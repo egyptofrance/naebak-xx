@@ -64,7 +64,7 @@ export async function SoloWorkspaceSidebar() {
     );
   } catch (e) {
     // Fallback UI instead of notFound()
-    console.error('Error loading workspace sidebar:', e);
+    console.error("Error loading workspace sidebar:", e);
     return (
       <Sidebar variant="inset" collapsible="icon">
         <SidebarHeader>
@@ -83,3 +83,4 @@ export async function SoloWorkspaceSidebar() {
     );
   }
 }
+

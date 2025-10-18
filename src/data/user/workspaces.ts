@@ -489,18 +489,21 @@ export async function getMaybeDefaultWorkspace(): Promise<{
   }
 }
 
-export async function getSoloWorkspace(): Promise<WorkspaceWithMembershipType> {
+eexport async function getSoloWorkspace(): Promise<WorkspaceWithMembershipType> {
   const user = await serverGetLoggedInUserVerified();
-
+  console.log("getSoloWorkspace: User ID:", user.id);
   const allWorkspaces = await getAllWorkspacesForUser(user.id);
+  console.log("getSoloWorkspace: All workspaces for user:", allWorkspaces.length, allWorkspaces.map(w => ({ id: w.id, name: w.name, membershipType: w.membershipType })));
   const soloWorkspace = allWorkspaces.find(
     (workspace) => workspace.membershipType === "solo",
   );
   if (!soloWorkspace) {
+    console.error("getSoloWorkspace: No solo workspace found for user:", user.id);
     throw new Error("No solo workspace found");
   }
+  console.log("getSoloWorkspace: Found solo workspace:", soloWorkspace.id, soloWorkspace.name);
   return soloWorkspace;
-}
+
 
 export async function fetchSlimWorkspaces(): Promise<SlimWorkspaces> {
   const currentUser = await serverGetLoggedInUserVerified();
