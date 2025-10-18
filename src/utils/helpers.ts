@@ -38,9 +38,17 @@ export const getUserAvatarUrl = ({
   )}?d=mp`;
   const isProfileAvatarUrlValid =
     profileAvatarUrl && profileAvatarUrl.length > 0;
-  return isProfileAvatarUrlValid
-    ? profileAvatarUrl
-    : (fallbackAvatarUrl ?? placeholderAvatarUrl);
+  
+  // Fix avatar URL if it contains naebak.com domain - convert to local path
+  if (isProfileAvatarUrlValid && profileAvatarUrl) {
+    const fixedUrl = profileAvatarUrl.replace(
+      /https?:\/\/naebak\.com\//,
+      '/'
+    );
+    return fixedUrl;
+  }
+  
+  return fallbackAvatarUrl ?? placeholderAvatarUrl;
 };
 
 export const getPublicUserAvatarUrl = (

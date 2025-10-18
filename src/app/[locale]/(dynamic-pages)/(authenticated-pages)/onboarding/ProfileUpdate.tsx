@@ -1,5 +1,4 @@
 "use client";
-import { FormInput } from "@/components/form-components/FormInput";
 import { Button } from "@/components/ui/button";
 import {
   CardContent,
@@ -8,13 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Form } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getUserAvatarUrl } from "@/utils/helpers";
 import { profileUpdateFormSchema } from "@/utils/zod-schemas/profile";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useHookFormActionErrorMapper } from "@next-safe-action/adapter-react-hook-form/hooks";
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useOnboarding } from "./OnboardingContext";
 
@@ -28,6 +29,34 @@ export function ProfileUpdate() {
   } = useOnboarding();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [governorates, setGovernorates] = useState<Array<{id: string, name: string}>>([]);
+  const [parties, setParties] = useState<Array<{id: string, name: string}>>([]);
+
+  // Fetch governorates and parties
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [govRes, partiesRes] = await Promise.all([
+          fetch('/api/governorates'),
+          fetch('/api/parties')
+        ]);
+        
+        if (govRes.ok) {
+          const govData = await govRes.json();
+          setGovernorates(govData);
+        }
+        
+        if (partiesRes.ok) {
+          const partiesData = await partiesRes.json();
+          setParties(partiesData);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    
+    fetchData();
+  }, []);
 
   const avatarUrlWithFallback = getUserAvatarUrl({
     profileAvatarUrl: avatarURLState ?? userProfile.avatar_url,
@@ -88,24 +117,22 @@ export function ProfileUpdate() {
       >
         <CardHeader>
           <CardTitle data-testid="profile-update-title">
-            Create Your Profile
+            إنشاء الملف الشخصي
           </CardTitle>
           <CardDescription>
-            Let&apos;s set up your personal details.
+            دعنا نقوم بإعداد بياناتك الشخصية
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* Avatar Upload */}
           <div className="space-y-2">
-            <label htmlFor="avatar" className="text-sm font-medium">
-              Avatar
-            </label>
-            <div className="flex items-center space-x-4">
-              <div className="relative w-12 h-12 shrink-0">
+            <div className="flex items-center space-x-4 rtl:space-x-reverse">
+              <div className="relative w-16 h-16 shrink-0">
                 <Image
                   fill
                   className="rounded-full object-cover"
                   src={avatarUrlWithFallback}
-                  alt="User avatar"
+                  alt="الصورة الشخصية"
                 />
               </div>
               <input
@@ -126,94 +153,209 @@ export function ProfileUpdate() {
                 disabled={uploadAvatarMutation.status === "executing"}
               >
                 {uploadAvatarMutation.status === "executing"
-                  ? "Uploading..."
-                  : "Change Avatar"}
+                  ? "جاري الرفع..."
+                  : "تغيير الصورة"}
               </Button>
             </div>
           </div>
-          
-          {/* Personal Information */}
-          <FormInput
-            id="full-name"
-            label="Full Name"
+
+          {/* Full Name - Required */}
+          <FormField
             control={control}
             name="fullName"
-            data-testid="full-name-input"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="الاسم الكامل *"
+                    data-testid="full-name-input"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          
-          <FormInput
-            id="phone"
-            label="Phone Number"
+
+          {/* Phone Number */}
+          <FormField
             control={control}
             name="phone"
-            type="tel"
-            data-testid="phone-input"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="tel"
+                    placeholder="رقم الهاتف"
+                    data-testid="phone-input"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          
-          <FormInput
-            id="gender"
-            label="Gender"
+
+          {/* Gender Select */}
+          <FormField
             control={control}
             name="gender"
-            data-testid="gender-input"
+            render={({ field }) => (
+              <FormItem>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger data-testid="gender-select">
+                      <SelectValue placeholder="النوع" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="male">ذكر</SelectItem>
+                    <SelectItem value="female">أنثى</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          
-          {/* Location Information */}
-          <FormInput
-            id="governorate"
-            label="Governorate"
+
+          {/* Governorate Select */}
+          <FormField
             control={control}
             name="governorateId"
-            data-testid="governorate-input"
+            render={({ field }) => (
+              <FormItem>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger data-testid="governorate-select">
+                      <SelectValue placeholder="المحافظة" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {governorates.map((gov) => (
+                      <SelectItem key={gov.id} value={gov.id}>
+                        {gov.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          
-          <FormInput
-            id="city"
-            label="City / District"
+
+          {/* City */}
+          <FormField
             control={control}
             name="city"
-            data-testid="city-input"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="المدينة / المركز"
+                    data-testid="city-input"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          
-          <FormInput
-            id="district"
-            label="District / Section"
+
+          {/* District */}
+          <FormField
             control={control}
             name="district"
-            data-testid="district-input"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="الحي / القسم"
+                    data-testid="district-input"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          
-          <FormInput
-            id="village"
-            label="Village"
+
+          {/* Village */}
+          <FormField
             control={control}
             name="village"
-            data-testid="village-input"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="القرية"
+                    data-testid="village-input"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          
-          {/* Political & Professional Information */}
-          <FormInput
-            id="job-title"
-            label="Job Title"
+
+          {/* Job Title */}
+          <FormField
             control={control}
             name="jobTitle"
-            data-testid="job-title-input"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="الوظيفة"
+                    data-testid="job-title-input"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          
-          <FormInput
-            id="party"
-            label="Political Party"
+
+          {/* Party Select */}
+          <FormField
             control={control}
             name="partyId"
-            data-testid="party-input"
+            render={({ field }) => (
+              <FormItem>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger data-testid="party-select">
+                      <SelectValue placeholder="الحزب السياسي" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {parties.map((party) => (
+                      <SelectItem key={party.id} value={party.id}>
+                        {party.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          
-          <FormInput
-            id="electoral-district"
-            label="Electoral District"
+
+          {/* Electoral District */}
+          <FormField
             control={control}
             name="electoralDistrict"
-            data-testid="electoral-district-input"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="الدائرة الانتخابية"
+                    data-testid="electoral-district-input"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
         </CardContent>
         <CardFooter>
@@ -224,8 +366,8 @@ export function ProfileUpdate() {
             data-testid="save-profile-button"
           >
             {profileUpdateActionState.status === "executing"
-              ? "Saving..."
-              : "Save Profile"}
+              ? "جاري الحفظ..."
+              : "حفظ البيانات"}
           </Button>
         </CardFooter>
       </form>
