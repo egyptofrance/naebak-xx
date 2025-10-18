@@ -20,7 +20,6 @@ import {
   getCachedSoloWorkspace,
 } from "@/rsc-data/user/workspaces";
 import { toLower } from "lodash";
-import { notFound } from "next/navigation";
 
 function getHasProSubscription(subscriptions: SubscriptionData[]) {
   return subscriptions.some(
@@ -32,14 +31,34 @@ function getHasProSubscription(subscriptions: SubscriptionData[]) {
 
 export async function SoloWorkspaceSidebar() {
   try {
-    const paymentGateway = new StripePaymentGateway();
-    const [workspace, slimWorkspaces] = await Promise.all([
-      getCachedSoloWorkspace(),
-      getCachedSlimWorkspaces(),
-    ]);
-    const subscriptions = await paymentGateway.db.getSubscriptionsByWorkspaceId(
-      workspace.id,
-    );
+    // Step 1: Get workspace
+    const workspace = await getCachedSoloWorkspace();
+    
+    if (!workspace) {
+      throw new Error("No workspace found");
+    }
+
+    // Step 2: Get slim workspaces (non-critical, can fail silently)
+    let slimWorkspaces;
+    try {
+      slimWorkspaces = await getCachedSlimWorkspaces();
+    } catch (e) {
+      console.error("Failed to load slim workspaces:", e);
+      slimWorkspaces = []; // Fallback to empty array
+    }
+
+    // Step 3: Get subscriptions (non-critical, can fail silently)
+    let subscriptions: SubscriptionData[] = [];
+    try {
+      const paymentGateway = new StripePaymentGateway();
+      subscriptions = await paymentGateway.db.getSubscriptionsByWorkspaceId(
+        workspace.id,
+      );
+    } catch (e) {
+      console.error("Failed to load subscriptions:", e);
+      // Continue with empty subscriptions
+    }
+
     const hasProSubscription = getHasProSubscription(subscriptions);
 
     return (
@@ -63,16 +82,27 @@ export async function SoloWorkspaceSidebar() {
       </Sidebar>
     );
   } catch (e) {
-    // Fallback UI instead of notFound()
-    console.error("Error loading workspace sidebar:", e);
+    // Only reach here if workspace loading fails
+    console.error("Critical error loading workspace sidebar:", e);
     return (
       <Sidebar variant="inset" collapsible="icon">
         <SidebarHeader>
-          <div className="p-4">Loading workspace...</div>
+          <div className="p-4 text-sm font-medium">Workspace Error</div>
         </SidebarHeader>
         <SidebarContent>
-          <div className="p-4 text-sm text-muted-foreground">
-            Unable to load workspace. Please refresh the page.
+          <div className="p-4 space-y-2">
+            <p className="text-sm text-muted-foreground">
+              Unable to load your workspace.
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Error: {e instanceof Error ? e.message : "Unknown error"}
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="text-xs text-primary hover:underline"
+            >
+              Refresh Page
+            </button>
           </div>
         </SidebarContent>
         <SidebarFooter>
