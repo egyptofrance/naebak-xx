@@ -352,24 +352,45 @@ export const requestAccountDeletionAction = authActionClient.action(
 
 const updateUserFullNameSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
+  phone: z.string().optional(),
+  governorateId: z.string().optional(),
+  city: z.string().optional(),
+  district: z.string().optional(),
+  village: z.string().optional(),
+  jobTitle: z.string().optional(),
+  partyId: z.string().optional(),
+  electoralDistrict: z.string().optional(),
+  gender: z.string().optional(),
   isOnboardingFlow: z.boolean().optional().default(false),
 });
 
 export const updateUserFullNameAction = authActionClient
   .schema(updateUserFullNameSchema)
-  .action(async ({ parsedInput: { fullName, isOnboardingFlow } }) => {
+  .action(async ({ parsedInput: { fullName, phone, governorateId, city, district, village, jobTitle, partyId, electoralDistrict, gender, isOnboardingFlow } }) => {
     const supabaseClient = await createSupabaseUserServerActionClient();
     const user = await serverGetLoggedInUserVerified();
 
+    // Build update object with only provided fields
+    const updateData: any = { full_name: fullName };
+    if (phone !== undefined) updateData.phone = phone;
+    if (governorateId !== undefined) updateData.governorate_id = governorateId;
+    if (city !== undefined) updateData.city = city;
+    if (district !== undefined) updateData.district = district;
+    if (village !== undefined) updateData.village = village;
+    if (jobTitle !== undefined) updateData.job_title = jobTitle;
+    if (partyId !== undefined) updateData.party_id = partyId;
+    if (electoralDistrict !== undefined) updateData.electoral_district = electoralDistrict;
+    if (gender !== undefined) updateData.gender = gender;
+
     const { data, error } = await supabaseClient
       .from("user_profiles")
-      .update({ full_name: fullName })
+      .update(updateData)
       .eq("id", user.id)
       .select()
       .single();
 
     if (error) {
-      throw new Error(`Failed to update full name: ${error.message}`);
+      throw new Error(`Failed to update profile: ${error.message}`);
     }
 
     if (isOnboardingFlow) {

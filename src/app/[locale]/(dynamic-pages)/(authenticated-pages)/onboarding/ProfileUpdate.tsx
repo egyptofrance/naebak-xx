@@ -42,6 +42,15 @@ export function ProfileUpdate() {
     resolver: zodResolver(profileUpdateFormSchema),
     defaultValues: {
       fullName: userProfile.full_name ?? "",
+      phone: userProfile.phone ?? "",
+      governorateId: userProfile.governorate_id ?? "",
+      city: userProfile.city ?? "",
+      district: userProfile.district ?? "",
+      village: userProfile.village ?? "",
+      jobTitle: userProfile.job_title ?? "",
+      partyId: userProfile.party_id ?? "",
+      electoralDistrict: userProfile.electoral_district ?? "",
+      gender: userProfile.gender ?? "",
     },
     errors: hookFormValidationErrors,
   });
@@ -122,12 +131,89 @@ export function ProfileUpdate() {
               </Button>
             </div>
           </div>
+          
+          {/* Personal Information */}
           <FormInput
             id="full-name"
             label="Full Name"
             control={control}
             name="fullName"
             data-testid="full-name-input"
+          />
+          
+          <FormInput
+            id="phone"
+            label="Phone Number"
+            control={control}
+            name="phone"
+            type="tel"
+            data-testid="phone-input"
+          />
+          
+          <FormInput
+            id="gender"
+            label="Gender"
+            control={control}
+            name="gender"
+            data-testid="gender-input"
+          />
+          
+          {/* Location Information */}
+          <FormInput
+            id="governorate"
+            label="Governorate"
+            control={control}
+            name="governorateId"
+            data-testid="governorate-input"
+          />
+          
+          <FormInput
+            id="city"
+            label="City / District"
+            control={control}
+            name="city"
+            data-testid="city-input"
+          />
+          
+          <FormInput
+            id="district"
+            label="District / Section"
+            control={control}
+            name="district"
+            data-testid="district-input"
+          />
+          
+          <FormInput
+            id="village"
+            label="Village"
+            control={control}
+            name="village"
+            data-testid="village-input"
+          />
+          
+          {/* Political & Professional Information */}
+          <FormInput
+            id="job-title"
+            label="Job Title"
+            control={control}
+            name="jobTitle"
+            data-testid="job-title-input"
+          />
+          
+          <FormInput
+            id="party"
+            label="Political Party"
+            control={control}
+            name="partyId"
+            data-testid="party-input"
+          />
+          
+          <FormInput
+            id="electoral-district"
+            label="Electoral District"
+            control={control}
+            name="electoralDistrict"
+            data-testid="electoral-district-input"
           />
         </CardContent>
         <CardFooter>
@@ -146,3 +232,4 @@ export function ProfileUpdate() {
     </Form>
   );
 }
+
