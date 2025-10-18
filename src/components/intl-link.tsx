@@ -4,3 +4,4 @@
  * TODO: File a bug and look for resolutions.
  */
 export { Link } from "@/i18n/routing";
+export { usePathname } from "@/i18n/routing";
