@@ -489,7 +489,7 @@ export async function getMaybeDefaultWorkspace(): Promise<{
   }
 }
 
-eexport async function getSoloWorkspace(): Promise<WorkspaceWithMembershipType> {
+export async function getSoloWorkspace(): Promise<WorkspaceWithMembershipType> {
   const user = await serverGetLoggedInUserVerified();
   console.log("getSoloWorkspace: User ID:", user.id);
   const allWorkspaces = await getAllWorkspacesForUser(user.id);
