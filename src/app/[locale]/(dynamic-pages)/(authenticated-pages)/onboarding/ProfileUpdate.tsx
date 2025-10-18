@@ -193,8 +193,7 @@ export function ProfileUpdate() {
             label="Full Name *"
             control={control}
             name="fullName"
-            data-testid="full-name-input"
-            placeholder="Enter your full name"
+            inputProps={{ "data-testid": "full-name-input", placeholder: "Enter your full name" }}
           />
 
           {/* Optional Fields */}
@@ -209,7 +208,7 @@ export function ProfileUpdate() {
                 label="Phone Number"
                 control={control}
                 name="phone"
-                placeholder="Enter your phone number"
+                inputProps={{ placeholder: "Enter your phone number" }}
               />
 
               <FormSelect
@@ -227,7 +226,7 @@ export function ProfileUpdate() {
                 label="City / Center"
                 control={control}
                 name="city"
-                placeholder="Enter your city or center"
+                inputProps={{ placeholder: "Enter your city or center" }}
               />
 
               <FormInput
@@ -235,7 +234,7 @@ export function ProfileUpdate() {
                 label="District / Neighborhood"
                 control={control}
                 name="district"
-                placeholder="Enter your district"
+                inputProps={{ placeholder: "Enter your district" }}
               />
 
               <FormInput
@@ -243,7 +242,7 @@ export function ProfileUpdate() {
                 label="Village (if applicable)"
                 control={control}
                 name="village"
-                placeholder="Enter your village"
+                inputProps={{ placeholder: "Enter your village" }}
               />
 
               <FormInput
@@ -251,7 +250,7 @@ export function ProfileUpdate() {
                 label="Full Address"
                 control={control}
                 name="address"
-                placeholder="Enter your full address"
+                inputProps={{ placeholder: "Enter your full address" }}
               />
 
               <FormInput
@@ -259,7 +258,7 @@ export function ProfileUpdate() {
                 label="Job Title / Occupation"
                 control={control}
                 name="jobTitle"
-                placeholder="Enter your job or occupation"
+                inputProps={{ placeholder: "Enter your job or occupation" }}
               />
 
               <FormSelect
@@ -277,7 +276,7 @@ export function ProfileUpdate() {
                 label="Electoral District"
                 control={control}
                 name="electoralDistrict"
-                placeholder="Enter your electoral district"
+                inputProps={{ placeholder: "Enter your electoral district" }}
               />
             </div>
           </div>
