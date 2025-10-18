@@ -65,6 +65,8 @@ interface OnboardingContextType {
   bulkSettleInvitationsActionState: InferUseOptimisticActionHookReturn<
     typeof bulkSettleInvitationsAction
   >;
+  governorates: Array<{id: string, name: string}>;
+  parties: Array<{id: string, name: string}>;
 }
 
 const OnboardingContext = createContext<OnboardingContextType | undefined>(
@@ -85,6 +87,8 @@ interface OnboardingProviderProps {
   onboardingStatus: AuthUserMetadata;
   userEmail: string | undefined;
   pendingInvitations: WorkspaceInvitation[];
+  governorates: Array<{id: string, name: string}>;
+  parties: Array<{id: string, name: string}>;
 }
 
 function getAllFlowStates(onboardingStatus: AuthUserMetadata): FLOW_STATE[] {
@@ -143,6 +147,8 @@ export function OnboardingProvider({
   onboardingStatus,
   userEmail,
   pendingInvitations,
+  governorates,
+  parties,
 }: OnboardingProviderProps) {
   const [avatarUrl, setAvatarUrl] = useState(
     userProfile.avatar_url ?? undefined,
@@ -325,6 +331,8 @@ export function OnboardingProvider({
       onboardingStatus,
       pendingInvitations,
       bulkSettleInvitationsActionState,
+      governorates,
+      parties,
     }),
     [
       currentStep,
@@ -341,6 +349,8 @@ export function OnboardingProvider({
       onboardingStatus,
       pendingInvitations,
       bulkSettleInvitationsActionState,
+      governorates,
+      parties,
     ],
   );
 

@@ -24,6 +24,8 @@ export const toDateTime = (secs: number) => {
   return t;
 };
 
+import MD5 from "crypto-js/md5";
+
 export const getUserAvatarUrl = ({
   email,
   profileAvatarUrl,
@@ -31,15 +33,13 @@ export const getUserAvatarUrl = ({
   email: string | undefined;
   profileAvatarUrl?: string | null | undefined;
 }) => {
-  const placeholderAvatarUrl = `https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp`;
-  if (!email) return placeholderAvatarUrl;
-  const fallbackAvatarUrl = `https://www.gravatar.com/avatar/${MD5(
-    email,
-  )}?d=mp`;
+  // A more neutral placeholder image path
+  const genericPlaceholder = '/assets/cute-avatars/default-user.png'; // Assuming you have a default-user.png in your assets
+
   const isProfileAvatarUrlValid =
     profileAvatarUrl && profileAvatarUrl.length > 0;
   
-  // Fix avatar URL if it contains naebak.com domain - convert to local path
+  // If a profile avatar URL is provided and valid, use it (and fix if it's a naebak.com domain)
   if (isProfileAvatarUrlValid && profileAvatarUrl) {
     const fixedUrl = profileAvatarUrl.replace(
       /https?:\/\/naebak\.com\//,
@@ -47,8 +47,16 @@ export const getUserAvatarUrl = ({
     );
     return fixedUrl;
   }
+
+  // If no profile avatar, try Gravatar if email is available
+  if (email) {
+    return `https://www.gravatar.com/avatar/${MD5(
+      email,
+    )}?d=mp`;
+  }
   
-  return fallbackAvatarUrl ?? placeholderAvatarUrl;
+  // Fallback to a generic placeholder if no profile avatar and no email
+  return genericPlaceholder;
 };
 
 export const getPublicUserAvatarUrl = (

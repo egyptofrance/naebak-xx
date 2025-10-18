@@ -352,27 +352,42 @@ export const requestAccountDeletionAction = authActionClient.action(
 
 const updateUserFullNameSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
-  phone: z.string().optional(),
-  governorateId: z.string().optional(),
-  city: z.string().optional(),
-  district: z.string().optional(),
-  village: z.string().optional(),
-  jobTitle: z.string().optional(),
-  partyId: z.string().optional(),
-  electoralDistrict: z.string().optional(),
-  gender: z.string().optional(),
+  phone: z.string().optional().nullable(),
+  gender: z.string().optional().nullable(),
+  governorateId: z.string().optional().nullable(),
+  city: z.string().optional().nullable(),
+  district: z.string().optional().nullable(),
+  village: z.string().optional().nullable(),
+  jobTitle: z.string().optional().nullable(),
+  partyId: z.string().optional().nullable(),
+  electoralDistrict: z.string().optional().nullable(),
   isOnboardingFlow: z.boolean().optional().default(false),
 });
 
 export const updateUserFullNameAction = authActionClient
   .schema(updateUserFullNameSchema)
-  .action(async ({ parsedInput: { fullName, phone, governorateId, city, district, village, jobTitle, partyId, electoralDistrict, gender, isOnboardingFlow } }) => {
+  .action(async ({
+    parsedInput: {
+      fullName,
+      phone,
+      gender,
+      governorateId,
+      city,
+      district,
+      village,
+      jobTitle,
+      partyId,
+      electoralDistrict,
+      isOnboardingFlow,
+    },
+  }) => {
     const supabaseClient = await createSupabaseUserServerActionClient();
     const user = await serverGetLoggedInUserVerified();
 
     // Build update object with only provided fields
     const updateData: any = { full_name: fullName };
     if (phone !== undefined) updateData.phone = phone;
+    if (gender !== undefined) updateData.gender = gender;
     if (governorateId !== undefined) updateData.governorate_id = governorateId;
     if (city !== undefined) updateData.city = city;
     if (district !== undefined) updateData.district = district;
@@ -380,7 +395,6 @@ export const updateUserFullNameAction = authActionClient
     if (jobTitle !== undefined) updateData.job_title = jobTitle;
     if (partyId !== undefined) updateData.party_id = partyId;
     if (electoralDistrict !== undefined) updateData.electoral_district = electoralDistrict;
-    if (gender !== undefined) updateData.gender = gender;
 
     const { data, error } = await supabaseClient
       .from("user_profiles")

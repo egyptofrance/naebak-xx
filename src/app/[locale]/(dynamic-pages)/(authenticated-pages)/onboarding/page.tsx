@@ -1,6 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { getPendingInvitationsOfUser } from "@/data/user/invitation";
 import { getUserProfile } from "@/data/user/user";
+import { getGovernorates, getParties } from "@/data/lookups/lookups";
 import {
   fetchSlimWorkspaces,
   getMaybeDefaultWorkspace,
@@ -40,14 +41,18 @@ async function getDefaultOrganizationOrSet(): Promise<string | null> {
 }
 
 async function getOnboardingConditions(userId: string) {
-  const [userProfile, defaultOrganizationId] = await Promise.all([
+  const [userProfile, defaultOrganizationId, governorates, parties] = await Promise.all([
     getUserProfile(userId),
     getDefaultOrganizationOrSet(),
+    getGovernorates(),
+    getParties(),
   ]);
 
   return {
     userProfile,
     defaultOrganizationId,
+    governorates,
+    parties,
   };
 }
 
@@ -67,6 +72,8 @@ async function OnboardingFlowWrapper() {
       onboardingStatus={onboardingStatus}
       userEmail={user.email}
       pendingInvitations={pendingInvitations}
+      governorates={onboardingConditions.governorates}
+      parties={onboardingConditions.parties}
     >
       <OnboardingFlowContent />
     </OnboardingProvider>

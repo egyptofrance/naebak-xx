@@ -1267,17 +1267,23 @@ export type Database = {
       governorates: {
         Row: {
           id: string
-          name: string
+          name_ar: string
+          name_en: string | null
+          code: string | null
           created_at: string
         }
         Insert: {
           id?: string
-          name: string
+          name_ar: string
+          name_en?: string | null
+          code?: string | null
           created_at?: string
         }
         Update: {
           id?: string
-          name?: string
+          name_ar?: string
+          name_en?: string | null
+          code?: string | null
           created_at?: string
         }
         Relationships: []
@@ -1285,18 +1291,39 @@ export type Database = {
       parties: {
         Row: {
           id: string
-          name: string
+          name_ar: string
+          name_en: string | null
+          abbreviation: string | null
+          description: string | null
+          logo_url: string | null
+          website_url: string | null
           created_at: string
+          display_order: number | null
+          is_active: boolean | null
         }
         Insert: {
           id?: string
-          name: string
+          name_ar: string
+          name_en?: string | null
+          abbreviation?: string | null
+          description?: string | null
+          logo_url?: string | null
+          website_url?: string | null
           created_at?: string
+          display_order?: number | null
+          is_active?: boolean | null
         }
         Update: {
           id?: string
-          name?: string
+          name_ar?: string
+          name_en?: string | null
+          abbreviation?: string | null
+          description?: string | null
+          logo_url?: string | null
+          website_url?: string | null
           created_at?: string
+          display_order?: number | null
+          is_active?: boolean | null
         }
         Relationships: []
       }

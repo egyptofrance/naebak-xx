@@ -15,7 +15,7 @@ import { profileUpdateFormSchema } from "@/utils/zod-schemas/profile";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useHookFormActionErrorMapper } from "@next-safe-action/adapter-react-hook-form/hooks";
 import Image from "next/image";
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useOnboarding } from "./OnboardingContext";
 
@@ -26,37 +26,11 @@ export function ProfileUpdate() {
     profileUpdateActionState,
     uploadAvatarMutation,
     avatarURLState,
+    governorates,
+    parties,
   } = useOnboarding();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [governorates, setGovernorates] = useState<Array<{id: string, name: string}>>([]);
-  const [parties, setParties] = useState<Array<{id: string, name: string}>>([]);
-
-  // Fetch governorates and parties
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [govRes, partiesRes] = await Promise.all([
-          fetch('/api/governorates'),
-          fetch('/api/parties')
-        ]);
-        
-        if (govRes.ok) {
-          const govData = await govRes.json();
-          setGovernorates(govData);
-        }
-        
-        if (partiesRes.ok) {
-          const partiesData = await partiesRes.json();
-          setParties(partiesData);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    
-    fetchData();
-  }, []);
 
   const avatarUrlWithFallback = getUserAvatarUrl({
     profileAvatarUrl: avatarURLState ?? userProfile.avatar_url,
@@ -72,6 +46,7 @@ export function ProfileUpdate() {
     defaultValues: {
       fullName: userProfile.full_name ?? "",
       phone: userProfile.phone ?? "",
+      gender: userProfile.gender ?? "",
       governorateId: userProfile.governorate_id ?? "",
       city: userProfile.city ?? "",
       district: userProfile.district ?? "",
@@ -79,7 +54,6 @@ export function ProfileUpdate() {
       jobTitle: userProfile.job_title ?? "",
       partyId: userProfile.party_id ?? "",
       electoralDistrict: userProfile.electoral_district ?? "",
-      gender: userProfile.gender ?? "",
     },
     errors: hookFormValidationErrors,
   });

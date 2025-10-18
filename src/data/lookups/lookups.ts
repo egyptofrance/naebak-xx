@@ -5,8 +5,8 @@ export const getGovernorates = async () => {
   const supabase = await createSupabaseUserServerComponentClient();
   const { data, error } = await supabase
     .from("governorates")
-    .select("id, name")
-    .order("name");
+    .select("id, name_ar as name")
+    .order("name_ar");
 
   if (error) {
     console.error("Error fetching governorates:", error);
@@ -20,8 +20,9 @@ export const getParties = async () => {
   const supabase = await createSupabaseUserServerComponentClient();
   const { data, error } = await supabase
     .from("parties")
-    .select("id, name")
-    .order("name");
+    .select("id, name_ar as name")
+    .eq("is_active", true) // Only fetch active parties
+    .order("name_ar");
 
   if (error) {
     console.error("Error fetching parties:", error);
