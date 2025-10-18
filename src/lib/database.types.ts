@@ -1270,18 +1270,54 @@ export type Database = {
           created_at: string
           full_name: string | null
           id: string
+          phone: string | null
+          governorate_id: string | null
+          city: string | null
+          district: string | null
+          village: string | null
+          job_title: string | null
+          party_id: string | null
+          electoral_district: string | null
+          address: string | null
+          email: string | null
+          role: string | null
+          gender: string | null
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string
           full_name?: string | null
           id: string
+          phone?: string | null
+          governorate_id?: string | null
+          city?: string | null
+          district?: string | null
+          village?: string | null
+          job_title?: string | null
+          party_id?: string | null
+          electoral_district?: string | null
+          address?: string | null
+          email?: string | null
+          role?: string | null
+          gender?: string | null
         }
         Update: {
           avatar_url?: string | null
           created_at?: string
           full_name?: string | null
           id?: string
+          phone?: string | null
+          governorate_id?: string | null
+          city?: string | null
+          district?: string | null
+          village?: string | null
+          job_title?: string | null
+          party_id?: string | null
+          electoral_district?: string | null
+          address?: string | null
+          email?: string | null
+          role?: string | null
+          gender?: string | null
         }
         Relationships: []
       }
