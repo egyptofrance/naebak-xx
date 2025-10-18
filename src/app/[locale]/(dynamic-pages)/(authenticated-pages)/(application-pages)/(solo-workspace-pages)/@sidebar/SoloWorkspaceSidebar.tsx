@@ -39,7 +39,7 @@ export async function SoloWorkspaceSidebar() {
     }
 
     // Step 2: Get slim workspaces (non-critical, can fail silently)
-    let slimWorkspaces;
+    let slimWorkspaces: Awaited<ReturnType<typeof getCachedSlimWorkspaces>> = [];
     try {
       slimWorkspaces = await getCachedSlimWorkspaces();
     } catch (e) {
