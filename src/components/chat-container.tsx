@@ -55,11 +55,13 @@ export function ChatContainer({
             role: "user",
             content: input,
             id: nanoid(),
+            parts: [{ type: "text", text: input }],
           },
           {
             role: "assistant",
             content,
             id: nanoid(),
+            parts: [{ type: "text", text: content }],
           },
         );
 
