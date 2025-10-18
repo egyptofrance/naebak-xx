@@ -42,6 +42,11 @@ export function ProfileUpdate() {
     resolver: zodResolver(profileUpdateFormSchema),
     defaultValues: {
       fullName: userProfile.full_name ?? "",
+      phone: userProfile.phone ?? "",
+      city: userProfile.city ?? "",
+      district: userProfile.district ?? "",
+      village: userProfile.village ?? "",
+      electoralDistrict: userProfile.electoral_district ?? "",
     },
     errors: hookFormValidationErrors,
   });
@@ -79,24 +84,22 @@ export function ProfileUpdate() {
       >
         <CardHeader>
           <CardTitle data-testid="profile-update-title">
-            Create Your Profile
+            إنشاء ملفك الشخصي
           </CardTitle>
           <CardDescription>
-            Let&apos;s set up your personal details.
+            دعنا نقوم بإعداد بياناتك الشخصية
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* Avatar Section */}
           <div className="space-y-2">
-            <label htmlFor="avatar" className="text-sm font-medium">
-              Avatar
-            </label>
-            <div className="flex items-center space-x-4">
-              <div className="relative w-12 h-12 shrink-0">
+            <div className="flex items-center space-x-4 rtl:space-x-reverse">
+              <div className="relative w-20 h-20 shrink-0">
                 <Image
                   fill
                   className="rounded-full object-cover"
                   src={avatarUrlWithFallback}
-                  alt="User avatar"
+                  alt="صورة المستخدم"
                 />
               </div>
               <input
@@ -117,17 +120,68 @@ export function ProfileUpdate() {
                 disabled={uploadAvatarMutation.status === "executing"}
               >
                 {uploadAvatarMutation.status === "executing"
-                  ? "Uploading..."
-                  : "Change Avatar"}
+                  ? "جاري الرفع..."
+                  : "تغيير الصورة"}
               </Button>
             </div>
           </div>
+
+          {/* Personal Information */}
           <FormInput
             id="full-name"
-            label="Full Name"
+            label="الاسم الكامل"
             control={control}
             name="fullName"
+            hideLabel={true}
             data-testid="full-name-input"
+          />
+
+          <FormInput
+            id="phone"
+            label="رقم الهاتف"
+            control={control}
+            name="phone"
+            type="tel"
+            hideLabel={true}
+            data-testid="phone-input"
+          />
+
+          {/* Location Information */}
+          <FormInput
+            id="city"
+            label="المدينة / المركز"
+            control={control}
+            name="city"
+            hideLabel={true}
+            data-testid="city-input"
+          />
+
+          <FormInput
+            id="district"
+            label="الحي / القسم"
+            control={control}
+            name="district"
+            hideLabel={true}
+            data-testid="district-input"
+          />
+
+          <FormInput
+            id="village"
+            label="القرية"
+            control={control}
+            name="village"
+            hideLabel={true}
+            data-testid="village-input"
+          />
+
+          {/* Political Information */}
+          <FormInput
+            id="electoral-district"
+            label="الدائرة الانتخابية"
+            control={control}
+            name="electoralDistrict"
+            hideLabel={true}
+            data-testid="electoral-district-input"
           />
         </CardContent>
         <CardFooter>
@@ -138,11 +192,12 @@ export function ProfileUpdate() {
             data-testid="save-profile-button"
           >
             {profileUpdateActionState.status === "executing"
-              ? "Saving..."
-              : "Save Profile"}
+              ? "جاري الحفظ..."
+              : "حفظ البيانات"}
           </Button>
         </CardFooter>
       </form>
     </Form>
   );
 }
+

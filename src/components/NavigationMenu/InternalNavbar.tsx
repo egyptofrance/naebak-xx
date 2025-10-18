@@ -1,6 +1,7 @@
 import { cn } from "@/utils/cn";
 import { Suspense, type ReactNode } from "react";
 import { SidebarTrigger } from "../ui/sidebar";
+import LocaleSwitcher from "../LocaleSwitcher";
 import { PendingInvitationCounter } from "./PendingInvitationCounter";
 
 export async function InternalNavbar({ children }: { children: ReactNode }) {
@@ -16,6 +17,7 @@ export async function InternalNavbar({ children }: { children: ReactNode }) {
         <div className="relative w-max flex items-center gap-2">
           <div className="hidden lg:flex items-center gap-2">
             <div className="flex items-center gap-2">
+              <LocaleSwitcher />
               <PendingInvitationCounter />
             </div>
           </div>

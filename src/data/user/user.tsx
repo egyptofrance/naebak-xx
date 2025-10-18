@@ -352,18 +352,30 @@ export const requestAccountDeletionAction = authActionClient.action(
 
 const updateUserFullNameSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
+  phone: z.string().optional(),
+  city: z.string().optional(),
+  district: z.string().optional(),
+  village: z.string().optional(),
+  electoralDistrict: z.string().optional(),
   isOnboardingFlow: z.boolean().optional().default(false),
 });
 
 export const updateUserFullNameAction = authActionClient
   .schema(updateUserFullNameSchema)
-  .action(async ({ parsedInput: { fullName, isOnboardingFlow } }) => {
+  .action(async ({ parsedInput: { fullName, phone, city, district, village, electoralDistrict, isOnboardingFlow } }) => {
     const supabaseClient = await createSupabaseUserServerActionClient();
     const user = await serverGetLoggedInUserVerified();
 
+    const updateData: any = { full_name: fullName };
+    if (phone !== undefined) updateData.phone = phone;
+    if (city !== undefined) updateData.city = city;
+    if (district !== undefined) updateData.district = district;
+    if (village !== undefined) updateData.village = village;
+    if (electoralDistrict !== undefined) updateData.electoral_district = electoralDistrict;
+
     const { data, error } = await supabaseClient
       .from("user_profiles")
-      .update({ full_name: fullName })
+      .update(updateData)
       .eq("id", user.id)
       .select()
       .single();

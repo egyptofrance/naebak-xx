@@ -17,6 +17,7 @@ type FormInputProps<TFieldValues extends FieldValues> = {
   name: Path<TFieldValues>;
   description?: string;
   type?: string;
+  hideLabel?: boolean;
   inputProps?: Omit<
     ComponentPropsWithoutRef<typeof Input>,
     "id" | "name" | "type"
@@ -30,6 +31,7 @@ export function FormInput<TFieldValues extends FieldValues>({
   name,
   description,
   type,
+  hideLabel = false,
   inputProps,
 }: FormInputProps<TFieldValues>) {
   return (
@@ -38,9 +40,15 @@ export function FormInput<TFieldValues extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel htmlFor={id}>{label}</FormLabel>
+          {!hideLabel && <FormLabel htmlFor={id}>{label}</FormLabel>}
           <FormControl>
-            <Input id={id} type={type} {...inputProps} {...field} />
+            <Input 
+              id={id} 
+              type={type} 
+              placeholder={hideLabel ? label : inputProps?.placeholder}
+              {...inputProps} 
+              {...field} 
+            />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
           <FormMessage />

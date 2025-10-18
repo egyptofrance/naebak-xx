@@ -49,16 +49,16 @@ export const RESTRICTED_SLUG_NAMES = [
 
 // starts with a letter, ends with a letter or number, and can contain letters, numbers, and hyphens
 export const SLUG_PATTERN = /^[a-zA-Z0-9-]+$/;
-export const LOCALES = ["en", "de"] as const;
+export const LOCALES = ["ar", "en", "de"] as const;
 export function isValidLocale(
   locale: string,
 ): locale is (typeof LOCALES)[number] {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return LOCALES.includes(locale as any);
 }
-// eg: en|de
+// eg: ar|en|de
 export const LOCALE_GLOB_PATTERN = `${LOCALES.join("|")}`;
-export const DEFAULT_LOCALE: Locale = "en";
+export const DEFAULT_LOCALE: Locale = "ar";
 
 export const FEEDBACK_BG_BOARD_COLORS = {
   blue: "bg-blue-500",
