@@ -63,6 +63,23 @@ export async function SoloWorkspaceSidebar() {
       </Sidebar>
     );
   } catch (e) {
-    return notFound();
+    // Fallback UI instead of notFound()
+    console.error('Error loading workspace sidebar:', e);
+    return (
+      <Sidebar variant="inset" collapsible="icon">
+        <SidebarHeader>
+          <div className="p-4">Loading workspace...</div>
+        </SidebarHeader>
+        <SidebarContent>
+          <div className="p-4 text-sm text-muted-foreground">
+            Unable to load workspace. Please refresh the page.
+          </div>
+        </SidebarContent>
+        <SidebarFooter>
+          <SidebarFooterUserNav />
+        </SidebarFooter>
+        <SidebarRail />
+      </Sidebar>
+    );
   }
 }

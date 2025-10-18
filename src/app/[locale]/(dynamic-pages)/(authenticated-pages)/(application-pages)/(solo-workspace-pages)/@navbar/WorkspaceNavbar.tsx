@@ -50,6 +50,13 @@ export async function WorkspaceNavbar() {
       </div>
     );
   } catch (error) {
-    return notFound();
+    // Fallback UI instead of notFound()
+    return (
+      <div className="flex items-center">
+        <span className="flex items-center space-x-2">
+          <T.P>Personal Workspace</T.P>
+        </span>
+      </div>
+    );
   }
 }
