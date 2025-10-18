@@ -1264,6 +1264,42 @@ export type Database = {
           },
         ]
       }
+      governorates: {
+        Row: {
+          id: string
+          name: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      parties: {
+        Row: {
+          id: string
+          name: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
       user_profiles: {
         Row: {
           avatar_url: string | null
