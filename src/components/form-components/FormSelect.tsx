@@ -22,7 +22,6 @@ interface FormSelectProps<TFieldValues extends FieldValues> {
   description?: string;
   options: { label: string; value: string }[];
   placeholder?: string;
-  disabled?: boolean;
 }
 
 export function FormSelect<TFieldValues extends FieldValues>({
@@ -33,7 +32,6 @@ export function FormSelect<TFieldValues extends FieldValues>({
   description,
   options,
   placeholder,
-  disabled,
 }: FormSelectProps<TFieldValues>) {
   return (
     <FormField
@@ -42,7 +40,7 @@ export function FormSelect<TFieldValues extends FieldValues>({
       render={({ field }) => (
         <FormItem>
           <FormLabel>{label}</FormLabel>
-          <Select onValueChange={field.onChange} defaultValue={field.value} disabled={disabled}>
+          <Select onValueChange={field.onChange} defaultValue={field.value}>
             <FormControl>
               <SelectTrigger id={id}>
                 <SelectValue placeholder={placeholder} />

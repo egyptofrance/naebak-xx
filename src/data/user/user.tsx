@@ -352,39 +352,18 @@ export const requestAccountDeletionAction = authActionClient.action(
 
 const updateUserFullNameSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
-  phone: z.string().optional(),
-  governorateId: z.string().uuid().optional(),
-  city: z.string().optional(),
-  district: z.string().optional(),
-  village: z.string().optional(),
-  address: z.string().optional(),
-  jobTitle: z.string().optional(),
-  partyId: z.string().uuid().optional(),
-  electoralDistrict: z.string().optional(),
   isOnboardingFlow: z.boolean().optional().default(false),
 });
 
 export const updateUserFullNameAction = authActionClient
   .schema(updateUserFullNameSchema)
-  .action(async ({ parsedInput: { fullName, phone, governorateId, city, district, village, address, jobTitle, partyId, electoralDistrict, isOnboardingFlow } }) => {
+  .action(async ({ parsedInput: { fullName, isOnboardingFlow } }) => {
     const supabaseClient = await createSupabaseUserServerActionClient();
     const user = await serverGetLoggedInUserVerified();
 
-    // Build update object with only provided fields
-    const updateData: Record<string, any> = { full_name: fullName };
-    if (phone !== undefined) updateData.phone = phone;
-    if (governorateId !== undefined) updateData.governorate_id = governorateId;
-    if (city !== undefined) updateData.city = city;
-    if (district !== undefined) updateData.district = district;
-    if (village !== undefined) updateData.village = village;
-    if (address !== undefined) updateData.address = address;
-    if (jobTitle !== undefined) updateData.job_title = jobTitle;
-    if (partyId !== undefined) updateData.party_id = partyId;
-    if (electoralDistrict !== undefined) updateData.electoral_district = electoralDistrict;
-
     const { data, error } = await supabaseClient
       .from("user_profiles")
-      .update(updateData)
+      .update({ full_name: fullName })
       .eq("id", user.id)
       .select()
       .single();
