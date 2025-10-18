@@ -47,40 +47,23 @@ async function runDiagnostics(): Promise<DiagnosticResult[]> {
 
   // 2. التحقق من Workspaces بدون Settings
   try {
-    const { data: workspacesWithoutSettings, error } = await supabase.rpc(
-      "get_workspaces_without_settings"
-    );
+    const { data: allWorkspaces } = await supabase.from("workspaces").select("id, name, slug");
+    const { data: workspaceSettings } = await supabase
+      .from("workspace_application_settings")
+      .select("workspace_id");
 
-    if (error) {
-      // إذا لم تكن الـ function موجودة، نستخدم query عادي
-      const { data: allWorkspaces } = await supabase.from("workspaces").select("id, name, slug");
-      const { data: workspaceSettings } = await supabase
-        .from("workspace_application_settings")
-        .select("workspace_id");
+    const settingsIds = new Set(workspaceSettings?.map((s) => s.workspace_id) || []);
+    const missingSettings = allWorkspaces?.filter((w) => !settingsIds.has(w.id)) || [];
 
-      const settingsIds = new Set(workspaceSettings?.map((s) => s.workspace_id) || []);
-      const missingSettings = allWorkspaces?.filter((w) => !settingsIds.has(w.id)) || [];
-
-      results.push({
-        category: "Workspaces",
-        name: "Workspaces Without Settings",
-        status: missingSettings.length > 0 ? "error" : "success",
-        message: missingSettings.length > 0
-          ? `Found ${missingSettings.length} workspaces without settings`
-          : "All workspaces have settings",
-        data: missingSettings,
-      });
-    } else {
-      results.push({
-        category: "Workspaces",
-        name: "Workspaces Without Settings",
-        status: workspacesWithoutSettings && workspacesWithoutSettings.length > 0 ? "error" : "success",
-        message: workspacesWithoutSettings && workspacesWithoutSettings.length > 0
-          ? `Found ${workspacesWithoutSettings.length} workspaces without settings`
-          : "All workspaces have settings",
-        data: workspacesWithoutSettings,
-      });
-    }
+    results.push({
+      category: "Workspaces",
+      name: "Workspaces Without Settings",
+      status: missingSettings.length > 0 ? "error" : "success",
+      message: missingSettings.length > 0
+        ? `Found ${missingSettings.length} workspaces without settings`
+        : "All workspaces have settings",
+      data: missingSettings,
+    });
   } catch (e: any) {
     results.push({
       category: "Workspaces",
