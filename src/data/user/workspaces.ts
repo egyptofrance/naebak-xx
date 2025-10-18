@@ -503,7 +503,7 @@ export async function getSoloWorkspace(): Promise<WorkspaceWithMembershipType> {
   }
   console.log("getSoloWorkspace: Found solo workspace:", soloWorkspace.id, soloWorkspace.name);
   return soloWorkspace;
-
+}
 
 export async function fetchSlimWorkspaces(): Promise<SlimWorkspaces> {
   const currentUser = await serverGetLoggedInUserVerified();
