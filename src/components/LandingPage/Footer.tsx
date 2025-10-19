@@ -12,14 +12,11 @@ export function Footer() {
               <Link href="/">
                 <div className="relative flex gap-2 items-center">
                   <Image
-                    src={"/logos/nextbase.png"}
-                    alt="logo"
-                    width={64}
-                    height={64}
+                    src="/logos/nextbase.png"
+                    alt="نائبك"
+                    width={128}
+                    height={128}
                   />
-                  <span className="font-medium text-2xl text-foreground sm:inline-block">
-                    نائبك
-                  </span>
                 </div>
               </Link>
               <p className="text-muted-foreground max-w-[350px] dark:font-light">

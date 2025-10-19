@@ -67,19 +67,18 @@ export function DocsMobileNavigation() {
         className="min-h-full w-full max-w-xs bg-white px-6 pb-12 pt-5 dark:bg-gray-900 sm:px-6"
       >
         <div className="flex items-center">
-          <Link href={"/"} className="font-bold text-xl">
-            <div className="relative flex space-x-2 items-center text-black dark:text-white dark:-ml-4">
+          <Link href="/" className="font-bold text-xl">
+            <div className="relative flex items-center text-black dark:text-white dark:-ml-4">
               <Image
                 src={lightLogo}
-                alt="logo"
-                className="dark:hidden block h-10 w-10"
+                alt="نائبك"
+                className="dark:hidden block h-20 w-20 object-contain"
               />
               <Image
                 src={darkLogo}
-                alt="logo"
-                className="hidden dark:block h-10 w-10"
+                alt="نائبك"
+                className="hidden dark:block h-20 w-20 object-contain"
               />
-              <span className="hidden font-bold sm:inline-block">nextbase</span>
             </div>
           </Link>
         </div>

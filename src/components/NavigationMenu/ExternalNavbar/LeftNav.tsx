@@ -18,25 +18,14 @@ export function LeftNav() {
       <DocsMobileNavigation />
       <div className="flex space-x-8">
         <Link href="/" className={cn("font-bold text-xl ")}>
-          <div className="relative flex space-x-2 h-10 md:w-fit items-center justify-center dark:-ml-4 -ml-2">
+          <div className="relative flex h-16 md:w-fit items-center justify-center dark:-ml-4 -ml-2">
             <Image
-              src={`/logos/nextbase.png`}
-              width={32}
-              height={32}
-              alt="light-logo"
+              src="/logos/nextbase.png"
+              width={64}
+              height={64}
+              alt="نائبك"
+              className="object-contain"
             />
-
-            {isBlogPage && (
-              <span className="font-bold text-foreground">مدونة نائبك</span>
-            )}
-            {isDocsPage && (
-              <span className="font-bold font-bold text-foreground">
-                توثيق نائبك
-              </span>
-            )}
-            {!isBlogPage && !isDocsPage && (
-              <span className="font-bold">نائبك</span>
-            )}
           </div>
         </Link>
       </div>
