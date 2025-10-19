@@ -145,9 +145,9 @@ export default function DeputiesList() {
       onSuccess: ({ data }) => {
         if (data) {
           setDeputies(data.deputies as Deputy[]);
-          setTotalPages(data.totalPages);
-          setTotal(data.total);
-          setCurrentPage(data.currentPage);
+          setTotalPages(data.totalPages || 0);
+          setTotal(data.total || 0);
+          setCurrentPage(data.currentPage || 1);
         }
       },
       onError: ({ error }) => {
