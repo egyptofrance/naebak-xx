@@ -97,20 +97,16 @@ export async function UserList({
                     </Suspense>
                   </TableCell>
                   <TableCell>
-                    <Suspense>
-                      <PromoteToDeputyButton 
-                        userId={user.id} 
-                        userName={user.full_name ?? email}
-                      />
-                    </Suspense>
+                    <PromoteToDeputyButton 
+                      userId={user.id} 
+                      userName={user.full_name ?? email}
+                    />
                   </TableCell>
                   <TableCell>
-                    <Suspense>
-                      <PromoteToManagerButton 
-                        userId={user.id} 
-                        userName={user.full_name ?? email}
-                      />
-                    </Suspense>
+                    <PromoteToManagerButton 
+                      userId={user.id} 
+                      userName={user.full_name ?? email}
+                    />
                   </TableCell>
                 </TableRow>
               );
