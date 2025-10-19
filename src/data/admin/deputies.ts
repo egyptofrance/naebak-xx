@@ -52,7 +52,7 @@ export const searchUsersForDeputyAction = actionClient
         *,
         user_application_settings(email_readonly)
       `)
-      .or(`full_name.ilike.%${query}%,phone.ilike.%${query}%`)
+      .or(`full_name.ilike.*${query}*,phone.ilike.*${query}*`)
       .limit(100);
     
     // Filter by email if no results from name/phone search
@@ -62,7 +62,7 @@ export const searchUsersForDeputyAction = actionClient
       const { data: emailUsers } = await supabase
         .from("user_application_settings")
         .select("id, email_readonly")
-        .ilike("email_readonly", `%${query}%`);
+        .ilike("email_readonly", `*${query}*`);
       
       if (emailUsers && emailUsers.length > 0) {
         const userIds = emailUsers.map(u => u.id);
