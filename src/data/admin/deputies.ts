@@ -42,6 +42,7 @@ const updateDeputySchema = z.object({
 export const searchUsersAction = actionClient
   .schema(searchUsersSchema)
   .action(async ({ parsedInput: { query } }) => {
+    console.log('[searchUsersAction] Starting search with query:', query);
     const supabase = await createSupabaseUserServerComponentClient();
 
     // Search in user_profiles
@@ -52,8 +53,11 @@ export const searchUsersAction = actionClient
       .limit(20);
 
     if (error) {
+      console.log('[searchUsersAction] Error:', error);
       throw new Error(`Failed to search users: ${error.message}`);
     }
+
+    console.log('[searchUsersAction] Found users:', users?.length || 0);
 
     if (!users || users.length === 0) {
       return { users: [] };
