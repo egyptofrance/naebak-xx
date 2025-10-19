@@ -269,24 +269,68 @@ const getPaginatedUserListSchema = z.object({
   query: z.string().optional(),
   page: z.number().optional(),
   limit: z.number().optional(),
+  governorateId: z.string().uuid().optional(),
+  partyId: z.string().uuid().optional(),
+  role: z.string().optional(),
+  gender: z.string().optional(),
 });
 
 export const getPaginatedUserListAction = adminActionClient
   .schema(getPaginatedUserListSchema)
-  .action(async ({ parsedInput: { query = "", page = 1, limit = 10 } }) => {
+  .action(async ({ parsedInput: { query = "", page = 1, limit = 10, governorateId, partyId, role, gender } }) => {
     console.log("query", query);
     const startIndex = (page - 1) * limit;
     const endIndex = startIndex + limit;
+    
     let supabaseQuery = supabaseAdminClient
       .from("user_profiles")
-      .select("*, user_application_settings(*), user_roles(*)");
+      .select(`
+        *, 
+        user_application_settings(*), 
+        user_roles(*),
+        governorates (
+          id,
+          name_ar,
+          name_en,
+          code
+        ),
+        parties (
+          id,
+          name_ar,
+          name_en,
+          abbreviation
+        )
+      `);
+    
     console.log(query);
+    
+    // Text search across multiple fields
     if (query) {
-      // Search by full_name, email, or phone
       supabaseQuery = supabaseQuery.or(
-        `full_name.ilike.%${query}%,email.ilike.%${query}%,phone.ilike.%${query}%`
+        `full_name.ilike.%${query}%,email.ilike.%${query}%,phone.ilike.%${query}%,city.ilike.%${query}%,district.ilike.%${query}%,electoral_district.ilike.%${query}%`
       );
     }
+    
+    // Filter by governorate
+    if (governorateId) {
+      supabaseQuery = supabaseQuery.eq("governorate_id", governorateId);
+    }
+    
+    // Filter by party
+    if (partyId) {
+      supabaseQuery = supabaseQuery.eq("party_id", partyId);
+    }
+    
+    // Filter by role
+    if (role) {
+      supabaseQuery = supabaseQuery.eq("role", role);
+    }
+    
+    // Filter by gender
+    if (gender) {
+      supabaseQuery = supabaseQuery.eq("gender", gender);
+    }
+    
     console.log(startIndex, endIndex);
     const { data, error } = await supabaseQuery
       .limit(limit)
@@ -302,11 +346,15 @@ export const getPaginatedUserListAction = adminActionClient
 const getUsersTotalPagesSchema = z.object({
   query: z.string().optional(),
   limit: z.number().optional(),
+  governorateId: z.string().uuid().optional(),
+  partyId: z.string().uuid().optional(),
+  role: z.string().optional(),
+  gender: z.string().optional(),
 });
 
 export const getUsersTotalPagesAction = adminActionClient
   .schema(getUsersTotalPagesSchema)
-  .action(async ({ parsedInput: { query = "", limit = 10 } }) => {
+  .action(async ({ parsedInput: { query = "", limit = 10, governorateId, partyId, role, gender } }) => {
     console.log("query", query);
     let supabaseQuery = supabaseAdminClient
       .from("user_profiles")
@@ -314,12 +362,34 @@ export const getUsersTotalPagesAction = adminActionClient
         count: "exact",
         head: true,
       });
+    
+    // Text search across multiple fields
     if (query) {
-      // Search by full_name, email, or phone
       supabaseQuery = supabaseQuery.or(
-        `full_name.ilike.%${query}%,email.ilike.%${query}%,phone.ilike.%${query}%`
+        `full_name.ilike.%${query}%,email.ilike.%${query}%,phone.ilike.%${query}%,city.ilike.%${query}%,district.ilike.%${query}%,electoral_district.ilike.%${query}%`
       );
     }
+    
+    // Filter by governorate
+    if (governorateId) {
+      supabaseQuery = supabaseQuery.eq("governorate_id", governorateId);
+    }
+    
+    // Filter by party
+    if (partyId) {
+      supabaseQuery = supabaseQuery.eq("party_id", partyId);
+    }
+    
+    // Filter by role
+    if (role) {
+      supabaseQuery = supabaseQuery.eq("role", role);
+    }
+    
+    // Filter by gender
+    if (gender) {
+      supabaseQuery = supabaseQuery.eq("gender", gender);
+    }
+    
     const { count, error } = await supabaseQuery;
 
     if (error) {
@@ -376,3 +446,37 @@ export const uploadBlogImageAction = adminActionClient
 
     return { status: "success", data: supabaseFileUrl };
   });
+
+/**
+ * Get all governorates for filter dropdown
+ */
+export const getGovernoratesAction = adminActionClient.action(async () => {
+  const { data: governorates, error } = await supabaseAdminClient
+    .from("governorates")
+    .select("id, name_ar, name_en, code")
+    .order("name_ar", { ascending: true });
+
+  if (error) {
+    throw new Error(`Failed to fetch governorates: ${error.message}`);
+  }
+
+  return { governorates: governorates || [] };
+});
+
+/**
+ * Get all parties for filter dropdown
+ */
+export const getPartiesAction = adminActionClient.action(async () => {
+  const { data: parties, error } = await supabaseAdminClient
+    .from("parties")
+    .select("id, name_ar, name_en, abbreviation")
+    .eq("is_active", true)
+    .order("display_order", { ascending: true });
+
+  if (error) {
+    throw new Error(`Failed to fetch parties: ${error.message}`);
+  }
+
+  return { parties: parties || [] };
+});
+

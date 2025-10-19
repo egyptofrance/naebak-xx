@@ -36,14 +36,14 @@ const updateDeputySchema = z.object({
 });
 
 /**
- * Search for users by name, email, or phone
+ * Search for users by name, email, or phone with governorate and party information
  */
 export const searchUsersAction = actionClient
   .schema(searchUsersSchema)
   .action(async ({ parsedInput: { query } }) => {
     const supabase = await createSupabaseUserServerComponentClient();
 
-    // Search in user_profiles
+    // Search in user_profiles with joins to governorates and parties
     const { data: users, error } = await supabase
       .from("user_profiles")
       .select(
@@ -53,7 +53,22 @@ export const searchUsersAction = actionClient
         email,
         phone,
         governorate_id,
-        party_id
+        party_id,
+        city,
+        district,
+        electoral_district,
+        governorates (
+          id,
+          name_ar,
+          name_en,
+          code
+        ),
+        parties (
+          id,
+          name_ar,
+          name_en,
+          abbreviation
+        )
       `
       )
       .or(`full_name.ilike.%${query}%,email.ilike.%${query}%,phone.ilike.%${query}%`)
@@ -76,8 +91,6 @@ export const searchUsersAction = actionClient
     const usersWithDeputyStatus = users?.map((user) => ({
       ...user,
       isDeputy: deputyUserIds.has(user.id),
-      governorates: null,
-      parties: null,
     }));
 
     return { users: usersWithDeputyStatus || [] };
@@ -147,19 +160,31 @@ export const getDeputiesAction = actionClient.action(async () => {
       electoral_number,
       created_at,
       user_profiles (
+        id,
         full_name,
         email,
         phone,
         governorate_id,
         party_id,
+        city,
+        district,
+        electoral_district,
         governorates (
+          id,
           name_ar,
           name_en
         ),
         parties (
+          id,
           name_ar,
           name_en
         )
+      ),
+      councils (
+        id,
+        name_ar,
+        name_en,
+        code
       )
     `
     )
@@ -186,24 +211,41 @@ export const getDeputyByIdAction = actionClient
         `
         *,
         user_profiles (
+          id,
           full_name,
           email,
           phone,
           governorate_id,
           party_id,
+          city,
+          district,
+          village,
           electoral_district,
+          address,
+          gender,
+          job_title,
+          avatar_url,
           governorates (
+            id,
             name_ar,
-            name_en
+            name_en,
+            code
           ),
           parties (
+            id,
             name_ar,
-            name_en
+            name_en,
+            abbreviation,
+            logo_url
           )
         ),
         councils (
+          id,
           name_ar,
-          name_en
+          name_en,
+          code,
+          description_ar,
+          description_en
         )
       `
       )
