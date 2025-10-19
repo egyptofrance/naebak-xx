@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { getUserAvatarUrl } from "@/utils/helpers";
-import { updateCompleteProfileSchema } from "@/utils/zod-schemas/profile";
+import { profileUpdateFormSchema } from "@/utils/zod-schemas/profile";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useHookFormActionErrorMapper } from "@next-safe-action/adapter-react-hook-form/hooks";
 import Image from "next/image";
@@ -74,11 +74,11 @@ export function ProfileUpdate() {
   }, []);
 
   const { hookFormValidationErrors } = useHookFormActionErrorMapper<
-    typeof updateCompleteProfileSchema
+    typeof profileUpdateFormSchema
   >(profileUpdateActionState.result.validationErrors, { joinBy: "\n" });
 
   const form = useForm({
-    resolver: zodResolver(updateCompleteProfileSchema),
+    resolver: zodResolver(profileUpdateFormSchema),
     defaultValues: {
       fullName: userProfile.full_name ?? "",
       email: (userProfile as any).email ?? userEmail ?? "",

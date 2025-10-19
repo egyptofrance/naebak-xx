@@ -9,6 +9,18 @@ export type UpdateUserFullNameSchema = z.infer<typeof updateUserFullNameSchema>;
 
 export const profileUpdateFormSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
+  email: z.string().email().optional(),
+  phone: z.string().optional(),
+  governorateId: z.string().optional(),
+  city: z.string().optional(),
+  electoralDistrict: z.string().optional(),
+  gender: z.enum(["male", "female"]).optional(),
+  district: z.string().optional(),
+  village: z.string().optional(),
+  address: z.string().optional(),
+  jobTitle: z.string().optional(),
+  partyId: z.string().optional().nullable(),
+  avatarUrl: z.string().optional(),
 });
 
 export type ProfileUpdateFormSchema = z.infer<typeof profileUpdateFormSchema>;
