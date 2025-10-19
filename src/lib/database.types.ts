@@ -1602,6 +1602,69 @@ export type Database = {
         }
         Relationships: []
       }
+      governorates: {
+        Row: {
+          id: string
+          name_ar: string
+          name_en: string | null
+          code: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name_ar: string
+          name_en?: string | null
+          code?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name_ar?: string
+          name_en?: string | null
+          code?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      parties: {
+        Row: {
+          id: string
+          name_ar: string
+          name_en: string | null
+          abbreviation: string | null
+          description: string | null
+          logo_url: string | null
+          website_url: string | null
+          created_at: string
+          display_order: number | null
+          is_active: boolean | null
+        }
+        Insert: {
+          id?: string
+          name_ar: string
+          name_en?: string | null
+          abbreviation?: string | null
+          description?: string | null
+          logo_url?: string | null
+          website_url?: string | null
+          created_at?: string
+          display_order?: number | null
+          is_active?: boolean | null
+        }
+        Update: {
+          id?: string
+          name_ar?: string
+          name_en?: string | null
+          abbreviation?: string | null
+          description?: string | null
+          logo_url?: string | null
+          website_url?: string | null
+          created_at?: string
+          display_order?: number | null
+          is_active?: boolean | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
