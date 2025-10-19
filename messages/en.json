@@ -1,7 +1,7 @@
 {
   "HomePage": {
-    "title": "Nextbase Ultimate Landing Page",
-    "description": "Welcome to Nextbase Ultimate Landing Page: Your Gateway to Innovation. Discover the Future of Excellence and Elevate Your Experience."
+    "title": "Naebak.com Platform",
+    "description": "A communication platform between Egyptian citizens and their representatives in parliamentary and local councils"
   },
   "LocaleSwitcher": {
     "label": "Change language",
@@ -9,5 +9,11 @@
       "en": "English",
       "ar": "العربية"
     }
+  },
+  "Navigation": {
+    "home": "Home",
+    "about": "About Us",
+    "contact": "Contact Us",
+    "complaints": "Complaints"
   }
 }

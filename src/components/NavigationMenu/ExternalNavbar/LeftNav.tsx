@@ -3,12 +3,14 @@
 import { Link } from "@/components/intl-link";
 import { cn } from "@/utils/cn";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import { DocsMobileNavigation } from "./DocsMobileNavigation";
 import { navbarLinks } from "./constants";
 
 export function LeftNav() {
   const pathname = usePathname();
+  const t = useTranslations("Navigation");
 
   const isBlogPage = pathname?.startsWith("/blog");
   const isDocsPage = pathname?.startsWith("/docs");
@@ -39,12 +41,12 @@ export function LeftNav() {
         </Link>
       </div>
       <ul className="hidden lg:flex gap-8 font-medium items-center">
-        {navbarLinks.map(({ name, href }) => (
+        {navbarLinks.map(({ key, href }) => (
           <li
-            key={name}
+            key={key}
             className="text-muted-foreground font-regular text-sm hover:text-foreground"
           >
-            <Link href={href}>{name}</Link>
+            <Link href={href}>{t(key)}</Link>
           </li>
         ))}
       </ul>
