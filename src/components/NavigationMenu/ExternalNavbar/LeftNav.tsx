@@ -19,12 +19,21 @@ export function LeftNav() {
       <div className="flex space-x-8">
         <Link href="/" className={cn("font-bold text-xl ")}>
           <div className="relative flex h-16 md:w-fit items-center justify-center dark:-ml-4 -ml-2">
+            {/* Light Mode: لوجو أخضر */}
             <Image
-              src="/logos/nextbase.png"
+              src="/images/logo-naebak-green.png"
               width={64}
               height={64}
               alt="نائبك"
-              className="object-contain"
+              className="object-contain dark:hidden"
+            />
+            {/* Dark Mode: لوجو أبيض */}
+            <Image
+              src="/images/logo-naebak-white.png"
+              width={64}
+              height={64}
+              alt="نائبك"
+              className="object-contain hidden dark:block"
             />
           </div>
         </Link>

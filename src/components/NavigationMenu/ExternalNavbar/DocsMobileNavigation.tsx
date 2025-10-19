@@ -2,8 +2,8 @@
 import { Link } from "@/components/intl-link";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import lightLogo from "@public/logos/acme-logo-dark.png";
-import darkLogo from "@public/logos/acme-logo-light.png";
+import lightLogo from "@public/images/logo-naebak-green.png";
+import darkLogo from "@public/images/logo-naebak-white.png";
 import { PanelLeft } from "lucide-react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
@@ -69,11 +69,13 @@ export function DocsMobileNavigation() {
         <div className="flex items-center">
           <Link href="/" className="font-bold text-xl">
             <div className="relative flex items-center text-black dark:text-white dark:-ml-4">
+              {/* Light Mode: لوجو أخضر */}
               <Image
                 src={lightLogo}
                 alt="نائبك"
                 className="dark:hidden block h-20 w-20 object-contain"
               />
+              {/* Dark Mode: لوجو أبيض */}
               <Image
                 src={darkLogo}
                 alt="نائبك"
