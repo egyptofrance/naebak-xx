@@ -1,5 +1,6 @@
 "use client";
 import { Link } from "@/components/intl-link";
+import { useTranslations } from "next-intl";
 import { useContext } from "react";
 import { LoginCTAButton } from "./LoginCTAButton";
 import { MobileMenuContext } from "./MobileMenuContext";
@@ -7,17 +8,18 @@ import { navbarLinks } from "./constants";
 
 export function MobileMenu() {
   const { setMobileMenuOpen, mobileMenuOpen } = useContext(MobileMenuContext);
+  const t = useTranslations("Navigation");
   return (
     <>
       {mobileMenuOpen && (
         <ul className="md:hidden w-full shadow-2xl py-2 flex flex-col items-start font-medium pb-2">
-          {navbarLinks.map(({ name, href }) => (
+          {navbarLinks.map(({ key, href }) => (
             <li
-              key={name}
+              key={key}
               className="px-4 py-2 rounded-lg text-gray-900 dark:text-gray-300"
             >
               <Link href={href} onClick={() => setMobileMenuOpen(false)}>
-                {name}
+                {t(key)}
               </Link>
             </li>
           ))}
