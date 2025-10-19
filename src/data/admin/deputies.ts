@@ -198,6 +198,127 @@ export const getDeputiesAction = actionClient.action(async () => {
 });
 
 /**
+ * Search and filter deputies with advanced options
+ */
+const searchDeputiesSchema = z.object({
+  query: z.string().optional(),
+  governorateId: z.string().uuid().optional(),
+  partyId: z.string().uuid().optional(),
+  councilId: z.string().uuid().optional(),
+  deputyStatus: z.enum(["active", "inactive"]).optional(),
+  page: z.number().optional(),
+  limit: z.number().optional(),
+});
+
+export const searchDeputiesAction = actionClient
+  .schema(searchDeputiesSchema)
+  .action(async ({ parsedInput }) => {
+    const {
+      query = "",
+      governorateId,
+      partyId,
+      councilId,
+      deputyStatus,
+      page = 1,
+      limit = 20,
+    } = parsedInput;
+
+    const supabase = await createSupabaseUserServerComponentClient();
+
+    // Start building the query
+    let supabaseQuery = supabase
+      .from("deputy_profiles")
+      .select(
+        `
+        id,
+        user_id,
+        deputy_status,
+        electoral_symbol,
+        electoral_number,
+        created_at,
+        council_id,
+        user_profiles!inner (
+          id,
+          full_name,
+          email,
+          phone,
+          governorate_id,
+          party_id,
+          city,
+          district,
+          electoral_district,
+          governorates (
+            id,
+            name_ar,
+            name_en
+          ),
+          parties (
+            id,
+            name_ar,
+            name_en
+          )
+        ),
+        councils (
+          id,
+          name_ar,
+          name_en,
+          code
+        )
+      `,
+        { count: "exact" }
+      );
+
+    // Text search in user profile fields
+    if (query) {
+      supabaseQuery = supabaseQuery.or(
+        `user_profiles.full_name.ilike.%${query}%,user_profiles.email.ilike.%${query}%,user_profiles.phone.ilike.%${query}%,electoral_symbol.ilike.%${query}%,electoral_number.ilike.%${query}%`
+      );
+    }
+
+    // Filter by governorate (through user_profiles)
+    if (governorateId) {
+      supabaseQuery = supabaseQuery.eq(
+        "user_profiles.governorate_id",
+        governorateId
+      );
+    }
+
+    // Filter by party (through user_profiles)
+    if (partyId) {
+      supabaseQuery = supabaseQuery.eq("user_profiles.party_id", partyId);
+    }
+
+    // Filter by council
+    if (councilId) {
+      supabaseQuery = supabaseQuery.eq("council_id", councilId);
+    }
+
+    // Filter by deputy status
+    if (deputyStatus) {
+      supabaseQuery = supabaseQuery.eq("deputy_status", deputyStatus);
+    }
+
+    // Pagination
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit - 1;
+
+    const { data: deputies, error, count } = await supabaseQuery
+      .order("created_at", { ascending: false })
+      .range(startIndex, endIndex);
+
+    if (error) {
+      throw new Error(`Failed to search deputies: ${error.message}`);
+    }
+
+    return {
+      deputies: deputies || [],
+      total: count || 0,
+      totalPages: Math.ceil((count || 0) / limit),
+      currentPage: page,
+    };
+  });
+
+/**
  * Get a single deputy profile with full details
  */
 export const getDeputyByIdAction = actionClient
