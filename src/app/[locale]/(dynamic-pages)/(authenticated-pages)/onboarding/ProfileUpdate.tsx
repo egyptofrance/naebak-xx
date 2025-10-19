@@ -240,7 +240,7 @@ export function ProfileUpdate() {
                   >
                     <FormControl>
                       <SelectTrigger data-testid="gender-select" className="w-full">
-                        <SelectValue placeholder="النوع (ذكر/أنثى)" />
+                        <SelectValue placeholder="النوع" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
