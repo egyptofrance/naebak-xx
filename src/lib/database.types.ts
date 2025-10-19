@@ -2037,7 +2037,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "manager"
+      app_role: "admin" | "manager" | "deputy" | "citizen"
       marketing_blog_post_status: "draft" | "published"
       marketing_changelog_status: "draft" | "published"
       marketing_feedback_moderator_hold_category:

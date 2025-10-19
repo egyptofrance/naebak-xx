@@ -159,7 +159,21 @@ export const createDeputyAction = actionClient
       throw new Error("User is already a deputy");
     }
 
-    // Create deputy profile
+    // Step 1: Add "deputy" role to user_roles
+    const { data: roleData, error: roleError } = await supabase
+      .from("user_roles")
+      .insert({
+        user_id: userId,
+        role: "deputy",
+      })
+      .select()
+      .single();
+
+    if (roleError) {
+      throw new Error(`Failed to add deputy role: ${roleError.message}`);
+    }
+
+    // Step 2: Create deputy profile
     const { data: deputy, error: deputyError } = await supabase
       .from("deputy_profiles")
       .insert({
@@ -170,10 +184,20 @@ export const createDeputyAction = actionClient
       .single();
 
     if (deputyError) {
+      // Rollback: remove the role if deputy profile creation fails
+      await supabase
+        .from("user_roles")
+        .delete()
+        .eq("id", roleData.id);
+      
       throw new Error(`Failed to create deputy profile: ${deputyError.message}`);
     }
 
-    return { deputy, message: "Deputy profile created successfully" };
+    return { 
+      deputy, 
+      role: roleData,
+      message: `تم ترقية ${user.full_name || 'المستخدم'} إلى نائب بنجاح` 
+    };
   });
 
 /**
