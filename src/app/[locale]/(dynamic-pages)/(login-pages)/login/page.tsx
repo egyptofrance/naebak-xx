@@ -8,8 +8,8 @@ const SearchParamsSchema = z.object({
 });
 
 export const metadata: Metadata = {
-  title: "Login | Nextbase Starter Kits Demo",
-  description: "Login to your Nextbase Starter Kits Demo account",
+  title: "Login | نائبك",
+  description: "Login to your نائبك account",
 };
 
 export default async function LoginPage(props: {

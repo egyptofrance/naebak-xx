@@ -5,8 +5,8 @@ export const metadata = {
   icons: {
     icon: "/images/logo-black-main.ico",
   },
-  title: "Nextbase Ultimate",
-  description: "Nextbase Ultimate",
+  title: "نائبك",
+  description: "نائبك",
 };
 
 export default async function RootLayout({

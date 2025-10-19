@@ -27,15 +27,15 @@ export function LeftNav() {
             />
 
             {isBlogPage && (
-              <span className="font-bold text-foreground">Nextbase Blog</span>
+              <span className="font-bold text-foreground">مدونة نائبك</span>
             )}
             {isDocsPage && (
               <span className="font-bold font-bold text-foreground">
-                Nextbase Docs
+                توثيق نائبك
               </span>
             )}
             {!isBlogPage && !isDocsPage && (
-              <span className="font-bold">Nextbase</span>
+              <span className="font-bold">نائبك</span>
             )}
           </div>
         </Link>

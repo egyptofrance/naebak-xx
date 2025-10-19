@@ -52,7 +52,7 @@ function CreateTeamWorkspaceDialog({
       <DialogContent className="flex flex-col gap-2">
         <DialogHeader>
           <DialogTitle className="text-lg">
-            Nextbase Ultimate supports Solo and Team workspaces
+            نائبك supports Solo and Team workspaces
           </DialogTitle>
           <DialogDescription>
             Create a team workspace to collaborate with your team members.
@@ -60,7 +60,7 @@ function CreateTeamWorkspaceDialog({
         </DialogHeader>
         <div className="grid gap-4">
           <Typography.Subtle>
-            By default, Nextbase Ultimate creates a Solo workspace for users
+            By default, نائبك creates a Solo workspace for users
             after they first onboard.
           </Typography.Subtle>
           <Typography.Subtle>
@@ -137,7 +137,7 @@ function AdminUserDialog({ workspace }: { workspace: SlimWorkspace }) {
       <DialogContent className="flex flex-col gap-2">
         <DialogHeader>
           <DialogTitle className="text-lg">
-            Nextbase Ultimates ships with an Admin panel
+            نائبكs ships with an Admin panel
           </DialogTitle>
           <DialogDescription>
             Discover the process of assigning admin privileges to users in your
@@ -345,7 +345,7 @@ function MoreFeaturesDialog({ workspace }: { workspace: SlimWorkspace }) {
         <div className="space-y-4">
           <div>
             <Typography.Small>
-              Nextbase Ultimate includes several powerful admin tools to help
+              نائبك includes several powerful admin tools to help
               you manage your application:
             </Typography.Small>
             <Typography.List>
@@ -417,7 +417,7 @@ function MoreFeaturesDialog({ workspace }: { workspace: SlimWorkspace }) {
 export function SidebarTipsNav({ workspace }: { workspace: SlimWorkspace }) {
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Nextbase Tips</SidebarGroupLabel>
+      <SidebarGroupLabel>نصائح نائبك</SidebarGroupLabel>
       <SidebarMenu>
         <CreateTeamWorkspaceDialog workspace={workspace} />
         <InviteUsersDialog workspace={workspace} />

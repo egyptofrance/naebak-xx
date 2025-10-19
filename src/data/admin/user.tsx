@@ -230,7 +230,7 @@ export const sendLoginLinkAction = adminActionClient
         const signInEmailHTML = await renderAsync(
           <SignInEmail
             signInUrl={url.toString()}
-            companyName="Nextbase"
+            companyName="نائبك"
             userName={userName ?? "User"}
             logoUrl={urlJoin(
               process.env.NEXT_PUBLIC_SUPABASE_URL,

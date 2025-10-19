@@ -19,7 +19,7 @@ export function TermsAcceptance() {
           data-testid="terms-acceptance-title"
           className="text-2xl font-bold mb-2"
         >
-          Welcome to Nextbase Ultimate Demo
+          Welcome to نائبك Demo
         </CardTitle>
         <CardDescription>
           Please review our terms of service before proceeding.

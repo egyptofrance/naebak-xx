@@ -9,7 +9,7 @@ import { UserList } from "./UsersList";
 import { appAdminUserFiltersSchema } from "./schema";
 
 export const metadata = {
-  title: "User List | Admin Panel | Nextbase",
+  title: "User List | Admin Panel | نائبك",
 };
 
 export default async function AdminUsersListPage(props: {

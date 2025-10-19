@@ -35,7 +35,7 @@ export class StripePaymentGateway implements PaymentGateway {
     this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
       apiVersion: "2025-02-24.acacia",
       appInfo: {
-        name: "Nextbase",
+        name: "نائبك",
         version: "0.1.0",
       },
     });

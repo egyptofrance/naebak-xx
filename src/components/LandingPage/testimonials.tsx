@@ -13,7 +13,7 @@ export default function Testimonials() {
       <div className="max-w-6xl mx-auto space-y-8">
         <TitleBlock
           title="Don't  take our word for it"
-          subtitle="Hear what our satisfied customers have to say about Nextbase"
+          subtitle="Hear what our satisfied customers have to say about نائبك"
         />
         <div className="relative flex h-full w-full flex-col  pt-10 items-center justify-center overflow-hidden ">
           <Marquee pauseOnHover className="[--duration:20s]">

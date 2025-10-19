@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   icons: {
     icon: "/images/logo-black-main.ico",
   },
-  title: "Nextbase Ultimate",
-  description: "Nextbase Ultimate",
+  title: "نائبك",
+  description: "نائبك",
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? `https://usenextbase.com`,
   ),

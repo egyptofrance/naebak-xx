@@ -29,7 +29,7 @@ export function SwitcherAndToggle({ workspaceId, slimWorkspaces }: Props) {
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <Home className="size-4" />
                 </div>
-                <span>Nextbase</span>
+                <span>نائبك</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

@@ -8,7 +8,7 @@ import { WorkspaceList } from "./WorkspaceList";
 import { appAdminWorkspacesFiltersSchema } from "./schema";
 
 export const metadata = {
-  title: "Workspaces List | Admin Panel | Nextbase",
+  title: "Workspaces List | Admin Panel | نائبك",
 };
 
 export default async function AdminWorkspacesList(props: {

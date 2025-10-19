@@ -9,8 +9,8 @@ import { PublicBlogList } from "../PublicBlogList";
 import { TagsNav } from "../TagsNav";
 
 export const metadata = {
-  title: "Blog List | Nextbase",
-  description: "Collection of the latest blog posts from the team at Nextbase",
+  title: "Blog List | نائبك",
+  description: "Collection of the latest blog posts from the team at نائبك",
   icons: {
     icon: "/images/logo-black-main.ico",
   },
@@ -42,7 +42,7 @@ export default async function BlogListPage(props: {
           <T.H1>All blog posts</T.H1>
           <T.P className="text-xl leading-[30px] text-muted-foreground">
             Here is a collection of the latest blog posts from the team at
-            Nextbase.
+            نائبك.
           </T.P>
         </div>
         <Suspense fallback={<T.Subtle>Loading tags...</T.Subtle>}>

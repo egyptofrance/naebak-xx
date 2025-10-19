@@ -21,7 +21,7 @@ function Notification({
   const notificationPayload = parseNotification(notification.payload);
   const handleNotificationClick = useCallback(() => {
     if (notificationPayload.type === "welcome") {
-      toast("Welcome to Nextbase");
+      toast("Welcome to نائبك");
     }
   }, [notificationPayload]);
 

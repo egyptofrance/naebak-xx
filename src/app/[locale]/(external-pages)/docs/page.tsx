@@ -21,8 +21,8 @@ export default function DocsPage() {
         {...fadeIn}
         transition={{ delay: 0.1 }}
       >
-        Nextbase Ultimate ships with Fumadocs. Fumadocs is a powerful
-        documentation framework integrated into Nextbase Ultimate, designed to
+        نائبك ships with Fumadocs. Fumadocs is a powerful
+        documentation framework integrated into نائبك, designed to
         make creating beautiful and functional documentation a breeze.
       </motion.p>
 

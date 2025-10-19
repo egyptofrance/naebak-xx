@@ -33,7 +33,7 @@ export async function generateMetadata(props: {
   const tag = await anonGetTagBySlug(tagSlug);
 
   return {
-    title: `${tag.name} | Blog | Nextbase Ultimate`,
+    title: `${tag.name} | Blog | نائبك`,
     description: tag.description,
   };
 }

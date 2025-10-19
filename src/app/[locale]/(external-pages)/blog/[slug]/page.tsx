@@ -39,17 +39,17 @@ export async function generateMetadata(props: {
   const { slug } = paramsSchema.parse(params);
   const post = await anonGetPublishedBlogPostBySlug(slug);
   return {
-    title: `${post.title} | Blog | Nextbase Boilerplate`,
+    title: `${post.title} | Blog | نائبك`,
     description: post.summary,
     openGraph: {
-      title: `${post.title} | Blog | Nextbase Boilerplate`,
+      title: `${post.title} | Blog | نائبك`,
       description: post.summary,
       type: "website",
       images: post.cover_image ? [post.cover_image] : undefined,
     },
     twitter: {
       images: post.cover_image ? [post.cover_image] : undefined,
-      title: `${post.title} | Blog | Nextbase Boilerplate`,
+      title: `${post.title} | Blog | نائبك`,
       card: "summary_large_image",
       site: "@usenextbase",
       description: post.summary,

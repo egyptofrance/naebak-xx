@@ -13,7 +13,7 @@ export async function generateMetadata() {
     const workspace = await getCachedSoloWorkspace();
 
     return {
-      title: `${workspace.name} | Workspace | Nextbase Ultimate`,
+      title: `${workspace.name} | Workspace | نائبك`,
       description: "Workspace title",
     };
   } catch (error) {

@@ -82,14 +82,14 @@ export async function FeedbackListSidebar() {
 
       <div className="text-center">
         <p className="text-xs text-muted-foreground">
-          Powered by{" "}
+          مدعوم بواسطة{" "}
           <a
-            href="https://usenextbase.com"
+            href="https://naebak.com"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:underline"
           >
-            Nextbase
+            نائبك
           </a>
         </p>
       </div>

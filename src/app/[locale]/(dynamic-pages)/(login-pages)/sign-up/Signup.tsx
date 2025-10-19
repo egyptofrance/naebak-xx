@@ -40,7 +40,7 @@ export function SignUp({ next, nextActionType }: SignUpProps) {
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle>Create your Nextbase Account</CardTitle>
+            <CardTitle>Create your حساب نائبك</CardTitle>
             <CardDescription>
               Choose your preferred signup method
             </CardDescription>

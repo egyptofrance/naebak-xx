@@ -48,9 +48,9 @@ export const parseNotification = (
         };
       case "welcome":
         return {
-          title: "Welcome to the Nextbase",
+          title: "Welcome to the نائبك",
           description:
-            "Welcome to the Nextbase Ultimate. We are glad to see you here!",
+            "Welcome to the نائبك. We are glad to see you here!",
           actionType: "button",
           image: "/logos/logo-black.png",
           type: notification.type,
