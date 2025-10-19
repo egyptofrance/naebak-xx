@@ -304,3 +304,23 @@ export const searchDeputiesAction = actionClient
     };
   });
 
+
+
+/**
+ * Get all councils
+ */
+export const getCouncilsAction = actionClient.action(async () => {
+  const supabase = await createSupabaseUserServerComponentClient();
+
+  const { data: councils, error } = await supabase
+    .from("councils")
+    .select("*")
+    .order("name_ar", { ascending: true });
+
+  if (error) {
+    throw new Error(`Failed to fetch councils: ${error.message}`);
+  }
+
+  return { councils: councils || [] };
+});
+
