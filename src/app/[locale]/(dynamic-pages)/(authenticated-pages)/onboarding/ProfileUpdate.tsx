@@ -1,5 +1,6 @@
 "use client";
 import { FormInput } from "@/components/form-components/FormInput";
+import { FormInputNoLabel } from "@/components/form-components/FormInputNoLabel";
 import { Button } from "@/components/ui/button";
 import {
   CardContent,
@@ -203,31 +204,28 @@ export function ProfileUpdate() {
               البيانات الأساسية
             </h3>
             
-            <FormInput
+            <FormInputNoLabel
               id="full-name"
-              label="الاسم الكامل *"
               control={control}
               name="fullName"
-              inputProps={{ placeholder: "أدخل الاسم الكامل" }}
+              inputProps={{ placeholder: "الاسم الكامل *" }}
               data-testid="full-name-input"
             />
 
-            <FormInput
+            <FormInputNoLabel
               id="email"
-              label="البريد الإلكتروني *"
               control={control}
               name="email"
               type="email"
-              inputProps={{ placeholder: "example@email.com" }}
+              inputProps={{ placeholder: "البريد الإلكتروني *" }}
               data-testid="email-input"
             />
 
-            <FormInput
+            <FormInputNoLabel
               id="phone"
-              label="رقم الهاتف *"
               control={control}
               name="phone"
-              inputProps={{ placeholder: "01012345678" }}
+              inputProps={{ placeholder: "رقم الهاتف * (01xxxxxxxxx)" }}
               data-testid="phone-input"
             />
 
@@ -236,14 +234,13 @@ export function ProfileUpdate() {
               name="gender"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>النوع</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger data-testid="gender-select">
-                        <SelectValue placeholder="اختر النوع" />
+                      <SelectTrigger data-testid="gender-select" className="w-full">
+                        <SelectValue placeholder="النوع (ذكر/أنثى)" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -256,11 +253,11 @@ export function ProfileUpdate() {
               )}
             />
 
-            <FormInput
+            <FormInputNoLabel
               id="job-title"
-              label="المهنة/الوظيفة"
               control={control}
               name="jobTitle"
+              inputProps={{ placeholder: "المهنة/الوظيفة" }}
               data-testid="job-title-input"
             />
           </div>
@@ -276,14 +273,13 @@ export function ProfileUpdate() {
               name="governorateId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>المحافظة *</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger data-testid="governorate-select">
-                        <SelectValue placeholder="اختر المحافظة" />
+                      <SelectTrigger data-testid="governorate-select" className="w-full">
+                        <SelectValue placeholder="المحافظة *" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -299,27 +295,27 @@ export function ProfileUpdate() {
               )}
             />
 
-            <FormInput
+            <FormInputNoLabel
               id="city"
-              label="المدينة *"
               control={control}
               name="city"
+              inputProps={{ placeholder: "المدينة *" }}
               data-testid="city-input"
             />
 
-            <FormInput
+            <FormInputNoLabel
               id="district"
-              label="الحي/المنطقة"
               control={control}
               name="district"
+              inputProps={{ placeholder: "الحي/المنطقة" }}
               data-testid="district-input"
             />
 
-            <FormInput
+            <FormInputNoLabel
               id="village"
-              label="القرية"
               control={control}
               name="village"
+              inputProps={{ placeholder: "القرية" }}
               data-testid="village-input"
             />
 
@@ -328,11 +324,10 @@ export function ProfileUpdate() {
               name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>العنوان التفصيلي</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="أدخل عنوانك بالتفصيل"
-                      className="resize-none min-h-[80px]"
+                      placeholder="العنوان التفصيلي"
+                      className="resize-none min-h-[80px] w-full"
                       {...field}
                       data-testid="address-input"
                     />
@@ -349,11 +344,11 @@ export function ProfileUpdate() {
               البيانات الانتخابية
             </h3>
 
-            <FormInput
+            <FormInputNoLabel
               id="electoral-district"
-              label="الدائرة الانتخابية *"
               control={control}
               name="electoralDistrict"
+              inputProps={{ placeholder: "الدائرة الانتخابية *" }}
               data-testid="electoral-district-input"
             />
 
@@ -362,14 +357,13 @@ export function ProfileUpdate() {
               name="partyId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>الحزب السياسي (اختياري)</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger data-testid="party-select">
-                        <SelectValue placeholder="اختر الحزب السياسي" />
+                      <SelectTrigger data-testid="party-select" className="w-full">
+                        <SelectValue placeholder="الحزب السياسي (اختياري)" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
