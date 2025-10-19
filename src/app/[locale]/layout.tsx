@@ -1,5 +1,5 @@
 import "@/styles/globals.css";
-import { GeistSans } from "geist/font/sans";
+import { Tajawal } from "@/fonts/tajawal";
 import { Metadata } from "next";
 import { getMessages } from "next-intl/server";
 import "server-only";
@@ -35,7 +35,7 @@ export default async function RootLayout(props: {
   return (
     <html
       lang={locale}
-      className={GeistSans.className}
+      className={Tajawal.className}
       suppressHydrationWarning
     >
       <head>
