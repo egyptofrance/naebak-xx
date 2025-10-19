@@ -377,19 +377,46 @@ export const updateUserFullNameAction = authActionClient
 
     // Map camelCase to snake_case for database
     const updateData: Record<string, any> = {};
-    if (profileData.fullName !== undefined) updateData.full_name = profileData.fullName;
-    if (profileData.email !== undefined) updateData.email = profileData.email;
-    if (profileData.phone !== undefined) updateData.phone = profileData.phone;
-    if (profileData.governorateId !== undefined) updateData.governorate_id = profileData.governorateId;
-    if (profileData.city !== undefined) updateData.city = profileData.city;
-    if (profileData.electoralDistrict !== undefined) updateData.electoral_district = profileData.electoralDistrict;
-    if (profileData.gender !== undefined) updateData.gender = profileData.gender;
-    if (profileData.district !== undefined) updateData.district = profileData.district;
-    if (profileData.village !== undefined) updateData.village = profileData.village;
-    if (profileData.address !== undefined) updateData.address = profileData.address;
-    if (profileData.jobTitle !== undefined) updateData.job_title = profileData.jobTitle;
-    if (profileData.partyId !== undefined) updateData.party_id = profileData.partyId || null;
-    if (profileData.avatarUrl !== undefined) updateData.avatar_url = profileData.avatarUrl;
+    
+    // Only update fields that have actual values (not empty strings)
+    if (profileData.fullName && profileData.fullName.trim()) 
+      updateData.full_name = profileData.fullName.trim();
+    
+    if (profileData.email && profileData.email.trim()) 
+      updateData.email = profileData.email.trim();
+    
+    if (profileData.phone && profileData.phone.trim()) 
+      updateData.phone = profileData.phone.trim();
+    
+    if (profileData.governorateId && profileData.governorateId.trim()) 
+      updateData.governorate_id = profileData.governorateId;
+    
+    if (profileData.city && profileData.city.trim()) 
+      updateData.city = profileData.city.trim();
+    
+    if (profileData.electoralDistrict && profileData.electoralDistrict.trim()) 
+      updateData.electoral_district = profileData.electoralDistrict.trim();
+    
+    if (profileData.gender) 
+      updateData.gender = profileData.gender;
+    
+    if (profileData.district && profileData.district.trim()) 
+      updateData.district = profileData.district.trim();
+    
+    if (profileData.village && profileData.village.trim()) 
+      updateData.village = profileData.village.trim();
+    
+    if (profileData.address && profileData.address.trim()) 
+      updateData.address = profileData.address.trim();
+    
+    if (profileData.jobTitle && profileData.jobTitle.trim()) 
+      updateData.job_title = profileData.jobTitle.trim();
+    
+    if (profileData.partyId && profileData.partyId.trim()) 
+      updateData.party_id = profileData.partyId;
+    
+    if (profileData.avatarUrl && profileData.avatarUrl.trim()) 
+      updateData.avatar_url = profileData.avatarUrl.trim();
 
     const { data, error } = await supabaseClient
       .from("user_profiles")
