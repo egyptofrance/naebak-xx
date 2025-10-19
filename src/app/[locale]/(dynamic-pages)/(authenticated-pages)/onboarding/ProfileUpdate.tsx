@@ -8,15 +8,31 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Form } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { getUserAvatarUrl } from "@/utils/helpers";
-import { profileUpdateFormSchema } from "@/utils/zod-schemas/profile";
+import { updateCompleteProfileSchema } from "@/utils/zod-schemas/profile";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useHookFormActionErrorMapper } from "@next-safe-action/adapter-react-hook-form/hooks";
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useOnboarding } from "./OnboardingContext";
+import { getGovernorates, getParties } from "@/data/user/complete-profile";
 
 export function ProfileUpdate() {
   const {
@@ -27,6 +43,10 @@ export function ProfileUpdate() {
     avatarURLState,
   } = useOnboarding();
 
+  const [governorates, setGovernorates] = useState<any[]>([]);
+  const [parties, setParties] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const avatarUrlWithFallback = getUserAvatarUrl({
@@ -34,14 +54,45 @@ export function ProfileUpdate() {
     email: userEmail,
   });
 
+  // Load governorates and parties
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const [govData, partiesData] = await Promise.all([
+          getGovernorates(),
+          getParties(),
+        ]);
+        setGovernorates(govData);
+        setParties(partiesData);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
+
   const { hookFormValidationErrors } = useHookFormActionErrorMapper<
-    typeof profileUpdateFormSchema
+    typeof updateCompleteProfileSchema
   >(profileUpdateActionState.result.validationErrors, { joinBy: "\n" });
 
   const form = useForm({
-    resolver: zodResolver(profileUpdateFormSchema),
+    resolver: zodResolver(updateCompleteProfileSchema),
     defaultValues: {
       fullName: userProfile.full_name ?? "",
+      email: userProfile.email ?? userEmail ?? "",
+      phone: userProfile.phone ?? "",
+      governorateId: userProfile.governorate_id ?? "",
+      city: userProfile.city ?? "",
+      electoralDistrict: userProfile.electoral_district ?? "",
+      gender: userProfile.gender ?? undefined,
+      district: userProfile.district ?? "",
+      village: userProfile.village ?? "",
+      address: userProfile.address ?? "",
+      jobTitle: userProfile.job_title ?? "",
+      partyId: userProfile.party_id ?? undefined,
+      avatarUrl: userProfile.avatar_url ?? "",
     },
     errors: hookFormValidationErrors,
   });
@@ -67,6 +118,10 @@ export function ProfileUpdate() {
     fileInputRef.current?.click();
   };
 
+  if (loading) {
+    return <div className="text-center">Loading...</div>;
+  }
+
   return (
     <Form {...form}>
       <form
@@ -79,24 +134,31 @@ export function ProfileUpdate() {
       >
         <CardHeader>
           <CardTitle data-testid="profile-update-title">
-            Create Your Profile
+            أكمل بياناتك الشخصية
           </CardTitle>
           <CardDescription>
-            Let&apos;s set up your personal details.
+            يرجى ملء جميع البيانات المطلوبة لإكمال التسجيل
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        
+        <CardContent className="space-y-6 max-h-[60vh] overflow-y-auto">
+          {/* Avatar Upload */}
           <div className="space-y-2">
             <label htmlFor="avatar" className="text-sm font-medium">
-              Avatar
+              الصورة الشخصية
             </label>
-            <div className="flex items-center space-x-4">
-              <div className="relative w-12 h-12 shrink-0">
+            <div className="flex items-center gap-4">
+              <div className="relative w-16 h-16 shrink-0 rounded-full overflow-hidden border-2 border-gray-200 bg-gray-100">
                 <Image
                   fill
-                  className="rounded-full object-cover"
+                  className="object-cover"
                   src={avatarUrlWithFallback}
                   alt="User avatar"
+                  unoptimized
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(userProfile.full_name || "User") + "&background=random&size=200";
+                  }}
                 />
               </div>
               <input
@@ -117,20 +179,202 @@ export function ProfileUpdate() {
                 disabled={uploadAvatarMutation.status === "executing"}
               >
                 {uploadAvatarMutation.status === "executing"
-                  ? "Uploading..."
-                  : "Change Avatar"}
+                  ? "جاري الرفع..."
+                  : "تغيير الصورة"}
               </Button>
             </div>
           </div>
-          <FormInput
-            id="full-name"
-            label="Full Name"
-            control={control}
-            name="fullName"
-            data-testid="full-name-input"
-          />
+
+          {/* Basic Information */}
+          <div className="space-y-4">
+            <h3 className="text-base font-semibold border-b pb-2">
+              البيانات الأساسية
+            </h3>
+            
+            <FormInput
+              id="full-name"
+              label="الاسم الكامل *"
+              control={control}
+              name="fullName"
+              data-testid="full-name-input"
+            />
+
+            <FormInput
+              id="email"
+              label="البريد الإلكتروني *"
+              control={control}
+              name="email"
+              type="email"
+              data-testid="email-input"
+            />
+
+            <FormInput
+              id="phone"
+              label="رقم الهاتف *"
+              control={control}
+              name="phone"
+              inputProps={{ placeholder: "01xxxxxxxxx" }}
+              data-testid="phone-input"
+            />
+
+            <FormField
+              control={control}
+              name="gender"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>النوع</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger data-testid="gender-select">
+                        <SelectValue placeholder="اختر النوع" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="male">ذكر</SelectItem>
+                      <SelectItem value="female">أنثى</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormInput
+              id="job-title"
+              label="المهنة/الوظيفة"
+              control={control}
+              name="jobTitle"
+              data-testid="job-title-input"
+            />
+          </div>
+
+          {/* Geographic Information */}
+          <div className="space-y-4">
+            <h3 className="text-base font-semibold border-b pb-2">
+              البيانات الجغرافية
+            </h3>
+
+            <FormField
+              control={control}
+              name="governorateId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>المحافظة *</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger data-testid="governorate-select">
+                        <SelectValue placeholder="اختر المحافظة" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {governorates.map((gov) => (
+                        <SelectItem key={gov.id} value={gov.id}>
+                          {gov.name_ar}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormInput
+              id="city"
+              label="المدينة *"
+              control={control}
+              name="city"
+              data-testid="city-input"
+            />
+
+            <FormInput
+              id="district"
+              label="الحي/المنطقة"
+              control={control}
+              name="district"
+              data-testid="district-input"
+            />
+
+            <FormInput
+              id="village"
+              label="القرية"
+              control={control}
+              name="village"
+              data-testid="village-input"
+            />
+
+            <FormField
+              control={control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>العنوان التفصيلي</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="أدخل عنوانك بالتفصيل"
+                      className="resize-none min-h-[80px]"
+                      {...field}
+                      data-testid="address-input"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          {/* Electoral Information */}
+          <div className="space-y-4">
+            <h3 className="text-base font-semibold border-b pb-2">
+              البيانات الانتخابية
+            </h3>
+
+            <FormInput
+              id="electoral-district"
+              label="الدائرة الانتخابية *"
+              control={control}
+              name="electoralDistrict"
+              data-testid="electoral-district-input"
+            />
+
+            <FormField
+              control={control}
+              name="partyId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>الحزب السياسي (اختياري)</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger data-testid="party-select">
+                        <SelectValue placeholder="اختر الحزب السياسي" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="">بدون حزب</SelectItem>
+                      {parties.map((party) => (
+                        <SelectItem key={party.id} value={party.id}>
+                          {party.name_ar}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         </CardContent>
-        <CardFooter>
+
+        <CardFooter className="pt-6">
           <Button
             type="submit"
             className="w-full"
@@ -138,11 +382,12 @@ export function ProfileUpdate() {
             data-testid="save-profile-button"
           >
             {profileUpdateActionState.status === "executing"
-              ? "Saving..."
-              : "Save Profile"}
+              ? "جاري الحفظ..."
+              : "حفظ البيانات"}
           </Button>
         </CardFooter>
       </form>
     </Form>
   );
 }
+

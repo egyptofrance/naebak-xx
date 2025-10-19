@@ -352,24 +352,54 @@ export const requestAccountDeletionAction = authActionClient.action(
 
 const updateUserFullNameSchema = z.object({
   fullName: z.string().min(1, "Full name is required"),
+  email: z.string().email().optional(),
+  phone: z.string().optional(),
+  governorateId: z.string().optional(),
+  city: z.string().optional(),
+  electoralDistrict: z.string().optional(),
+  gender: z.enum(["male", "female"]).optional(),
+  district: z.string().optional(),
+  village: z.string().optional(),
+  address: z.string().optional(),
+  jobTitle: z.string().optional(),
+  partyId: z.string().optional(),
+  avatarUrl: z.string().optional(),
   isOnboardingFlow: z.boolean().optional().default(false),
 });
 
 export const updateUserFullNameAction = authActionClient
   .schema(updateUserFullNameSchema)
-  .action(async ({ parsedInput: { fullName, isOnboardingFlow } }) => {
+  .action(async ({ parsedInput }) => {
     const supabaseClient = await createSupabaseUserServerActionClient();
     const user = await serverGetLoggedInUserVerified();
 
+    const { isOnboardingFlow, ...profileData } = parsedInput;
+
+    // Map camelCase to snake_case for database
+    const updateData: Record<string, any> = {};
+    if (profileData.fullName !== undefined) updateData.full_name = profileData.fullName;
+    if (profileData.email !== undefined) updateData.email = profileData.email;
+    if (profileData.phone !== undefined) updateData.phone = profileData.phone;
+    if (profileData.governorateId !== undefined) updateData.governorate_id = profileData.governorateId;
+    if (profileData.city !== undefined) updateData.city = profileData.city;
+    if (profileData.electoralDistrict !== undefined) updateData.electoral_district = profileData.electoralDistrict;
+    if (profileData.gender !== undefined) updateData.gender = profileData.gender;
+    if (profileData.district !== undefined) updateData.district = profileData.district;
+    if (profileData.village !== undefined) updateData.village = profileData.village;
+    if (profileData.address !== undefined) updateData.address = profileData.address;
+    if (profileData.jobTitle !== undefined) updateData.job_title = profileData.jobTitle;
+    if (profileData.partyId !== undefined) updateData.party_id = profileData.partyId || null;
+    if (profileData.avatarUrl !== undefined) updateData.avatar_url = profileData.avatarUrl;
+
     const { data, error } = await supabaseClient
       .from("user_profiles")
-      .update({ full_name: fullName })
+      .update(updateData)
       .eq("id", user.id)
       .select()
       .single();
 
     if (error) {
-      throw new Error(`Failed to update full name: ${error.message}`);
+      throw new Error(`Failed to update profile: ${error.message}`);
     }
 
     if (isOnboardingFlow) {
