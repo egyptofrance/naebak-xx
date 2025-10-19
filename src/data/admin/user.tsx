@@ -282,7 +282,10 @@ export const getPaginatedUserListAction = adminActionClient
       .select("*, user_application_settings(*), user_roles(*)");
     console.log(query);
     if (query) {
-      supabaseQuery = supabaseQuery.ilike("full_name", `%${query}%`);
+      // Search by full_name, email, or phone
+      supabaseQuery = supabaseQuery.or(
+        `full_name.ilike.%${query}%,email.ilike.%${query}%,phone.ilike.%${query}%`
+      );
     }
     console.log(startIndex, endIndex);
     const { data, error } = await supabaseQuery
@@ -312,7 +315,10 @@ export const getUsersTotalPagesAction = adminActionClient
         head: true,
       });
     if (query) {
-      supabaseQuery = supabaseQuery.ilike("full_name", `%${query}%`);
+      // Search by full_name, email, or phone
+      supabaseQuery = supabaseQuery.or(
+        `full_name.ilike.%${query}%,email.ilike.%${query}%,phone.ilike.%${query}%`
+      );
     }
     const { count, error } = await supabaseQuery;
 

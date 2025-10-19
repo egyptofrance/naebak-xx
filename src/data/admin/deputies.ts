@@ -53,15 +53,7 @@ export const searchUsersAction = actionClient
         email,
         phone,
         governorate_id,
-        party_id,
-        governorates (
-          name_ar,
-          name_en
-        ),
-        parties (
-          name_ar,
-          name_en
-        )
+        party_id
       `
       )
       .or(`full_name.ilike.%${query}%,email.ilike.%${query}%,phone.ilike.%${query}%`)
@@ -84,6 +76,8 @@ export const searchUsersAction = actionClient
     const usersWithDeputyStatus = users?.map((user) => ({
       ...user,
       isDeputy: deputyUserIds.has(user.id),
+      governorates: null,
+      parties: null,
     }));
 
     return { users: usersWithDeputyStatus || [] };
