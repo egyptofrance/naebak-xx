@@ -27,7 +27,6 @@ export function SidebarWorkspaceNav({
 }) {
   let sidebarLinks = [
     { label: "Home", href: "/home", icon: <Home className="h-5 w-5" /> },
-
     {
       label: "Projects",
       href: "/projects",
@@ -37,11 +36,6 @@ export function SidebarWorkspaceNav({
       label: "Settings",
       href: "/settings",
       icon: <Settings className="h-5 w-5" />,
-    },
-    {
-      label: "Billing",
-      href: "/settings/billing",
-      icon: <DollarSign className="h-5 w-5" />,
     },
   ];
 
@@ -79,13 +73,6 @@ export function SidebarWorkspaceNav({
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}
-        <SidebarMenuItem>
-          <ProFeatureGateDialog
-            workspace={workspace}
-            label="Feature Pro"
-            icon={<FileBox className="h-5 w-5" />}
-          />
-        </SidebarMenuItem>
       </SidebarMenu>
     </SidebarGroup>
   );
