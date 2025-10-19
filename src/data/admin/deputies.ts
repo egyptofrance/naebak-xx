@@ -60,8 +60,8 @@ export const searchUsersAction = actionClient
     }
 
     // Get governorates and parties for these users
-    const governorateIds = [...new Set(users.map(u => u.governorate_id).filter(Boolean))];
-    const partyIds = [...new Set(users.map(u => u.party_id).filter(Boolean))];
+    const governorateIds = [...new Set(users.map(u => u.governorate_id).filter(Boolean))] as string[];
+    const partyIds = [...new Set(users.map(u => u.party_id).filter(Boolean))] as string[];
 
     const { data: governorates } = await supabase
       .from("governorates")
@@ -258,9 +258,9 @@ export const searchDeputiesAction = actionClient
     }
 
     // Get related data
-    const governorateIds = [...new Set(users?.map(u => u.governorate_id).filter(Boolean) || [])];
-    const partyIds = [...new Set(users?.map(u => u.party_id).filter(Boolean) || [])];
-    const councilIds = [...new Set(deputies.map(d => d.council_id).filter(Boolean))];
+    const governorateIds = [...new Set(users?.map(u => u.governorate_id).filter(Boolean) || [])] as string[];
+    const partyIds = [...new Set(users?.map(u => u.party_id).filter(Boolean) || [])] as string[];
+    const councilIds = [...new Set(deputies.map(d => d.council_id).filter(Boolean))] as string[];
 
     const [
       { data: governorates },
