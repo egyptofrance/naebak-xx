@@ -42,53 +42,55 @@ const updateDeputySchema = z.object({
 export const searchUsersForDeputyAction = actionClient
   .schema(searchUsersSchema)
   .action(async ({ parsedInput: { query } }) => {
-    console.log('[searchUsersAction] Starting search with query:', query);
+    console.log('[searchUsersForDeputy] Query:', query);
     const supabase = await createSupabaseUserServerComponentClient();
 
-    // Search in user_profiles with user_application_settings joined for email
-    const { data: users, error } = await supabase
+    // Step 1: Get all user profiles (simple fetch, no complex queries)
+    const { data: allProfiles, error: profilesError } = await supabase
       .from("user_profiles")
-      .select(`
-        *,
-        user_application_settings(email_readonly)
-      `)
-      .or(`full_name.ilike.*${query}*,phone.ilike.*${query}*`)
-      .limit(100);
-    
-    // Filter by email if no results from name/phone search
-    let filteredUsers = users || [];
-    if (query && filteredUsers.length === 0) {
-      // Try searching by email in user_application_settings
-      const { data: emailUsers } = await supabase
-        .from("user_application_settings")
-        .select("id, email_readonly")
-        .ilike("email_readonly", `*${query}*`);
+      .select("*")
+      .limit(1000);
+
+    if (profilesError) {
+      console.error('[searchUsersForDeputy] Error:', profilesError);
+      throw new Error(`Failed to fetch profiles: ${profilesError.message}`);
+    }
+
+    // Step 2: Get all user emails
+    const { data: allSettings, error: settingsError } = await supabase
+      .from("user_application_settings")
+      .select("id, email_readonly")
+      .limit(1000);
+
+    if (settingsError) {
+      console.error('[searchUsersForDeputy] Error:', settingsError);
+      throw new Error(`Failed to fetch settings: ${settingsError.message}`);
+    }
+
+    // Step 3: Create email lookup
+    const emailMap = new Map(allSettings?.map(s => [s.id, s.email_readonly]) || []);
+
+    // Step 4: Simple client-side filtering (no complex SQL)
+    const queryLower = query.toLowerCase();
+    const filteredUsers = allProfiles?.filter(profile => {
+      const email = emailMap.get(profile.id) || '';
+      const fullName = profile.full_name || '';
+      const phone = profile.phone || '';
       
-      if (emailUsers && emailUsers.length > 0) {
-        const userIds = emailUsers.map(u => u.id);
-        const { data: profileUsers } = await supabase
-          .from("user_profiles")
-          .select(`
-            *,
-            user_application_settings(email_readonly)
-          `)
-          .in("id", userIds);
-        filteredUsers = profileUsers || [];
-      }
-    }
+      return (
+        fullName.toLowerCase().includes(queryLower) ||
+        email.toLowerCase().includes(queryLower) ||
+        phone.toLowerCase().includes(queryLower)
+      );
+    }) || [];
 
-    if (error) {
-      console.log('[searchUsersAction] Error:', error);
-      throw new Error(`Failed to search users: ${error.message}`);
-    }
+    console.log('[searchUsersForDeputy] Matched:', filteredUsers.length);
 
-    console.log('[searchUsersAction] Found users:', filteredUsers?.length || 0);
-
-    if (!filteredUsers || filteredUsers.length === 0) {
+    if (filteredUsers.length === 0) {
       return { users: [] };
     }
 
-    // Get governorates and parties for these users
+    // Get governorates and parties
     const governorateIds = [...new Set(filteredUsers.map(u => u.governorate_id).filter(Boolean))] as string[];
     const partyIds = [...new Set(filteredUsers.map(u => u.party_id).filter(Boolean))] as string[];
 
@@ -115,10 +117,10 @@ export const searchUsersForDeputyAction = actionClient
     const governorateMap = new Map(governorates?.map(g => [g.id, g]) || []);
     const partyMap = new Map(parties?.map(p => [p.id, p]) || []);
 
-    // Merge data
+    // Merge data with email from our map
     const usersWithDetails = filteredUsers.map((user) => ({
       ...user,
-      email: user.user_application_settings?.email_readonly || null,
+      email: emailMap.get(user.id) || null,
       governorates: user.governorate_id ? governorateMap.get(user.governorate_id) : null,
       parties: user.party_id ? partyMap.get(user.party_id) : null,
       isDeputy: deputyUserIds.has(user.id),
