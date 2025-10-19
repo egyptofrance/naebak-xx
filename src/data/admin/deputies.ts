@@ -44,43 +44,37 @@ export const searchUsersAction = actionClient
   .action(async ({ parsedInput: { query } }) => {
     const supabase = await createSupabaseUserServerComponentClient();
 
-    // Search in user_profiles with joins to governorates and parties
+    // Search in user_profiles
     const { data: users, error } = await supabase
       .from("user_profiles")
-      .select(
-        `
-        id,
-        full_name,
-        email,
-        phone,
-        governorate_id,
-        party_id,
-        city,
-        district,
-        electoral_district,
-        governorates (
-          id,
-          name_ar,
-          name_en,
-          code
-        ),
-        parties (
-          id,
-          name_ar,
-          name_en,
-          abbreviation
-        )
-      `
-      )
-      .or(`full_name.ilike.%${query}%,email.ilike.%${query}%,phone.ilike.%${query}%`)
+      .select("*")
+      .or(`full_name.ilike.*${query}*,email.ilike.*${query}*,phone.ilike.*${query}*`)
       .limit(20);
 
     if (error) {
       throw new Error(`Failed to search users: ${error.message}`);
     }
 
+    if (!users || users.length === 0) {
+      return { users: [] };
+    }
+
+    // Get governorates and parties for these users
+    const governorateIds = [...new Set(users.map(u => u.governorate_id).filter(Boolean))];
+    const partyIds = [...new Set(users.map(u => u.party_id).filter(Boolean))];
+
+    const { data: governorates } = await supabase
+      .from("governorates")
+      .select("*")
+      .in("id", governorateIds);
+
+    const { data: parties } = await supabase
+      .from("parties")
+      .select("*")
+      .in("id", partyIds);
+
     // Check which users are already deputies
-    const userIds = users?.map((u) => u.id) || [];
+    const userIds = users.map((u) => u.id);
     const { data: existingDeputies } = await supabase
       .from("deputy_profiles")
       .select("user_id")
@@ -88,13 +82,19 @@ export const searchUsersAction = actionClient
 
     const deputyUserIds = new Set(existingDeputies?.map((d) => d.user_id) || []);
 
-    // Add isDeputy flag to each user
-    const usersWithDeputyStatus = users?.map((user) => ({
+    // Create lookup maps
+    const governorateMap = new Map(governorates?.map(g => [g.id, g]) || []);
+    const partyMap = new Map(parties?.map(p => [p.id, p]) || []);
+
+    // Merge data
+    const usersWithDetails = users.map((user) => ({
       ...user,
+      governorates: user.governorate_id ? governorateMap.get(user.governorate_id) : null,
+      parties: user.party_id ? partyMap.get(user.party_id) : null,
       isDeputy: deputyUserIds.has(user.id),
     }));
 
-    return { users: usersWithDeputyStatus || [] };
+    return { users: usersWithDetails };
   });
 
 /**
@@ -145,62 +145,29 @@ export const createDeputyAction = actionClient
   });
 
 /**
- * Get all deputies with their user information
+ * Update deputy profile
  */
-export const getDeputiesAction = actionClient.action(async () => {
-  const supabase = await createSupabaseUserServerComponentClient();
+export const updateDeputyAction = actionClient
+  .schema(updateDeputySchema)
+  .action(async ({ parsedInput }) => {
+    const { deputyId, ...updateData } = parsedInput;
+    const supabase = await createSupabaseUserServerComponentClient();
 
-  const { data: deputies, error } = await supabase
-    .from("deputy_profiles")
-    .select(
-      `
-      id,
-      user_id,
-      deputy_status,
-      electoral_symbol,
-      electoral_number,
-      created_at,
-      user_profiles (
-        id,
-        full_name,
-        email,
-        phone,
-        governorate_id,
-        party_id,
-        city,
-        district,
-        electoral_district,
-        governorates (
-          id,
-          name_ar,
-          name_en
-        ),
-        parties (
-          id,
-          name_ar,
-          name_en
-        )
-      ),
-      councils (
-        id,
-        name_ar,
-        name_en,
-        code
-      )
-    `
-    )
-    .order("created_at", { ascending: false });
+    const { data: deputy, error } = await supabase
+      .from("deputy_profiles")
+      .update(updateData)
+      .eq("id", deputyId)
+      .select()
+      .single();
 
-  if (error) {
-    throw new Error(`Failed to fetch deputies: ${error.message}`);
-  }
+    if (error) {
+      throw new Error(`Failed to update deputy profile: ${error.message}`);
+    }
 
-  return { deputies: deputies || [] };
-});
+    return { deputy, message: "Deputy profile updated successfully" };
+  });
 
-/**
- * Search and filter deputies with advanced options
- */
+// Schema for searching deputies
 const searchDeputiesSchema = z.object({
   query: z.string().optional(),
   governorateId: z.string().uuid().optional(),
@@ -226,253 +193,114 @@ export const searchDeputiesAction = actionClient
 
     const supabase = await createSupabaseUserServerComponentClient();
 
-    // Start building the query
-    let supabaseQuery = supabase
+    // Get all deputy profiles with optional filters
+    let deputyQuery = supabase
       .from("deputy_profiles")
-      .select(
-        `
-        id,
-        user_id,
-        deputy_status,
-        electoral_symbol,
-        electoral_number,
-        created_at,
-        council_id,
-        user_profiles!inner (
-          id,
-          full_name,
-          email,
-          phone,
-          governorate_id,
-          party_id,
-          city,
-          district,
-          electoral_district,
-          governorates (
-            id,
-            name_ar,
-            name_en
-          ),
-          parties (
-            id,
-            name_ar,
-            name_en
-          )
-        ),
-        councils (
-          id,
-          name_ar,
-          name_en,
-          code
-        )
-      `,
-        { count: "exact" }
-      );
+      .select("*", { count: "exact" });
 
-    // Text search in user profile fields
-    if (query) {
-      supabaseQuery = supabaseQuery.or(
-        `user_profiles.full_name.ilike.%${query}%,user_profiles.email.ilike.%${query}%,user_profiles.phone.ilike.%${query}%,electoral_symbol.ilike.%${query}%,electoral_number.ilike.%${query}%`
-      );
-    }
-
-    // Filter by governorate (through user_profiles)
-    if (governorateId) {
-      supabaseQuery = supabaseQuery.eq(
-        "user_profiles.governorate_id",
-        governorateId
-      );
-    }
-
-    // Filter by party (through user_profiles)
-    if (partyId) {
-      supabaseQuery = supabaseQuery.eq("user_profiles.party_id", partyId);
+    // Filter by deputy status
+    if (deputyStatus) {
+      deputyQuery = deputyQuery.eq("deputy_status", deputyStatus);
     }
 
     // Filter by council
     if (councilId) {
-      supabaseQuery = supabaseQuery.eq("council_id", councilId);
+      deputyQuery = deputyQuery.eq("council_id", councilId);
     }
 
-    // Filter by deputy status
-    if (deputyStatus) {
-      supabaseQuery = supabaseQuery.eq("deputy_status", deputyStatus);
+    // Text search in deputy fields
+    if (query) {
+      deputyQuery = deputyQuery.or(
+        `electoral_symbol.ilike.*${query}*,electoral_number.ilike.*${query}*`
+      );
     }
 
-    // Pagination
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + limit - 1;
+    const { data: deputies, error: deputyError, count } = await deputyQuery
+      .range((page - 1) * limit, page * limit - 1)
+      .order("created_at", { ascending: false });
 
-    const { data: deputies, error, count } = await supabaseQuery
-      .order("created_at", { ascending: false })
-      .range(startIndex, endIndex);
-
-    if (error) {
-      throw new Error(`Failed to search deputies: ${error.message}`);
+    if (deputyError) {
+      throw new Error(`Failed to search deputies: ${deputyError.message}`);
     }
 
-    return {
-      deputies: deputies || [],
-      total: count || 0,
-      totalPages: Math.ceil((count || 0) / limit),
-      currentPage: page,
+    if (!deputies || deputies.length === 0) {
+      return { deputies: [], total: 0, page, limit };
+    }
+
+    // Get user profiles for these deputies
+    const userIds = deputies.map(d => d.user_id);
+    let userQuery = supabase
+      .from("user_profiles")
+      .select("*")
+      .in("id", userIds);
+
+    // Filter by governorate
+    if (governorateId) {
+      userQuery = userQuery.eq("governorate_id", governorateId);
+    }
+
+    // Filter by party
+    if (partyId) {
+      userQuery = userQuery.eq("party_id", partyId);
+    }
+
+    // Text search in user fields
+    if (query) {
+      userQuery = userQuery.or(
+        `full_name.ilike.*${query}*,email.ilike.*${query}*,phone.ilike.*${query}*`
+      );
+    }
+
+    const { data: users, error: userError } = await userQuery;
+
+    if (userError) {
+      throw new Error(`Failed to fetch user profiles: ${userError.message}`);
+    }
+
+    // Get related data
+    const governorateIds = [...new Set(users?.map(u => u.governorate_id).filter(Boolean) || [])];
+    const partyIds = [...new Set(users?.map(u => u.party_id).filter(Boolean) || [])];
+    const councilIds = [...new Set(deputies.map(d => d.council_id).filter(Boolean))];
+
+    const [
+      { data: governorates },
+      { data: parties },
+      { data: councils }
+    ] = await Promise.all([
+      supabase.from("governorates").select("*").in("id", governorateIds),
+      supabase.from("parties").select("*").in("id", partyIds),
+      supabase.from("councils").select("*").in("id", councilIds),
+    ]);
+
+    // Create lookup maps
+    const userMap = new Map(users?.map(u => [u.id, u]) || []);
+    const governorateMap = new Map(governorates?.map(g => [g.id, g]) || []);
+    const partyMap = new Map(parties?.map(p => [p.id, p]) || []);
+    const councilMap = new Map(councils?.map(c => [c.id, c]) || []);
+
+    // Merge all data
+    const deputiesWithDetails = deputies
+      .map((deputy) => {
+        const user = userMap.get(deputy.user_id);
+        if (!user) return null; // Skip if user not found (filtered out)
+        
+        return {
+          ...deputy,
+          user_profiles: {
+            ...user,
+            governorates: user.governorate_id ? governorateMap.get(user.governorate_id) : null,
+            parties: user.party_id ? partyMap.get(user.party_id) : null,
+          },
+          councils: deputy.council_id ? councilMap.get(deputy.council_id) : null,
+        };
+      })
+      .filter(Boolean); // Remove nulls
+
+    return { 
+      deputies: deputiesWithDetails, 
+      total: count || 0, 
+      page, 
+      limit 
     };
   });
-
-/**
- * Get a single deputy profile with full details
- */
-export const getDeputyByIdAction = actionClient
-  .schema(z.object({ deputyId: z.string().uuid() }))
-  .action(async ({ parsedInput: { deputyId } }) => {
-    const supabase = await createSupabaseUserServerComponentClient();
-
-    const { data: deputy, error } = await supabase
-      .from("deputy_profiles")
-      .select(
-        `
-        *,
-        user_profiles (
-          id,
-          full_name,
-          email,
-          phone,
-          governorate_id,
-          party_id,
-          city,
-          district,
-          village,
-          electoral_district,
-          address,
-          gender,
-          job_title,
-          avatar_url,
-          governorates (
-            id,
-            name_ar,
-            name_en,
-            code
-          ),
-          parties (
-            id,
-            name_ar,
-            name_en,
-            abbreviation,
-            logo_url
-          )
-        ),
-        councils (
-          id,
-          name_ar,
-          name_en,
-          code,
-          description_ar,
-          description_en
-        )
-      `
-      )
-      .eq("id", deputyId)
-      .single();
-
-    if (error) {
-      throw new Error(`Failed to fetch deputy: ${error.message}`);
-    }
-
-    return { deputy };
-  });
-
-/**
- * Update deputy profile
- */
-export const updateDeputyAction = actionClient
-  .schema(updateDeputySchema)
-  .action(async ({ parsedInput }) => {
-    const supabase = await createSupabaseUserServerComponentClient();
-    const { deputyId, ...updateData } = parsedInput;
-
-    // Convert camelCase to snake_case for database
-    const dbUpdateData: any = {};
-    if (updateData.bio !== undefined) dbUpdateData.bio = updateData.bio;
-    if (updateData.officeAddress !== undefined)
-      dbUpdateData.office_address = updateData.officeAddress;
-    if (updateData.officePhone !== undefined)
-      dbUpdateData.office_phone = updateData.officePhone;
-    if (updateData.officeHours !== undefined)
-      dbUpdateData.office_hours = updateData.officeHours;
-    if (updateData.electoralSymbol !== undefined)
-      dbUpdateData.electoral_symbol = updateData.electoralSymbol;
-    if (updateData.electoralNumber !== undefined)
-      dbUpdateData.electoral_number = updateData.electoralNumber;
-    if (updateData.electoralProgram !== undefined)
-      dbUpdateData.electoral_program = updateData.electoralProgram;
-    if (updateData.achievements !== undefined)
-      dbUpdateData.achievements = updateData.achievements;
-    if (updateData.events !== undefined) dbUpdateData.events = updateData.events;
-    if (updateData.websiteUrl !== undefined)
-      dbUpdateData.website_url = updateData.websiteUrl || null;
-    if (updateData.socialMediaFacebook !== undefined)
-      dbUpdateData.social_media_facebook = updateData.socialMediaFacebook || null;
-    if (updateData.socialMediaTwitter !== undefined)
-      dbUpdateData.social_media_twitter = updateData.socialMediaTwitter || null;
-    if (updateData.socialMediaInstagram !== undefined)
-      dbUpdateData.social_media_instagram = updateData.socialMediaInstagram || null;
-    if (updateData.socialMediaYoutube !== undefined)
-      dbUpdateData.social_media_youtube = updateData.socialMediaYoutube || null;
-    if (updateData.councilId !== undefined)
-      dbUpdateData.council_id = updateData.councilId;
-
-    dbUpdateData.updated_at = new Date().toISOString();
-
-    const { data: deputy, error } = await supabase
-      .from("deputy_profiles")
-      .update(dbUpdateData)
-      .eq("id", deputyId)
-      .select()
-      .single();
-
-    if (error) {
-      throw new Error(`Failed to update deputy profile: ${error.message}`);
-    }
-
-    return { deputy, message: "Deputy profile updated successfully" };
-  });
-
-/**
- * Delete deputy profile (convert back to regular user)
- */
-export const deleteDeputyAction = actionClient
-  .schema(z.object({ deputyId: z.string().uuid() }))
-  .action(async ({ parsedInput: { deputyId } }) => {
-    const supabase = await createSupabaseUserServerComponentClient();
-
-    const { error } = await supabase
-      .from("deputy_profiles")
-      .delete()
-      .eq("id", deputyId);
-
-    if (error) {
-      throw new Error(`Failed to delete deputy profile: ${error.message}`);
-    }
-
-    return { message: "Deputy profile deleted successfully" };
-  });
-
-/**
- * Get councils list for dropdown
- */
-export const getCouncilsAction = actionClient.action(async () => {
-  const supabase = await createSupabaseUserServerComponentClient();
-
-  const { data: councils, error } = await supabase
-    .from("councils")
-    .select("id, name_ar, name_en, code")
-    .eq("is_active", true)
-    .order("display_order", { ascending: true });
-
-  if (error) {
-    throw new Error(`Failed to fetch councils: ${error.message}`);
-  }
-
-  return { councils: councils || [] };
-});
 
