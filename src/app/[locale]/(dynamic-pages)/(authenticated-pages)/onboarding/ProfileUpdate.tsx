@@ -359,7 +359,6 @@ export function ProfileUpdate() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="">بدون حزب</SelectItem>
                       {parties.map((party) => (
                         <SelectItem key={party.id} value={party.id}>
                           {party.name_ar}
