@@ -14,7 +14,6 @@ import { Globe } from "lucide-react";
 
 const LOCALE_NAMES: Record<string, string> = {
   en: "English",
-  de: "Deutsch",
   ar: "العربية",
 };
 
