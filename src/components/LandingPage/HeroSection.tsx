@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronRight, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { AvatarCirclesDemo } from "./AvatarCirclesDemo";
+
 
 export default function HeroSection() {
   const t = useTranslations("HomePage");
@@ -52,19 +52,7 @@ export default function HeroSection() {
             </Button>
           </div>
         </div>
-        <div className="flex justify-center items-center">
-          <AvatarCirclesDemo />
-        </div>
-        <div className="relative w-full aspect-21/9 rounded-md border-2 border-border shadow-xs overflow-hidden">
-          <Image
-            alt="Hero Image"
-            src="/images/hero.jpeg"
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover"
-            priority
-          />
-        </div>
+
       </div>
     </section>
     </>
