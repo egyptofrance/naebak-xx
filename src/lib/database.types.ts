@@ -1266,24 +1266,75 @@ export type Database = {
       }
       user_profiles: {
         Row: {
+          id: string
+          full_name: string | null
           avatar_url: string | null
           created_at: string
-          full_name: string | null
-          id: string
+          phone: string | null
+          governorate_id: string | null
+          city: string | null
+          district: string | null
+          village: string | null
+          job_title: string | null
+          party_id: string | null
+          electoral_district: string | null
+          address: string | null
+          email: string | null
+          role: string
+          gender: string | null
         }
         Insert: {
+          id: string
+          full_name?: string | null
           avatar_url?: string | null
           created_at?: string
-          full_name?: string | null
-          id: string
+          phone?: string | null
+          governorate_id?: string | null
+          city?: string | null
+          district?: string | null
+          village?: string | null
+          job_title?: string | null
+          party_id?: string | null
+          electoral_district?: string | null
+          address?: string | null
+          email?: string | null
+          role?: string
+          gender?: string | null
         }
         Update: {
+          id?: string
+          full_name?: string | null
           avatar_url?: string | null
           created_at?: string
-          full_name?: string | null
-          id?: string
+          phone?: string | null
+          governorate_id?: string | null
+          city?: string | null
+          district?: string | null
+          village?: string | null
+          job_title?: string | null
+          party_id?: string | null
+          electoral_district?: string | null
+          address?: string | null
+          email?: string | null
+          role?: string
+          gender?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "user_profiles_governorate_id_fkey"
+            columns: ["governorate_id"]
+            isOneToOne: false
+            referencedRelation: "governorates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_profiles_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
