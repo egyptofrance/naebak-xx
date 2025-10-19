@@ -140,7 +140,7 @@ export const createDeputyAction = actionClient
  * Get all deputies with their user information
  */
 export const getDeputiesAction = actionClient.action(async () => {
-  const supabase = await createClient();
+  const supabase = await createSupabaseUserServerComponentClient();
 
   const { data: deputies, error } = await supabase
     .from("deputy_profiles")
@@ -303,7 +303,7 @@ export const deleteDeputyAction = actionClient
  * Get councils list for dropdown
  */
 export const getCouncilsAction = actionClient.action(async () => {
-  const supabase = await createClient();
+  const supabase = await createSupabaseUserServerComponentClient();
 
   const { data: councils, error } = await supabase
     .from("councils")
