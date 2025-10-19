@@ -58,7 +58,7 @@ export function isValidLocale(
 }
 // eg: en|de
 export const LOCALE_GLOB_PATTERN = `${LOCALES.join("|")}`;
-export const DEFAULT_LOCALE: Locale = "en";
+export const DEFAULT_LOCALE: Locale = "ar";
 
 export const FEEDBACK_BG_BOARD_COLORS = {
   blue: "bg-blue-500",
