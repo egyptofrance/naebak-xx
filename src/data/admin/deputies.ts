@@ -50,25 +50,47 @@ export const searchUsersForDeputyAction = actionClient
       .from("user_profiles")
       .select(`
         *,
-        user_application_settings!inner(email_readonly)
+        user_application_settings(email_readonly)
       `)
-      .or(`full_name.ilike.*${query}*,phone.ilike.*${query}*,user_application_settings.email_readonly.ilike.*${query}*`)
-      .limit(20);
+      .or(`full_name.ilike.*${query}*,phone.ilike.*${query}*`)
+      .limit(100);
+    
+    // Filter by email if no results from name/phone search
+    let filteredUsers = users || [];
+    if (query && filteredUsers.length === 0) {
+      // Try searching by email in user_application_settings
+      const { data: emailUsers } = await supabase
+        .from("user_application_settings")
+        .select("id, email_readonly")
+        .ilike("email_readonly", `*${query}*`);
+      
+      if (emailUsers && emailUsers.length > 0) {
+        const userIds = emailUsers.map(u => u.id);
+        const { data: profileUsers } = await supabase
+          .from("user_profiles")
+          .select(`
+            *,
+            user_application_settings(email_readonly)
+          `)
+          .in("id", userIds);
+        filteredUsers = profileUsers || [];
+      }
+    }
 
     if (error) {
       console.log('[searchUsersAction] Error:', error);
       throw new Error(`Failed to search users: ${error.message}`);
     }
 
-    console.log('[searchUsersAction] Found users:', users?.length || 0);
+    console.log('[searchUsersAction] Found users:', filteredUsers?.length || 0);
 
-    if (!users || users.length === 0) {
+    if (!filteredUsers || filteredUsers.length === 0) {
       return { users: [] };
     }
 
     // Get governorates and parties for these users
-    const governorateIds = [...new Set(users.map(u => u.governorate_id).filter(Boolean))] as string[];
-    const partyIds = [...new Set(users.map(u => u.party_id).filter(Boolean))] as string[];
+    const governorateIds = [...new Set(filteredUsers.map(u => u.governorate_id).filter(Boolean))] as string[];
+    const partyIds = [...new Set(filteredUsers.map(u => u.party_id).filter(Boolean))] as string[];
 
     const { data: governorates } = await supabase
       .from("governorates")
@@ -81,7 +103,7 @@ export const searchUsersForDeputyAction = actionClient
       .in("id", partyIds);
 
     // Check which users are already deputies
-    const userIds = users.map((u) => u.id);
+    const userIds = filteredUsers.map((u) => u.id);
     const { data: existingDeputies } = await supabase
       .from("deputy_profiles")
       .select("user_id")
@@ -94,7 +116,7 @@ export const searchUsersForDeputyAction = actionClient
     const partyMap = new Map(parties?.map(p => [p.id, p]) || []);
 
     // Merge data
-    const usersWithDetails = users.map((user) => ({
+    const usersWithDetails = filteredUsers.map((user) => ({
       ...user,
       email: user.user_application_settings?.email_readonly || null,
       governorates: user.governorate_id ? governorateMap.get(user.governorate_id) : null,
