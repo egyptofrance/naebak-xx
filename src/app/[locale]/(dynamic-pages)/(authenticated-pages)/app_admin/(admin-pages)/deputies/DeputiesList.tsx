@@ -78,22 +78,22 @@ interface Deputy {
 interface Governorate {
   id: string;
   name_ar: string;
-  name_en: string;
-  code: string;
+  name_en: string | null;
+  code: string | null;
 }
 
 interface Party {
   id: string;
   name_ar: string;
-  name_en: string;
+  name_en: string | null;
   abbreviation: string | null;
 }
 
 interface Council {
   id: string;
   name_ar: string;
-  name_en: string;
-  code: string;
+  name_en: string | null;
+  code: string | null;
 }
 
 export default function DeputiesList() {
