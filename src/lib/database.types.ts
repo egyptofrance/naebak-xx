@@ -1716,6 +1716,138 @@ export type Database = {
         }
         Relationships: []
       }
+      deputy_profiles: {
+        Row: {
+          id: string
+          user_id: string
+          deputy_status: string
+          office_address: string | null
+          bio: string | null
+          initial_rating_count: number | null
+          initial_rating_average: number | null
+          created_at: string | null
+          updated_at: string | null
+          electoral_symbol: string | null
+          electoral_number: string | null
+          electoral_program: string | null
+          achievements: string | null
+          events: string | null
+          initial_rating_avg: number | null
+          social_media_facebook: string | null
+          social_media_twitter: string | null
+          social_media_instagram: string | null
+          social_media_youtube: string | null
+          website_url: string | null
+          office_phone: string | null
+          office_hours: string | null
+          council_id: string | null
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          deputy_status: string
+          office_address?: string | null
+          bio?: string | null
+          initial_rating_count?: number | null
+          initial_rating_average?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+          electoral_symbol?: string | null
+          electoral_number?: string | null
+          electoral_program?: string | null
+          achievements?: string | null
+          events?: string | null
+          initial_rating_avg?: number | null
+          social_media_facebook?: string | null
+          social_media_twitter?: string | null
+          social_media_instagram?: string | null
+          social_media_youtube?: string | null
+          website_url?: string | null
+          office_phone?: string | null
+          office_hours?: string | null
+          council_id?: string | null
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          deputy_status?: string
+          office_address?: string | null
+          bio?: string | null
+          initial_rating_count?: number | null
+          initial_rating_average?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+          electoral_symbol?: string | null
+          electoral_number?: string | null
+          electoral_program?: string | null
+          achievements?: string | null
+          events?: string | null
+          initial_rating_avg?: number | null
+          social_media_facebook?: string | null
+          social_media_twitter?: string | null
+          social_media_instagram?: string | null
+          social_media_youtube?: string | null
+          website_url?: string | null
+          office_phone?: string | null
+          office_hours?: string | null
+          council_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deputy_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deputy_profiles_council_id_fkey"
+            columns: ["council_id"]
+            isOneToOne: false
+            referencedRelation: "councils"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      councils: {
+        Row: {
+          id: string
+          name_ar: string
+          name_en: string
+          code: string
+          description_ar: string | null
+          description_en: string | null
+          is_active: boolean | null
+          display_order: number | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          name_ar: string
+          name_en: string
+          code: string
+          description_ar?: string | null
+          description_en?: string | null
+          is_active?: boolean | null
+          display_order?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          name_ar?: string
+          name_en?: string
+          code?: string
+          description_ar?: string | null
+          description_en?: string | null
+          is_active?: boolean | null
+          display_order?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
