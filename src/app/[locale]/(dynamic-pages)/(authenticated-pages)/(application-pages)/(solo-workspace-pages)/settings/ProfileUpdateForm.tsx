@@ -149,7 +149,6 @@ export function ProfileUpdateForm({
                 control={control}
                 name="email"
                 inputProps={{
-                  type: "email",
                   placeholder: "البريد الإلكتروني *",
                 }}
               />
@@ -159,7 +158,6 @@ export function ProfileUpdateForm({
                 control={control}
                 name="phone"
                 inputProps={{
-                  type: "tel",
                   placeholder: "رقم الهاتف * (01xxxxxxxxx)",
                 }}
               />
