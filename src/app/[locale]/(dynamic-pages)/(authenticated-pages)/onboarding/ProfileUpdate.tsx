@@ -63,7 +63,13 @@ export function ProfileUpdate() {
           getParties(),
         ]);
         setGovernorates(govData);
-        setParties(partiesData);
+        // Sort parties: "مستقل" first, then others
+        const sortedParties = partiesData.sort((a, b) => {
+          if (a.name_ar === "مستقل") return -1;
+          if (b.name_ar === "مستقل") return 1;
+          return 0;
+        });
+        setParties(sortedParties);
       } catch (error) {
         console.error("Error loading data:", error);
       } finally {
