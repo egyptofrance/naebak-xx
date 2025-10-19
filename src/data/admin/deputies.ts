@@ -45,11 +45,14 @@ export const searchUsersForDeputyAction = actionClient
     console.log('[searchUsersAction] Starting search with query:', query);
     const supabase = await createSupabaseUserServerComponentClient();
 
-    // Search in user_profiles
+    // Search in user_profiles with user_application_settings joined for email
     const { data: users, error } = await supabase
       .from("user_profiles")
-      .select("*")
-      .or(`full_name.ilike.*${query}*,email.ilike.*${query}*,phone.ilike.*${query}*`)
+      .select(`
+        *,
+        user_application_settings!inner(email_readonly)
+      `)
+      .or(`full_name.ilike.*${query}*,phone.ilike.*${query}*,user_application_settings.email_readonly.ilike.*${query}*`)
       .limit(20);
 
     if (error) {
@@ -93,6 +96,7 @@ export const searchUsersForDeputyAction = actionClient
     // Merge data
     const usersWithDetails = users.map((user) => ({
       ...user,
+      email: user.user_application_settings?.email_readonly || null,
       governorates: user.governorate_id ? governorateMap.get(user.governorate_id) : null,
       parties: user.party_id ? partyMap.get(user.party_id) : null,
       isDeputy: deputyUserIds.has(user.id),
