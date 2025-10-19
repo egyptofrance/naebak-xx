@@ -17,6 +17,7 @@ import { Suspense } from "react";
 import { ConfirmSendLoginLinkDialog } from "./ConfirmSendLoginLinkDialog";
 import { GetLoginLinkDialog } from "./GetLoginLinkDialog";
 import { PromoteToDeputyButton } from "./PromoteToDeputyButton";
+import { PromoteToManagerButton } from "./PromoteToManagerButton";
 import { AppAdminUserFiltersSchema } from "./schema";
 
 export async function UserList({
@@ -39,6 +40,7 @@ export async function UserList({
               <TableHead>Contact User</TableHead>
               <TableHead>Send Login Link</TableHead>
               <TableHead>Promote to Deputy</TableHead>
+              <TableHead>Promote to Manager</TableHead>
               <TableHead>Debug</TableHead>
             </TableRow>
           </TableHeader>
@@ -97,6 +99,14 @@ export async function UserList({
                   <TableCell>
                     <Suspense>
                       <PromoteToDeputyButton 
+                        userId={user.id} 
+                        userName={user.full_name ?? email}
+                      />
+                    </Suspense>
+                  </TableCell>
+                  <TableCell>
+                    <Suspense>
+                      <PromoteToManagerButton 
                         userId={user.id} 
                         userName={user.full_name ?? email}
                       />
