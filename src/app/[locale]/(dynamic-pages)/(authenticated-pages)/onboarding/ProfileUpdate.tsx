@@ -63,12 +63,18 @@ export function ProfileUpdate() {
           getParties(),
         ]);
         setGovernorates(govData);
-        // Sort parties: "مستقل" first, then others
-        const sortedParties = partiesData.sort((a, b) => {
+        
+        // Remove duplicates and sort: "مستقل" first, then others
+        const uniqueParties = partiesData.filter((party, index, self) =>
+          index === self.findIndex((p) => p.name_ar === party.name_ar)
+        );
+        
+        const sortedParties = uniqueParties.sort((a, b) => {
           if (a.name_ar === "مستقل") return -1;
           if (b.name_ar === "مستقل") return 1;
-          return 0;
+          return a.name_ar.localeCompare(b.name_ar, 'ar');
         });
+        
         setParties(sortedParties);
       } catch (error) {
         console.error("Error loading data:", error);
@@ -202,6 +208,7 @@ export function ProfileUpdate() {
               label="الاسم الكامل *"
               control={control}
               name="fullName"
+              inputProps={{ placeholder: "أدخل الاسم الكامل" }}
               data-testid="full-name-input"
             />
 
@@ -211,6 +218,7 @@ export function ProfileUpdate() {
               control={control}
               name="email"
               type="email"
+              inputProps={{ placeholder: "example@email.com" }}
               data-testid="email-input"
             />
 
@@ -219,7 +227,7 @@ export function ProfileUpdate() {
               label="رقم الهاتف *"
               control={control}
               name="phone"
-              inputProps={{ placeholder: "01xxxxxxxxx" }}
+              inputProps={{ placeholder: "01012345678" }}
               data-testid="phone-input"
             />
 

@@ -31,11 +31,11 @@ export const getUserAvatarUrl = ({
   email: string | undefined;
   profileAvatarUrl?: string | null | undefined;
 }) => {
-  const placeholderAvatarUrl = `https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp`;
+  const placeholderAvatarUrl = `https://www.gravatar.com/avatar/00000000000000000000000000000000?d=identicon`;
   if (!email) return placeholderAvatarUrl;
   const fallbackAvatarUrl = `https://www.gravatar.com/avatar/${MD5(
     email,
-  )}?d=mp`;
+  )}?d=identicon`;
   const isProfileAvatarUrlValid =
     profileAvatarUrl && profileAvatarUrl.length > 0;
   return isProfileAvatarUrlValid
@@ -46,7 +46,7 @@ export const getUserAvatarUrl = ({
 export const getPublicUserAvatarUrl = (
   possibleAvatarUrl?: string | null | undefined,
 ) => {
-  const placeholderAvatarUrl = `https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp`;
+  const placeholderAvatarUrl = `https://www.gravatar.com/avatar/00000000000000000000000000000000?d=identicon`;
 
   return possibleAvatarUrl ?? placeholderAvatarUrl;
 };
