@@ -6,43 +6,8 @@ type FooterItem = {
   }[];
 };
 
-export const footerItems: FooterItem[] = [
-  {
-    title: "Resources",
-    items: [
-      {
-        name: "NextBase",
-        url: "#",
-      },
-    ],
-  },
-  {
-    title: "Follow Us",
-    items: [
-      {
-        name: "Github",
-        url: "#",
-      },
-      {
-        name: "Twitter",
-        url: "#",
-      },
-    ],
-  },
-  {
-    title: "Legal",
-    items: [
-      {
-        name: "Privacy Policy",
-        url: "#",
-      },
-      {
-        name: "Terms & Conditions",
-        url: "#",
-      },
-    ],
-  },
-];
+// تم إزالة جميع الروابط والعناوين من Footer
+export const footerItems: FooterItem[] = [];
 
 export const footerSocialItems = [
   {
@@ -125,3 +90,4 @@ export const footerSocialItems = [
     ),
   },
 ];
+
