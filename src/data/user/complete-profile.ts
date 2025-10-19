@@ -1,7 +1,7 @@
 "use server";
 
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
-import { actionClient } from "@/utils/safe-action";
+import { actionClient } from "@/lib/safe-action";
 import {
   completeProfileSchema,
   updateCompleteProfileSchema,
