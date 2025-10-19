@@ -9,13 +9,12 @@ import {
 import { getIsAppAdmin } from "@/data/user/user";
 import {
   Book,
-  Briefcase,
-  CreditCard,
   FileLineChart,
   HelpCircle,
   Map,
   PenTool,
   Settings,
+  UserCheck,
   Users,
 } from "lucide-react";
 import { Suspense } from "react";
@@ -27,19 +26,14 @@ const adminLinks = [
     icon: <FileLineChart className="h-5 w-5" />,
   },
   {
-    label: "Payment Gateways",
-    href: `/app_admin/payment-gateway`,
-    icon: <CreditCard className="h-5 w-5" />,
+    label: "النواب",
+    href: `/app_admin/deputies`,
+    icon: <UserCheck className="h-5 w-5" />,
   },
   {
     label: "Users",
     href: `/app_admin/users`,
     icon: <Users className="h-5 w-5" />,
-  },
-  {
-    label: "Workspaces",
-    href: `/app_admin/workspaces`,
-    icon: <Briefcase className="h-5 w-5" />,
   },
   {
     label: "Application Settings",
@@ -49,12 +43,12 @@ const adminLinks = [
   {
     label: "Marketing Authors",
     href: `/app_admin/marketing/authors`,
-    icon: <CreditCard className="h-5 w-5" />,
+    icon: <Users className="h-5 w-5" />,
   },
   {
     label: "Marketing Tags",
     href: `/app_admin/marketing/tags`,
-    icon: <CreditCard className="h-5 w-5" />,
+    icon: <Settings className="h-5 w-5" />,
   },
   {
     label: "Marketing Blog",

@@ -9,33 +9,26 @@ import {
 } from "@/components/ui/card";
 import {
   Book,
-  Briefcase,
-  CreditCard,
   HelpCircle,
   Map,
   PenTool,
   Settings,
+  UserCheck,
   Users,
 } from "lucide-react";
 
 const adminLinks = [
   {
-    title: "Payment Gateways",
-    description: "Manage payment gateways and transactions",
-    href: "/app_admin/payment-gateway",
-    icon: <CreditCard className="h-8 w-8" />,
+    title: "إدارة النواب",
+    description: "إدارة ملفات النواب والمعلومات الانتخابية",
+    href: "/app_admin/deputies",
+    icon: <UserCheck className="h-8 w-8" />,
   },
   {
     title: "Users",
     description: "Manage user accounts and permissions",
     href: "/app_admin/users",
     icon: <Users className="h-8 w-8" />,
-  },
-  {
-    title: "Workspaces",
-    description: "Oversee and manage workspaces",
-    href: "/app_admin/workspaces",
-    icon: <Briefcase className="h-8 w-8" />,
   },
   {
     title: "Application Settings",
