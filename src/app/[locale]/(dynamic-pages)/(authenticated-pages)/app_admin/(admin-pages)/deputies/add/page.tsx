@@ -21,7 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { createDeputyAction, searchUsersAction } from "@/data/admin/deputies";
+import { createDeputyAction, searchUsersForDeputyAction } from "@/data/admin/deputies";
 import { ArrowLeft, Search, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { useAction } from "next-safe-action/hooks";
@@ -34,7 +34,7 @@ export default function AddDeputyPage() {
   const router = useRouter();
 
   const { execute: executeSearch, isExecuting: isSearching } = useAction(
-    searchUsersAction,
+    searchUsersForDeputyAction,
     {
       onSuccess: ({ data }) => {
         setSearchResults(data?.users || []);

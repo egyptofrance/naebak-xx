@@ -39,7 +39,7 @@ const updateDeputySchema = z.object({
 /**
  * Search for users by name, email, or phone with governorate and party information
  */
-export const searchUsersAction = actionClient
+export const searchUsersForDeputyAction = actionClient
   .schema(searchUsersSchema)
   .action(async ({ parsedInput: { query } }) => {
     console.log('[searchUsersAction] Starting search with query:', query);
