@@ -19,7 +19,7 @@ export const profileUpdateFormSchema = z.object({
   village: z.string().optional(),
   address: z.string().optional(),
   jobTitle: z.string().optional(),
-  partyId: z.string().optional().nullable(),
+  partyId: z.string().optional(),
   avatarUrl: z.string().optional(),
 });
 
