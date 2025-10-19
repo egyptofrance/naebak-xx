@@ -16,6 +16,7 @@ import { Check, Mail, X } from "lucide-react";
 import { Suspense } from "react";
 import { ConfirmSendLoginLinkDialog } from "./ConfirmSendLoginLinkDialog";
 import { GetLoginLinkDialog } from "./GetLoginLinkDialog";
+import { PromoteToDeputyButton } from "./PromoteToDeputyButton";
 import { AppAdminUserFiltersSchema } from "./schema";
 
 export async function UserList({
@@ -37,6 +38,7 @@ export async function UserList({
               <TableHead>Created At</TableHead>
               <TableHead>Contact User</TableHead>
               <TableHead>Send Login Link</TableHead>
+              <TableHead>Promote to Deputy</TableHead>
               <TableHead>Debug</TableHead>
             </TableRow>
           </TableHeader>
@@ -90,6 +92,14 @@ export async function UserList({
                   <TableCell>
                     <Suspense>
                       <GetLoginLinkDialog userId={user.id} />
+                    </Suspense>
+                  </TableCell>
+                  <TableCell>
+                    <Suspense>
+                      <PromoteToDeputyButton 
+                        userId={user.id} 
+                        userName={user.full_name ?? email}
+                      />
                     </Suspense>
                   </TableCell>
                 </TableRow>
