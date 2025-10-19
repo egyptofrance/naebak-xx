@@ -8,12 +8,13 @@ import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user
 import { notFound } from "next/navigation";
 
 interface DeputyPageProps {
-  params: {
+  params: Promise<{
     deputyId: string;
-  };
+  }>;
 }
 
 export default async function DeputyPage({ params }: DeputyPageProps) {
+  const { deputyId } = await params;
   const supabase = await createSupabaseUserServerComponentClient();
 
   // Fetch deputy data
@@ -44,7 +45,7 @@ export default async function DeputyPage({ params }: DeputyPageProps) {
       )
     `
     )
-    .eq("id", params.deputyId)
+    .eq("id", deputyId)
     .single();
 
   if (deputyError || !deputy) {
