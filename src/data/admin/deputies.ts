@@ -296,9 +296,13 @@ export const searchDeputiesAction = actionClient
       })
       .filter(Boolean); // Remove nulls
 
+    const totalPages = Math.ceil((count || 0) / limit);
+
     return { 
       deputies: deputiesWithDetails, 
       total: count || 0, 
+      totalPages,
+      currentPage: page,
       page, 
       limit 
     };
