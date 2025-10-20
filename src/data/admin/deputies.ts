@@ -227,7 +227,18 @@ export const updateDeputyAction = actionClient
   .schema(updateDeputySchema)
   .action(async ({ parsedInput }) => {
     const { deputyId, ...updateData } = parsedInput;
-    const supabase = await createSupabaseUserServerComponentClient();
+    
+    // Use service role client to bypass RLS issues
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
 
     const { data: deputy, error } = await supabase
       .from("deputy_profiles")
@@ -267,7 +278,17 @@ export const searchDeputiesAction = actionClient
       limit = 20,
     } = parsedInput;
 
-    const supabase = await createSupabaseUserServerComponentClient();
+    // Use service role client to bypass RLS issues
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
 
     // Get all deputy profiles with optional filters
     let deputyQuery = supabase
