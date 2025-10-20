@@ -323,7 +323,7 @@ export const searchDeputiesAction = actionClient
     // Text search in user fields
     if (query) {
       userQuery = userQuery.or(
-        `full_name.ilike.*${query}*,email.ilike.*${query}*,phone.ilike.*${query}*`
+        `full_name.ilike.*${query}*,phone.ilike.*${query}*`
       );
     }
 
