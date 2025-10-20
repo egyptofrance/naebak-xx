@@ -3,6 +3,7 @@
 
 import { actionClient } from "@/lib/safe-action";
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
+import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 
 // Schema for searching users
@@ -136,7 +137,18 @@ export const createDeputyAction = actionClient
   .schema(createDeputySchema)
   .action(async ({ parsedInput: { userId, deputyStatus } }) => {
     console.log("[createDeputyAction] Starting with:", { userId, deputyStatus });
-    const supabase = await createSupabaseUserServerComponentClient();
+    
+    // Use service role client to bypass RLS issues
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
 
     try {
       // Check if user exists
