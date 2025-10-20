@@ -43,7 +43,7 @@ export function PromoteToDeputyDialog({ userId, userName }: PromoteToDeputyDialo
 
   const handlePromote = async () => {
     console.log("Promoting user to deputy:", { userId, userName });
-    await execute({ userId, deputyStatus: "active" });
+    await execute({ userId, deputyStatus: "current" });
   };
 
   return (
