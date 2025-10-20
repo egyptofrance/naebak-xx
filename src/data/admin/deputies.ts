@@ -249,7 +249,7 @@ const searchDeputiesSchema = z.object({
   governorateId: z.string().uuid().optional(),
   partyId: z.string().uuid().optional(),
   councilId: z.string().uuid().optional(),
-  deputyStatus: z.enum(["active", "inactive"]).optional(),
+  deputyStatus: z.enum(["current", "candidate"]).optional(),
   page: z.number().optional(),
   limit: z.number().optional(),
 });
