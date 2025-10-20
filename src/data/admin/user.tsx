@@ -282,6 +282,7 @@ export const getPaginatedUserListAction = adminActionClient
     const startIndex = (page - 1) * limit;
     const endIndex = startIndex + limit;
     
+    // First, get all users with their roles
     let supabaseQuery = supabaseAdminClient
       .from("user_profiles")
       .select(`
@@ -339,8 +340,15 @@ export const getPaginatedUserListAction = adminActionClient
     if (error) {
       throw error;
     }
-    console.log(data);
-    return data;
+    
+    // Filter out users who have the "deputy" role
+    const filteredData = data?.filter(user => {
+      const hasDeputyRole = user.user_roles?.some((role: any) => role.role === "deputy");
+      return !hasDeputyRole;
+    }) || [];
+    
+    console.log("Filtered users (excluding deputies):", filteredData.length);
+    return filteredData;
   });
 
 const getUsersTotalPagesSchema = z.object({
@@ -356,12 +364,11 @@ export const getUsersTotalPagesAction = adminActionClient
   .schema(getUsersTotalPagesSchema)
   .action(async ({ parsedInput: { query = "", limit = 10, governorateId, partyId, role, gender } }) => {
     console.log("query", query);
+    
+    // Get all users with their roles to filter out deputies
     let supabaseQuery = supabaseAdminClient
       .from("user_profiles")
-      .select("*, user_application_settings(*), user_roles(*)", {
-        count: "exact",
-        head: true,
-      });
+      .select("*, user_application_settings(*), user_roles(*)");
     
     // Text search across multiple fields
     if (query) {
@@ -390,15 +397,24 @@ export const getUsersTotalPagesAction = adminActionClient
       supabaseQuery = supabaseQuery.eq("gender", gender);
     }
     
-    const { count, error } = await supabaseQuery;
+    const { data, error } = await supabaseQuery;
 
     if (error) {
       console.log("supabase***************");
       console.error(error);
       throw error;
     }
-
-    return Math.ceil((count ?? 0) / limit);
+    
+    // Filter out users who have the "deputy" role
+    const filteredData = data?.filter(user => {
+      const hasDeputyRole = user.user_roles?.some((role: any) => role.role === "deputy");
+      return !hasDeputyRole;
+    }) || [];
+    
+    const count = filteredData.length;
+    console.log("Total users (excluding deputies):", count);
+    
+    return Math.ceil(count / limit);
   });
 
 const uploadBlogImageSchema = z.object({
