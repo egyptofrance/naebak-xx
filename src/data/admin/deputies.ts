@@ -145,11 +145,16 @@ export const createDeputyAction = actionClient
         .from("user_profiles")
         .select("id, full_name")
         .eq("id", userId)
-        .single();
+        .maybeSingle();
 
-      if (userError || !user) {
-        console.error("[createDeputyAction] User not found:", userError);
-        throw new Error("User not found");
+      if (userError) {
+        console.error("[createDeputyAction] Database error:", userError);
+        throw new Error(`خطأ في قاعدة البيانات: ${userError.message}`);
+      }
+
+      if (!user) {
+        console.error("[createDeputyAction] User not found with ID:", userId);
+        throw new Error("لم يتم العثور على المستخدم");
       }
 
       console.log("[createDeputyAction] User found:", user);
@@ -160,11 +165,11 @@ export const createDeputyAction = actionClient
         .from("deputy_profiles")
         .select("id")
         .eq("user_id", userId)
-        .single();
+        .maybeSingle();
 
       if (existingDeputy) {
         console.log("[createDeputyAction] User is already a deputy");
-        throw new Error("User is already a deputy");
+        throw new Error("هذا المستخدم نائب بالفعل");
       }
 
       // Step 1: Add "deputy" role to user_roles
@@ -180,7 +185,7 @@ export const createDeputyAction = actionClient
 
       if (roleError) {
         console.error("[createDeputyAction] Failed to add role:", roleError);
-        throw new Error(`Failed to add deputy role: ${roleError.message}`);
+        throw new Error(`فشل إضافة دور النائب: ${roleError.message}`);
       }
 
       console.log("[createDeputyAction] Role added successfully:", roleData);
@@ -204,7 +209,7 @@ export const createDeputyAction = actionClient
           .delete()
           .eq("id", roleData.id);
         
-        throw new Error(`Failed to create deputy profile: ${deputyError.message}`);
+        throw new Error(`فشل إنشاء ملف النائب: ${deputyError.message}`);
       }
 
       console.log("[createDeputyAction] Deputy profile created successfully:", deputy);

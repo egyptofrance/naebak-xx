@@ -16,7 +16,7 @@ import { Check, Mail, X } from "lucide-react";
 import { Suspense } from "react";
 import { ConfirmSendLoginLinkDialog } from "./ConfirmSendLoginLinkDialog";
 import { GetLoginLinkDialog } from "./GetLoginLinkDialog";
-import { PromoteToDeputyButton } from "./PromoteToDeputyButton";
+import { PromoteToDeputyDialog } from "./PromoteToDeputyDialog";
 import { PromoteToManagerButton } from "./PromoteToManagerButton";
 import { AppAdminUserFiltersSchema } from "./schema";
 
@@ -29,7 +29,7 @@ export async function UserList({
   if (usersActionResult?.data) {
     const users = usersActionResult.data;
     return (
-      <div className="space-y-2 border">
+      <div className="space-y-2 border overflow-x-auto">
         <ShadcnTable>
           <TableHeader>
             <TableRow>
@@ -97,7 +97,7 @@ export async function UserList({
                     </Suspense>
                   </TableCell>
                   <TableCell>
-                    <PromoteToDeputyButton 
+                    <PromoteToDeputyDialog 
                       userId={user.id} 
                       userName={user.full_name ?? email}
                     />
