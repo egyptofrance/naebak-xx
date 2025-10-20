@@ -151,25 +151,8 @@ export const createDeputyAction = actionClient
     );
 
     try {
-      // Check if user exists
-      console.log("[createDeputyAction] Checking if user exists...");
-      const { data: user, error: userError } = await supabase
-        .from("user_profiles")
-        .select("id, full_name")
-        .eq("id", userId)
-        .maybeSingle();
-
-      if (userError) {
-        console.error("[createDeputyAction] Database error:", userError);
-        throw new Error(`خطأ في قاعدة البيانات: ${userError.message}`);
-      }
-
-      if (!user) {
-        console.error("[createDeputyAction] User not found with ID:", userId);
-        throw new Error("لم يتم العثور على المستخدم");
-      }
-
-      console.log("[createDeputyAction] User found:", user);
+      // No need to check if user exists - we already have the user in the list
+      console.log("[createDeputyAction] Processing user:", userId);
 
       // Check if deputy profile already exists
       console.log("[createDeputyAction] Checking if deputy profile exists...");
@@ -229,7 +212,7 @@ export const createDeputyAction = actionClient
       return { 
         deputy, 
         role: roleData,
-        message: `تم ترقية ${user.full_name || 'المستخدم'} إلى نائب بنجاح` 
+        message: `تم ترقية المستخدم إلى نائب بنجاح` 
       };
     } catch (error) {
       console.error("[createDeputyAction] Error:", error);
