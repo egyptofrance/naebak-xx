@@ -14,7 +14,7 @@ const searchUsersSchema = z.object({
 // Schema for creating deputy profile
 const createDeputySchema = z.object({
   userId: z.string().uuid("Invalid user ID"),
-  deputyStatus: z.enum(["active", "inactive"]),
+  deputyStatus: z.enum(["current", "candidate", "former"]),
 });
 
 // Schema for updating deputy profile
@@ -191,7 +191,7 @@ export const createDeputyAction = actionClient
         .from("deputy_profiles")
         .insert({
           user_id: userId,
-          deputy_status: deputyStatus,
+          deputy_status: "current", // Always set to 'current' when promoting
         })
         .select()
         .single();
