@@ -36,7 +36,7 @@ import {
   getGovernoratesAction,
   getPartiesAction,
 } from "@/data/admin/user";
-import { UserPlus, Edit, Search, X, Filter } from "lucide-react";
+import { Edit, Search, X, Filter } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
@@ -199,21 +199,13 @@ export default function DeputiesList() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="space-y-2">
-          <Typography.H1 className="text-3xl font-bold tracking-tight">
-            إدارة النواب
-          </Typography.H1>
-          <Typography.P className="text-muted-foreground">
-            إدارة ملفات النواب والمعلومات الانتخابية
-          </Typography.P>
-        </div>
-        <Link href="/app_admin/deputies/add">
-          <Button>
-            <UserPlus className="h-4 w-4 mr-2" />
-            إضافة نائب جديد
-          </Button>
-        </Link>
+      <div className="space-y-2">
+        <Typography.H1 className="text-3xl font-bold tracking-tight">
+          قائمة النواب
+        </Typography.H1>
+        <Typography.P className="text-muted-foreground">
+          استعراض وتعديل ملفات النواب والمعلومات الانتخابية. لإضافة نائب جديد، قم بترقية مستخدم من صفحة Users.
+        </Typography.P>
       </div>
 
       {/* Search and Filters */}
@@ -468,12 +460,9 @@ export default function DeputiesList() {
                   : "لا يوجد نواب مسجلين حالياً"}
               </p>
               {!hasActiveFilters && (
-                <Link href="/app_admin/deputies/add">
-                  <Button>
-                    <UserPlus className="h-4 w-4 mr-2" />
-                    إضافة نائب جديد
-                  </Button>
-                </Link>
+                <p className="text-sm">
+                  لإضافة نائب جديد، اذهب إلى صفحة <Link href="/app_admin/users" className="text-primary hover:underline">Users</Link> وقم بترقية مستخدم إلى نائب.
+                </p>
               )}
             </div>
           )}
