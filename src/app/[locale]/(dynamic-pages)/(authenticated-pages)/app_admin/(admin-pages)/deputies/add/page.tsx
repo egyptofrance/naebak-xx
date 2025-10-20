@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { createDeputyAction, searchUsersForDeputyAction } from "@/data/admin/deputies";
-import { ArrowLeft, Search, UserPlus } from "lucide-react";
+import { ArrowLeft, Search, UserPlus, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
@@ -31,19 +31,26 @@ import { useRouter } from "next/navigation";
 export default function AddDeputyPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [hasSearched, setHasSearched] = useState(false);
   const router = useRouter();
 
   const { execute: executeSearch, isExecuting: isSearching } = useAction(
     searchUsersForDeputyAction,
     {
       onSuccess: ({ data }) => {
+        console.log("Search results:", data);
         setSearchResults(data?.users || []);
+        setHasSearched(true);
         if (data?.users?.length === 0) {
           toast.info("لم يتم العثور على نتائج");
+        } else {
+          toast.success(`تم العثور على ${data?.users?.length} مستخدم`);
         }
       },
       onError: ({ error }) => {
+        console.error("Search error:", error);
         toast.error(error.serverError || "حدث خطأ أثناء البحث");
+        setHasSearched(true);
       },
     }
   );
@@ -53,9 +60,12 @@ export default function AddDeputyPage() {
     {
       onSuccess: ({ data }) => {
         toast.success(data?.message || "تم إنشاء ملف النائب بنجاح");
-        router.push("/app_admin/deputies");
+        setTimeout(() => {
+          router.push("/app_admin/deputies");
+        }, 1500);
       },
       onError: ({ error }) => {
+        console.error("Create deputy error:", error);
         toast.error(error.serverError || "حدث خطأ أثناء إنشاء ملف النائب");
       },
     }
@@ -64,12 +74,19 @@ export default function AddDeputyPage() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
+      console.log("Searching for:", searchQuery);
+      setHasSearched(false);
       executeSearch({ query: searchQuery });
+    } else {
+      toast.error("الرجاء إدخال نص للبحث");
     }
   };
 
-  const handleCreateDeputy = (userId: string) => {
-    executeCreate({ userId, deputyStatus: "active" });
+  const handleCreateDeputy = (userId: string, userName: string) => {
+    if (window.confirm(`هل أنت متأكد من ترقية ${userName} إلى نائب؟`)) {
+      console.log("Creating deputy for user:", userId);
+      executeCreate({ userId, deputyStatus: "active" });
+    }
   };
 
   return (
@@ -113,13 +130,32 @@ export default function AddDeputyPage() {
                 />
               </div>
               <Button type="submit" disabled={isSearching || !searchQuery.trim()}>
-                <Search className="h-4 w-4 mr-2" />
-                بحث
+                {isSearching ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    جاري البحث...
+                  </>
+                ) : (
+                  <>
+                    <Search className="h-4 w-4 mr-2" />
+                    بحث
+                  </>
+                )}
               </Button>
             </div>
           </form>
         </CardContent>
       </Card>
+
+      {hasSearched && searchResults.length === 0 && (
+        <Card>
+          <CardContent className="pt-6">
+            <p className="text-center text-muted-foreground">
+              لم يتم العثور على نتائج. حاول البحث بكلمات مختلفة.
+            </p>
+          </CardContent>
+        </Card>
+      )}
 
       {searchResults.length > 0 && (
         <Card>
@@ -165,11 +201,20 @@ export default function AddDeputyPage() {
                       {!user.isDeputy ? (
                         <Button
                           size="sm"
-                          onClick={() => handleCreateDeputy(user.id)}
+                          onClick={() => handleCreateDeputy(user.id, user.full_name || user.email)}
                           disabled={isCreating}
                         >
-                          <UserPlus className="h-4 w-4 mr-2" />
-                          تحويل إلى نائب
+                          {isCreating ? (
+                            <>
+                              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                              جاري التحويل...
+                            </>
+                          ) : (
+                            <>
+                              <UserPlus className="h-4 w-4 mr-2" />
+                              تحويل إلى نائب
+                            </>
+                          )}
                         </Button>
                       ) : (
                         <Button size="sm" variant="outline" disabled>

@@ -135,69 +135,89 @@ export const searchUsersForDeputyAction = actionClient
 export const createDeputyAction = actionClient
   .schema(createDeputySchema)
   .action(async ({ parsedInput: { userId, deputyStatus } }) => {
+    console.log("[createDeputyAction] Starting with:", { userId, deputyStatus });
     const supabase = await createSupabaseUserServerComponentClient();
 
-    // Check if user exists
-    const { data: user, error: userError } = await supabase
-      .from("user_profiles")
-      .select("id, full_name")
-      .eq("id", userId)
-      .single();
+    try {
+      // Check if user exists
+      console.log("[createDeputyAction] Checking if user exists...");
+      const { data: user, error: userError } = await supabase
+        .from("user_profiles")
+        .select("id, full_name")
+        .eq("id", userId)
+        .single();
 
-    if (userError || !user) {
-      throw new Error("User not found");
-    }
+      if (userError || !user) {
+        console.error("[createDeputyAction] User not found:", userError);
+        throw new Error("User not found");
+      }
 
-    // Check if deputy profile already exists
-    const { data: existingDeputy } = await supabase
-      .from("deputy_profiles")
-      .select("id")
-      .eq("user_id", userId)
-      .single();
+      console.log("[createDeputyAction] User found:", user);
 
-    if (existingDeputy) {
-      throw new Error("User is already a deputy");
-    }
+      // Check if deputy profile already exists
+      console.log("[createDeputyAction] Checking if deputy profile exists...");
+      const { data: existingDeputy } = await supabase
+        .from("deputy_profiles")
+        .select("id")
+        .eq("user_id", userId)
+        .single();
 
-    // Step 1: Add "deputy" role to user_roles
-    const { data: roleData, error: roleError } = await supabase
-      .from("user_roles")
-      .insert({
-        user_id: userId,
-        role: "deputy",
-      })
-      .select()
-      .single();
+      if (existingDeputy) {
+        console.log("[createDeputyAction] User is already a deputy");
+        throw new Error("User is already a deputy");
+      }
 
-    if (roleError) {
-      throw new Error(`Failed to add deputy role: ${roleError.message}`);
-    }
-
-    // Step 2: Create deputy profile
-    const { data: deputy, error: deputyError } = await supabase
-      .from("deputy_profiles")
-      .insert({
-        user_id: userId,
-        deputy_status: deputyStatus,
-      })
-      .select()
-      .single();
-
-    if (deputyError) {
-      // Rollback: remove the role if deputy profile creation fails
-      await supabase
+      // Step 1: Add "deputy" role to user_roles
+      console.log("[createDeputyAction] Adding deputy role...");
+      const { data: roleData, error: roleError } = await supabase
         .from("user_roles")
-        .delete()
-        .eq("id", roleData.id);
-      
-      throw new Error(`Failed to create deputy profile: ${deputyError.message}`);
-    }
+        .insert({
+          user_id: userId,
+          role: "deputy",
+        })
+        .select()
+        .single();
 
-    return { 
-      deputy, 
-      role: roleData,
-      message: `تم ترقية ${user.full_name || 'المستخدم'} إلى نائب بنجاح` 
-    };
+      if (roleError) {
+        console.error("[createDeputyAction] Failed to add role:", roleError);
+        throw new Error(`Failed to add deputy role: ${roleError.message}`);
+      }
+
+      console.log("[createDeputyAction] Role added successfully:", roleData);
+
+      // Step 2: Create deputy profile
+      console.log("[createDeputyAction] Creating deputy profile...");
+      const { data: deputy, error: deputyError } = await supabase
+        .from("deputy_profiles")
+        .insert({
+          user_id: userId,
+          deputy_status: deputyStatus,
+        })
+        .select()
+        .single();
+
+      if (deputyError) {
+        console.error("[createDeputyAction] Failed to create deputy profile:", deputyError);
+        // Rollback: remove the role if deputy profile creation fails
+        await supabase
+          .from("user_roles")
+          .delete()
+          .eq("id", roleData.id);
+        
+        throw new Error(`Failed to create deputy profile: ${deputyError.message}`);
+      }
+
+      console.log("[createDeputyAction] Deputy profile created successfully:", deputy);
+
+      return { 
+        deputy, 
+        role: roleData,
+        message: `تم ترقية ${user.full_name || 'المستخدم'} إلى نائب بنجاح` 
+      };
+    } catch (error) {
+      console.error("[createDeputyAction] Error:", error);
+      throw error;
+    }
   });
 
 /**
