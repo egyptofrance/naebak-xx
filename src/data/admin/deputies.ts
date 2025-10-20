@@ -316,14 +316,11 @@ export const searchDeputiesAction = actionClient
       .range((page - 1) * limit, page * limit - 1)
       .order("created_at", { ascending: false });
 
-    console.log('[searchDeputiesAction] Deputies found:', deputies?.length || 0, 'Total count:', count);
-
     if (deputyError) {
       throw new Error(`Failed to search deputies: ${deputyError.message}`);
     }
 
     if (!deputies || deputies.length === 0) {
-      console.log('[searchDeputiesAction] No deputies found, returning empty array');
       return { deputies: [], total: 0, page, limit };
     }
 
@@ -352,8 +349,6 @@ export const searchDeputiesAction = actionClient
     }
 
     const { data: users, error: userError } = await userQuery;
-
-    console.log('[searchDeputiesAction] Users found:', users?.length || 0);
 
     if (userError) {
       throw new Error(`Failed to fetch user profiles: ${userError.message}`);
