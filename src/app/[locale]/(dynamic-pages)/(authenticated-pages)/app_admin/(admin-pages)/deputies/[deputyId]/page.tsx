@@ -76,8 +76,8 @@ export default async function DeputyPage({ params }: DeputyPageProps) {
             <Typography.H1 className="text-3xl font-bold tracking-tight">
               {userProfile?.full_name || "غير محدد"}
             </Typography.H1>
-            <Badge variant={deputy.deputy_status === "active" ? "default" : "secondary"}>
-              {deputy.deputy_status === "active" ? "نشط" : "غير نشط"}
+            <Badge variant={deputy.deputy_status === "current" ? "default" : "secondary"}>
+              {deputy.deputy_status === "current" ? "نائب حالي" : "مرشح"}
             </Badge>
           </div>
           <div className="flex gap-4 text-sm text-muted-foreground">

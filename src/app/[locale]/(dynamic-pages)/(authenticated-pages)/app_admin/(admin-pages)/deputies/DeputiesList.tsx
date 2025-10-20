@@ -44,7 +44,7 @@ import { toast } from "sonner";
 interface Deputy {
   id: string;
   user_id: string;
-  deputy_status: "active" | "inactive";
+  deputy_status: "current" | "candidate";
   electoral_symbol: string | null;
   electoral_number: string | null;
   created_at: string;
@@ -168,7 +168,7 @@ export default function DeputiesList() {
       partyId: selectedParty || undefined,
       councilId: selectedCouncil || undefined,
       deputyStatus: selectedStatus
-        ? (selectedStatus as "active" | "inactive")
+        ? (selectedStatus as "current" | "candidate")
         : undefined,
       page: currentPage,
       limit: 20,
@@ -399,14 +399,14 @@ export default function DeputiesList() {
                         <TableCell>
                           <Badge
                             variant={
-                              deputy.deputy_status === "active"
+                              deputy.deputy_status === "current"
                                 ? "default"
                                 : "secondary"
                             }
                           >
-                            {deputy.deputy_status === "active"
-                              ? "نشط"
-                              : "غير نشط"}
+                            {deputy.deputy_status === "current"
+                              ? "نائب حالي"
+                              : "مرشح"}
                           </Badge>
                         </TableCell>
                         <TableCell>
