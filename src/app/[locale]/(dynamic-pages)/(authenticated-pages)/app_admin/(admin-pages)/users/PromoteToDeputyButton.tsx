@@ -37,7 +37,7 @@ export function PromoteToDeputyButton({ userId, userName }: PromoteToDeputyButto
       
       if (confirmed) {
         console.log("Promoting user to deputy:", userId);
-        await execute({ userId, deputyStatus: "active" });
+        await execute({ userId, deputyStatus: "current" });
       }
     } catch (error) {
       console.error("Error in handlePromote:", error);
