@@ -39,9 +39,7 @@ export async function UserSidebar() {
         </SidebarHeader>
         <SidebarContent>
           <SidebarAdminPanelNav />
-          <Suspense>
-            <SidebarDeputyNav />
-          </Suspense>
+          <SidebarDeputyNav />
           <Suspense>
             <SoloWorkspaceTips />
           </Suspense>
