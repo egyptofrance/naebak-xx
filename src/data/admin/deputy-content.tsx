@@ -1,11 +1,9 @@
 "use server";
 
 import { adminActionClient } from "@/lib/safe-action";
-import { createClient } from "@/utils/supabase/server";
+import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClient";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-
-const supabaseAdminClient = await createClient();
 
 // ============================================
 // SCHEMAS
