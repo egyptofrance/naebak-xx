@@ -18,7 +18,7 @@ export async function getDeputyProfile() {
     .from("deputy_profiles")
     .select("*")
     .eq("user_id", user.id)
-    .single();
+    .maybeSingle();
 
   return deputyProfile;
 }
