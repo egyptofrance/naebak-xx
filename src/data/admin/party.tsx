@@ -1,10 +1,8 @@
 "use server";
 
-import { adminActionClient } from "@/data/safe-action";
-import { createClient as createSupabaseAdminClient } from "@/supabase-clients/admin/server";
+import { adminActionClient } from "@/lib/safe-action";
+import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClient";
 import { z } from "zod";
-
-const supabaseAdminClient = createSupabaseAdminClient();
 
 /**
  * Get all parties
