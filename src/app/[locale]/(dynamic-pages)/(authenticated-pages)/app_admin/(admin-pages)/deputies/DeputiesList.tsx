@@ -239,37 +239,22 @@ export default function DeputiesList() {
     }
   };
 
-  const handleBulkDelete = async () => {
+  const handleBulkDelete = () => {
     if (selectedDeputies.size === 0) return;
     
     if (!confirm(`هل أنت متأكد من حذف ${selectedDeputies.size} نائب؟`)) {
       return;
     }
 
-    const result = await executeBulkDelete({ deputyIds: Array.from(selectedDeputies) });
-    
-    if (result?.data?.success) {
-      toast.success(result.data.message || `تم حذف ${selectedDeputies.size} نائب بنجاح`);
-      setSelectedDeputies(new Set());
-      handleSearch();
-    } else {
-      toast.error("فشل حذف النواب");
-    }
+    executeBulkDelete({ deputyIds: Array.from(selectedDeputies) });
   };
 
-  const handleDeleteDeputy = async (deputyId: string, deputyName: string) => {
+  const handleDeleteDeputy = (deputyId: string, deputyName: string) => {
     if (!confirm(`هل أنت متأكد من حذف النائب "${deputyName}"؟`)) {
       return;
     }
 
-    const result = await executeDeleteDeputy({ deputyId });
-    
-    if (result?.data?.success) {
-      toast.success(result.data.message || `تم حذف النائب "${deputyName}" بنجاح`);
-      handleSearch();
-    } else {
-      toast.error("فشل حذف النائب");
-    }
+    executeDeleteDeputy({ deputyId });
   };
 
   return (
