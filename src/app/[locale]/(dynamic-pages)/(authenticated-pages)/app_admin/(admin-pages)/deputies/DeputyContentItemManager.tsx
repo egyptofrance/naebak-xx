@@ -41,10 +41,19 @@ export function DeputyContentItemManager({
   const { execute: uploadImage } = useAction(uploadImageAction, {
     onSuccess: ({ data }) => {
       if (data?.status === "success" && data.data && uploadingIndex !== null) {
-        updateItem(uploadingIndex, "imageUrl", data.data);
+        // Update the image URL immediately
+        const updatedItems = [...items];
+        updatedItems[uploadingIndex] = {
+          ...updatedItems[uploadingIndex],
+          imageUrl: data.data,
+        };
+        onChange(updatedItems);
         toast.success("تم رفع الصورة بنجاح!");
+        setUploadingIndex(null);
+      } else {
+        toast.error("فشل رفع الصورة");
+        setUploadingIndex(null);
       }
-      setUploadingIndex(null);
     },
     onError: ({ error }) => {
       toast.error(error.serverError || "فشل رفع الصورة");

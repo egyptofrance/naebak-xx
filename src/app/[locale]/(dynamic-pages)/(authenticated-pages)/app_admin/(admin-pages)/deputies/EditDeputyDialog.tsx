@@ -396,52 +396,7 @@ export function EditDeputyDialog({
                 />
               </div>
 
-              <Separator className="my-4" />
-              
-              <div className="bg-muted/30 p-4 rounded-lg">
-                <p className="text-sm text-muted-foreground mb-2">
-                  <strong>ملاحظة:</strong> الحقول التالية هي حقول نصية بسيطة للتوافق مع النظام القديم.
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  للحصول على تجربة أفضل مع إمكانية إضافة عناصر متعددة بصور، استخدم تبويب "المحتوى التفصيلي".
-                </p>
-              </div>
 
-              {/* Electoral Program */}
-              <div className="space-y-2">
-                <Label htmlFor="electoral_program">البرنامج الانتخابي (نص بسيط)</Label>
-                <Textarea
-                  id="electoral_program"
-                  value={electoralProgram}
-                  onChange={(e) => setElectoralProgram(e.target.value)}
-                  placeholder="أدخل البرنامج الانتخابي للنائب..."
-                  rows={4}
-                />
-              </div>
-
-              {/* Achievements */}
-              <div className="space-y-2">
-                <Label htmlFor="achievements">الإنجازات (نص بسيط)</Label>
-                <Textarea
-                  id="achievements"
-                  value={achievements}
-                  onChange={(e) => setAchievements(e.target.value)}
-                  placeholder="أدخل إنجازات النائب..."
-                  rows={4}
-                />
-              </div>
-
-              {/* Events */}
-              <div className="space-y-2">
-                <Label htmlFor="events">المناسبات (نص بسيط)</Label>
-                <Textarea
-                  id="events"
-                  value={events}
-                  onChange={(e) => setEvents(e.target.value)}
-                  placeholder="أدخل المناسبات والفعاليات..."
-                  rows={4}
-                />
-              </div>
             </TabsContent>
             
             <TabsContent value="content" className="space-y-6 py-4">
