@@ -1,7 +1,6 @@
 "use server";
 
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
-import { unstable_cache } from "next/cache";
 
 /**
  * Check if the current user is a deputy and return their deputy profile
@@ -25,16 +24,12 @@ export async function getDeputyProfile() {
 }
 
 /**
- * Cached version of getDeputyProfile
+ * Get deputy profile without caching to avoid cache collision between users
+ * This is a simple query that won't impact performance
  */
-export const getCachedDeputyProfile = unstable_cache(
-  getDeputyProfile,
-  ["deputy-profile"],
-  {
-    tags: ["deputy-profile"],
-    revalidate: 60, // Cache for 1 minute
-  }
-);
+export async function getCachedDeputyProfile() {
+  return getDeputyProfile();
+}
 
 /**
  * Check if the current user is a deputy
