@@ -61,7 +61,7 @@ export function EditDeputyDialog({
     currentData.achievements || ""
   );
   const [events, setEvents] = useState(currentData.events || "");
-  const [councilId, setCouncilId] = useState(currentData.councilId || "");
+  const [councilId, setCouncilId] = useState(currentData.councilId || "none");
   const [electoralSymbol, setElectoralSymbol] = useState(
     currentData.electoralSymbol || ""
   );
@@ -77,7 +77,7 @@ export function EditDeputyDialog({
       setElectoralProgram(currentData.electoralProgram || "");
       setAchievements(currentData.achievements || "");
       setEvents(currentData.events || "");
-      setCouncilId(currentData.councilId || "");
+      setCouncilId(currentData.councilId || "none");
       setElectoralSymbol(currentData.electoralSymbol || "");
       setElectoralNumber(currentData.electoralNumber || "");
     }
@@ -113,7 +113,7 @@ export function EditDeputyDialog({
       electoralProgram: electoralProgram.trim() || undefined,
       achievements: achievements.trim() || undefined,
       events: events.trim() || undefined,
-      councilId: councilId || null,
+      councilId: councilId === "none" ? null : councilId || null,
       electoralSymbol: electoralSymbol.trim() || undefined,
       electoralNumber: electoralNumber.trim() || undefined,
     });
@@ -158,7 +158,7 @@ export function EditDeputyDialog({
                   <SelectValue placeholder="اختر المجلس" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">بدون مجلس</SelectItem>
+                  <SelectItem value="none">بدون مجلس</SelectItem>
                   {councils.map((council) => (
                     <SelectItem key={council.id} value={council.id}>
                       {council.name_ar}
