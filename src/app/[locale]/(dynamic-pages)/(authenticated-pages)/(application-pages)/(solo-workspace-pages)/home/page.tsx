@@ -1,26 +1,19 @@
-import { DashboardLoadingFallback } from "@/components/workspaces/DashboardLoadingFallback";
-import { WorkspaceDashboard } from "@/components/workspaces/WorkspaceDashboard";
-import { getCachedSoloWorkspace } from "@/rsc-data/user/workspaces";
+import { getUserRoleAndDashboard } from "@/lib/role-routing";
+import { redirect } from "next/navigation";
 import type { Metadata } from "next";
-import { Suspense } from "react";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const workspace = await getCachedSoloWorkspace();
-
   return {
-    title: `${workspace.name} | Workspace Dashboard`,
-    description: `View your projects and team members for ${workspace.name}`,
+    title: "Dashboard",
+    description: "Your personal dashboard",
   };
 }
 
-export default async function WorkspaceDashboardPage(props: {
-  searchParams: Promise<unknown>;
-}) {
-  const searchParams = await props.searchParams;
-  const workspace = await getCachedSoloWorkspace();
-  return (
-    <Suspense fallback={<DashboardLoadingFallback />}>
-      <WorkspaceDashboard workspaceSlug={workspace.slug} />
-    </Suspense>
-  );
+/**
+ * Home page - redirects to role-based dashboard
+ */
+export default async function HomePage() {
+  const { dashboardUrl } = await getUserRoleAndDashboard();
+  redirect(dashboardUrl);
 }
+
