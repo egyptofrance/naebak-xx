@@ -32,6 +32,17 @@ const createPartySchema = z.object({
 export const createPartyAction = adminActionClient
   .schema(createPartySchema)
   .action(async ({ parsedInput }) => {
+    // Check if party with same Arabic name already exists
+    const { data: existingParty } = await supabaseAdminClient
+      .from("parties")
+      .select("id, name_ar")
+      .eq("name_ar", parsedInput.name_ar)
+      .maybeSingle();
+
+    if (existingParty) {
+      throw new Error(`حزب بنفس الاسم "${parsedInput.name_ar}" موجود بالفعل`);
+    }
+
     // Get the highest display_order
     const { data: maxOrderParty } = await supabaseAdminClient
       .from("parties")
@@ -72,6 +83,18 @@ const updatePartySchema = z.object({
 export const updatePartyAction = adminActionClient
   .schema(updatePartySchema)
   .action(async ({ parsedInput: { id, ...updates } }) => {
+    // Check if another party with same Arabic name already exists
+    const { data: existingParty } = await supabaseAdminClient
+      .from("parties")
+      .select("id, name_ar")
+      .eq("name_ar", updates.name_ar)
+      .neq("id", id)
+      .maybeSingle();
+
+    if (existingParty) {
+      throw new Error(`حزب آخر بنفس الاسم "${updates.name_ar}" موجود بالفعل`);
+    }
+
     const { data, error } = await supabaseAdminClient
       .from("parties")
       .update(updates)
