@@ -9,10 +9,12 @@ export async function getManagerProfile() {
     return null;
   }
 
+  // Check if user has manager role
   const { data, error } = await supabase
-    .from("manager_profiles")
+    .from("user_roles")
     .select("*")
     .eq("user_id", user.id)
+    .eq("role", "manager")
     .maybeSingle();
 
   if (error) {
@@ -22,3 +24,4 @@ export async function getManagerProfile() {
 
   return data;
 }
+
