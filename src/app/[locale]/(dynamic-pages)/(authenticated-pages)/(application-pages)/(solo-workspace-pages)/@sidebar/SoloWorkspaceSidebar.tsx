@@ -1,6 +1,7 @@
 // OrganizationSidebar.tsx (Server Component)
 
 import { SidebarAdminPanelNav } from "@/components/sidebar-admin-panel-nav";
+import { SidebarDeputyNav } from "@/components/sidebar-deputy-nav";
 import { SwitcherAndToggle } from "@/components/sidebar-components/switcher-and-toggle";
 import { SidebarFooterUserNav } from "@/components/sidebar-footer-user-nav";
 
@@ -70,6 +71,7 @@ export async function SoloWorkspaceSidebar() {
         </SidebarHeader>
         <SidebarContent>
           <SidebarWorkspaceNav workspace={workspace} />
+          <SidebarDeputyNav />
           <SidebarAdminPanelNav />
         </SidebarContent>
         <SidebarFooter>
