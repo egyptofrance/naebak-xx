@@ -4,6 +4,7 @@
 import { actionClient } from "@/lib/safe-action";
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 import { createClient } from "@supabase/supabase-js";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";
 
 // Schema for searching users
@@ -209,6 +210,10 @@ export const createDeputyAction = actionClient
       }
 
       console.log("[createDeputyAction] Deputy profile created successfully:", deputy);
+
+      // Revalidate the deputies page and deputy profile cache
+      revalidatePath('/app_admin/deputies');
+      revalidateTag('deputy-profile');
 
       return { 
         deputy, 
@@ -543,6 +548,10 @@ export const deleteDeputyAction = actionClient
 
       console.log("[deleteDeputyAction] Deputy deleted successfully");
       
+      // Revalidate the deputies page and deputy profile cache to refresh the UI
+      revalidatePath('/app_admin/deputies');
+      revalidateTag('deputy-profile');
+      
       return { 
         success: true,
         message: "تم حذف النائب بنجاح" 
@@ -622,6 +631,10 @@ export const bulkDeleteDeputiesAction = actionClient
         .eq("role", "deputy");
 
       console.log("[bulkDeleteDeputiesAction] Bulk delete completed successfully");
+      
+      // Revalidate the deputies page and deputy profile cache to refresh the UI
+      revalidatePath('/app_admin/deputies');
+      revalidateTag('deputy-profile');
       
       return { 
         success: true,

@@ -2,6 +2,7 @@
 
 import { actionClient } from "@/lib/safe-action";
 import { createClient } from "@supabase/supabase-js";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 // Schema for promoting user to manager
@@ -390,6 +391,9 @@ export const deleteManagerAction = actionClient
 
       console.log("[deleteManagerAction] Manager deleted successfully");
       
+      // Revalidate the managers page to refresh the UI
+      revalidatePath('/app_admin/managers');
+      
       return { 
         success: true,
         message: "تم حذف المدير بنجاح" 
@@ -439,6 +443,9 @@ export const bulkDeleteManagersAction = actionClient
       }
 
       console.log("[bulkDeleteManagersAction] Bulk delete completed successfully");
+      
+      // Revalidate the managers page to refresh the UI
+      revalidatePath('/app_admin/managers');
       
       return { 
         success: true,

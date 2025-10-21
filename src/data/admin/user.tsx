@@ -11,6 +11,7 @@ import slugify from "slugify";
 import urlJoin from "url-join";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
+import { revalidatePath } from "next/cache";
 
 const appAdminGetUserProfileSchema = z.object({
   userId: z.string(),
@@ -526,6 +527,9 @@ export const deleteUserAction = adminActionClient
       throw new Error(`Failed to delete user: ${error.message}`);
     }
 
+    // Revalidate the users page to refresh the UI
+    revalidatePath('/app_admin/users');
+
     return { status: "success", message: "User deleted successfully" };
   });
 
@@ -554,12 +558,17 @@ export const deleteMultipleUsersAction = adminActionClient
     }
 
     if (errors.length > 0) {
+      // Revalidate even on partial success
+      revalidatePath('/app_admin/users');
       return {
         status: "partial",
         message: `Deleted ${successCount} users, ${errors.length} failed`,
         errors,
       };
     }
+
+    // Revalidate the users page to refresh the UI
+    revalidatePath('/app_admin/users');
 
     return {
       status: "success",
