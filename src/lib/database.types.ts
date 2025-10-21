@@ -530,6 +530,50 @@ export type Database = {
           },
         ]
       }
+      manager_permissions: {
+        Row: {
+          id: string
+          user_id: string
+          can_manage_users: boolean | null
+          can_manage_deputies: boolean | null
+          can_manage_content: boolean | null
+          can_view_reports: boolean | null
+          can_manage_settings: boolean | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          can_manage_users?: boolean | null
+          can_manage_deputies?: boolean | null
+          can_manage_content?: boolean | null
+          can_view_reports?: boolean | null
+          can_manage_settings?: boolean | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          can_manage_users?: boolean | null
+          can_manage_deputies?: boolean | null
+          can_manage_content?: boolean | null
+          can_view_reports?: boolean | null
+          can_manage_settings?: boolean | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "manager_permissions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       marketing_author_profiles: {
         Row: {
           avatar_url: string
