@@ -29,7 +29,8 @@ import { toast } from "sonner";
 type Council = {
   id: string;
   name_ar: string;
-  name_en: string;
+  name_en: string | null;
+  code: string | null;
 };
 
 type EditDeputyDialogProps = {
