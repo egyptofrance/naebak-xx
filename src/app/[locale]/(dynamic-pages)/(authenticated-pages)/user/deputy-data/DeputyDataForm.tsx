@@ -33,27 +33,8 @@ export function DeputyDataForm({ deputyProfile }: DeputyDataFormProps) {
     setIsSaving(true);
     
     try {
-      const result = await updateDeputyDataAction({
-        deputy_status: deputyStatus as "current" | "candidate" | "former",
-        electoral_symbol: electoralSymbol,
-        electoral_number: electoralNumber,
-        bio,
-        office_address: officeAddress,
-        office_phone: officePhone,
-        office_hours: officeHours,
-        social_media_facebook: facebook,
-        social_media_twitter: twitter,
-        social_media_instagram: instagram,
-        social_media_youtube: youtube,
-        social_media_tiktok: tiktok,
-        website,
-      });
-
-      if (result.success) {
-        toast.success(result.message);
-      } else {
-        toast.error(result.message);
-      }
+      // TODO: Implement server action to update deputy data
+      toast.info("لم يتم تفعيل الحفظ بعد");
     } catch (error) {
       console.error("Error saving:", error);
       toast.error("فشل حفظ التغييرات");
