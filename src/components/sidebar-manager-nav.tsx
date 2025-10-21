@@ -6,7 +6,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { getManagerProfile } from "@/rsc-data/user/manager";
+import { getCachedManagerProfile } from "@/rsc-data/user/manager";
 import { SlimWorkspace } from "@/types";
 import { getWorkspaceSubPath } from "@/utils/workspaces";
 import { BarChart3, Users, UserCheck } from "lucide-react";
@@ -30,7 +30,7 @@ const managerLinks = [
 ];
 
 export async function SidebarManagerNav({ workspace }: { workspace: SlimWorkspace }) {
-  const managerProfile = await getManagerProfile();
+  const managerProfile = await getCachedManagerProfile();
 
   // Only show for managers
   if (!managerProfile) {
