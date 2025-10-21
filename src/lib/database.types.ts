@@ -1380,50 +1380,6 @@ export type Database = {
           },
         ]
       }
-      manager_permissions: {
-        Row: {
-          id: string
-          user_id: string
-          can_manage_users: boolean
-          can_manage_deputies: boolean
-          can_manage_content: boolean
-          can_view_reports: boolean
-          can_manage_settings: boolean
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          can_manage_users?: boolean
-          can_manage_deputies?: boolean
-          can_manage_content?: boolean
-          can_view_reports?: boolean
-          can_manage_settings?: boolean
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          can_manage_users?: boolean
-          can_manage_deputies?: boolean
-          can_manage_content?: boolean
-          can_view_reports?: boolean
-          can_manage_settings?: boolean
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "manager_permissions_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "user_profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       user_roles: {
         Row: {
           id: string
