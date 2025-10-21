@@ -1,13 +1,13 @@
 "use server";
 
-import { createClient } from "@/utils/supabase/server";
+import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 import { unstable_cache } from "next/cache";
 
 /**
  * Check if the current user is a deputy and return their deputy profile
  */
 export async function getDeputyProfile() {
-  const supabase = await createClient();
+  const supabase = await createSupabaseUserServerComponentClient();
   
   const { data: { user } } = await supabase.auth.getUser();
   
