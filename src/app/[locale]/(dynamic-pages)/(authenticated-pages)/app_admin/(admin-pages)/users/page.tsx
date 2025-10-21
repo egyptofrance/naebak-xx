@@ -26,11 +26,11 @@ export default async function AdminUsersListPage(props: {
     return (
       <div className="space-y-4 max-w-[1296px]">
         <PageHeading
-          title="Users"
-          subTitle="View all users in your app. Perform actions such as creating new users, sending users login links, debug bugs your users face by logging in as them and more!"
+          title="بيانات المواطنين"
+          subTitle="عرض وإدارة بيانات جميع المواطنين المسجلين في المنصة. يمكنك إنشاء مواطنين جدد، إرسال روابط تسجيل الدخول، وإدارة حساباتهم بشكل كامل."
         ></PageHeading>
         <div className="flex justify-between space-x-3">
-          <Search placeholder="Search Users... " />
+          <Search placeholder="البحث عن مواطنين..." />
           <AppAdminCreateUserDialog />
         </div>
         <Suspense
