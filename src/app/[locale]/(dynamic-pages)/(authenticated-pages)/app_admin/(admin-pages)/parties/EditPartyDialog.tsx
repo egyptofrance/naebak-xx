@@ -16,13 +16,7 @@ import { updatePartyAction } from "@/data/admin/party";
 import { useAction } from "next-safe-action/hooks";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
-
-type Party = {
-  id: string;
-  name_ar: string;
-  name_en: string;
-  abbreviation: string | null;
-};
+import type { Party } from "./types";
 
 export function EditPartyDialog({
   party,
@@ -33,7 +27,7 @@ export function EditPartyDialog({
 }) {
   const [open, setOpen] = useState(false);
   const [nameAr, setNameAr] = useState(party.name_ar);
-  const [nameEn, setNameEn] = useState(party.name_en);
+  const [nameEn, setNameEn] = useState(party.name_en || "");
   const [abbreviation, setAbbreviation] = useState(party.abbreviation || "");
   const toastRef = useRef<string | number | undefined>(undefined);
 

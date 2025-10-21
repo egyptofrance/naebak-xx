@@ -19,15 +19,7 @@ import { useAction } from "next-safe-action/hooks";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { EditPartyDialog } from "./EditPartyDialog";
-
-type Party = {
-  id: string;
-  name_ar: string;
-  name_en: string | null;
-  abbreviation: string | null;
-  display_order: number | null;
-  is_active: boolean | null;
-};
+import type { Party } from "./types";
 
 export function PartiesList({ parties }: { parties: Party[] }) {
   const [localParties, setLocalParties] = useState(parties);
