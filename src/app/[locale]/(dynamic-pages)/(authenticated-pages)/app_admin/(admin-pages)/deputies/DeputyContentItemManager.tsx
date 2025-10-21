@@ -4,8 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Trash2, Image as ImageIcon } from "lucide-react";
-import { useState } from "react";
+import { uploadImageAction } from "@/data/admin/user";
+import { Plus, Trash2, Image as ImageIcon, Upload, Loader2 } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
+import { useRef, useState } from "react";
+import { toast } from "sonner";
 
 export type ContentItem = {
   id?: string;
@@ -32,6 +35,23 @@ export function DeputyContentItemManager({
   onChange,
   placeholder = {},
 }: DeputyContentItemManagerProps) {
+  const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
+  const fileInputRefs = useRef<{ [key: number]: HTMLInputElement | null }>({});
+
+  const { execute: uploadImage } = useAction(uploadImageAction, {
+    onSuccess: ({ data }) => {
+      if (data?.status === "success" && data.data && uploadingIndex !== null) {
+        updateItem(uploadingIndex, "imageUrl", data.data);
+        toast.success("تم رفع الصورة بنجاح!");
+      }
+      setUploadingIndex(null);
+    },
+    onError: ({ error }) => {
+      toast.error(error.serverError || "فشل رفع الصورة");
+      setUploadingIndex(null);
+    },
+  });
+
   const addNewItem = () => {
     const newItem: ContentItem = {
       title: "",
@@ -59,6 +79,46 @@ export function DeputyContentItemManager({
       displayOrder: i,
     }));
     onChange(reorderedItems);
+  };
+
+  const handleFileSelect = async (index: number, file: File) => {
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      toast.error("الرجاء اختيار ملف صورة");
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("حجم الصورة يجب أن يكون أقل من 5 ميجابايت");
+      return;
+    }
+
+    setUploadingIndex(index);
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    // Generate filename from item title or use timestamp
+    const item = items[index];
+    const fileName = item.title
+      ? `deputy-${item.title}-${Date.now()}`
+      : `deputy-image-${Date.now()}`;
+
+    uploadImage({
+      formData: formData as any,
+      fileName,
+      fileOptions: {
+        cacheControl: "3600",
+        upsert: false,
+      },
+    });
+  };
+
+  const triggerFileInput = (index: number) => {
+    fileInputRefs.current[index]?.click();
   };
 
   return (
@@ -134,21 +194,48 @@ export function DeputyContentItemManager({
                 />
               </div>
 
-              {/* Image URL */}
+              {/* Image Upload */}
               <div className="space-y-1.5">
-                <Label htmlFor={`item-${index}-image`} className="text-sm">
-                  رابط الصورة
-                </Label>
+                <Label className="text-sm">الصورة</Label>
+                
+                {/* Hidden file input */}
+                <input
+                  type="file"
+                  ref={(el) => (fileInputRefs.current[index] = el)}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      handleFileSelect(index, file);
+                    }
+                  }}
+                  accept="image/*"
+                  className="hidden"
+                />
+
                 <div className="flex gap-2">
-                  <div className="flex-1">
-                    <Input
-                      id={`item-${index}-image`}
-                      value={item.imageUrl}
-                      onChange={(e) => updateItem(index, "imageUrl", e.target.value)}
-                      placeholder={placeholder.image || "أدخل رابط الصورة..."}
-                      dir="ltr"
-                    />
-                  </div>
+                  {/* Upload button */}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => triggerFileInput(index)}
+                    disabled={uploadingIndex === index}
+                    className="gap-2"
+                  >
+                    {uploadingIndex === index ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        جاري الرفع...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-4 h-4" />
+                        رفع صورة
+                      </>
+                    )}
+                  </Button>
+
+                  {/* Image preview */}
                   {item.imageUrl && (
                     <div className="w-16 h-16 border rounded overflow-hidden flex-shrink-0">
                       <img
@@ -167,8 +254,26 @@ export function DeputyContentItemManager({
                     </div>
                   )}
                 </div>
+
+                {/* Manual URL input (optional) */}
+                <details className="mt-2">
+                  <summary className="text-xs text-muted-foreground cursor-pointer hover:text-foreground">
+                    أو أدخل رابط صورة يدوياً
+                  </summary>
+                  <div className="mt-2">
+                    <Input
+                      id={`item-${index}-image`}
+                      value={item.imageUrl}
+                      onChange={(e) => updateItem(index, "imageUrl", e.target.value)}
+                      placeholder={placeholder.image || "أدخل رابط الصورة..."}
+                      dir="ltr"
+                      className="text-sm"
+                    />
+                  </div>
+                </details>
+
                 <p className="text-xs text-muted-foreground">
-                  يمكنك إضافة رابط صورة من الإنترنت أو رفع صورة لاحقاً
+                  اضغط "رفع صورة" لاختيار صورة من جهازك (حد أقصى 5 ميجابايت)
                 </p>
               </div>
             </div>
