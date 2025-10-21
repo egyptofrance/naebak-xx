@@ -279,10 +279,8 @@ export const getPaginatedUserListAction = adminActionClient
   .schema(getPaginatedUserListSchema)
   .action(async ({ parsedInput: { query = "", page = 1, limit = 10, governorateId, partyId, role, gender } }) => {
     console.log("query", query);
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + limit;
     
-    // First, get all users with their roles
+    // First, get ALL users with their roles (we'll filter and paginate in memory)
     let supabaseQuery = supabaseAdminClient
       .from("user_profiles")
       .select(`
@@ -332,10 +330,8 @@ export const getPaginatedUserListAction = adminActionClient
       supabaseQuery = supabaseQuery.eq("gender", gender);
     }
     
-    console.log(startIndex, endIndex);
-    const { data, error } = await supabaseQuery
-      .limit(limit)
-      .range(startIndex, endIndex);
+    // Fetch all matching users
+    const { data, error } = await supabaseQuery;
 
     if (error) {
       throw error;
@@ -347,8 +343,13 @@ export const getPaginatedUserListAction = adminActionClient
       return !hasDeputyRole;
     }) || [];
     
-    console.log("Filtered users (excluding deputies):", filteredData.length);
-    return filteredData;
+    // Now apply pagination on the filtered citizens only
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    const paginatedData = filteredData.slice(startIndex, endIndex);
+    
+    console.log("Total citizens:", filteredData.length, "Page:", page, "Showing:", paginatedData.length);
+    return paginatedData;
   });
 
 const getUsersTotalPagesSchema = z.object({
