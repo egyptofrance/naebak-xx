@@ -325,3 +325,129 @@ export const demoteManagerAction = actionClient
     }
   });
 
+
+
+// Schema for deleting a single manager
+const deleteManagerSchema = z.object({
+  userId: z.string().uuid("Invalid user ID"),
+});
+
+// Schema for bulk deleting managers
+const bulkDeleteManagersSchema = z.object({
+  userIds: z.array(z.string().uuid()).min(1, "At least one user ID is required"),
+});
+
+/**
+ * Delete a single manager
+ * Removes manager role, permissions, and optionally the user account
+ */
+export const deleteManagerAction = actionClient
+  .schema(deleteManagerSchema)
+  .action(async ({ parsedInput: { userId } }) => {
+    console.log("[deleteManagerAction] Starting delete for:", userId);
+    
+    // Use service role client
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
+
+    try {
+      // Check if user is a manager
+      const { data: managerRole } = await supabase
+        .from("user_roles")
+        .select("*")
+        .eq("user_id", userId)
+        .eq("role", "manager")
+        .maybeSingle();
+
+      if (!managerRole) {
+        throw new Error("المستخدم ليس مديراً");
+      }
+
+      // Step 1: Delete manager permissions
+      await supabase
+        .from("manager_permissions")
+        .delete()
+        .eq("user_id", userId);
+
+      // Step 2: Remove manager role
+      const { error: roleError } = await supabase
+        .from("user_roles")
+        .delete()
+        .eq("user_id", userId)
+        .eq("role", "manager");
+
+      if (roleError) {
+        throw new Error(`فشل حذف دور المدير: ${roleError.message}`);
+      }
+
+      console.log("[deleteManagerAction] Manager deleted successfully");
+      
+      return { 
+        success: true,
+        message: "تم حذف المدير بنجاح" 
+      };
+    } catch (error) {
+      console.error("[deleteManagerAction] Error:", error);
+      throw error;
+    }
+  });
+
+/**
+ * Bulk delete managers
+ */
+export const bulkDeleteManagersAction = actionClient
+  .schema(bulkDeleteManagersSchema)
+  .action(async ({ parsedInput: { userIds } }) => {
+    console.log("[bulkDeleteManagersAction] Starting bulk delete for:", userIds.length, "managers");
+    
+    // Use service role client
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
+
+    try {
+      // Step 1: Delete manager permissions
+      await supabase
+        .from("manager_permissions")
+        .delete()
+        .in("user_id", userIds);
+
+      // Step 2: Remove manager roles
+      const { error: roleError } = await supabase
+        .from("user_roles")
+        .delete()
+        .in("user_id", userIds)
+        .eq("role", "manager");
+
+      if (roleError) {
+        throw new Error(`فشل حذف أدوار المديرين: ${roleError.message}`);
+      }
+
+      console.log("[bulkDeleteManagersAction] Bulk delete completed successfully");
+      
+      return { 
+        success: true,
+        count: userIds.length,
+        message: `تم حذف ${userIds.length} مدير بنجاح` 
+      };
+    } catch (error) {
+      console.error("[bulkDeleteManagersAction] Error:", error);
+      throw error;
+    }
+  });
+

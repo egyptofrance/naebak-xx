@@ -14,6 +14,7 @@ import { format } from "date-fns";
 import { Check, Mail, X } from "lucide-react";
 import { EditManagerDialog } from "./EditManagerDialog";
 import { DemoteManagerButton } from "./DemoteManagerButton";
+import { DeleteManagerButton } from "./DeleteManagerButton";
 import { GetLoginLinkDialog } from "../users/GetLoginLinkDialog";
 import { AppAdminManagerFilters } from "./schema";
 
@@ -104,6 +105,7 @@ export async function ManagersList({
             <TableHead>Get Link</TableHead>
             <TableHead>تعديل</TableHead>
             <TableHead>إزالة</TableHead>
+            <TableHead>حذف</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -151,6 +153,12 @@ export async function ManagersList({
                 </TableCell>
                 <TableCell>
                   <DemoteManagerButton
+                    userId={manager.id}
+                    managerName={manager.full_name ?? email}
+                  />
+                </TableCell>
+                <TableCell>
+                  <DeleteManagerButton
                     userId={manager.id}
                     managerName={manager.full_name ?? email}
                   />

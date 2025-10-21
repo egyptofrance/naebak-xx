@@ -459,3 +459,178 @@ export const getCouncilsAction = actionClient.action(async () => {
   return { councils: councils || [] };
 });
 
+
+
+// Schema for deleting a single deputy
+const deleteDeputySchema = z.object({
+  deputyId: z.string().uuid("Invalid deputy ID"),
+});
+
+// Schema for bulk deleting deputies
+const bulkDeleteDeputiesSchema = z.object({
+  deputyIds: z.array(z.string().uuid()).min(1, "At least one deputy ID is required"),
+});
+
+/**
+ * Delete a single deputy
+ * Removes deputy profile, role, and optionally the user account
+ */
+export const deleteDeputyAction = actionClient
+  .schema(deleteDeputySchema)
+  .action(async ({ parsedInput: { deputyId } }) => {
+    console.log("[deleteDeputyAction] Starting delete for:", deputyId);
+    
+    // Use service role client to bypass RLS issues
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
+
+    try {
+      // Get deputy profile to find user_id
+      const { data: deputy, error: fetchError } = await supabase
+        .from("deputy_profiles")
+        .select("user_id")
+        .eq("id", deputyId)
+        .single();
+
+      if (fetchError || !deputy) {
+        throw new Error("النائب غير موجود");
+      }
+
+      const userId = deputy.user_id;
+
+      // Step 1: Delete from deputy_electoral_programs
+      await supabase
+        .from("deputy_electoral_programs")
+        .delete()
+        .eq("deputy_id", deputyId);
+
+      // Step 2: Delete from deputy_achievements
+      await supabase
+        .from("deputy_achievements")
+        .delete()
+        .eq("deputy_id", deputyId);
+
+      // Step 3: Delete from deputy_events
+      await supabase
+        .from("deputy_events")
+        .delete()
+        .eq("deputy_id", deputyId);
+
+      // Step 4: Delete deputy profile
+      const { error: deleteProfileError } = await supabase
+        .from("deputy_profiles")
+        .delete()
+        .eq("id", deputyId);
+
+      if (deleteProfileError) {
+        throw new Error(`فشل حذف ملف النائب: ${deleteProfileError.message}`);
+      }
+
+      // Step 5: Remove deputy role
+      await supabase
+        .from("user_roles")
+        .delete()
+        .eq("user_id", userId)
+        .eq("role", "deputy");
+
+      console.log("[deleteDeputyAction] Deputy deleted successfully");
+      
+      return { 
+        success: true,
+        message: "تم حذف النائب بنجاح" 
+      };
+    } catch (error) {
+      console.error("[deleteDeputyAction] Error:", error);
+      throw error;
+    }
+  });
+
+/**
+ * Bulk delete deputies
+ */
+export const bulkDeleteDeputiesAction = actionClient
+  .schema(bulkDeleteDeputiesSchema)
+  .action(async ({ parsedInput: { deputyIds } }) => {
+    console.log("[bulkDeleteDeputiesAction] Starting bulk delete for:", deputyIds.length, "deputies");
+    
+    // Use service role client to bypass RLS issues
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
+
+    try {
+      // Get all deputy profiles to find user_ids
+      const { data: deputies, error: fetchError } = await supabase
+        .from("deputy_profiles")
+        .select("id, user_id")
+        .in("id", deputyIds);
+
+      if (fetchError || !deputies) {
+        throw new Error("فشل في جلب بيانات النواب");
+      }
+
+      const userIds = deputies.map(d => d.user_id);
+
+      // Step 1: Delete from deputy_electoral_programs
+      await supabase
+        .from("deputy_electoral_programs")
+        .delete()
+        .in("deputy_id", deputyIds);
+
+      // Step 2: Delete from deputy_achievements
+      await supabase
+        .from("deputy_achievements")
+        .delete()
+        .in("deputy_id", deputyIds);
+
+      // Step 3: Delete from deputy_events
+      await supabase
+        .from("deputy_events")
+        .delete()
+        .in("deputy_id", deputyIds);
+
+      // Step 4: Delete deputy profiles
+      const { error: deleteProfilesError } = await supabase
+        .from("deputy_profiles")
+        .delete()
+        .in("id", deputyIds);
+
+      if (deleteProfilesError) {
+        throw new Error(`فشل حذف ملفات النواب: ${deleteProfilesError.message}`);
+      }
+
+      // Step 5: Remove deputy roles
+      await supabase
+        .from("user_roles")
+        .delete()
+        .in("user_id", userIds)
+        .eq("role", "deputy");
+
+      console.log("[bulkDeleteDeputiesAction] Bulk delete completed successfully");
+      
+      return { 
+        success: true,
+        count: deputyIds.length,
+        message: `تم حذف ${deputyIds.length} نائب بنجاح` 
+      };
+    } catch (error) {
+      console.error("[bulkDeleteDeputiesAction] Error:", error);
+      throw error;
+    }
+  });
+

@@ -32,6 +32,8 @@ import {
 import {
   searchDeputiesAction,
   getCouncilsAction,
+  deleteDeputyAction,
+  bulkDeleteDeputiesAction,
 } from "@/data/admin/deputies";
 import {
   getGovernoratesAction,
@@ -122,6 +124,10 @@ export default function DeputiesList() {
   const [councils, setCouncils] = useState<Council[]>([]);
   const [showFilters, setShowFilters] = useState(false);
   const [selectedDeputies, setSelectedDeputies] = useState<Set<string>>(new Set());
+
+  // Delete actions
+  const { execute: executeDeleteDeputy, isExecuting: isDeletingDeputy } = useAction(deleteDeputyAction);
+  const { execute: executeBulkDelete, isExecuting: isBulkDeleting } = useAction(bulkDeleteDeputiesAction);
 
   // Load filter options
   useEffect(() => {
@@ -240,11 +246,15 @@ export default function DeputiesList() {
       return;
     }
 
-    toast.info("جاري حذف النواب المحددين...");
-    // TODO: Implement bulk delete action
-    toast.success(`تم حذف ${selectedDeputies.size} نائب بنجاح`);
-    setSelectedDeputies(new Set());
-    handleSearch();
+    const result = await executeBulkDelete({ deputyIds: Array.from(selectedDeputies) });
+    
+    if (result?.data?.success) {
+      toast.success(result.data.message || `تم حذف ${selectedDeputies.size} نائب بنجاح`);
+      setSelectedDeputies(new Set());
+      handleSearch();
+    } else {
+      toast.error("فشل حذف النواب");
+    }
   };
 
   const handleDeleteDeputy = async (deputyId: string, deputyName: string) => {
@@ -252,10 +262,14 @@ export default function DeputiesList() {
       return;
     }
 
-    toast.info("جاري حذف النائب...");
-    // TODO: Implement single delete action
-    toast.success(`تم حذف النائب "${deputyName}" بنجاح`);
-    handleSearch();
+    const result = await executeDeleteDeputy({ deputyId });
+    
+    if (result?.data?.success) {
+      toast.success(result.data.message || `تم حذف النائب "${deputyName}" بنجاح`);
+      handleSearch();
+    } else {
+      toast.error("فشل حذف النائب");
+    }
   };
 
   return (
