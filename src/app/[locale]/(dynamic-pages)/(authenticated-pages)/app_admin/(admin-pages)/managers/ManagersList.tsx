@@ -14,6 +14,7 @@ import { format } from "date-fns";
 import { Check, Mail, X } from "lucide-react";
 import { EditManagerDialog } from "./EditManagerDialog";
 import { DemoteManagerButton } from "./DemoteManagerButton";
+import { GetLoginLinkDialog } from "../users/GetLoginLinkDialog";
 import { AppAdminManagerFilters } from "./schema";
 
 import { createClient } from "@supabase/supabase-js";
@@ -100,6 +101,7 @@ export async function ManagersList({
             <TableHead>مدير</TableHead>
             <TableHead>تاريخ الإنشاء</TableHead>
             <TableHead>التواصل</TableHead>
+            <TableHead>Get Link</TableHead>
             <TableHead>تعديل</TableHead>
             <TableHead>إزالة</TableHead>
           </TableRow>
@@ -136,6 +138,9 @@ export async function ManagersList({
                       </T.Small>
                     </a>
                   </span>
+                </TableCell>
+                <TableCell>
+                  <GetLoginLinkDialog userId={manager.id} />
                 </TableCell>
                 <TableCell>
                   <EditManagerDialog

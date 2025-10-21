@@ -42,6 +42,7 @@ import { useState, useEffect } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 import { EditDeputyDialog } from "./EditDeputyDialog";
+import { GetLoginLinkDialog } from "../users/GetLoginLinkDialog";
 
 interface Deputy {
   id: string;
@@ -478,6 +479,7 @@ export default function DeputiesList() {
                     <TableHead>الحزب</TableHead>
                     <TableHead>المجلس</TableHead>
                     <TableHead>الحالة</TableHead>
+                    <TableHead>Get Link</TableHead>
                     <TableHead>تعديل</TableHead>
                     <TableHead>حذف</TableHead>
                   </TableRow>
@@ -524,6 +526,9 @@ export default function DeputiesList() {
                               ? "مرشح"
                               : "نائب سابق"}
                           </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <GetLoginLinkDialog userId={deputy.user_id} />
                         </TableCell>
                         <TableCell>
                           <EditDeputyDialog
