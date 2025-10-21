@@ -5,6 +5,7 @@ import { Plus } from "lucide-react";
 import { Suspense } from "react";
 import { CreatePartyDialog } from "./CreatePartyDialog";
 import { PartiesList } from "./PartiesList";
+import { ReorderPartiesButton } from "./ReorderPartiesButton";
 
 export default async function PartiesPage() {
   return (
@@ -16,12 +17,15 @@ export default async function PartiesPage() {
             إضافة وتعديل وترتيب الأحزاب السياسية في التطبيق
           </T.P>
         </div>
-        <CreatePartyDialog>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            إضافة حزب جديد
-          </Button>
-        </CreatePartyDialog>
+        <div className="flex gap-2">
+          <ReorderPartiesButton />
+          <CreatePartyDialog>
+            <Button>
+              <Plus className="w-4 h-4 mr-2" />
+              إضافة حزب جديد
+            </Button>
+          </CreatePartyDialog>
+        </div>
       </div>
 
       <Suspense fallback={<div>Loading...</div>}>

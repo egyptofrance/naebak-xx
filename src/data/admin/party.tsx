@@ -154,3 +154,33 @@ export const togglePartyActiveAction = adminActionClient
     return { message: `Party ${isActive ? "activated" : "deactivated"} successfully` };
   });
 
+
+/**
+ * Reorder all parties (fix existing data)
+ */
+export const reorderAllPartiesAction = adminActionClient
+  .schema(z.object({}))
+  .action(async () => {
+    // Get all parties ordered by name_ar
+    const { data: parties, error: fetchError } = await supabaseAdminClient
+      .from("parties")
+      .select("id, name_ar")
+      .order("name_ar", { ascending: true });
+
+    if (fetchError || !parties) {
+      throw new Error(`Failed to fetch parties: ${fetchError?.message}`);
+    }
+
+    // Update each party with new display_order
+    const updates = parties.map((party, index) => 
+      supabaseAdminClient
+        .from("parties")
+        .update({ display_order: index })
+        .eq("id", party.id)
+    );
+
+    await Promise.all(updates);
+
+    return { message: `Successfully reordered ${parties.length} parties` };
+  });
+
