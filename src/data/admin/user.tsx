@@ -212,7 +212,7 @@ export const sendLoginLinkAction = adminActionClient
         const { data: userSettings, error: userSettingsError } =
           await supabaseAdminClient
             .from("user_application_settings")
-            .select("user_id, email_readonly")
+            .select("id, email_readonly")
             .eq("email_readonly", email)
             .single();
 
@@ -225,7 +225,7 @@ export const sendLoginLinkAction = adminActionClient
           await supabaseAdminClient
             .from("user_profiles")
             .select("id, full_name")
-            .eq("id", userSettings.user_id)
+            .eq("id", userSettings.id)
             .single();
 
         if (userProfileError) {
