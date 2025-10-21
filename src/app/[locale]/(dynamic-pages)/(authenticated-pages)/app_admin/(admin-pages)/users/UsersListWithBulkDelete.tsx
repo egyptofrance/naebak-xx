@@ -131,7 +131,6 @@ export function UsersListWithBulkDelete({ users }: { users: User[] }) {
               </TableHead>
               <TableHead>Full Name</TableHead>
               <TableHead>Email</TableHead>
-              <TableHead>Created At</TableHead>
               <TableHead>Contact User</TableHead>
               <TableHead>Send Login Link</TableHead>
               <TableHead>Get Login Link</TableHead>
@@ -157,10 +156,6 @@ export function UsersListWithBulkDelete({ users }: { users: User[] }) {
                   <TableCell>
                     <Link href={`/app_admin/users/${user.id}`}>{email}</Link>
                   </TableCell>
-                  <TableCell>
-                    {format(new Date(user.created_at), "PPpp")}
-                  </TableCell>
-
                   <TableCell>
                     <span className="flex items-center space-x-4">
                       <a
