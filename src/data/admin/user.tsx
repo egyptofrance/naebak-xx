@@ -208,23 +208,32 @@ export const sendLoginLinkAction = adminActionClient
         url.pathname = `/auth/confirm`;
         url.search = searchParams.toString();
 
+        // Find user by email from user_application_settings
+        const { data: userSettings, error: userSettingsError } =
+          await supabaseAdminClient
+            .from("user_application_settings")
+            .select("user_id, email_readonly")
+            .eq("email_readonly", email)
+            .single();
+
+        if (userSettingsError) {
+          throw new Error("User not found with this email");
+        }
+
+        // Get user profile
         const { data: userProfile, error: userProfileError } =
           await supabaseAdminClient
             .from("user_profiles")
-            .select("id,full_name, user_application_settings(*)")
-            .eq("user_application_settings.email_readonly", email)
+            .select("id, full_name")
+            .eq("id", userSettings.user_id)
             .single();
 
         if (userProfileError) {
           throw userProfileError;
         }
 
-        const userEmail = userProfile.user_application_settings?.email_readonly;
+        const userEmail = email;
         const userName = userProfile.full_name;
-
-        if (!userEmail) {
-          throw new Error("User email not found");
-        }
 
         // send email
         const signInEmailHTML = await renderAsync(

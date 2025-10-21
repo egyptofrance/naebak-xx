@@ -54,23 +54,23 @@ export const ConfirmSendLoginLinkDialog = ({
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <div className="p-3 w-fit bg-gray-200/50 dark:bg-gray-700/40 mb-2 rounded-lg">
-            <Send className=" w-6 h-6" />
+        <DialogHeader className="space-y-3">
+          <div className="mx-auto p-3 w-fit bg-gray-200/50 dark:bg-gray-700/40 rounded-lg">
+            <Send className="w-6 h-6" />
           </div>
-          <div className="p-1">
+          <div className="text-center space-y-2">
             <DialogTitle className="text-lg">Send Login Link</DialogTitle>
-            <DialogDescription className="text-base mt-0">
+            <DialogDescription className="text-base">
               Are you sure you want to send a login link to the user?
             </DialogDescription>
           </div>
         </DialogHeader>
-        <DialogFooter className="mt-2">
+        <DialogFooter className="mt-4 gap-2 sm:gap-0">
           <Button
             type="button"
             variant="outline"
             className="w-full"
-            aria-disabled={isSending}
+            disabled={isSending}
             onClick={() => {
               setOpen(false);
             }}
@@ -81,12 +81,12 @@ export const ConfirmSendLoginLinkDialog = ({
             type="button"
             variant="default"
             className="w-full"
-            aria-disabled={isSending}
+            disabled={isSending}
             onClick={() => {
               sendLoginLink({ email: userEmail });
             }}
           >
-            Send Login Link
+            {isSending ? "Sending..." : "Send Login Link"}
           </Button>
         </DialogFooter>
       </DialogContent>
