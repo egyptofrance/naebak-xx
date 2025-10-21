@@ -346,10 +346,11 @@ export const getPaginatedUserListAction = adminActionClient
       throw error;
     }
     
-    // Filter out users who have the "deputy" role
+    // Filter out users who have the "deputy" or "manager" role
     const filteredData = data?.filter(user => {
       const hasDeputyRole = user.user_roles?.some((role: any) => role.role === "deputy");
-      return !hasDeputyRole;
+      const hasManagerRole = user.user_roles?.some((role: any) => role.role === "manager");
+      return !hasDeputyRole && !hasManagerRole;
     }) || [];
     
     // Now apply pagination on the filtered citizens only
@@ -415,14 +416,15 @@ export const getUsersTotalPagesAction = adminActionClient
       throw error;
     }
     
-    // Filter out users who have the "deputy" role
+    // Filter out users who have the "deputy" or "manager" role
     const filteredData = data?.filter(user => {
       const hasDeputyRole = user.user_roles?.some((role: any) => role.role === "deputy");
-      return !hasDeputyRole;
+      const hasManagerRole = user.user_roles?.some((role: any) => role.role === "manager");
+      return !hasDeputyRole && !hasManagerRole;
     }) || [];
     
     const count = filteredData.length;
-    console.log("Total users (excluding deputies):", count);
+    console.log("Total users (excluding deputies and managers):", count);
     
     return Math.ceil(count / limit);
   });
