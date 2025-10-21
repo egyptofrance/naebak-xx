@@ -10,15 +10,20 @@ export async function getDeputyProfile() {
   
   const { data: { user } } = await supabase.auth.getUser();
   
+  console.log("[getDeputyProfile] User:", user?.id, user?.email);
+  
   if (!user) {
+    console.log("[getDeputyProfile] No user found");
     return null;
   }
 
-  const { data: deputyProfile } = await supabase
+  const { data: deputyProfile, error } = await supabase
     .from("deputy_profiles")
     .select("*")
     .eq("user_id", user.id)
     .maybeSingle();
+
+  console.log("[getDeputyProfile] Deputy profile:", deputyProfile, "Error:", error);
 
   return deputyProfile;
 }
