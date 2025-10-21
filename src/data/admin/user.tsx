@@ -506,3 +506,62 @@ export const getPartiesAction = adminActionClient.action(async () => {
   return { parties: parties || [] };
 });
 
+
+/**
+ * Delete a single user
+ */
+const deleteUserSchema = z.object({
+  userId: z.string().uuid(),
+});
+
+export const deleteUserAction = adminActionClient
+  .schema(deleteUserSchema)
+  .action(async ({ parsedInput: { userId } }) => {
+    // Delete user from auth.users (cascade will delete related records)
+    const { error } = await supabaseAdminClient.auth.admin.deleteUser(userId);
+
+    if (error) {
+      throw new Error(`Failed to delete user: ${error.message}`);
+    }
+
+    return { status: "success", message: "User deleted successfully" };
+  });
+
+/**
+ * Delete multiple users
+ */
+const deleteMultipleUsersSchema = z.object({
+  userIds: z.array(z.string().uuid()).min(1, "At least one user must be selected"),
+});
+
+export const deleteMultipleUsersAction = adminActionClient
+  .schema(deleteMultipleUsersSchema)
+  .action(async ({ parsedInput: { userIds } }) => {
+    const errors: string[] = [];
+    let successCount = 0;
+
+    // Delete users one by one
+    for (const userId of userIds) {
+      const { error } = await supabaseAdminClient.auth.admin.deleteUser(userId);
+      
+      if (error) {
+        errors.push(`Failed to delete user ${userId}: ${error.message}`);
+      } else {
+        successCount++;
+      }
+    }
+
+    if (errors.length > 0) {
+      return {
+        status: "partial",
+        message: `Deleted ${successCount} users, ${errors.length} failed`,
+        errors,
+      };
+    }
+
+    return {
+      status: "success",
+      message: `Successfully deleted ${successCount} users`,
+    };
+  });
+

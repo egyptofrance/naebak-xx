@@ -1,24 +1,8 @@
 "use server";
 
-import { Link } from "@/components/intl-link";
-import { T } from "@/components/ui/Typography";
-import {
-  Table as ShadcnTable,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { getPaginatedUserListAction } from "@/data/admin/user";
-import { format } from "date-fns";
-import { Mail } from "lucide-react";
-import { Suspense } from "react";
-import { ConfirmSendLoginLinkDialog } from "./ConfirmSendLoginLinkDialog";
-import { GetLoginLinkDialog } from "./GetLoginLinkDialog";
-import { PromoteToDeputyDialog } from "./PromoteToDeputyDialog";
-import { PromoteToManagerButton } from "./PromoteToManagerButton";
 import { AppAdminUserFiltersSchema } from "./schema";
+import { UsersListWithBulkDelete } from "./UsersListWithBulkDelete";
 
 export async function UserList({
   filters,
@@ -28,82 +12,7 @@ export async function UserList({
   const usersActionResult = await getPaginatedUserListAction(filters);
   if (usersActionResult?.data) {
     const users = usersActionResult.data;
-    return (
-      <div className="space-y-2 border overflow-x-auto">
-        <ShadcnTable>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Full Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Created At</TableHead>
-              <TableHead>Contact User</TableHead>
-              <TableHead>Send Login Link</TableHead>
-              <TableHead>Get Login Link</TableHead>
-              <TableHead>Promote to Deputy</TableHead>
-              <TableHead>Promote to Manager</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {users.map((user) => {
-              const email =
-                user.user_application_settings?.email_readonly ?? "-";
-
-              return (
-                <TableRow key={user.id}>
-                  <TableCell> {user.full_name ?? "-"} </TableCell>
-                  <TableCell>
-                    <Link href={`/app_admin/users/${user.id}`}>{email}</Link>
-                  </TableCell>
-                  <TableCell>
-                    {format(new Date(user.created_at), "PPpp")}
-                  </TableCell>
-
-                  <TableCell>
-                    <span className="flex items-center space-x-4">
-                      <a
-                        title="Contact User by email"
-                        className="flex items-center "
-                        href={`mailto:${email}`}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        <Mail className="h-5 w-5 mr-2 " />{" "}
-                        <T.Small className=" font-medium underline underline-offset-4 ">
-                          Contact User by email
-                        </T.Small>
-                      </a>
-                    </span>
-                  </TableCell>
-
-                  <TableCell>
-                    <Suspense>
-                      <ConfirmSendLoginLinkDialog userEmail={email} />
-                    </Suspense>
-                  </TableCell>
-                  <TableCell>
-                    <Suspense>
-                      <GetLoginLinkDialog userId={user.id} />
-                    </Suspense>
-                  </TableCell>
-                  <TableCell>
-                    <PromoteToDeputyDialog 
-                      userId={user.id} 
-                      userName={user.full_name ?? email}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <PromoteToManagerButton 
-                      userId={user.id} 
-                      userName={user.full_name ?? email}
-                    />
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </ShadcnTable>
-      </div>
-    );
+    return <UsersListWithBulkDelete users={users} />;
   } else {
     if (usersActionResult?.serverError) {
       return <div>{usersActionResult.serverError}</div>;
