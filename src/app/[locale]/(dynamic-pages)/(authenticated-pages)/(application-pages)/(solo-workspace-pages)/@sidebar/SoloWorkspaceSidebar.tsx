@@ -2,6 +2,7 @@
 
 import { SidebarAdminPanelNav } from "@/components/sidebar-admin-panel-nav";
 import { SidebarDeputyNav } from "@/components/sidebar-deputy-nav";
+import { SidebarManagerNav } from "@/components/sidebar-manager-nav";
 import { SwitcherAndToggle } from "@/components/sidebar-components/switcher-and-toggle";
 import { SidebarFooterUserNav } from "@/components/sidebar-footer-user-nav";
 
@@ -72,6 +73,7 @@ export async function SoloWorkspaceSidebar() {
         <SidebarContent>
           <SidebarWorkspaceNav workspace={workspace} />
           <SidebarDeputyNav workspace={workspace} />
+          <SidebarManagerNav workspace={workspace} />
           <SidebarAdminPanelNav />
         </SidebarContent>
         <SidebarFooter>
