@@ -45,7 +45,7 @@ import { EditDeputyDialog } from "./EditDeputyDialog";
 interface Deputy {
   id: string;
   user_id: string;
-  deputy_status: "current" | "candidate";
+  deputy_status: "current" | "candidate" | "former";
   electoral_symbol: string | null;
   electoral_number: string | null;
   electoral_program: string | null;
@@ -405,12 +405,16 @@ export default function DeputiesList() {
                             variant={
                               deputy.deputy_status === "current"
                                 ? "default"
-                                : "secondary"
+                                : deputy.deputy_status === "candidate"
+                                ? "secondary"
+                                : "outline"
                             }
                           >
                             {deputy.deputy_status === "current"
                               ? "نائب حالي"
-                              : "مرشح"}
+                              : deputy.deputy_status === "candidate"
+                              ? "مرشح"
+                              : "نائب سابق"}
                           </Badge>
                         </TableCell>
                         <TableCell>

@@ -50,10 +50,10 @@ type EditDeputyDialogProps = {
 export function EditDeputyDialog({
   deputyId,
   currentData,
-  councils,
+  councils = [],
 }: EditDeputyDialogProps) {
   const [open, setOpen] = useState(false);
-  const [deputyStatus, setDeputyStatus] = useState(currentData.deputyStatus);
+  const [deputyStatus, setDeputyStatus] = useState(currentData.deputyStatus || "current");
   const [electoralProgram, setElectoralProgram] = useState(
     currentData.electoralProgram || ""
   );
@@ -73,7 +73,7 @@ export function EditDeputyDialog({
   // Reset form when dialog opens
   useEffect(() => {
     if (open) {
-      setDeputyStatus(currentData.deputyStatus);
+      setDeputyStatus(currentData.deputyStatus || "current");
       setElectoralProgram(currentData.electoralProgram || "");
       setAchievements(currentData.achievements || "");
       setEvents(currentData.events || "");
