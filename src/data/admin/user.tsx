@@ -565,3 +565,31 @@ export const deleteMultipleUsersAction = adminActionClient
     };
   });
 
+
+/**
+ * Update user profile data
+ */
+const updateUserProfileSchema = z.object({
+  userId: z.string().uuid("Invalid user ID"),
+  fullName: z.string().nullable(),
+  phone: z.string().nullable(),
+});
+
+export const updateUserProfileAction = adminActionClient
+  .schema(updateUserProfileSchema)
+  .action(async ({ parsedInput: { userId, fullName, phone } }) => {
+    const { error } = await supabaseAdminClient
+      .from("user_profiles")
+      .update({
+        full_name: fullName,
+        phone: phone,
+      })
+      .eq("id", userId);
+
+    if (error) {
+      throw new Error(`Failed to update user profile: ${error.message}`);
+    }
+
+    return { message: "تم تحديث بيانات المستخدم بنجاح" };
+  });
+

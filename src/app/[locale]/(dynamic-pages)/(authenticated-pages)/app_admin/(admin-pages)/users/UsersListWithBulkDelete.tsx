@@ -31,10 +31,12 @@ import { DeleteUserDialog } from "./DeleteUserDialog";
 import { GetLoginLinkDialog } from "./GetLoginLinkDialog";
 import { PromoteToDeputyDialog } from "./PromoteToDeputyDialog";
 import { PromoteToManagerButton } from "./PromoteToManagerButton";
+import { EditUserDialog } from "./EditUserDialog";
 
 type User = {
   id: string;
   full_name: string | null;
+  phone: string | null;
   created_at: string;
   user_application_settings?: {
     email_readonly: string;
@@ -135,6 +137,7 @@ export function UsersListWithBulkDelete({ users }: { users: User[] }) {
               <TableHead>Get Login Link</TableHead>
               <TableHead>Promote to Deputy</TableHead>
               <TableHead>Promote to Manager</TableHead>
+              <TableHead>Edit</TableHead>
               <TableHead>Delete</TableHead>
             </TableRow>
           </TableHeader>
@@ -195,6 +198,13 @@ export function UsersListWithBulkDelete({ users }: { users: User[] }) {
                     <PromoteToManagerButton
                       userId={user.id}
                       userName={user.full_name ?? email}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <EditUserDialog
+                      userId={user.id}
+                      currentFullName={user.full_name}
+                      currentPhone={user.phone}
                     />
                   </TableCell>
                   <TableCell>

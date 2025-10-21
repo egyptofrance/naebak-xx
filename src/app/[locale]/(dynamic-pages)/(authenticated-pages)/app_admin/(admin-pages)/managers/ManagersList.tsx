@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/table";
 import { format } from "date-fns";
 import { Check, Mail, X } from "lucide-react";
+import { EditManagerDialog } from "./EditManagerDialog";
+import { DemoteManagerButton } from "./DemoteManagerButton";
 import { AppAdminManagerFilters } from "./schema";
 
 import { createClient } from "@supabase/supabase-js";
@@ -98,6 +100,8 @@ export async function ManagersList({
             <TableHead>مدير</TableHead>
             <TableHead>تاريخ الإنشاء</TableHead>
             <TableHead>التواصل</TableHead>
+            <TableHead>تعديل</TableHead>
+            <TableHead>إزالة</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -132,6 +136,19 @@ export async function ManagersList({
                       </T.Small>
                     </a>
                   </span>
+                </TableCell>
+                <TableCell>
+                  <EditManagerDialog
+                    userId={manager.id}
+                    currentFullName={manager.full_name}
+                    currentPhone={manager.phone}
+                  />
+                </TableCell>
+                <TableCell>
+                  <DemoteManagerButton
+                    userId={manager.id}
+                    managerName={manager.full_name ?? email}
+                  />
                 </TableCell>
               </TableRow>
             );

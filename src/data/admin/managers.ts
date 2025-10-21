@@ -226,3 +226,102 @@ export const getManagerPermissionsAction = actionClient
     return { permissions: data };
   });
 
+
+
+/**
+ * Demote manager to citizen (remove manager role and permissions)
+ */
+const demoteManagerSchema = z.object({
+  userId: z.string().uuid("Invalid user ID"),
+});
+
+export const demoteManagerAction = actionClient
+  .schema(demoteManagerSchema)
+  .action(async ({ parsedInput: { userId } }) => {
+    console.log('[demoteManager] Demoting manager:', userId);
+    
+    // Use service role client
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
+
+    try {
+      // Check if user exists
+      const { data: user, error: userError } = await supabase
+        .from("user_profiles")
+        .select("id, full_name")
+        .eq("id", userId)
+        .single();
+
+      if (userError || !user) {
+        throw new Error("المستخدم غير موجود");
+      }
+
+      // Check if user is a manager
+      const { data: managerRole } = await supabase
+        .from("user_roles")
+        .select("*")
+        .eq("user_id", userId)
+        .eq("role", "manager")
+        .maybeSingle();
+
+      if (!managerRole) {
+        throw new Error("المستخدم ليس مديراً");
+      }
+
+      // Step 1: Delete manager permissions
+      console.log('[demoteManager] Deleting manager permissions...');
+      const { error: permissionsError } = await supabase
+        .from("manager_permissions")
+        .delete()
+        .eq("user_id", userId);
+
+      if (permissionsError) {
+        console.error('[demoteManager] Error deleting permissions:', permissionsError);
+        // Continue anyway, permissions might not exist
+      }
+
+      // Step 2: Remove manager role
+      console.log('[demoteManager] Removing manager role...');
+      const { error: roleError } = await supabase
+        .from("user_roles")
+        .delete()
+        .eq("user_id", userId)
+        .eq("role", "manager");
+
+      if (roleError) {
+        throw new Error(`فشل إزالة دور المدير: ${roleError.message}`);
+      }
+
+      // Step 3: Add citizen role back
+      console.log('[demoteManager] Adding citizen role...');
+      const { error: citizenError } = await supabase
+        .from("user_roles")
+        .insert({
+          user_id: userId,
+          role: "citizen",
+        });
+
+      if (citizenError) {
+        console.error('[demoteManager] Error adding citizen role:', citizenError);
+        // Don't throw error, user might already have citizen role
+      }
+
+      console.log('[demoteManager] Successfully demoted manager to citizen');
+      
+      return {
+        message: `تم إزالة ${user.full_name || "المستخدم"} من قائمة المديرين وإعادته إلى قائمة المواطنين.`,
+      };
+    } catch (error) {
+      console.error('[demoteManager] Unexpected error:', error);
+      throw error;
+    }
+  });
+
