@@ -65,11 +65,10 @@ export const ConfirmSendLoginLinkDialog = ({
             </DialogDescription>
           </div>
         </DialogHeader>
-        <DialogFooter className="mt-4 sm:space-x-2">
+        <DialogFooter className="mt-4">
           <Button
             type="button"
             variant="outline"
-            className="w-full"
             disabled={isSending}
             onClick={() => {
               setOpen(false);
@@ -80,7 +79,6 @@ export const ConfirmSendLoginLinkDialog = ({
           <Button
             type="button"
             variant="default"
-            className="w-full"
             disabled={isSending}
             onClick={() => {
               sendLoginLink({ email: userEmail });

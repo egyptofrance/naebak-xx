@@ -71,11 +71,10 @@ export const GetLoginLinkDialog = ({ userId }: { userId: string }) => {
             </DialogDescription>
           </div>
         </DialogHeader>
-        <DialogFooter className="mt-4 sm:space-x-2">
+        <DialogFooter className="mt-4">
           <Button
             type="button"
             variant="outline"
-            className="w-full"
             disabled={isPending}
             onClick={() => setOpen(false)}
           >
@@ -84,7 +83,6 @@ export const GetLoginLinkDialog = ({ userId }: { userId: string }) => {
           <Button
             type="button"
             variant="default"
-            className="w-full"
             onClick={handleGetLoginLink}
             disabled={isPending}
           >
