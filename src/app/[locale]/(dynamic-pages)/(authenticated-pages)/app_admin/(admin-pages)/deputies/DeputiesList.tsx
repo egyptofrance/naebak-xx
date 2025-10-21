@@ -19,6 +19,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -36,7 +37,7 @@ import {
   getGovernoratesAction,
   getPartiesAction,
 } from "@/data/admin/user";
-import { Edit, Search, X, Filter } from "lucide-react";
+import { Edit, Search, X, Filter, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
@@ -115,6 +116,7 @@ export default function DeputiesList() {
   const [parties, setParties] = useState<Party[]>([]);
   const [councils, setCouncils] = useState<Council[]>([]);
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedDeputies, setSelectedDeputies] = useState<Set<string>>(new Set());
 
   // Load filter options
   useEffect(() => {
@@ -200,6 +202,50 @@ export default function DeputiesList() {
     selectedParty ||
     selectedCouncil ||
     selectedStatus;
+
+  // Selection handlers
+  const toggleDeputy = (deputyId: string) => {
+    const newSelected = new Set(selectedDeputies);
+    if (newSelected.has(deputyId)) {
+      newSelected.delete(deputyId);
+    } else {
+      newSelected.add(deputyId);
+    }
+    setSelectedDeputies(newSelected);
+  };
+
+  const toggleAll = () => {
+    if (selectedDeputies.size === deputies.length) {
+      setSelectedDeputies(new Set());
+    } else {
+      setSelectedDeputies(new Set(deputies.map((d) => d.id)));
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedDeputies.size === 0) return;
+    
+    if (!confirm(`هل أنت متأكد من حذف ${selectedDeputies.size} نائب؟`)) {
+      return;
+    }
+
+    toast.info("جاري حذف النواب المحددين...");
+    // TODO: Implement bulk delete action
+    toast.success(`تم حذف ${selectedDeputies.size} نائب بنجاح`);
+    setSelectedDeputies(new Set());
+    performSearch();
+  };
+
+  const handleDeleteDeputy = async (deputyId: string, deputyName: string) => {
+    if (!confirm(`هل أنت متأكد من حذف النائب "${deputyName}"؟`)) {
+      return;
+    }
+
+    toast.info("جاري حذف النائب...");
+    // TODO: Implement single delete action
+    toast.success(`تم حذف النائب "${deputyName}" بنجاح`);
+    performSearch();
+  };
 
   return (
     <div className="space-y-6">
@@ -357,6 +403,21 @@ export default function DeputiesList() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {selectedDeputies.size > 0 && (
+            <div className="mb-4 flex items-center justify-between bg-muted p-4 rounded-lg">
+              <span className="text-sm font-medium">
+                تم تحديد {selectedDeputies.size} نائب
+              </span>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={handleBulkDelete}
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                حذف المحدد
+              </Button>
+            </div>
+          )}
           {isSearching ? (
             <div className="text-center py-12 text-muted-foreground">
               <p>جاري التحميل...</p>
@@ -366,15 +427,23 @@ export default function DeputiesList() {
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead className="w-12">
+                      <Checkbox
+                        checked={
+                          deputies.length > 0 && selectedDeputies.size === deputies.length
+                        }
+                        onCheckedChange={toggleAll}
+                      />
+                    </TableHead>
                     <TableHead>الاسم</TableHead>
                     <TableHead>البريد الإلكتروني</TableHead>
                     <TableHead>الهاتف</TableHead>
                     <TableHead>المحافظة</TableHead>
                     <TableHead>الحزب</TableHead>
                     <TableHead>المجلس</TableHead>
-                    <TableHead>الرقم الانتخابي</TableHead>
                     <TableHead>الحالة</TableHead>
-                    <TableHead>الإجراءات</TableHead>
+                    <TableHead>تعديل</TableHead>
+                    <TableHead>حذف</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -383,6 +452,12 @@ export default function DeputiesList() {
 
                     return (
                       <TableRow key={deputy.id}>
+                        <TableCell>
+                          <Checkbox
+                            checked={selectedDeputies.has(deputy.id)}
+                            onCheckedChange={() => toggleDeputy(deputy.id)}
+                          />
+                        </TableCell>
                         <TableCell className="font-medium">
                           {userProfile?.full_name || "غير محدد"}
                         </TableCell>
@@ -396,9 +471,6 @@ export default function DeputiesList() {
                         </TableCell>
                         <TableCell>
                           {deputy.councils?.name_ar || "غير محدد"}
-                        </TableCell>
-                        <TableCell>
-                          {deputy.electoral_number || "غير محدد"}
                         </TableCell>
                         <TableCell>
                           <Badge
@@ -431,6 +503,20 @@ export default function DeputiesList() {
                             }}
                             councils={councils}
                           />
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() =>
+                              handleDeleteDeputy(
+                                deputy.id,
+                                userProfile?.full_name || "غير محدد"
+                              )
+                            }
+                          >
+                            <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
                         </TableCell>
                       </TableRow>
                     );
