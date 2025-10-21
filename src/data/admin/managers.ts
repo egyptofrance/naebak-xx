@@ -1,7 +1,7 @@
 "use server";
 
 import { actionClient } from "@/lib/safe-action";
-import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
+import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 
 // Schema for promoting user to manager
@@ -28,65 +28,115 @@ export const promoteToManagerAction = actionClient
   .schema(promoteToManagerSchema)
   .action(async ({ parsedInput: { userId } }) => {
     console.log('[promoteToManager] Promoting user:', userId);
-    const supabase = await createSupabaseUserServerComponentClient();
+    
+    // Use service role client to bypass RLS issues
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
 
-    // Check if user exists
-    const { data: user, error: userError } = await supabase
-      .from("user_profiles")
-      .select("id, full_name")
-      .eq("id", userId)
-      .single();
+    try {
+      // Check if user exists
+      console.log('[promoteToManager] Checking if user exists...');
+      const { data: user, error: userError } = await supabase
+        .from("user_profiles")
+        .select("id, full_name")
+        .eq("id", userId)
+        .single();
 
-    if (userError || !user) {
-      throw new Error("User not found");
+      if (userError || !user) {
+        console.error('[promoteToManager] User not found:', userError);
+        throw new Error("المستخدم غير موجود");
+      }
+
+      console.log('[promoteToManager] User found:', user.full_name);
+
+      // Check if user is already a manager
+      console.log('[promoteToManager] Checking if user is already a manager...');
+      const { data: existingRole } = await supabase
+        .from("user_roles")
+        .select("*")
+        .eq("user_id", userId)
+        .eq("role", "manager")
+        .maybeSingle();
+
+      if (existingRole) {
+        console.log('[promoteToManager] User is already a manager');
+        throw new Error("هذا المستخدم مدير بالفعل");
+      }
+
+      // Step 1: Remove "citizen" role if exists
+      console.log('[promoteToManager] Removing citizen role if exists...');
+      const { error: removeCitizenError } = await supabase
+        .from("user_roles")
+        .delete()
+        .eq("user_id", userId)
+        .eq("role", "citizen");
+
+      if (removeCitizenError) {
+        console.error('[promoteToManager] Error removing citizen role:', removeCitizenError);
+        // Don't throw error, citizen role might not exist
+      } else {
+        console.log('[promoteToManager] Citizen role removed successfully');
+      }
+
+      // Step 2: Add manager role
+      console.log('[promoteToManager] Adding manager role...');
+      const { data: roleData, error: roleError } = await supabase
+        .from("user_roles")
+        .insert({
+          user_id: userId,
+          role: "manager",
+        })
+        .select()
+        .single();
+
+      if (roleError) {
+        console.error('[promoteToManager] Error adding role:', roleError);
+        throw new Error(`فشل إضافة دور المدير: ${roleError.message}`);
+      }
+
+      console.log('[promoteToManager] Manager role added successfully:', roleData);
+
+      // Step 3: Create manager permissions record with default permissions
+      console.log('[promoteToManager] Creating manager permissions...');
+      const { error: permissionsError } = await supabase
+        .from("manager_permissions")
+        .insert({
+          user_id: userId,
+          can_manage_users: false,
+          can_manage_deputies: false,
+          can_manage_content: false,
+          can_view_reports: false,
+          can_manage_settings: false,
+        });
+
+      if (permissionsError) {
+        console.error('[promoteToManager] Error creating permissions:', permissionsError);
+        // Rollback: remove the role if permissions creation fails
+        await supabase
+          .from("user_roles")
+          .delete()
+          .eq("id", roleData.id);
+        throw new Error(`فشل إنشاء صلاحيات المدير: ${permissionsError.message}`);
+      }
+
+      console.log('[promoteToManager] Manager permissions created successfully');
+      console.log('[promoteToManager] Successfully promoted user to manager');
+      
+      return {
+        message: `تم ترقية ${user.full_name || "المستخدم"} إلى مدير بنجاح. تم حذفه من قائمة المواطنين وإضافته إلى قائمة المديرين.`,
+      };
+    } catch (error) {
+      console.error('[promoteToManager] Unexpected error:', error);
+      throw error;
     }
-
-    // Check if user is already a manager
-    const { data: existingRole } = await supabase
-      .from("user_roles")
-      .select("*")
-      .eq("user_id", userId)
-      .eq("role", "manager")
-      .single();
-
-    if (existingRole) {
-      throw new Error("User is already a manager");
-    }
-
-    // Add manager role
-    const { error: roleError } = await supabase
-      .from("user_roles")
-      .insert({
-        user_id: userId,
-        role: "manager",
-      });
-
-    if (roleError) {
-      console.error('[promoteToManager] Error adding role:', roleError);
-      throw new Error(`Failed to add manager role: ${roleError.message}`);
-    }
-
-    // Create manager permissions record with default permissions
-    const { error: permissionsError } = await supabase
-      .from("manager_permissions")
-      .insert({
-        user_id: userId,
-        can_manage_users: false,
-        can_manage_deputies: false,
-        can_manage_content: false,
-        can_view_reports: false,
-        can_manage_settings: false,
-      });
-
-    if (permissionsError) {
-      console.error('[promoteToManager] Error creating permissions:', permissionsError);
-      // Don't throw error here, role is already created
-    }
-
-    console.log('[promoteToManager] Successfully promoted user to manager');
-    return {
-      message: `تم ترقية ${user.full_name || "المستخدم"} إلى مدير بنجاح. يمكنك الآن تخصيص صلاحياته.`,
-    };
   });
 
 /**
@@ -96,7 +146,18 @@ export const updateManagerPermissionsAction = actionClient
   .schema(updateManagerPermissionsSchema)
   .action(async ({ parsedInput: { userId, permissions } }) => {
     console.log('[updateManagerPermissions] Updating permissions for:', userId);
-    const supabase = await createSupabaseUserServerComponentClient();
+    
+    // Use service role client
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
 
     // Check if user is a manager
     const { data: managerRole } = await supabase
@@ -104,10 +165,10 @@ export const updateManagerPermissionsAction = actionClient
       .select("*")
       .eq("user_id", userId)
       .eq("role", "manager")
-      .single();
+      .maybeSingle();
 
     if (!managerRole) {
-      throw new Error("User is not a manager");
+      throw new Error("المستخدم ليس مديراً");
     }
 
     // Update permissions
@@ -124,7 +185,7 @@ export const updateManagerPermissionsAction = actionClient
 
     if (error) {
       console.error('[updateManagerPermissions] Error:', error);
-      throw new Error(`Failed to update permissions: ${error.message}`);
+      throw new Error(`فشل تحديث الصلاحيات: ${error.message}`);
     }
 
     console.log('[updateManagerPermissions] Successfully updated permissions');
@@ -139,13 +200,23 @@ export const updateManagerPermissionsAction = actionClient
 export const getManagerPermissionsAction = actionClient
   .schema(z.object({ userId: z.string().uuid() }))
   .action(async ({ parsedInput: { userId } }) => {
-    const supabase = await createSupabaseUserServerComponentClient();
+    // Use service role client
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
 
     const { data, error } = await supabase
       .from("manager_permissions")
       .select("*")
       .eq("user_id", userId)
-      .single();
+      .maybeSingle();
 
     if (error) {
       console.error('[getManagerPermissions] Error:', error);

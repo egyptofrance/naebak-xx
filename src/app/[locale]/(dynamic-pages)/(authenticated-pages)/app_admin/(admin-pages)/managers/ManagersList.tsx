@@ -14,10 +14,61 @@ import { format } from "date-fns";
 import { Check, Mail, X } from "lucide-react";
 import { AppAdminManagerFilters } from "./schema";
 
-// Temporary mock data - replace with actual data fetching
+import { createClient } from "@supabase/supabase-js";
+
+// Fetch managers data from database
 async function getManagersData(filters: AppAdminManagerFilters) {
-  // This is a placeholder - you'll need to implement the actual data fetching
-  return [];
+  // Use service role client to fetch managers
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    }
+  );
+
+  // Get all users with manager role
+  const { data: managerRoles, error: rolesError } = await supabase
+    .from("user_roles")
+    .select("user_id")
+    .eq("role", "manager");
+
+  if (rolesError || !managerRoles || managerRoles.length === 0) {
+    return [];
+  }
+
+  const managerIds = managerRoles.map(r => r.user_id);
+
+  // Get user profiles for managers
+  const { data: profiles, error: profilesError } = await supabase
+    .from("user_profiles")
+    .select("*")
+    .in("id", managerIds)
+    .order("created_at", { ascending: false });
+
+  if (profilesError) {
+    console.error("Error fetching manager profiles:", profilesError);
+    return [];
+  }
+
+  // Apply search filter if provided
+  let filteredProfiles = profiles || [];
+  if (filters.query) {
+    const queryLower = filters.query.toLowerCase();
+    filteredProfiles = filteredProfiles.filter(profile => {
+      const fullName = profile.full_name || "";
+      const email = profile.email || "";
+      return (
+        fullName.toLowerCase().includes(queryLower) ||
+        email.toLowerCase().includes(queryLower)
+      );
+    });
+  }
+
+  return filteredProfiles;
 }
 
 export async function ManagersList({
