@@ -23,10 +23,10 @@ import { EditPartyDialog } from "./EditPartyDialog";
 type Party = {
   id: string;
   name_ar: string;
-  name_en: string;
+  name_en: string | null;
   abbreviation: string | null;
-  display_order: number;
-  is_active: boolean;
+  display_order: number | null;
+  is_active: boolean | null;
 };
 
 export function PartiesList({ parties }: { parties: Party[] }) {
@@ -128,20 +128,20 @@ export function PartiesList({ parties }: { parties: Party[] }) {
           {localParties.map((party, index) => (
             <TableRow key={party.id}>
               <TableCell className="font-medium">
-                {party.display_order}
+                {party.display_order ?? "-"}
               </TableCell>
               <TableCell>{party.name_ar}</TableCell>
-              <TableCell>{party.name_en}</TableCell>
+              <TableCell>{party.name_en || "-"}</TableCell>
               <TableCell>{party.abbreviation || "-"}</TableCell>
               <TableCell>
                 <Button
-                  variant={party.is_active ? "default" : "outline"}
+                  variant={party.is_active ?? false ? "default" : "outline"}
                   size="sm"
                   onClick={() =>
                     toggleActive({ id: party.id, isActive: !party.is_active })
                   }
                 >
-                  {party.is_active ? "نشط" : "غير نشط"}
+                  {party.is_active ?? false ? "نشط" : "غير نشط"}
                 </Button>
               </TableCell>
               <TableCell>
