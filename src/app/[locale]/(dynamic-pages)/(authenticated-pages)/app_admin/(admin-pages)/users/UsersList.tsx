@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 import { getPaginatedUserListAction } from "@/data/admin/user";
 import { format } from "date-fns";
-import { Check, Mail, X } from "lucide-react";
+import { Mail } from "lucide-react";
 import { Suspense } from "react";
 import { ConfirmSendLoginLinkDialog } from "./ConfirmSendLoginLinkDialog";
 import { GetLoginLinkDialog } from "./GetLoginLinkDialog";
@@ -35,20 +35,16 @@ export async function UserList({
             <TableRow>
               <TableHead>Full Name</TableHead>
               <TableHead>Email</TableHead>
-              <TableHead>Admin</TableHead>
               <TableHead>Created At</TableHead>
               <TableHead>Contact User</TableHead>
               <TableHead>Send Login Link</TableHead>
+              <TableHead>Get Login Link</TableHead>
               <TableHead>Promote to Deputy</TableHead>
               <TableHead>Promote to Manager</TableHead>
-              <TableHead>Debug</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {users.map((user) => {
-              const isAppAdmin = user.user_roles.some(
-                (role) => role.role === "admin",
-              );
               const email =
                 user.user_application_settings?.email_readonly ?? "-";
 
@@ -57,13 +53,6 @@ export async function UserList({
                   <TableCell> {user.full_name ?? "-"} </TableCell>
                   <TableCell>
                     <Link href={`/app_admin/users/${user.id}`}>{email}</Link>
-                  </TableCell>
-                  <TableCell>
-                    {isAppAdmin ? (
-                      <Check className="text-green-500 dark:text-green-400" />
-                    ) : (
-                      <X className="text-red-500 dark:text-red-400" />
-                    )}
                   </TableCell>
                   <TableCell>
                     {format(new Date(user.created_at), "PPpp")}
