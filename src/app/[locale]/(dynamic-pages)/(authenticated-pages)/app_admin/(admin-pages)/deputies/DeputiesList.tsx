@@ -233,7 +233,7 @@ export default function DeputiesList() {
     // TODO: Implement bulk delete action
     toast.success(`تم حذف ${selectedDeputies.size} نائب بنجاح`);
     setSelectedDeputies(new Set());
-    performSearch();
+    handleSearch();
   };
 
   const handleDeleteDeputy = async (deputyId: string, deputyName: string) => {
@@ -244,7 +244,7 @@ export default function DeputiesList() {
     toast.info("جاري حذف النائب...");
     // TODO: Implement single delete action
     toast.success(`تم حذف النائب "${deputyName}" بنجاح`);
-    performSearch();
+    handleSearch();
   };
 
   return (
