@@ -1,7 +1,7 @@
-import { createClient } from "@/lib/supabase/server";
+import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 
 export async function getManagerProfile() {
-  const supabase = await createClient();
+  const supabase = await createSupabaseUserServerComponentClient();
   
   const { data: { user } } = await supabase.auth.getUser();
   
