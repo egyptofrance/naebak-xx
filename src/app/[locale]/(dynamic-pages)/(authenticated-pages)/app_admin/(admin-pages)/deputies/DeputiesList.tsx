@@ -40,6 +40,7 @@ import { Edit, Search, X, Filter } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
+import { EditDeputyDialog } from "./EditDeputyDialog";
 
 interface Deputy {
   id: string;
@@ -47,6 +48,9 @@ interface Deputy {
   deputy_status: "current" | "candidate";
   electoral_symbol: string | null;
   electoral_number: string | null;
+  electoral_program: string | null;
+  achievements: string | null;
+  events: string | null;
   created_at: string;
   council_id: string | null;
   user_profiles: {
@@ -410,12 +414,19 @@ export default function DeputiesList() {
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          <Link href={`/app_admin/deputies/${deputy.id}`}>
-                            <Button size="sm" variant="outline">
-                              <Edit className="h-4 w-4 mr-2" />
-                              تعديل
-                            </Button>
-                          </Link>
+                          <EditDeputyDialog
+                            deputyId={deputy.id}
+                            currentData={{
+                              deputyStatus: deputy.deputy_status,
+                              electoralProgram: deputy.electoral_program,
+                              achievements: deputy.achievements,
+                              events: deputy.events,
+                              councilId: deputy.council_id,
+                              electoralSymbol: deputy.electoral_symbol,
+                              electoralNumber: deputy.electoral_number,
+                            }}
+                            councils={councils}
+                          />
                         </TableCell>
                       </TableRow>
                     );

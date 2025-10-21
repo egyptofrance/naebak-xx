@@ -20,6 +20,7 @@ const createDeputySchema = z.object({
 // Schema for updating deputy profile
 const updateDeputySchema = z.object({
   deputyId: z.string().uuid("Invalid deputy ID"),
+  deputyStatus: z.enum(["current", "candidate", "former"]).optional(),
   bio: z.string().optional(),
   officeAddress: z.string().optional(),
   officePhone: z.string().optional(),
@@ -240,9 +241,28 @@ export const updateDeputyAction = actionClient
       }
     );
 
+    // Map camelCase to snake_case for database
+    const dbUpdateData: any = {};
+    if (updateData.deputyStatus !== undefined) dbUpdateData.deputy_status = updateData.deputyStatus;
+    if (updateData.bio !== undefined) dbUpdateData.bio = updateData.bio;
+    if (updateData.officeAddress !== undefined) dbUpdateData.office_address = updateData.officeAddress;
+    if (updateData.officePhone !== undefined) dbUpdateData.office_phone = updateData.officePhone;
+    if (updateData.officeHours !== undefined) dbUpdateData.office_hours = updateData.officeHours;
+    if (updateData.electoralSymbol !== undefined) dbUpdateData.electoral_symbol = updateData.electoralSymbol;
+    if (updateData.electoralNumber !== undefined) dbUpdateData.electoral_number = updateData.electoralNumber;
+    if (updateData.electoralProgram !== undefined) dbUpdateData.electoral_program = updateData.electoralProgram;
+    if (updateData.achievements !== undefined) dbUpdateData.achievements = updateData.achievements;
+    if (updateData.events !== undefined) dbUpdateData.events = updateData.events;
+    if (updateData.websiteUrl !== undefined) dbUpdateData.website_url = updateData.websiteUrl;
+    if (updateData.socialMediaFacebook !== undefined) dbUpdateData.social_media_facebook = updateData.socialMediaFacebook;
+    if (updateData.socialMediaTwitter !== undefined) dbUpdateData.social_media_twitter = updateData.socialMediaTwitter;
+    if (updateData.socialMediaInstagram !== undefined) dbUpdateData.social_media_instagram = updateData.socialMediaInstagram;
+    if (updateData.socialMediaYoutube !== undefined) dbUpdateData.social_media_youtube = updateData.socialMediaYoutube;
+    if (updateData.councilId !== undefined) dbUpdateData.council_id = updateData.councilId;
+
     const { data: deputy, error } = await supabase
       .from("deputy_profiles")
-      .update(updateData)
+      .update(dbUpdateData)
       .eq("id", deputyId)
       .select()
       .single();
@@ -251,7 +271,7 @@ export const updateDeputyAction = actionClient
       throw new Error(`Failed to update deputy profile: ${error.message}`);
     }
 
-    return { deputy, message: "Deputy profile updated successfully" };
+    return { deputy, message: "تم تحديث بيانات النائب بنجاح" };
   });
 
 // Schema for searching deputies
