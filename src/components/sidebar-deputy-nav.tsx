@@ -12,22 +12,22 @@ import { Award, Calendar, FileText, Info } from "lucide-react";
 const deputyLinks = [
   {
     label: "البيانات الإضافية",
-    href: "/user/deputy-data",
+    href: "/home/deputy-data",
     icon: <Info className="h-5 w-5" />,
   },
   {
     label: "البرنامج الانتخابي",
-    href: "/user/electoral-program",
+    href: "/home/electoral-program",
     icon: <FileText className="h-5 w-5" />,
   },
   {
     label: "الإنجازات",
-    href: "/user/achievements",
+    href: "/home/achievements",
     icon: <Award className="h-5 w-5" />,
   },
   {
     label: "المناسبات",
-    href: "/user/events",
+    href: "/home/events",
     icon: <Calendar className="h-5 w-5" />,
   },
 ];
