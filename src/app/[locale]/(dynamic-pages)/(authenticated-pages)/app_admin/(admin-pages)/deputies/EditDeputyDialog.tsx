@@ -27,6 +27,15 @@ import {
   createElectoralProgramAction,
   createAchievementAction,
   createEventAction,
+  updateElectoralProgramAction,
+  updateAchievementAction,
+  updateEventAction,
+  deleteElectoralProgramAction,
+  deleteAchievementAction,
+  deleteEventAction,
+  getElectoralProgramsAction,
+  getAchievementsAction,
+  getEventsAction,
 } from "@/data/admin/deputy-content";
 import { Edit } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
@@ -85,6 +94,12 @@ export function EditDeputyDialog({
   const [achievementItems, setAchievementItems] = useState<ContentItem[]>([]);
   const [eventItems, setEventItems] = useState<ContentItem[]>([]);
   
+  // Track original items to detect deletions
+  const [originalElectoralProgramIds, setOriginalElectoralProgramIds] = useState<Set<string>>(new Set());
+  const [originalAchievementIds, setOriginalAchievementIds] = useState<Set<string>>(new Set());
+  const [originalEventIds, setOriginalEventIds] = useState<Set<string>>(new Set());
+  
+  const [isLoadingContent, setIsLoadingContent] = useState(false);
   const toastRef = useRef<string | number | undefined>(undefined);
 
   // Load existing content items when dialog opens
@@ -99,24 +114,95 @@ export function EditDeputyDialog({
       setElectoralSymbol(currentData.electoralSymbol || "");
       setElectoralNumber(currentData.electoralNumber || "");
       
-      // Load structured content (for future implementation)
-      // For now, we'll start with empty arrays
-      setElectoralProgramItems([]);
-      setAchievementItems([]);
-      setEventItems([]);
+      // Load structured content from database
+      loadContentItems();
     }
-  }, [open, currentData]);
+  }, [open, deputyId]);
+
+  const loadContentItems = async () => {
+    setIsLoadingContent(true);
+    try {
+      // Load electoral programs
+      const programsResult = await getElectoralProgramsAction({ deputyId });
+      if (programsResult?.data) {
+        const programs = programsResult.data.map((item: any) => ({
+          id: item.id,
+          title: item.title || "",
+          description: item.description || "",
+          imageUrl: item.image_url || "",
+          displayOrder: item.display_order || 0,
+        }));
+        setElectoralProgramItems(programs);
+        setOriginalElectoralProgramIds(new Set(programs.map((p: ContentItem) => p.id!)));
+      }
+
+      // Load achievements
+      const achievementsResult = await getAchievementsAction({ deputyId });
+      if (achievementsResult?.data) {
+        const achievements = achievementsResult.data.map((item: any) => ({
+          id: item.id,
+          title: item.title || "",
+          description: item.description || "",
+          imageUrl: item.image_url || "",
+          displayOrder: item.display_order || 0,
+        }));
+        setAchievementItems(achievements);
+        setOriginalAchievementIds(new Set(achievements.map((a: ContentItem) => a.id!)));
+      }
+
+      // Load events
+      const eventsResult = await getEventsAction({ deputyId });
+      if (eventsResult?.data) {
+        const events = eventsResult.data.map((item: any) => ({
+          id: item.id,
+          title: item.title || "",
+          description: item.description || "",
+          imageUrl: item.image_url || "",
+          displayOrder: item.display_order || 0,
+        }));
+        setEventItems(events);
+        setOriginalEventIds(new Set(events.map((e: ContentItem) => e.id!)));
+      }
+    } catch (error) {
+      console.error("Error loading content items:", error);
+      toast.error("فشل تحميل المحتوى التفصيلي");
+    } finally {
+      setIsLoadingContent(false);
+    }
+  };
 
   const { execute: updateDeputy, isPending } = useAction(updateDeputyAction, {
     onExecute: () => {
       toastRef.current = toast.loading("جاري تحديث البيانات...");
     },
     onSuccess: async ({ data }) => {
-      // Save new content items
+      // Save/Update/Delete content items
       try {
-        // Save electoral programs
+        // Process electoral programs
+        const currentProgramIds = new Set(electoralProgramItems.filter(i => i.id).map(i => i.id!));
+        
+        // Delete removed items
+        for (const id of originalElectoralProgramIds) {
+          if (!currentProgramIds.has(id)) {
+            await deleteElectoralProgramAction({ id });
+          }
+        }
+        
+        // Create or update items
         for (const item of electoralProgramItems) {
-          if (!item.id && item.title.trim()) {
+          if (!item.title.trim()) continue; // Skip empty items
+          
+          if (item.id) {
+            // Update existing item
+            await updateElectoralProgramAction({
+              id: item.id,
+              title: item.title,
+              description: item.description || undefined,
+              imageUrl: item.imageUrl || undefined,
+              displayOrder: item.displayOrder,
+            });
+          } else {
+            // Create new item
             await createElectoralProgramAction({
               deputyId,
               title: item.title,
@@ -127,9 +213,29 @@ export function EditDeputyDialog({
           }
         }
         
-        // Save achievements
+        // Process achievements
+        const currentAchievementIds = new Set(achievementItems.filter(i => i.id).map(i => i.id!));
+        
+        // Delete removed items
+        for (const id of originalAchievementIds) {
+          if (!currentAchievementIds.has(id)) {
+            await deleteAchievementAction({ id });
+          }
+        }
+        
+        // Create or update items
         for (const item of achievementItems) {
-          if (!item.id && item.title.trim()) {
+          if (!item.title.trim()) continue;
+          
+          if (item.id) {
+            await updateAchievementAction({
+              id: item.id,
+              title: item.title,
+              description: item.description || undefined,
+              imageUrl: item.imageUrl || undefined,
+              displayOrder: item.displayOrder,
+            });
+          } else {
             await createAchievementAction({
               deputyId,
               title: item.title,
@@ -140,9 +246,29 @@ export function EditDeputyDialog({
           }
         }
         
-        // Save events
+        // Process events
+        const currentEventIds = new Set(eventItems.filter(i => i.id).map(i => i.id!));
+        
+        // Delete removed items
+        for (const id of originalEventIds) {
+          if (!currentEventIds.has(id)) {
+            await deleteEventAction({ id });
+          }
+        }
+        
+        // Create or update items
         for (const item of eventItems) {
-          if (!item.id && item.title.trim()) {
+          if (!item.title.trim()) continue;
+          
+          if (item.id) {
+            await updateEventAction({
+              id: item.id,
+              title: item.title,
+              description: item.description || undefined,
+              imageUrl: item.imageUrl || undefined,
+              displayOrder: item.displayOrder,
+            });
+          } else {
             await createEventAction({
               deputyId,
               title: item.title,
@@ -157,6 +283,7 @@ export function EditDeputyDialog({
           id: toastRef.current,
         });
       } catch (error) {
+        console.error("Error saving content:", error);
         toast.error("تم تحديث البيانات الأساسية، لكن حدث خطأ في حفظ بعض المحتويات", {
           id: toastRef.current,
         });
@@ -318,52 +445,60 @@ export function EditDeputyDialog({
             </TabsContent>
             
             <TabsContent value="content" className="space-y-6 py-4">
-              <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg border border-blue-200 dark:border-blue-900">
-                <p className="text-sm text-blue-900 dark:text-blue-100">
-                  <strong>المحتوى التفصيلي:</strong> يمكنك هنا إضافة عناصر متعددة لكل قسم، 
-                  حيث يحتوي كل عنصر على عنوان ووصف وصورة منفصلة.
-                </p>
-              </div>
+              {isLoadingContent ? (
+                <div className="text-center py-8">
+                  <p className="text-muted-foreground">جاري تحميل المحتوى...</p>
+                </div>
+              ) : (
+                <>
+                  <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg border border-blue-200 dark:border-blue-900">
+                    <p className="text-sm text-blue-900 dark:text-blue-100">
+                      <strong>المحتوى التفصيلي:</strong> يمكنك هنا إضافة عناصر متعددة لكل قسم، 
+                      حيث يحتوي كل عنصر على عنوان ووصف وصورة منفصلة. التعديلات تُحفظ تلقائياً عند الضغط على "حفظ التغييرات".
+                    </p>
+                  </div>
 
-              {/* Electoral Programs */}
-              <DeputyContentItemManager
-                title="البرنامج الانتخابي"
-                items={electoralProgramItems}
-                onChange={setElectoralProgramItems}
-                placeholder={{
-                  title: "مثال: تطوير البنية التحتية",
-                  description: "وصف تفصيلي للبند من البرنامج الانتخابي...",
-                  image: "https://example.com/image.jpg",
-                }}
-              />
+                  {/* Electoral Programs */}
+                  <DeputyContentItemManager
+                    title="البرنامج الانتخابي"
+                    items={electoralProgramItems}
+                    onChange={setElectoralProgramItems}
+                    placeholder={{
+                      title: "مثال: تطوير البنية التحتية",
+                      description: "وصف تفصيلي للبند من البرنامج الانتخابي...",
+                      image: "https://example.com/image.jpg",
+                    }}
+                  />
 
-              <Separator />
+                  <Separator />
 
-              {/* Achievements */}
-              <DeputyContentItemManager
-                title="الإنجازات"
-                items={achievementItems}
-                onChange={setAchievementItems}
-                placeholder={{
-                  title: "مثال: افتتاح مستشفى جديد",
-                  description: "تفاصيل الإنجاز...",
-                  image: "https://example.com/achievement.jpg",
-                }}
-              />
+                  {/* Achievements */}
+                  <DeputyContentItemManager
+                    title="الإنجازات"
+                    items={achievementItems}
+                    onChange={setAchievementItems}
+                    placeholder={{
+                      title: "مثال: افتتاح مستشفى جديد",
+                      description: "تفاصيل الإنجاز...",
+                      image: "https://example.com/achievement.jpg",
+                    }}
+                  />
 
-              <Separator />
+                  <Separator />
 
-              {/* Events */}
-              <DeputyContentItemManager
-                title="المناسبات"
-                items={eventItems}
-                onChange={setEventItems}
-                placeholder={{
-                  title: "مثال: لقاء مع المواطنين",
-                  description: "تفاصيل المناسبة...",
-                  image: "https://example.com/event.jpg",
-                }}
-              />
+                  {/* Events */}
+                  <DeputyContentItemManager
+                    title="المناسبات"
+                    items={eventItems}
+                    onChange={setEventItems}
+                    placeholder={{
+                      title: "مثال: لقاء مع المواطنين",
+                      description: "تفاصيل المناسبة...",
+                      image: "https://example.com/event.jpg",
+                    }}
+                  />
+                </>
+              )}
             </TabsContent>
           </Tabs>
           
@@ -380,7 +515,7 @@ export function EditDeputyDialog({
             <Button
               type="submit"
               className="flex-1 min-w-[120px]"
-              disabled={isPending}
+              disabled={isPending || isLoadingContent}
             >
               {isPending ? "جاري الحفظ..." : "حفظ التغييرات"}
             </Button>
