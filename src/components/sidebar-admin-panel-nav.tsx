@@ -26,13 +26,18 @@ const adminLinks = [
     icon: <FileLineChart className="h-5 w-5" />,
   },
   {
-    label: "النواب",
+    label: "بيانات النواب",
     href: `/app_admin/deputies`,
     icon: <UserCheck className="h-5 w-5" />,
   },
   {
-    label: "Users",
+    label: "بيانات المواطنين",
     href: `/app_admin/users`,
+    icon: <Users className="h-5 w-5" />,
+  },
+  {
+    label: "بيانات المديرين",
+    href: `/app_admin/managers`,
     icon: <Users className="h-5 w-5" />,
   },
   {
