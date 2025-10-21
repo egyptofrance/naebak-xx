@@ -59,6 +59,8 @@ interface Deputy {
     full_name: string | null;
     email: string | null;
     phone: string | null;
+    gender: string | null;
+    electoral_district: string | null;
     governorate_id: string | null;
     party_id: string | null;
     governorates: {
@@ -107,6 +109,8 @@ export default function DeputiesList() {
   const [selectedParty, setSelectedParty] = useState<string>("");
   const [selectedCouncil, setSelectedCouncil] = useState<string>("");
   const [selectedStatus, setSelectedStatus] = useState<string>("");
+  const [selectedGender, setSelectedGender] = useState<string>("");
+  const [selectedDistrict, setSelectedDistrict] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [deputies, setDeputies] = useState<Deputy[]>([]);
   const [totalPages, setTotalPages] = useState(1);
@@ -174,8 +178,10 @@ export default function DeputiesList() {
       partyId: selectedParty || undefined,
       councilId: selectedCouncil || undefined,
       deputyStatus: selectedStatus
-        ? (selectedStatus as "current" | "candidate")
+        ? (selectedStatus as "current" | "candidate" | "former")
         : undefined,
+      gender: selectedGender ? (selectedGender as "male" | "female") : undefined,
+      electoralDistrict: selectedDistrict || undefined,
       page: currentPage,
       limit: 20,
     });
@@ -187,6 +193,8 @@ export default function DeputiesList() {
     setSelectedParty("");
     setSelectedCouncil("");
     setSelectedStatus("");
+    setSelectedGender("");
+    setSelectedDistrict("");
     setCurrentPage(1);
     setTimeout(() => {
       executeSearch({
@@ -201,7 +209,9 @@ export default function DeputiesList() {
     selectedGovernorate ||
     selectedParty ||
     selectedCouncil ||
-    selectedStatus;
+    selectedStatus ||
+    selectedGender ||
+    selectedDistrict;
 
   // Selection handlers
   const toggleDeputy = (deputyId: string) => {
@@ -312,7 +322,7 @@ export default function DeputiesList() {
 
           {/* Filters */}
           {showFilters && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-4 border-t">
               {/* Governorate Filter */}
               <div className="space-y-2">
                 <Label>المحافظة</Label>
@@ -375,17 +385,43 @@ export default function DeputiesList() {
 
               {/* Status Filter */}
               <div className="space-y-2">
-                <Label>الحالة</Label>
+                <Label>حالة العضوية</Label>
                 <Select value={selectedStatus} onValueChange={setSelectedStatus}>
                   <SelectTrigger>
                     <SelectValue placeholder="جميع الحالات" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">جميع الحالات</SelectItem>
-                    <SelectItem value="active">نشط</SelectItem>
-                    <SelectItem value="inactive">غير نشط</SelectItem>
+                    <SelectItem value="current">نائب حالي</SelectItem>
+                    <SelectItem value="candidate">مرشح للعضوية</SelectItem>
+                    <SelectItem value="former">نائب سابق</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              {/* Gender Filter */}
+              <div className="space-y-2">
+                <Label>الجنس</Label>
+                <Select value={selectedGender} onValueChange={setSelectedGender}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="الكل" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">الكل</SelectItem>
+                    <SelectItem value="male">ذكر</SelectItem>
+                    <SelectItem value="female">أنثى</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Electoral District Filter */}
+              <div className="space-y-2">
+                <Label>الدائرة الانتخابية</Label>
+                <Input
+                  placeholder="ابحث باسم الدائرة..."
+                  value={selectedDistrict}
+                  onChange={(e) => setSelectedDistrict(e.target.value)}
+                />
               </div>
             </div>
           )}
@@ -526,11 +562,19 @@ export default function DeputiesList() {
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="flex items-center justify-between mt-4">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4">
                   <div className="text-sm text-muted-foreground">
-                    صفحة {currentPage} من {totalPages}
+                    عرض {((currentPage - 1) * 20) + 1} - {Math.min(currentPage * 20, total)} من {total} نائب
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(1)}
+                      disabled={currentPage === 1 || isSearching}
+                    >
+                      الأولى
+                    </Button>
                     <Button
                       variant="outline"
                       size="sm"
@@ -539,6 +583,36 @@ export default function DeputiesList() {
                     >
                       السابق
                     </Button>
+                    
+                    {/* Page Numbers */}
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                        let pageNum;
+                        if (totalPages <= 5) {
+                          pageNum = i + 1;
+                        } else if (currentPage <= 3) {
+                          pageNum = i + 1;
+                        } else if (currentPage >= totalPages - 2) {
+                          pageNum = totalPages - 4 + i;
+                        } else {
+                          pageNum = currentPage - 2 + i;
+                        }
+                        
+                        return (
+                          <Button
+                            key={pageNum}
+                            variant={currentPage === pageNum ? "default" : "outline"}
+                            size="sm"
+                            className="w-10"
+                            onClick={() => setCurrentPage(pageNum)}
+                            disabled={isSearching}
+                          >
+                            {pageNum}
+                          </Button>
+                        );
+                      })}
+                    </div>
+                    
                     <Button
                       variant="outline"
                       size="sm"
@@ -548,6 +622,14 @@ export default function DeputiesList() {
                       disabled={currentPage === totalPages || isSearching}
                     >
                       التالي
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(totalPages)}
+                      disabled={currentPage === totalPages || isSearching}
+                    >
+                      الأخيرة
                     </Button>
                   </div>
                 </div>

@@ -280,7 +280,9 @@ const searchDeputiesSchema = z.object({
   governorateId: z.string().uuid().optional(),
   partyId: z.string().uuid().optional(),
   councilId: z.string().uuid().optional(),
-  deputyStatus: z.enum(["current", "candidate"]).optional(),
+  deputyStatus: z.enum(["current", "candidate", "former"]).optional(),
+  gender: z.enum(["male", "female"]).optional(),
+  electoralDistrict: z.string().optional(),
   page: z.number().optional(),
   limit: z.number().optional(),
 });
@@ -294,6 +296,8 @@ export const searchDeputiesAction = actionClient
       partyId,
       councilId,
       deputyStatus,
+      gender,
+      electoralDistrict,
       page = 1,
       limit = 20,
     } = parsedInput;
@@ -361,10 +365,20 @@ export const searchDeputiesAction = actionClient
       userQuery = userQuery.eq("party_id", partyId);
     }
 
+    // Filter by gender
+    if (gender) {
+      userQuery = userQuery.eq("gender", gender);
+    }
+
+    // Filter by electoral district
+    if (electoralDistrict) {
+      userQuery = userQuery.ilike("electoral_district", `%${electoralDistrict}%`);
+    }
+
     // Text search in user fields
     if (query) {
       userQuery = userQuery.or(
-        `full_name.ilike.*${query}*,phone.ilike.*${query}*`
+        `full_name.ilike.*${query}*,phone.ilike.*${query}*,email.ilike.*${query}*`
       );
     }
 
