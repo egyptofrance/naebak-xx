@@ -124,8 +124,8 @@ export function EditDeputyDialog({
     try {
       // Load electoral programs
       const programsResult = await getElectoralProgramsAction({ deputyId });
-      if (programsResult?.data) {
-        const programs = programsResult.data.map((item: any) => ({
+      if (programsResult?.data?.data) {
+        const programs = programsResult.data.data.map((item: any) => ({
           id: item.id,
           title: item.title || "",
           description: item.description || "",
@@ -138,8 +138,8 @@ export function EditDeputyDialog({
 
       // Load achievements
       const achievementsResult = await getAchievementsAction({ deputyId });
-      if (achievementsResult?.data) {
-        const achievements = achievementsResult.data.map((item: any) => ({
+      if (achievementsResult?.data?.data) {
+        const achievements = achievementsResult.data.data.map((item: any) => ({
           id: item.id,
           title: item.title || "",
           description: item.description || "",
@@ -152,8 +152,8 @@ export function EditDeputyDialog({
 
       // Load events
       const eventsResult = await getEventsAction({ deputyId });
-      if (eventsResult?.data) {
-        const events = eventsResult.data.map((item: any) => ({
+      if (eventsResult?.data?.data) {
+        const events = eventsResult.data.data.map((item: any) => ({
           id: item.id,
           title: item.title || "",
           description: item.description || "",
