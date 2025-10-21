@@ -1853,6 +1853,132 @@ export type Database = {
           },
         ]
       }
+      deputy_achievements: {
+        Row: {
+          id: string
+          deputy_id: string
+          title: string
+          description: string | null
+          image_url: string | null
+          display_order: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          deputy_id: string
+          title: string
+          description?: string | null
+          image_url?: string | null
+          display_order?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          deputy_id?: string
+          title?: string
+          description?: string | null
+          image_url?: string | null
+          display_order?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deputy_achievements_deputy_id_fkey"
+            columns: ["deputy_id"]
+            isOneToOne: false
+            referencedRelation: "deputy_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      deputy_electoral_programs: {
+        Row: {
+          id: string
+          deputy_id: string
+          title: string
+          description: string | null
+          image_url: string | null
+          display_order: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          deputy_id: string
+          title: string
+          description?: string | null
+          image_url?: string | null
+          display_order?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          deputy_id?: string
+          title?: string
+          description?: string | null
+          image_url?: string | null
+          display_order?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deputy_electoral_programs_deputy_id_fkey"
+            columns: ["deputy_id"]
+            isOneToOne: false
+            referencedRelation: "deputy_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      deputy_events: {
+        Row: {
+          id: string
+          deputy_id: string
+          title: string
+          description: string | null
+          image_url: string | null
+          event_date: string | null
+          display_order: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          deputy_id: string
+          title: string
+          description?: string | null
+          image_url?: string | null
+          event_date?: string | null
+          display_order?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          deputy_id?: string
+          title?: string
+          description?: string | null
+          image_url?: string | null
+          event_date?: string | null
+          display_order?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deputy_events_deputy_id_fkey"
+            columns: ["deputy_id"]
+            isOneToOne: false
+            referencedRelation: "deputy_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       councils: {
         Row: {
           id: string
