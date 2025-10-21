@@ -10,6 +10,7 @@ import { getIsAppAdmin } from "@/data/user/user";
 import {
   Book,
   FileLineChart,
+  Flag,
   HelpCircle,
   Map,
   PenTool,
@@ -39,6 +40,11 @@ const adminLinks = [
     label: "بيانات المديرين",
     href: `/app_admin/managers`,
     icon: <Users className="h-5 w-5" />,
+  },
+  {
+    label: "إدارة الأحزاب",
+    href: `/app_admin/parties`,
+    icon: <Flag className="h-5 w-5" />,
   },
   {
     label: "Application Settings",

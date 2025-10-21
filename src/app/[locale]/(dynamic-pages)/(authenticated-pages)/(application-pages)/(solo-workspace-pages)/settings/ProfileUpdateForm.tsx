@@ -169,11 +169,11 @@ export function ProfileUpdateForm({
                   <FormItem>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      value={field.value}
                     >
                       <FormControl>
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="النوع" />
+                          <SelectValue placeholder="اختر الجنس" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
