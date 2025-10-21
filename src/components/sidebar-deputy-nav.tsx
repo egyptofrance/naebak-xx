@@ -7,32 +7,34 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { getCachedDeputyProfile } from "@/rsc-data/user/deputy";
+import { SlimWorkspace } from "@/types";
+import { getWorkspaceSubPath } from "@/utils/workspaces";
 import { Award, Calendar, FileText, Info } from "lucide-react";
 
 const deputyLinks = [
   {
     label: "البيانات الإضافية",
-    href: "/home/deputy-data",
+    href: "/deputy-data",
     icon: <Info className="h-5 w-5" />,
   },
   {
     label: "البرنامج الانتخابي",
-    href: "/home/electoral-program",
+    href: "/electoral-program",
     icon: <FileText className="h-5 w-5" />,
   },
   {
     label: "الإنجازات",
-    href: "/home/achievements",
+    href: "/achievements",
     icon: <Award className="h-5 w-5" />,
   },
   {
     label: "المناسبات",
-    href: "/home/events",
+    href: "/events",
     icon: <Calendar className="h-5 w-5" />,
   },
 ];
 
-export async function SidebarDeputyNav() {
+export async function SidebarDeputyNav({ workspace }: { workspace: SlimWorkspace }) {
   const deputyProfile = await getCachedDeputyProfile();
 
   // Only show for deputies
@@ -47,7 +49,7 @@ export async function SidebarDeputyNav() {
         {deputyLinks.map((link) => (
           <SidebarMenuItem key={link.href}>
             <SidebarMenuButton asChild>
-              <Link href={link.href}>
+              <Link href={getWorkspaceSubPath(workspace, link.href)}>
                 {link.icon}
                 {link.label}
               </Link>

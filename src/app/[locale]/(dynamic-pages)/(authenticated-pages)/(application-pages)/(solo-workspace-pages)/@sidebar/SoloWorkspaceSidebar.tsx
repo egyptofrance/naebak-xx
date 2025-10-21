@@ -71,7 +71,7 @@ export async function SoloWorkspaceSidebar() {
         </SidebarHeader>
         <SidebarContent>
           <SidebarWorkspaceNav workspace={workspace} />
-          <SidebarDeputyNav />
+          <SidebarDeputyNav workspace={workspace} />
           <SidebarAdminPanelNav />
         </SidebarContent>
         <SidebarFooter>
