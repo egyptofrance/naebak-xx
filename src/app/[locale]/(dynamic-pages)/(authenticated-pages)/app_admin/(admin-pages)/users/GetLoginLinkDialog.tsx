@@ -60,18 +60,18 @@ export const GetLoginLinkDialog = ({ userId }: { userId: string }) => {
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <div className="p-3 w-fit bg-gray-200/50 dark:bg-gray-700/40 mb-2 rounded-lg">
+        <DialogHeader className="space-y-3">
+          <div className="mx-auto p-3 w-fit bg-gray-200/50 dark:bg-gray-700/40 rounded-lg">
             <Link className="w-6 h-6" />
           </div>
-          <div className="p-1">
+          <div className="text-center space-y-2">
             <DialogTitle className="text-lg">Get Login Link</DialogTitle>
-            <DialogDescription className="text-base mt-0">
+            <DialogDescription className="text-base">
               Are you sure you want to generate a login link for the user?
             </DialogDescription>
           </div>
         </DialogHeader>
-        <DialogFooter className="mt-2">
+        <DialogFooter className="mt-4 gap-2 sm:gap-0">
           <Button
             type="button"
             variant="outline"
@@ -88,7 +88,7 @@ export const GetLoginLinkDialog = ({ userId }: { userId: string }) => {
             onClick={handleGetLoginLink}
             disabled={isPending}
           >
-            Get Login Link
+            {isPending ? "Generating..." : "Get Login Link"}
           </Button>
         </DialogFooter>
       </DialogContent>
