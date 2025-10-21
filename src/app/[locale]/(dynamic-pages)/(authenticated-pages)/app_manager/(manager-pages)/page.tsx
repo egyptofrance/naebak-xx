@@ -137,7 +137,7 @@ export default async function ManagerDashboard() {
             <div>
               <p className="text-sm text-muted-foreground">الموافقة على المحتوى</p>
               <p className="text-lg font-semibold">
-                {managerPermissions?.can_approve_content ? "✅ مفعل" : "❌ غير مفعل"}
+                {managerPermissions?.can_manage_content ? "✅ مفعل" : "❌ غير مفعل"}
               </p>
             </div>
           </div>
