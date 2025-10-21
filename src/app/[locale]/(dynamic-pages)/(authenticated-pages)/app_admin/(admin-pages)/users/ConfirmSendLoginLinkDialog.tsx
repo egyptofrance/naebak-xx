@@ -65,7 +65,7 @@ export const ConfirmSendLoginLinkDialog = ({
             </DialogDescription>
           </div>
         </DialogHeader>
-        <DialogFooter className="mt-4 gap-2 sm:gap-0">
+        <DialogFooter className="mt-4 sm:space-x-2">
           <Button
             type="button"
             variant="outline"
