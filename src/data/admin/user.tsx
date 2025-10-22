@@ -1,5 +1,5 @@
 "use server";
-import { adminActionClient } from "@/lib/safe-action";
+import { adminActionClient, managerOrAdminActionClient } from "@/lib/safe-action";
 import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClient";
 import { sendEmail } from "@/utils/api-routes/utils";
 import {
@@ -285,7 +285,7 @@ const getPaginatedUserListSchema = z.object({
   gender: z.string().optional(),
 });
 
-export const getPaginatedUserListAction = adminActionClient
+export const getPaginatedUserListAction = managerOrAdminActionClient
   .schema(getPaginatedUserListSchema)
   .action(async ({ parsedInput: { query = "", page = 1, limit = 10, governorateId, partyId, role, gender } }) => {
     console.log("query", query);
@@ -372,7 +372,7 @@ const getUsersTotalPagesSchema = z.object({
   gender: z.string().optional(),
 });
 
-export const getUsersTotalPagesAction = adminActionClient
+export const getUsersTotalPagesAction = managerOrAdminActionClient
   .schema(getUsersTotalPagesSchema)
   .action(async ({ parsedInput: { query = "", limit = 10, governorateId, partyId, role, gender } }) => {
     console.log("query", query);

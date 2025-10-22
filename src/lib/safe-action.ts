@@ -68,3 +68,11 @@ export const adminActionClient = authActionClient.use(async ({ next }) => {
   }
   return await next();
 });
+
+export const managerOrAdminActionClient = authActionClient.use(async ({ next }) => {
+  const userType = await serverGetUserType();
+  if (userType !== userRoles.ADMIN && userType !== userRoles.MANAGER) {
+    throw new Error("User is not an admin or manager");
+  }
+  return await next();
+});
