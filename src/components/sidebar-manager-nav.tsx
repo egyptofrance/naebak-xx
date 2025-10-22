@@ -32,10 +32,15 @@ const managerLinks = [
 export async function SidebarManagerNav({ workspace }: { workspace: SlimWorkspace }) {
   const managerProfile = await getCachedManagerProfile();
 
+  console.log("[SidebarManagerNav] Manager profile:", managerProfile);
+
   // Only show for managers
   if (!managerProfile) {
+    console.log("[SidebarManagerNav] No manager profile found, returning null");
     return null;
   }
+
+  console.log("[SidebarManagerNav] Rendering manager navigation");
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
