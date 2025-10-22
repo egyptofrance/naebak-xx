@@ -12,9 +12,10 @@ import {
   HelpCircle,
   Map,
   PenTool,
-  Settings,
+  Tags,
   UserCheck,
   Users,
+  UserPen,
 } from "lucide-react";
 
 const adminLinks = [
@@ -25,38 +26,44 @@ const adminLinks = [
     icon: <UserCheck className="h-8 w-8" />,
   },
   {
-    title: "Users",
-    description: "Manage user accounts and permissions",
+    title: "إدارة المستخدمين",
+    description: "إدارة حسابات المستخدمين والصلاحيات",
     href: "/app_admin/users",
     icon: <Users className="h-8 w-8" />,
   },
   {
-    title: "Application Settings",
-    description: "Configure global application settings",
-    href: "/app_admin/settings",
-    icon: <Settings className="h-8 w-8" />,
+    title: "الكُتّاب",
+    description: "إدارة ملفات كُتّاب المحتوى الإعلامي",
+    href: "/app_admin/marketing/authors",
+    icon: <UserPen className="h-8 w-8" />,
   },
   {
-    title: "Marketing Blog",
-    description: "Manage blog posts and content",
+    title: "التصنيفات",
+    description: "إدارة تصنيفات المحتوى والمواضيع",
+    href: "/app_admin/marketing/tags",
+    icon: <Tags className="h-8 w-8" />,
+  },
+  {
+    title: "أخبار ومقالات",
+    description: "إدارة ونشر الأخبار والمقالات",
     href: "/app_admin/marketing/blog",
     icon: <PenTool className="h-8 w-8" />,
   },
   {
-    title: "Feedback List",
-    description: "View and manage user feedback",
+    title: "اقتراحات المستخدمين",
+    description: "عرض وإدارة اقتراحات وملاحظات المستخدمين",
     href: "/feedback",
     icon: <HelpCircle className="h-8 w-8" />,
   },
   {
-    title: "Changelog",
-    description: "Manage and publish changelogs",
+    title: "سجل التحديثات",
+    description: "إدارة ونشر سجل التحديثات والتغييرات",
     href: "/app_admin/marketing/changelog",
     icon: <Book className="h-8 w-8" />,
   },
   {
-    title: "Roadmap",
-    description: "Plan and manage product roadmap",
+    title: "خارطة الطريق",
+    description: "التخطيط وإدارة خارطة تطوير المنصة",
     href: "/roadmap",
     icon: <Map className="h-8 w-8" />,
   },
@@ -64,14 +71,13 @@ const adminLinks = [
 
 export default function AdminDashboard() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" dir="rtl">
       <div className="space-y-2">
         <Typography.H1 className="text-3xl font-bold tracking-tight">
-          Admin Dashboard
+          لوحة تحكم الأدمن
         </Typography.H1>
         <Typography.P className="text-muted-foreground">
-          Welcome to the admin dashboard. Manage various aspects of your
-          application from here.
+          مرحباً بك في لوحة تحكم الأدمن. يمكنك إدارة جميع جوانب المنصة من هنا.
         </Typography.P>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -94,3 +100,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+

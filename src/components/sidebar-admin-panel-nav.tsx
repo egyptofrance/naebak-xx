@@ -15,15 +15,16 @@ import {
   HelpCircle,
   Map,
   PenTool,
-  Settings,
+  Tags,
   UserCheck,
+  UserPen,
   Users,
 } from "lucide-react";
 import { Suspense } from "react";
 
 const adminLinks = [
   {
-    label: "Admin Dashboard",
+    label: "لوحة التحكم",
     href: `/app_admin`,
     icon: <FileLineChart className="h-5 w-5" />,
   },
@@ -53,37 +54,32 @@ const adminLinks = [
     icon: <Building2 className="h-5 w-5" />,
   },
   {
-    label: "Application Settings",
-    href: `/app_admin/settings`,
-    icon: <Settings className="h-5 w-5" />,
-  },
-  {
-    label: "Marketing Authors",
+    label: "الكُتّاب",
     href: `/app_admin/marketing/authors`,
-    icon: <Users className="h-5 w-5" />,
+    icon: <UserPen className="h-5 w-5" />,
   },
   {
-    label: "Marketing Tags",
+    label: "التصنيفات",
     href: `/app_admin/marketing/tags`,
-    icon: <Settings className="h-5 w-5" />,
+    icon: <Tags className="h-5 w-5" />,
   },
   {
-    label: "Marketing Blog",
+    label: "أخبار ومقالات",
     href: `/app_admin/marketing/blog`,
     icon: <PenTool className="h-5 w-5" />,
   },
   {
-    label: "Marketing Feedback List",
+    label: "اقتراحات المستخدمين",
     href: `/feedback`,
     icon: <HelpCircle className="h-5 w-5" />,
   },
   {
-    label: "Marketing Changelog List",
+    label: "سجل التحديثات",
     href: `/app_admin/marketing/changelog`,
     icon: <Book className="h-5 w-5" />,
   },
   {
-    label: "Marketing Roadmap",
+    label: "خارطة الطريق",
     href: "/roadmap",
     icon: <Map className="h-5 w-5" />,
   },
@@ -95,7 +91,7 @@ async function AdminPanelSidebar() {
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel data-testid="admin-panel-label">
-        Admin Panel
+        لوحة الأدمن
       </SidebarGroupLabel>
       <SidebarMenu>
         {adminLinks.map((link) => (
@@ -120,3 +116,4 @@ export async function SidebarAdminPanelNav() {
     </Suspense>
   );
 }
+
