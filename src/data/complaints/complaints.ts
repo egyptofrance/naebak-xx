@@ -6,7 +6,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/utils/supabase/server";
+import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 import {
   actionClient,
   adminActionClient,
@@ -51,7 +51,7 @@ import type {
 export const createComplaintAction = actionClient
   .schema(createComplaintSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
     const userId = ctx.user.id;
 
     try {
@@ -106,7 +106,7 @@ export const createComplaintAction = actionClient
 export const updateComplaintAction = actionClient
   .schema(updateComplaintSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
     const userId = ctx.user.id;
 
     try {
@@ -168,7 +168,7 @@ export const updateComplaintAction = actionClient
 export const getMyCom plaintsAction = actionClient
   .schema(filterComplaintsSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
     const userId = ctx.user.id;
 
     try {
@@ -263,7 +263,7 @@ export const getMyCom plaintsAction = actionClient
 export const getAllComplaintsAction = managerOrAdminActionClient
   .schema(filterComplaintsSchema)
   .action(async ({ parsedInput }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
 
     try {
       let query = supabase
@@ -372,7 +372,7 @@ export const getAllComplaintsAction = managerOrAdminActionClient
 export const assignComplaintAction = managerOrAdminActionClient
   .schema(assignComplaintSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
     const userId = ctx.user.id;
 
     try {
@@ -437,7 +437,7 @@ export const assignComplaintAction = managerOrAdminActionClient
 export const updateComplaintStatusAction = managerOrAdminActionClient
   .schema(updateComplaintSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
     const userId = ctx.user.id;
     const userRole = ctx.user.role;
 
@@ -486,7 +486,7 @@ export const updateComplaintStatusAction = managerOrAdminActionClient
 export const closeComplaintAction = adminActionClient
   .schema(closeComplaintSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
     const userId = ctx.user.id;
 
     try {
@@ -533,7 +533,7 @@ export const closeComplaintAction = adminActionClient
 export const archiveComplaintAction = adminActionClient
   .schema(archiveComplaintSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
     const userId = ctx.user.id;
 
     try {
@@ -579,7 +579,7 @@ export const archiveComplaintAction = adminActionClient
 export const deleteComplaintAction = adminActionClient
   .schema(archiveComplaintSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
     const userId = ctx.user.id;
 
     try {
@@ -614,7 +614,7 @@ export const deleteComplaintAction = adminActionClient
 export const awardPointsAction = adminActionClient
   .schema(awardPointsSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
     const userId = ctx.user.id;
 
     try {
@@ -680,7 +680,7 @@ export const awardPointsAction = adminActionClient
 export const getMyAssignedComplaintsAction = actionClient
   .schema(filterComplaintsSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
     const userId = ctx.user.id;
 
     try {
@@ -752,7 +752,7 @@ export const getMyAssignedComplaintsAction = actionClient
 export const acceptComplaintAction = actionClient
   .schema(acceptComplaintSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
     const userId = ctx.user.id;
 
     try {
@@ -816,7 +816,7 @@ export const acceptComplaintAction = actionClient
 export const rejectComplaintAction = actionClient
   .schema(rejectComplaintSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
     const userId = ctx.user.id;
 
     try {
@@ -883,7 +883,7 @@ export const rejectComplaintAction = actionClient
 export const resolveComplaintAction = actionClient
   .schema(resolveComplaintSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
     const userId = ctx.user.id;
 
     try {
@@ -950,7 +950,7 @@ export const resolveComplaintAction = actionClient
 export const holdComplaintAction = actionClient
   .schema(acceptComplaintSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
     const userId = ctx.user.id;
 
     try {
@@ -998,7 +998,7 @@ export const holdComplaintAction = actionClient
 export const startWorkingOnComplaintAction = actionClient
   .schema(acceptComplaintSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
     const userId = ctx.user.id;
 
     try {
@@ -1050,7 +1050,7 @@ export const startWorkingOnComplaintAction = actionClient
 export const createCommentAction = actionClient
   .schema(createCommentSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
     const userId = ctx.user.id;
 
     try {
@@ -1116,7 +1116,7 @@ export const createCommentAction = actionClient
 export const updateCommentAction = actionClient
   .schema(updateCommentSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
     const userId = ctx.user.id;
 
     try {
@@ -1155,7 +1155,7 @@ export const updateCommentAction = actionClient
 export const deleteCommentAction = actionClient
   .schema(deleteCommentSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
     const userId = ctx.user.id;
 
     try {
@@ -1194,7 +1194,7 @@ export const deleteCommentAction = actionClient
  */
 export const getComplaintsStatsAction = managerOrAdminActionClient
   .action(async () => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
 
     try {
       const { data, error } = await supabase
@@ -1222,7 +1222,7 @@ export const getComplaintsStatsAction = managerOrAdminActionClient
 export const getDeputyScoresAction = actionClient
   .schema(getDeputyScoresSchema)
   .action(async ({ parsedInput }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
 
     try {
       let query = supabase
@@ -1274,7 +1274,7 @@ export const getDeputyScoresAction = actionClient
 export const getComplaintDetailsAction = actionClient
   .schema(getComplaintDetailsSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
     const userId = ctx.user.id;
 
     try {
@@ -1360,7 +1360,7 @@ export const getComplaintDetailsAction = actionClient
 export const bulkAssignComplaintsAction = managerOrAdminActionClient
   .schema(bulkAssignComplaintsSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerComponentClient();
     const userId = ctx.user.id;
 
     try {
