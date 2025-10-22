@@ -25,6 +25,17 @@ export const serverGetUserType = cache(async () => {
       return userRoles.ADMIN;
     }
 
+    // Check if user is a manager
+    const { data: managerData } = await supabase
+      .from("manager_permissions")
+      .select("user_id")
+      .eq("user_id", user.id)
+      .single();
+
+    if (managerData) {
+      return userRoles.MANAGER;
+    }
+
     return userRoles.USER;
   } catch (error) {
     return userRoles.ANON;
