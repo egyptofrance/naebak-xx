@@ -2018,6 +2018,121 @@ export type Database = {
         }
         Relationships: []
       }
+      complaints: {
+        Row: {
+          id: string
+          citizen_id: string
+          assigned_deputy_id: string | null
+          title: string
+          description: string
+          category: Database["public"]["Enums"]["complaint_category"]
+          status: Database["public"]["Enums"]["complaint_status"]
+          priority: Database["public"]["Enums"]["complaint_priority"]
+          governorate: string | null
+          district: string | null
+          address: string | null
+          location_lat: number | null
+          location_lng: number | null
+          attachments: Json | null
+          citizen_phone: string | null
+          citizen_email: string | null
+          admin_notes: string | null
+          deputy_notes: string | null
+          rejection_reason: string | null
+          resolution_notes: string | null
+          points_awarded: boolean
+          is_archived: boolean
+          created_at: string
+          updated_at: string
+          assigned_at: string | null
+          accepted_at: string | null
+          rejected_at: string | null
+          resolved_at: string | null
+          closed_at: string | null
+          archived_at: string | null
+        }
+        Insert: {
+          id?: string
+          citizen_id: string
+          assigned_deputy_id?: string | null
+          title: string
+          description: string
+          category: Database["public"]["Enums"]["complaint_category"]
+          status?: Database["public"]["Enums"]["complaint_status"]
+          priority?: Database["public"]["Enums"]["complaint_priority"]
+          governorate?: string | null
+          district?: string | null
+          address?: string | null
+          location_lat?: number | null
+          location_lng?: number | null
+          attachments?: Json | null
+          citizen_phone?: string | null
+          citizen_email?: string | null
+          admin_notes?: string | null
+          deputy_notes?: string | null
+          rejection_reason?: string | null
+          resolution_notes?: string | null
+          points_awarded?: boolean
+          is_archived?: boolean
+          created_at?: string
+          updated_at?: string
+          assigned_at?: string | null
+          accepted_at?: string | null
+          rejected_at?: string | null
+          resolved_at?: string | null
+          closed_at?: string | null
+          archived_at?: string | null
+        }
+        Update: {
+          id?: string
+          citizen_id?: string
+          assigned_deputy_id?: string | null
+          title?: string
+          description?: string
+          category?: Database["public"]["Enums"]["complaint_category"]
+          status?: Database["public"]["Enums"]["complaint_status"]
+          priority?: Database["public"]["Enums"]["complaint_priority"]
+          governorate?: string | null
+          district?: string | null
+          address?: string | null
+          location_lat?: number | null
+          location_lng?: number | null
+          attachments?: Json | null
+          citizen_phone?: string | null
+          citizen_email?: string | null
+          admin_notes?: string | null
+          deputy_notes?: string | null
+          rejection_reason?: string | null
+          resolution_notes?: string | null
+          points_awarded?: boolean
+          is_archived?: boolean
+          created_at?: string
+          updated_at?: string
+          assigned_at?: string | null
+          accepted_at?: string | null
+          rejected_at?: string | null
+          resolved_at?: string | null
+          closed_at?: string | null
+          archived_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "complaints_assigned_deputy_id_fkey"
+            columns: ["assigned_deputy_id"]
+            isOneToOne: false
+            referencedRelation: "deputy_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "complaints_citizen_id_fkey"
+            columns: ["citizen_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+
     }
     Views: {
       [_ in never]: never
@@ -2212,6 +2327,46 @@ export type Database = {
         | "inactive"
       workspace_member_role_type: "owner" | "admin" | "member" | "readonly"
       workspace_membership_type: "solo" | "team"
+      complaint_status:
+        | "new"
+        | "under_review"
+        | "assigned_to_deputy"
+        | "accepted"
+        | "in_progress"
+        | "on_hold"
+        | "rejected"
+        | "resolved"
+        | "closed"
+        | "archived"
+      complaint_priority: "low" | "medium" | "high" | "urgent"
+      complaint_category:
+        | "infrastructure"
+        | "education"
+        | "health"
+        | "security"
+        | "environment"
+        | "transportation"
+        | "utilities"
+        | "housing"
+        | "employment"
+        | "social_services"
+        | "legal"
+        | "corruption"
+        | "other"
+      complaint_action_type:
+        | "created"
+        | "updated"
+        | "assigned"
+        | "reassigned"
+        | "accepted"
+        | "rejected"
+        | "in_progress"
+        | "on_hold"
+        | "resolved"
+        | "closed"
+        | "archived"
+        | "commented"
+
     }
     CompositeTypes: {
       [_ in never]: never
