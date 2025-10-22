@@ -461,7 +461,19 @@ export default function DeputiesListForManager() {
                       <TableCell>
                         <div className="flex gap-2">
                           <GetLoginLinkDialog userId={deputy.user_id} />
-                          <EditDeputyDialog deputy={deputy} />
+                          <EditDeputyDialog
+                            deputyId={deputy.id}
+                            currentData={{
+                              deputyStatus: deputy.deputy_status,
+                              electoralProgram: deputy.electoral_program,
+                              achievements: deputy.achievements,
+                              events: deputy.events,
+                              councilId: deputy.council_id,
+                              electoralSymbol: deputy.electoral_symbol,
+                              electoralNumber: deputy.electoral_number,
+                            }}
+                            councils={councils}
+                          />
                         </div>
                       </TableCell>
                     </TableRow>
