@@ -15,6 +15,95 @@
     "about": "من نحن",
     "contact": "اتصل بنا",
     "complaints": "الشكاوي"
+  },
+  "Complaints": {
+    "title": "الشكاوى",
+    "newComplaint": "شكوى جديدة",
+    "myComplaints": "شكاواي",
+    "allComplaints": "جميع الشكاوى",
+    "submitComplaint": "تقديم شكوى",
+    "complaintDetails": "تفاصيل الشكوى",
+    "form": {
+      "title": "تقديم شكوى جديدة",
+      "description": "املأ النموذج أدناه لتقديم شكوى إلى ممثلك",
+      "fields": {
+        "title": "العنوان",
+        "titlePlaceholder": "وصف مختصر للمشكلة",
+        "category": "الفئة",
+        "categoryPlaceholder": "اختر فئة",
+        "description": "الوصف",
+        "descriptionPlaceholder": "قدم معلومات تفصيلية عن شكواك",
+        "governorate": "المحافظة",
+        "governoratePlaceholder": "مثال: القاهرة",
+        "district": "المنطقة",
+        "districtPlaceholder": "مثال: مدينة نصر",
+        "address": "العنوان",
+        "addressPlaceholder": "الموقع أو العنوان المحدد",
+        "phone": "رقم الهاتف",
+        "phonePlaceholder": "+20 123 456 7890",
+        "email": "البريد الإلكتروني",
+        "emailPlaceholder": "your.email@example.com"
+      },
+      "categories": {
+        "infrastructure": "البنية التحتية",
+        "education": "التعليم",
+        "health": "الصحة",
+        "security": "الأمن",
+        "environment": "البيئة",
+        "transportation": "النقل",
+        "utilities": "المرافق",
+        "housing": "الإسكان",
+        "employment": "التوظيف",
+        "social_services": "الخدمات الاجتماعية",
+        "legal": "قانوني",
+        "corruption": "فساد",
+        "other": "أخرى"
+      },
+      "buttons": {
+        "submit": "تقديم الشكوى",
+        "submitting": "جاري التقديم...",
+        "clear": "مسح النموذج"
+      },
+      "success": {
+        "title": "تم تقديم الشكوى بنجاح!",
+        "complaintId": "رقم الشكوى"
+      },
+      "required": "مطلوب"
+    },
+    "status": {
+      "new": "جديدة",
+      "under_review": "قيد المراجعة",
+      "in_progress": "قيد التنفيذ",
+      "pending_info": "في انتظار معلومات",
+      "resolved": "تم الحل",
+      "closed": "مغلقة",
+      "rejected": "مرفوضة",
+      "escalated": "تم التصعيد",
+      "on_hold": "معلقة",
+      "cancelled": "ملغاة"
+    },
+    "priority": {
+      "low": "منخفضة",
+      "medium": "متوسطة",
+      "high": "عالية",
+      "urgent": "عاجلة"
+    },
+    "management": {
+      "title": "إدارة الشكاوى",
+      "assignToDeputy": "إسناد لنائب",
+      "changeStatus": "تغيير الحالة",
+      "changePriority": "تغيير الأولوية",
+      "addComment": "إضافة تعليق",
+      "viewDetails": "عرض التفاصيل",
+      "filters": {
+        "all": "الكل",
+        "byStatus": "حسب الحالة",
+        "byPriority": "حسب الأولوية",
+        "byCategory": "حسب الفئة",
+        "assigned": "المسندة",
+        "unassigned": "غير المسندة"
+      }
+    }
   }
 }
 

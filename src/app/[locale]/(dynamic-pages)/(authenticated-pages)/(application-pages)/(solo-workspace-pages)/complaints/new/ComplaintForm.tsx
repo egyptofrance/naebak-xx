@@ -15,29 +15,31 @@ import {
 import { useState } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
-const categories = [
-  { value: "infrastructure", label: "Infrastructure" },
-  { value: "education", label: "Education" },
-  { value: "health", label: "Health" },
-  { value: "security", label: "Security" },
-  { value: "environment", label: "Environment" },
-  { value: "transportation", label: "Transportation" },
-  { value: "utilities", label: "Utilities" },
-  { value: "housing", label: "Housing" },
-  { value: "employment", label: "Employment" },
-  { value: "social_services", label: "Social Services" },
-  { value: "legal", label: "Legal" },
-  { value: "corruption", label: "Corruption" },
-  { value: "other", label: "Other" },
-];
+const categoryKeys = [
+  "infrastructure",
+  "education",
+  "health",
+  "security",
+  "environment",
+  "transportation",
+  "utilities",
+  "housing",
+  "employment",
+  "social_services",
+  "legal",
+  "corruption",
+  "other",
+] as const;
 
 export function ComplaintForm() {
+  const t = useTranslations("Complaints");
   const [category, setCategory] = useState<string>("");
 
   const { execute, status, result } = useAction(createComplaintAction, {
     onSuccess: ({ data }) => {
-      toast.success("Complaint submitted successfully!");
+      toast.success(t("form.success.title"));
       // Reset form
       const form = document.getElementById("complaint-form") as HTMLFormElement;
       form?.reset();
@@ -69,11 +71,13 @@ export function ComplaintForm() {
   return (
     <form id="complaint-form" onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="title">Title *</Label>
+        <Label htmlFor="title">
+          {t("form.fields.title")} <span className="text-red-500">*</span>
+        </Label>
         <Input
           id="title"
           name="title"
-          placeholder="Brief description of the issue"
+          placeholder={t("form.fields.titlePlaceholder")}
           required
           minLength={5}
           maxLength={200}
@@ -82,7 +86,9 @@ export function ComplaintForm() {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="category">Category *</Label>
+        <Label htmlFor="category">
+          {t("form.fields.category")} <span className="text-red-500">*</span>
+        </Label>
         <Select
           value={category}
           onValueChange={setCategory}
@@ -90,12 +96,12 @@ export function ComplaintForm() {
           required
         >
           <SelectTrigger>
-            <SelectValue placeholder="Select a category" />
+            <SelectValue placeholder={t("form.fields.categoryPlaceholder")} />
           </SelectTrigger>
           <SelectContent>
-            {categories.map((cat) => (
-              <SelectItem key={cat.value} value={cat.value}>
-                {cat.label}
+            {categoryKeys.map((cat) => (
+              <SelectItem key={cat} value={cat}>
+                {t(`form.categories.${cat}`)}
               </SelectItem>
             ))}
           </SelectContent>
@@ -103,11 +109,13 @@ export function ComplaintForm() {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Description *</Label>
+        <Label htmlFor="description">
+          {t("form.fields.description")} <span className="text-red-500">*</span>
+        </Label>
         <Textarea
           id="description"
           name="description"
-          placeholder="Provide detailed information about your complaint"
+          placeholder={t("form.fields.descriptionPlaceholder")}
           required
           minLength={20}
           maxLength={5000}
@@ -118,55 +126,55 @@ export function ComplaintForm() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="governorate">Governorate</Label>
+          <Label htmlFor="governorate">{t("form.fields.governorate")}</Label>
           <Input
             id="governorate"
             name="governorate"
-            placeholder="e.g., Cairo"
+            placeholder={t("form.fields.governoratePlaceholder")}
             disabled={isLoading}
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="district">District</Label>
+          <Label htmlFor="district">{t("form.fields.district")}</Label>
           <Input
             id="district"
             name="district"
-            placeholder="e.g., Nasr City"
+            placeholder={t("form.fields.districtPlaceholder")}
             disabled={isLoading}
           />
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="address">Address</Label>
+        <Label htmlFor="address">{t("form.fields.address")}</Label>
         <Input
           id="address"
           name="address"
-          placeholder="Specific location or address"
+          placeholder={t("form.fields.addressPlaceholder")}
           disabled={isLoading}
         />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="citizen_phone">Phone Number</Label>
+          <Label htmlFor="citizen_phone">{t("form.fields.phone")}</Label>
           <Input
             id="citizen_phone"
             name="citizen_phone"
             type="tel"
-            placeholder="+20 123 456 7890"
+            placeholder={t("form.fields.phonePlaceholder")}
             disabled={isLoading}
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="citizen_email">Email</Label>
+          <Label htmlFor="citizen_email">{t("form.fields.email")}</Label>
           <Input
             id="citizen_email"
             name="citizen_email"
             type="email"
-            placeholder="your.email@example.com"
+            placeholder={t("form.fields.emailPlaceholder")}
             disabled={isLoading}
           />
         </div>
@@ -174,7 +182,7 @@ export function ComplaintForm() {
 
       <div className="flex gap-4">
         <Button type="submit" disabled={isLoading || !category}>
-          {isLoading ? "Submitting..." : "Submit Complaint"}
+          {isLoading ? t("form.buttons.submitting") : t("form.buttons.submit")}
         </Button>
         <Button
           type="button"
@@ -186,17 +194,17 @@ export function ComplaintForm() {
             setCategory("");
           }}
         >
-          Clear Form
+          {t("form.buttons.clear")}
         </Button>
       </div>
 
       {result?.data && (
         <div className="p-4 bg-green-50 border border-green-200 rounded-md">
           <p className="text-green-800 font-medium">
-            ✓ Complaint submitted successfully!
+            ✓ {t("form.success.title")}
           </p>
           <p className="text-sm text-green-700 mt-1">
-            Complaint ID: {result.data.complaint.id}
+            {t("form.success.complaintId")}: {result.data.complaint.id}
           </p>
         </div>
       )}

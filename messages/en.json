@@ -15,5 +15,94 @@
     "about": "About Us",
     "contact": "Contact Us",
     "complaints": "Complaints"
+  },
+  "Complaints": {
+    "title": "Complaints",
+    "newComplaint": "New Complaint",
+    "myComplaints": "My Complaints",
+    "allComplaints": "All Complaints",
+    "submitComplaint": "Submit Complaint",
+    "complaintDetails": "Complaint Details",
+    "form": {
+      "title": "Submit a New Complaint",
+      "description": "Fill out the form below to submit a complaint to your representative",
+      "fields": {
+        "title": "Title",
+        "titlePlaceholder": "Brief description of the issue",
+        "category": "Category",
+        "categoryPlaceholder": "Select a category",
+        "description": "Description",
+        "descriptionPlaceholder": "Provide detailed information about your complaint",
+        "governorate": "Governorate",
+        "governoratePlaceholder": "e.g., Cairo",
+        "district": "District",
+        "districtPlaceholder": "e.g., Nasr City",
+        "address": "Address",
+        "addressPlaceholder": "Specific location or address",
+        "phone": "Phone Number",
+        "phonePlaceholder": "+20 123 456 7890",
+        "email": "Email",
+        "emailPlaceholder": "your.email@example.com"
+      },
+      "categories": {
+        "infrastructure": "Infrastructure",
+        "education": "Education",
+        "health": "Health",
+        "security": "Security",
+        "environment": "Environment",
+        "transportation": "Transportation",
+        "utilities": "Utilities",
+        "housing": "Housing",
+        "employment": "Employment",
+        "social_services": "Social Services",
+        "legal": "Legal",
+        "corruption": "Corruption",
+        "other": "Other"
+      },
+      "buttons": {
+        "submit": "Submit Complaint",
+        "submitting": "Submitting...",
+        "clear": "Clear Form"
+      },
+      "success": {
+        "title": "Complaint submitted successfully!",
+        "complaintId": "Complaint ID"
+      },
+      "required": "Required"
+    },
+    "status": {
+      "new": "New",
+      "under_review": "Under Review",
+      "in_progress": "In Progress",
+      "pending_info": "Pending Info",
+      "resolved": "Resolved",
+      "closed": "Closed",
+      "rejected": "Rejected",
+      "escalated": "Escalated",
+      "on_hold": "On Hold",
+      "cancelled": "Cancelled"
+    },
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "urgent": "Urgent"
+    },
+    "management": {
+      "title": "Complaints Management",
+      "assignToDeputy": "Assign to Deputy",
+      "changeStatus": "Change Status",
+      "changePriority": "Change Priority",
+      "addComment": "Add Comment",
+      "viewDetails": "View Details",
+      "filters": {
+        "all": "All",
+        "byStatus": "By Status",
+        "byPriority": "By Priority",
+        "byCategory": "By Category",
+        "assigned": "Assigned",
+        "unassigned": "Unassigned"
+      }
+    }
   }
 }

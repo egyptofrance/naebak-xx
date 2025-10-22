@@ -1,18 +1,25 @@
 import type { Metadata } from "next";
 import { ComplaintForm } from "./ComplaintForm";
+import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-  title: "Submit New Complaint",
-  description: "Submit a new complaint to your representative",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Complaints");
+  
+  return {
+    title: t("form.title"),
+    description: t("form.description"),
+  };
+}
 
-export default function NewComplaintPage() {
+export default async function NewComplaintPage() {
+  const t = await getTranslations("Complaints");
+  
   return (
     <div className="container mx-auto max-w-4xl py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold">Submit a New Complaint</h1>
+        <h1 className="text-3xl font-bold">{t("form.title")}</h1>
         <p className="text-muted-foreground mt-2">
-          Fill out the form below to submit a complaint to your representative.
+          {t("form.description")}
         </p>
       </div>
       <ComplaintForm />
