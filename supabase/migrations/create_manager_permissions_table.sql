@@ -26,12 +26,13 @@ CREATE POLICY "Service role has full access to manager_permissions"
   USING (true)
   WITH CHECK (true);
 
--- Create policy to allow authenticated users to read their own permissions
-CREATE POLICY "Users can read their own manager permissions"
+-- Create policy to allow authenticated users to read manager permissions
+-- Using same approach as deputy_profiles for consistency
+CREATE POLICY "Anyone can view manager permissions"
   ON public.manager_permissions
   FOR SELECT
   TO authenticated
-  USING (auth.uid() = user_id);
+  USING (true);
 
 -- Create policy to allow admins to read all permissions
 CREATE POLICY "Admins can read all manager permissions"
