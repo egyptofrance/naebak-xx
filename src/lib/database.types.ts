@@ -2429,7 +2429,7 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
+      },
       complaints: {
         Row: {
           id: string
