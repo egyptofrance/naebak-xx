@@ -1,9 +1,9 @@
 "use server";
 
-import { createClient } from "@/utils/supabase/server";
+import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 
 export async function getManagerStats() {
-  const supabase = await createClient();
+  const supabase = await createSupabaseUserServerComponentClient();
 
   try {
     // Get total citizens count
