@@ -425,7 +425,7 @@ export async function getFeedbackStakeholdersExceptMentionedUser({
       stakeholders.add(feedbackOwnerResult.data[0].user_id);
     }
 
-    feedbackCommentatorsResult.data.forEach((comment) => {
+    feedbackCommentatorsResult.data.forEach((comment: { user_id: string }) => {
       stakeholders.add(comment.user_id);
     });
 
