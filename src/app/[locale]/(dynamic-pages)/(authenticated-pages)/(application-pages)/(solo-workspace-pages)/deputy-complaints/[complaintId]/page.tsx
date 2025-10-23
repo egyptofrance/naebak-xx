@@ -2,14 +2,14 @@ import { getComplaintDetails } from "@/data/complaints/complaints";
 import Link from "next/link";
 import { UpdateStatusForm } from "@/components/complaints/UpdateStatusForm";
 import { AddCommentForm } from "@/components/complaints/AddCommentForm";
-import { createClient } from "@/lib/supabase/server";
+import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 
 export default async function DeputyComplaintDetailsPage({
   params,
 }: {
   params: { complaintId: string };
 }) {
-  const supabase = await createClient();
+  const supabase = await createSupabaseUserServerComponentClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
