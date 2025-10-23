@@ -152,9 +152,14 @@ export async function getAllComplaints() {
   const supabaseClient = await supabaseClientBasedOnUserRole();
   const userType = await serverGetUserType();
 
+  console.log("[getAllComplaints] userType:", userType);
+  console.log("[getAllComplaints] userRoles.MANAGER:", userRoles.MANAGER);
+  console.log("[getAllComplaints] userRoles.ADMIN:", userRoles.ADMIN);
+
   // Only managers and admins can access all complaints
   if (userType !== userRoles.MANAGER && userType !== userRoles.ADMIN) {
-    return { data: [], error: "Unauthorized" };
+    console.log("[getAllComplaints] Unauthorized - userType:", userType);
+    return { data: [], error: "User not authenticated" };
   }
 
   const { data, error } = await supabaseClient
