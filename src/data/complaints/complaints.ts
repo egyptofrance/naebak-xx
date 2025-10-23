@@ -445,7 +445,6 @@ export async function getAvailableDeputies(filters?: {
     .select(`
       id,
       governorate,
-      party,
       council_type,
       deputy_status,
       gender,
@@ -483,10 +482,9 @@ export async function getAvailableDeputies(filters?: {
     id: deputy.id,
     full_name: deputy.user_profiles?.full_name || "غير محدد",
     governorate: deputy.governorate || "غير محدد",
-    party: deputy.party,
     council_type: deputy.council_type || "parliament",
     deputy_status: deputy.deputy_status || "current",
-    gender: deputy.gender,
+    gender: deputy.gender || "male",
     points: deputy.points || 0,
   })) || [];
 

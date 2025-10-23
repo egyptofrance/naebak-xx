@@ -103,18 +103,13 @@ export default function AdvancedDeputySelector({
       );
     }
 
-    // Filter by gender
-    if (gender !== "all") {
-      filtered = filtered.filter((deputy) => deputy.gender === gender);
-    }
-
     // Filter by governorate
     if (governorate !== "all") {
       filtered = filtered.filter((deputy) => deputy.governorate === governorate);
     }
 
     setFilteredDeputies(filtered);
-  }, [searchName, councilType, deputyStatus, gender, governorate, deputies]);
+  }, [searchName, councilType, deputyStatus, governorate, deputies]);
 
   const handleToggleDeputy = (deputyId: string) => {
     const newSelected = new Set(selectedDeputies);
@@ -138,7 +133,6 @@ export default function AdvancedDeputySelector({
     setSearchName("");
     setCouncilType("all");
     setDeputyStatus("all");
-    setGender("all");
     setGovernorate("all");
     setSelectedDeputies(new Set());
   };
@@ -204,7 +198,7 @@ export default function AdvancedDeputySelector({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* Council Type */}
             <div className="space-y-2">
               <Label htmlFor="council-type">نوع المجلس</Label>
@@ -233,21 +227,6 @@ export default function AdvancedDeputySelector({
                   <SelectItem value="current">حالي</SelectItem>
                   <SelectItem value="candidate">مرشح</SelectItem>
                   <SelectItem value="former">سابق</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Gender */}
-            <div className="space-y-2">
-              <Label htmlFor="gender">الجنس</Label>
-              <Select value={gender} onValueChange={setGender}>
-                <SelectTrigger id="gender">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">الكل</SelectItem>
-                  <SelectItem value="male">ذكر</SelectItem>
-                  <SelectItem value="female">أنثى</SelectItem>
                 </SelectContent>
               </Select>
             </div>
