@@ -39,6 +39,7 @@ export default function NewComplaintPage() {
       address: formData.get("address") as string || undefined,
       citizen_phone: formData.get("citizen_phone") as string || undefined,
       citizen_email: formData.get("citizen_email") as string || undefined,
+      is_public: formData.get("is_public") === "on",
     };
 
     const result = await createComplaintAction(data);
@@ -210,6 +211,25 @@ export default function NewComplaintPage() {
               name="citizen_email"
               className="w-full px-3 py-2 border rounded-md"
             />
+          </div>
+        </div>
+
+        <div className="border-t pt-4 mt-4">
+          <div className="flex items-start gap-3 p-4 bg-secondary/30 rounded-md">
+            <input
+              type="checkbox"
+              id="is_public"
+              name="is_public"
+              className="mt-1 h-4 w-4"
+            />
+            <div>
+              <label htmlFor="is_public" className="block text-sm font-medium cursor-pointer">
+                السماح بعرض هذه الشكوى للجمهور
+              </label>
+              <p className="text-xs text-muted-foreground mt-1">
+                إذا وافقت، سيتم عرض شكواك في صفحة الشكاوى العامة ليراها الجميع. هذا يساعد في زيادة الشفافية والضغط لحل المشكلة.
+              </p>
+            </div>
           </div>
         </div>
 
