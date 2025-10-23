@@ -103,7 +103,6 @@ export function EditDeputyDialog({
   );
   
   // New required fields
-  const [councilType, setCouncilType] = useState(currentData.councilType || "parliament");
   const [gender, setGender] = useState(currentData.gender || "male");
   const [governorate, setGovernorate] = useState(currentData.governorate || "القاهرة");
   const [partyId, setPartyId] = useState(currentData.partyId || "none");
@@ -334,7 +333,6 @@ export function EditDeputyDialog({
       electoralSymbol: electoralSymbol.trim() || undefined,
       electoralNumber: electoralNumber.trim() || undefined,
       // New required fields
-      councilType: councilType as "parliament" | "senate" | "local",
       gender: gender as "male" | "female",
       governorate: governorate.trim(),
       // User profile fields
@@ -442,21 +440,6 @@ export function EditDeputyDialog({
 
               <Separator className="my-4" />
               
-              {/* Council Type */}
-              <div className="space-y-2">
-                <Label htmlFor="council_type">نوع المجلس *</Label>
-                <Select value={councilType} onValueChange={setCouncilType}>
-                  <SelectTrigger id="council_type">
-                    <SelectValue placeholder="اختر نوع المجلس" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="parliament">مجلس النواب</SelectItem>
-                    <SelectItem value="senate">مجلس الشيوخ</SelectItem>
-                    <SelectItem value="local">المجلس المحلي</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
               {/* Gender */}
               <div className="space-y-2">
                 <Label htmlFor="gender">الجنس *</Label>
