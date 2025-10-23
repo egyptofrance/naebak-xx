@@ -1,5 +1,6 @@
 import { getAllComplaints } from "@/data/complaints/complaints";
 import { RefreshComplaintsButton } from "@/components/complaints/RefreshComplaintsButton";
+import Link from "next/link";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -88,6 +89,14 @@ export default async function ManagerComplaintsPage() {
                 {complaint.assigned_deputy_id ? '✓ مسندة' : '⚠ غير مسندة'}
               </span>
               <span>{new Date(complaint.created_at).toLocaleDateString("ar-EG")}</span>
+            </div>
+            <div className="mt-3 pt-3 border-t">
+              <Link
+                href={`/manager-complaints/${complaint.id}`}
+                className="text-sm text-primary hover:underline"
+              >
+                عرض التفاصيل وإدارة الشكوى ←
+              </Link>
             </div>
           </div>
         ))}
