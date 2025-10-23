@@ -2132,6 +2132,54 @@ export type Database = {
           }
         ]
       }
+      complaint_actions: {
+        Row: {
+          id: string
+          complaint_id: string
+          action_type: Database["public"]["Enums"]["complaint_action_type"]
+          performed_by: string
+          old_value: string | null
+          new_value: string | null
+          comment: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          complaint_id: string
+          action_type: Database["public"]["Enums"]["complaint_action_type"]
+          performed_by: string
+          old_value?: string | null
+          new_value?: string | null
+          comment?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          complaint_id?: string
+          action_type?: Database["public"]["Enums"]["complaint_action_type"]
+          performed_by?: string
+          old_value?: string | null
+          new_value?: string | null
+          comment?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "complaint_actions_complaint_id_fkey"
+            columns: ["complaint_id"]
+            isOneToOne: false
+            referencedRelation: "complaints"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "complaint_actions_performed_by_fkey"
+            columns: ["performed_by"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
 
     }
     Views: {
