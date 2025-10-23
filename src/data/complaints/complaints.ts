@@ -573,3 +573,49 @@ export const approveComplaintForPublic = adminActionClient
     return { success: true };
   });
 
+
+
+/**
+ * Archive complaint (Admin only)
+ */
+export const archiveComplaint = adminActionClient
+  .schema(z.object({
+    complaintId: z.string().uuid(),
+  }))
+  .action(async ({ parsedInput: { complaintId } }) => {
+    const { error } = await supabaseAdminClient
+      .from("complaints")
+      .update({ is_archived: true })
+      .eq("id", complaintId);
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    revalidatePath("/manager-complaints");
+    
+    return { success: true };
+  });
+
+/**
+ * Delete complaint permanently (Admin only)
+ */
+export const deleteComplaint = adminActionClient
+  .schema(z.object({
+    complaintId: z.string().uuid(),
+  }))
+  .action(async ({ parsedInput: { complaintId } }) => {
+    const { error } = await supabaseAdminClient
+      .from("complaints")
+      .delete()
+      .eq("id", complaintId);
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    revalidatePath("/manager-complaints");
+    
+    return { success: true };
+  });
+

@@ -1,6 +1,6 @@
 import { getAllComplaints } from "@/data/complaints/complaints";
 import { RefreshComplaintsButton } from "@/components/complaints/RefreshComplaintsButton";
-import Link from "next/link";
+import { ComplaintCard } from "@/components/complaints/ComplaintCard";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -55,50 +55,7 @@ export default async function ManagerComplaintsPage() {
 
       <div className="grid gap-4">
         {complaints && complaints.map((complaint: any) => (
-          <div
-            key={complaint.id}
-            className="border rounded-lg p-4 hover:shadow-md transition-shadow"
-          >
-            <div className="flex justify-between items-start mb-2">
-              <div>
-                <h3 className="font-semibold text-lg">{complaint.title}</h3>
-                <p className="text-xs text-muted-foreground mt-1">
-                  رقم الشكوى: {complaint.id.slice(0, 8)}
-                </p>
-              </div>
-              <div className="flex gap-2">
-                <span className="text-xs px-2 py-1 rounded-full bg-secondary">
-                  {complaint.status}
-                </span>
-                <span className={`text-xs px-2 py-1 rounded-full ${
-                  complaint.priority === 'urgent' ? 'bg-red-100 text-red-800' :
-                  complaint.priority === 'high' ? 'bg-orange-100 text-orange-800' :
-                  complaint.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                  'bg-green-100 text-green-800'
-                }`}>
-                  {complaint.priority}
-                </span>
-              </div>
-            </div>
-            <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-              {complaint.description}
-            </p>
-            <div className="flex justify-between items-center text-xs text-muted-foreground">
-              <span>الفئة: {complaint.category}</span>
-              <span>
-                {complaint.assigned_deputy_id ? '✓ مسندة' : '⚠ غير مسندة'}
-              </span>
-              <span>{new Date(complaint.created_at).toLocaleDateString("ar-EG")}</span>
-            </div>
-            <div className="mt-3 pt-3 border-t">
-              <Link
-                href={`/manager-complaints/${complaint.id}`}
-                className="text-sm text-primary hover:underline"
-              >
-                عرض التفاصيل وإدارة الشكوى ←
-              </Link>
-            </div>
-          </div>
+          <ComplaintCard key={complaint.id} complaint={complaint} />
         ))}
       </div>
     </div>
