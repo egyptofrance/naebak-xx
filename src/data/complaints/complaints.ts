@@ -622,3 +622,61 @@ export const deleteComplaint = adminActionClient
     return { success: true };
   });
 
+
+
+/**
+ * Get archived complaints (Admin/Manager only)
+ */
+export async function getArchivedComplaints() {
+  const supabase = await createSupabaseUserServerComponentClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
+    return { data: [], error: "User not authenticated" };
+  }
+
+  // Check if user is admin or manager
+  const isAdmin = isSupabaseUserAppAdmin(user);
+  const userType = await serverGetUserType();
+  const isManager = userType === userRoles.MANAGER;
+
+  // Only managers and admins can access archived complaints
+  if (!isAdmin && !isManager) {
+    return { data: [], error: "Unauthorized access" };
+  }
+
+  const { data, error } = await supabase
+    .from("complaints")
+    .select("*")
+    .eq("is_archived", true)
+    .order("archived_at", { ascending: false });
+
+  return { data: data || [], error: error?.message };
+}
+
+/**
+ * Unarchive complaint (Admin only)
+ */
+export const unarchiveComplaint = adminActionClient
+  .schema(z.object({
+    complaintId: z.string().uuid(),
+  }))
+  .action(async ({ parsedInput: { complaintId } }) => {
+    const { error } = await supabaseAdminClient
+      .from("complaints")
+      .update({ 
+        is_archived: false,
+        archived_at: null
+      })
+      .eq("id", complaintId);
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    revalidatePath("/manager-complaints");
+    revalidatePath("/manager-complaints/archived");
+    
+    return { success: true };
+  });
+

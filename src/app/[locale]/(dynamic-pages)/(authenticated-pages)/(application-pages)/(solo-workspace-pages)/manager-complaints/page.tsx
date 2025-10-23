@@ -1,12 +1,17 @@
 import { getAllComplaints } from "@/data/complaints/complaints";
 import { RefreshComplaintsButton } from "@/components/complaints/RefreshComplaintsButton";
 import { ComplaintCard } from "@/components/complaints/ComplaintCard";
+import Link from "next/link";
+import { Archive } from "lucide-react";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function ManagerComplaintsPage() {
-  const { data: complaints, error } = await getAllComplaints();
+  const { data: allComplaints, error } = await getAllComplaints();
+  
+  // Filter out archived complaints
+  const complaints = allComplaints?.filter(c => !c.is_archived) || [];
 
   // Count complaints by status
   const statusCounts = complaints?.reduce((acc: any, complaint: any) => {
@@ -18,7 +23,16 @@ export default async function ManagerComplaintsPage() {
     <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">إدارة الشكاوى</h1>
-        <RefreshComplaintsButton />
+        <div className="flex gap-3">
+          <Link
+            href="/manager-complaints/archived"
+            className="flex items-center gap-2 px-4 py-2 border rounded-md hover:bg-secondary text-sm"
+          >
+            <Archive className="h-4 w-4" />
+            الأرشيف
+          </Link>
+          <RefreshComplaintsButton />
+        </div>
       </div>
 
       {/* Statistics */}
