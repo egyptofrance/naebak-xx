@@ -9,9 +9,14 @@ import {
 import { getCachedDeputyProfile } from "@/rsc-data/user/deputy";
 import { SlimWorkspace } from "@/types";
 import { getWorkspaceSubPath } from "@/utils/workspaces";
-import { Award, Calendar, FileText, Info } from "lucide-react";
+import { Award, Calendar, FileText, Info, MessageSquare } from "lucide-react";
 
 const deputyLinks = [
+  {
+    label: "الشكاوى المسندة",
+    href: "/deputy-complaints",
+    icon: <MessageSquare className="h-5 w-5" />,
+  },
   {
     label: "البيانات الإضافية",
     href: "/deputy-data",

@@ -14,6 +14,7 @@ import {
   Layers,
   Settings,
   Users,
+  MessageSquare,
 } from "lucide-react";
 import { ProFeatureGateDialog } from "./ProFeatureGateDialog";
 import { Link } from "./intl-link";
@@ -31,6 +32,11 @@ export function SidebarWorkspaceNav({
       label: "Projects",
       href: "/projects",
       icon: <Layers className="h-5 w-5" />,
+    },
+    {
+      label: "Complaints",
+      href: "/complaints",
+      icon: <MessageSquare className="h-5 w-5" />,
     },
     {
       label: "Settings",
