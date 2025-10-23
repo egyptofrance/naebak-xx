@@ -16,9 +16,10 @@ interface Props {
   complaintId: string;
   currentDeputyId: string | null;
   deputies: Deputy[];
+  userId: string;
 }
 
-export function AssignDeputyForm({ complaintId, currentDeputyId, deputies }: Props) {
+export function AssignDeputyForm({ complaintId, currentDeputyId, deputies, userId }: Props) {
   const router = useRouter();
   const [selectedDeputyId, setSelectedDeputyId] = useState(currentDeputyId || "");
   const [loading, setLoading] = useState(false);
@@ -33,7 +34,7 @@ export function AssignDeputyForm({ complaintId, currentDeputyId, deputies }: Pro
     setLoading(true);
     setError("");
 
-    const result = await assignComplaintToDeputy(complaintId, selectedDeputyId);
+    const result = await assignComplaintToDeputy(complaintId, selectedDeputyId, userId);
 
     if (result.success) {
       router.refresh();

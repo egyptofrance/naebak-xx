@@ -127,6 +127,7 @@ export default async function ManagerComplaintDetailPage({ params }: Props) {
             complaintId={complaint.id}
             currentDeputyId={complaint.assigned_deputy_id}
             deputies={deputies || []}
+            userId={user.id}
           />
 
           {/* Update Status */}
