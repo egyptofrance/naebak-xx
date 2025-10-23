@@ -68,61 +68,67 @@ export function ComplaintCard({ complaint }: ComplaintCardProps) {
       onClick={handleCardClick}
       className="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
     >
-      <div className="flex justify-between items-start mb-2">
-        <div>
-          <h3 className="font-semibold text-lg">{complaint.title}</h3>
-          <p className="text-xs text-muted-foreground mt-1">
-            رقم الشكوى: {complaint.id.slice(0, 8)}
+      <div className="flex gap-4">
+        {/* Main content - takes most of the space */}
+        <div className="flex-1">
+          <div className="flex justify-between items-start mb-2">
+            <div>
+              <h3 className="font-semibold text-lg">{complaint.title}</h3>
+              <p className="text-xs text-muted-foreground mt-1">
+                رقم الشكوى: {complaint.id.slice(0, 8)}
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <span className="text-xs px-2 py-1 rounded-full bg-secondary">
+                {complaint.status}
+              </span>
+              <span className={`text-xs px-2 py-1 rounded-full ${
+                complaint.priority === 'urgent' ? 'bg-red-100 text-red-800' :
+                complaint.priority === 'high' ? 'bg-orange-100 text-orange-800' :
+                complaint.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                'bg-green-100 text-green-800'
+              }`}>
+                {complaint.priority}
+              </span>
+            </div>
+          </div>
+          
+          <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+            {complaint.description}
           </p>
+          
+          <div className="flex justify-between items-center text-xs text-muted-foreground">
+            <span>الفئة: {complaint.category}</span>
+            <span>
+              {complaint.assigned_deputy_id ? '✓ مسندة' : '⚠ غير مسندة'}
+            </span>
+            <span>{new Date(complaint.created_at).toLocaleDateString("ar-EG")}</span>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <span className="text-xs px-2 py-1 rounded-full bg-secondary">
-            {complaint.status}
-          </span>
-          <span className={`text-xs px-2 py-1 rounded-full ${
-            complaint.priority === 'urgent' ? 'bg-red-100 text-red-800' :
-            complaint.priority === 'high' ? 'bg-orange-100 text-orange-800' :
-            complaint.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-            'bg-green-100 text-green-800'
-          }`}>
-            {complaint.priority}
-          </span>
-        </div>
-      </div>
-      
-      <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-        {complaint.description}
-      </p>
-      
-      <div className="flex justify-between items-center text-xs text-muted-foreground mb-3">
-        <span>الفئة: {complaint.category}</span>
-        <span>
-          {complaint.assigned_deputy_id ? '✓ مسندة' : '⚠ غير مسندة'}
-        </span>
-        <span>{new Date(complaint.created_at).toLocaleDateString("ar-EG")}</span>
-      </div>
 
-      <div className="flex gap-2 pt-3 border-t">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleArchive}
-          disabled={loading}
-          className="flex-1"
-        >
-          <Archive className="h-4 w-4 mr-2" />
-          أرشفة
-        </Button>
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={handleDelete}
-          disabled={loading}
-          className="flex-1"
-        >
-          <Trash2 className="h-4 w-4 mr-2" />
-          حذف نهائي
-        </Button>
+        {/* Action buttons - on the right side, stacked vertically */}
+        <div className="flex flex-col gap-2 justify-center">
+          <Button
+            variant="default"
+            size="sm"
+            onClick={handleArchive}
+            disabled={loading}
+            className="bg-blue-600 hover:bg-blue-700 text-white min-w-[100px]"
+          >
+            <Archive className="h-4 w-4 mr-2" />
+            أرشفة
+          </Button>
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={handleDelete}
+            disabled={loading}
+            className="min-w-[100px]"
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            حذف
+          </Button>
+        </div>
       </div>
     </div>
   );

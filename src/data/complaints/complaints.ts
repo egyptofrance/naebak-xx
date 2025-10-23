@@ -585,7 +585,10 @@ export const archiveComplaint = adminActionClient
   .action(async ({ parsedInput: { complaintId } }) => {
     const { error } = await supabaseAdminClient
       .from("complaints")
-      .update({ is_archived: true })
+      .update({ 
+        is_archived: true,
+        archived_at: new Date().toISOString()
+      })
       .eq("id", complaintId);
 
     if (error) {
