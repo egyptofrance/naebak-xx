@@ -1,4 +1,5 @@
 import { getDeputyComplaints } from "@/data/complaints/complaints";
+import Link from "next/link";
 
 export default async function DeputyComplaintsPage() {
   const { data: complaints, error } = await getDeputyComplaints();
@@ -21,9 +22,10 @@ export default async function DeputyComplaintsPage() {
 
       <div className="grid gap-4">
         {complaints && complaints.map((complaint: any) => (
-          <div
+          <Link
             key={complaint.id}
-            className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+            href={`/deputy-complaints/${complaint.id}`}
+            className="block border rounded-lg p-4 hover:shadow-md transition-shadow"
           >
             <div className="flex justify-between items-start mb-2">
               <h3 className="font-semibold text-lg">{complaint.title}</h3>
@@ -48,7 +50,7 @@ export default async function DeputyComplaintsPage() {
               <span>الفئة: {complaint.category}</span>
               <span>{new Date(complaint.created_at).toLocaleDateString("ar-EG")}</span>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
