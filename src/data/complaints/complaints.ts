@@ -680,3 +680,32 @@ export const unarchiveComplaint = adminActionClient
     return { success: true };
   });
 
+
+
+/**
+ * Get public complaints (accessible to everyone, no authentication required)
+ */
+export async function getPublicComplaints() {
+  const supabase = await createSupabaseUserServerComponentClient();
+
+  const { data, error } = await supabase
+    .from("complaints")
+    .select(`
+      id,
+      title,
+      description,
+      category,
+      status,
+      governorate,
+      district,
+      created_at,
+      resolved_at
+    `)
+    .eq("is_public", true)
+    .eq("admin_approved_public", true)
+    .eq("is_archived", false)
+    .order("created_at", { ascending: false });
+
+  return { data: data || [], error: error?.message };
+}
+
