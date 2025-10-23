@@ -2045,6 +2045,8 @@ export type Database = {
           resolution_notes: string | null
           points_awarded: boolean
           is_archived: boolean
+          is_public: boolean
+          admin_approved_public: boolean
           created_at: string
           updated_at: string
           assigned_at: string | null
@@ -2077,6 +2079,8 @@ export type Database = {
           resolution_notes?: string | null
           points_awarded?: boolean
           is_archived?: boolean
+          is_public?: boolean
+          admin_approved_public?: boolean
           created_at?: string
           updated_at?: string
           assigned_at?: string | null
@@ -2109,6 +2113,8 @@ export type Database = {
           resolution_notes?: string | null
           points_awarded?: boolean
           is_archived?: boolean
+          is_public?: boolean
+          admin_approved_public?: boolean
           created_at?: string
           updated_at?: string
           assigned_at?: string | null
