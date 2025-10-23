@@ -545,3 +545,29 @@ export async function grantPointsToDeputy(deputyId: string, points: number = 10)
   return { success: true, newPoints };
 }
 
+
+
+/**
+ * Approve complaint for public display (Admin only)
+ */
+export const approveComplaintForPublic = adminActionClient
+  .schema(z.object({
+    complaintId: z.string().uuid(),
+    approved: z.boolean(),
+  }))
+  .action(async ({ parsedInput: { complaintId, approved } }) => {
+    const { error } = await supabaseAdminClient
+      .from("complaints")
+      .update({ admin_approved_public: approved })
+      .eq("id", complaintId);
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    revalidatePath("/manager-complaints");
+    revalidatePath(`/manager-complaints/${complaintId}`);
+    
+    return { success: true };
+  });
+

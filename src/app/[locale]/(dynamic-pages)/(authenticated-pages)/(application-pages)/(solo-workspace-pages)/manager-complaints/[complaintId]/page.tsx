@@ -4,6 +4,7 @@ import { UpdateStatusForm } from "@/components/complaints/UpdateStatusForm";
 import { UpdatePriorityForm } from "@/components/complaints/UpdatePriorityForm";
 import { AddCommentForm } from "@/components/complaints/AddCommentForm";
 import { ComplaintActionsHistory } from "@/components/complaints/ComplaintActionsHistory";
+import { ApprovePublicButton } from "@/components/complaints/ApprovePublicButton";
 import Link from "next/link";
 import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
 
@@ -147,6 +148,15 @@ export default async function ManagerComplaintDetailPage({ params }: Props) {
             currentPriority={complaint.priority}
             userId={user.id}
           />
+
+          {/* Approve for Public Display */}
+          <div className="bg-card border rounded-lg p-4">
+            <ApprovePublicButton
+              complaintId={complaint.id}
+              isPublic={complaint.is_public || false}
+              adminApprovedPublic={complaint.admin_approved_public || false}
+            />
+          </div>
         </div>
       </div>
     </div>
