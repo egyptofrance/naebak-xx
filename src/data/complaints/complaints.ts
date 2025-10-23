@@ -176,3 +176,151 @@ export async function getAllComplaints() {
   return { data: data || [], error: error?.message };
 }
 
+
+
+/**
+ * Assign a complaint to a deputy
+ */
+export async function assignComplaintToDeputy(
+  complaintId: string,
+  deputyId: string,
+  assignedBy: string
+) {
+  const supabaseAdminClient = await createSupabaseUserServerActionClient();
+
+  // Update complaint
+  const { error: updateError } = await supabaseAdminClient
+    .from("complaints")
+    .update({
+      assigned_deputy_id: deputyId,
+      assigned_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", complaintId);
+
+  if (updateError) {
+    return { success: false, error: updateError.message };
+  }
+
+  // Log action
+  const { error: actionError } = await supabaseAdminClient
+    .from("complaint_actions")
+    .insert({
+      complaint_id: complaintId,
+      action_type: "assignment",
+      performed_by: assignedBy,
+      new_value: deputyId,
+    });
+
+  if (actionError) {
+    console.error("Failed to log action:", actionError);
+  }
+
+  revalidatePath("/manager-complaints");
+  revalidatePath("/deputy-complaints");
+
+  return { success: true };
+}
+
+/**
+ * Update complaint status
+ */
+export async function updateComplaintStatus(
+  complaintId: string,
+  newStatus: string,
+  userId: string,
+  comment?: string
+) {
+  const supabaseAdminClient = await createSupabaseUserServerActionClient();
+
+  const updateData: any = {
+    status: newStatus,
+    updated_at: new Date().toISOString(),
+  };
+
+  // Set timestamp based on status
+  if (newStatus === "accepted") {
+    updateData.accepted_at = new Date().toISOString();
+  } else if (newStatus === "rejected") {
+    updateData.rejected_at = new Date().toISOString();
+  } else if (newStatus === "resolved") {
+    updateData.resolved_at = new Date().toISOString();
+  } else if (newStatus === "closed") {
+    updateData.closed_at = new Date().toISOString();
+  }
+
+  // Update complaint
+  const { error: updateError } = await supabaseAdminClient
+    .from("complaints")
+    .update(updateData)
+    .eq("id", complaintId);
+
+  if (updateError) {
+    return { success: false, error: updateError.message };
+  }
+
+  // Log action
+  const { error: actionError } = await supabaseAdminClient
+    .from("complaint_actions")
+    .insert({
+      complaint_id: complaintId,
+      action_type: "status_change",
+      performed_by: userId,
+      new_value: newStatus,
+      comment: comment || null,
+    });
+
+  if (actionError) {
+    console.error("Failed to log action:", actionError);
+  }
+
+  revalidatePath("/manager-complaints");
+  revalidatePath("/deputy-complaints");
+  revalidatePath("/complaints");
+
+  return { success: true };
+}
+
+/**
+ * Update complaint priority
+ */
+export async function updateComplaintPriority(
+  complaintId: string,
+  newPriority: string,
+  userId: string
+) {
+  const supabaseAdminClient = await createSupabaseUserServerActionClient();
+
+  // Update complaint
+  const { error: updateError } = await supabaseAdminClient
+    .from("complaints")
+    .update({
+      priority: newPriority,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", complaintId);
+
+  if (updateError) {
+    return { success: false, error: updateError.message };
+  }
+
+  // Log action
+  const { error: actionError } = await supabaseAdminClient
+    .from("complaint_actions")
+    .insert({
+      complaint_id: complaintId,
+      action_type: "priority_change",
+      performed_by: userId,
+      new_value: newPriority,
+    });
+
+  if (actionError) {
+    console.error("Failed to log action:", actionError);
+  }
+
+  revalidatePath("/manager-complaints");
+  revalidatePath("/deputy-complaints");
+
+  return { success: true };
+}
+
