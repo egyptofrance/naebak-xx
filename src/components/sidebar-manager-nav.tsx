@@ -9,18 +9,13 @@ import {
 import { getCachedManagerProfile } from "@/rsc-data/user/manager";
 import { SlimWorkspace } from "@/types";
 import { getWorkspaceSubPath } from "@/utils/workspaces";
-import { BarChart3, Users, UserCheck, MessageSquare, Archive } from "lucide-react";
+import { BarChart3, Users, UserCheck, MessageSquare } from "lucide-react";
 
 const managerLinks = [
   {
     label: "إدارة الشكاوى",
     href: "/manager-complaints",
     icon: <MessageSquare className="h-5 w-5" />,
-  },
-  {
-    label: "أرشيف الشكاوى",
-    href: "/manager-complaints/archived",
-    icon: <Archive className="h-5 w-5" />,
   },
   {
     label: "إدارة المواطنين",
