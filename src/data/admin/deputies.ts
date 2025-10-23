@@ -37,6 +37,10 @@ const updateDeputySchema = z.object({
   socialMediaInstagram: z.string().url().optional().or(z.literal("")),
   socialMediaYoutube: z.string().url().optional().or(z.literal("")),
   councilId: z.string().uuid().optional().nullable(),
+  // New required fields
+  councilType: z.enum(["parliament", "senate", "local"]).optional(),
+  gender: z.enum(["male", "female"]).optional(),
+  governorate: z.string().optional(),
 });
 
 /**
@@ -263,6 +267,10 @@ export const updateDeputyAction = actionClient
     if (updateData.socialMediaInstagram !== undefined) dbUpdateData.social_media_instagram = updateData.socialMediaInstagram;
     if (updateData.socialMediaYoutube !== undefined) dbUpdateData.social_media_youtube = updateData.socialMediaYoutube;
     if (updateData.councilId !== undefined) dbUpdateData.council_id = updateData.councilId;
+    // New fields
+    if (updateData.councilType !== undefined) dbUpdateData.council_type = updateData.councilType;
+    if (updateData.gender !== undefined) dbUpdateData.gender = updateData.gender;
+    if (updateData.governorate !== undefined) dbUpdateData.governorate = updateData.governorate;
 
     const { data: deputy, error } = await supabase
       .from("deputy_profiles")
