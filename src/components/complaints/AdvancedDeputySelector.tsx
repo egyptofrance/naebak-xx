@@ -150,11 +150,11 @@ export default function AdvancedDeputySelector({
   const getCouncilTypeLabel = (type: string) => {
     switch (type) {
       case "parliament":
-        return "برلمان";
+        return "مجلس النواب";
       case "senate":
-        return "مجلس شيوخ";
-      case "local_council":
-        return "مجلس محلي";
+        return "مجلس الشيوخ";
+      case "local":
+        return "المجلس المحلي";
       default:
         return type;
     }
@@ -214,9 +214,9 @@ export default function AdvancedDeputySelector({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">الكل</SelectItem>
-                  <SelectItem value="parliament">برلمان</SelectItem>
-                  <SelectItem value="senate">مجلس شيوخ</SelectItem>
-                  <SelectItem value="local_council">مجلس محلي</SelectItem>
+                  <SelectItem value="parliament">مجلس النواب</SelectItem>
+                  <SelectItem value="senate">مجلس الشيوخ</SelectItem>
+                  <SelectItem value="local">المجلس المحلي</SelectItem>
                 </SelectContent>
               </Select>
             </div>
