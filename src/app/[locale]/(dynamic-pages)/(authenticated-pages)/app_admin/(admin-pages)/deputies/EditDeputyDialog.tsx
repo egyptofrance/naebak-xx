@@ -53,6 +53,12 @@ type Council = {
   code: string | null;
 };
 
+type Party = {
+  id: string;
+  name_ar: string;
+  name_en: string | null;
+};
+
 type EditDeputyDialogProps = {
   deputyId: string;
   currentData: {
@@ -66,14 +72,18 @@ type EditDeputyDialogProps = {
     councilType?: string | null;
     gender?: string | null;
     governorate?: string | null;
+    partyId?: string | null;
+    userId?: string;
   };
   councils: Council[];
+  parties: Party[];
 };
 
 export function EditDeputyDialog({
   deputyId,
   currentData,
   councils = [],
+  parties = [],
 }: EditDeputyDialogProps) {
   const [open, setOpen] = useState(false);
   const [deputyStatus, setDeputyStatus] = useState(currentData.deputyStatus || "current");
@@ -96,6 +106,7 @@ export function EditDeputyDialog({
   const [councilType, setCouncilType] = useState(currentData.councilType || "parliament");
   const [gender, setGender] = useState(currentData.gender || "male");
   const [governorate, setGovernorate] = useState(currentData.governorate || "القاهرة");
+  const [partyId, setPartyId] = useState(currentData.partyId || "none");
   
   // New structured content states
   const [electoralProgramItems, setElectoralProgramItems] = useState<ContentItem[]>([]);
@@ -326,6 +337,9 @@ export function EditDeputyDialog({
       councilType: councilType as "parliament" | "senate" | "local",
       gender: gender as "male" | "female",
       governorate: governorate.trim(),
+      // User profile fields
+      userId: currentData.userId,
+      partyId: partyId === "none" ? null : partyId,
     });
   };
 
@@ -379,6 +393,24 @@ export function EditDeputyDialog({
                     {councils.map((council) => (
                       <SelectItem key={council.id} value={council.id}>
                         {council.name_ar}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Party */}
+              <div className="space-y-2">
+                <Label htmlFor="party_id">الحزب</Label>
+                <Select value={partyId} onValueChange={setPartyId}>
+                  <SelectTrigger id="party_id">
+                    <SelectValue placeholder="اختر الحزب" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">بدون حزب / مستقل</SelectItem>
+                    {parties.map((party) => (
+                      <SelectItem key={party.id} value={party.id}>
+                        {party.name_ar}
                       </SelectItem>
                     ))}
                   </SelectContent>

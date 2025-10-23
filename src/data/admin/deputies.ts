@@ -41,6 +41,9 @@ const updateDeputySchema = z.object({
   councilType: z.enum(["parliament", "senate", "local"]).optional(),
   gender: z.enum(["male", "female"]).optional(),
   governorate: z.string().optional(),
+  // User profile fields
+  userId: z.string().uuid("Invalid user ID").optional(),
+  partyId: z.string().uuid().optional().nullable(),
 });
 
 /**
@@ -281,6 +284,19 @@ export const updateDeputyAction = actionClient
 
     if (error) {
       throw new Error(`Failed to update deputy profile: ${error.message}`);
+    }
+
+    // Update user_profiles.party_id if provided
+    if (updateData.userId && updateData.partyId !== undefined) {
+      const { error: userError } = await supabase
+        .from("user_profiles")
+        .update({ party_id: updateData.partyId === "none" ? null : updateData.partyId })
+        .eq("id", updateData.userId);
+
+      if (userError) {
+        console.error("Failed to update user party:", userError);
+        // Don't throw error, just log it
+      }
     }
 
     return { deputy, message: "تم تحديث بيانات النائب بنجاح" };

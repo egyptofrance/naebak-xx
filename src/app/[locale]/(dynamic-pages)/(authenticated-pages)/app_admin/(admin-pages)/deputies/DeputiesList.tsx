@@ -540,8 +540,11 @@ export default function DeputiesList() {
                               councilId: deputy.council_id,
                               electoralSymbol: deputy.electoral_symbol,
                               electoralNumber: deputy.electoral_number,
+                              partyId: userProfile?.party_id,
+                              userId: deputy.user_id,
                             }}
                             councils={councils}
+                            parties={parties}
                           />
                         </TableCell>
                         <TableCell>
