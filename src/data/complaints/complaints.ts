@@ -120,3 +120,26 @@ export async function getMyComplaints() {
   return { data: data || [], error: error?.message };
 }
 
+
+
+/**
+ * Get complaints assigned to deputy
+ */
+export async function getDeputyComplaints() {
+  const supabaseClient = await supabaseClientBasedOnUserRole();
+  const { data: userData } = await supabaseClient.auth.getUser();
+  const userId = userData.user?.id;
+
+  if (!userId) {
+    return { data: [], error: "User not authenticated" };
+  }
+
+  const { data, error } = await supabaseClient
+    .from("complaints")
+    .select("*")
+    .eq("assigned_deputy_id", userId)
+    .order("created_at", { ascending: false });
+
+  return { data: data || [], error: error?.message };
+}
+
