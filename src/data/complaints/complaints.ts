@@ -186,7 +186,7 @@ export async function assignComplaintToDeputy(
   deputyId: string,
   assignedBy: string
 ) {
-  const supabaseAdminClient = await createSupabaseUserServerActionClient();
+  // Use admin client for privileged operations
 
   // Update complaint
   const { error: updateError } = await supabaseAdminClient
@@ -231,7 +231,7 @@ export async function updateComplaintStatus(
   userId: string,
   comment?: string
 ) {
-  const supabaseAdminClient = await createSupabaseUserServerActionClient();
+  // Use admin client for privileged operations
 
   const updateData: any = {
     status: newStatus,
@@ -289,7 +289,7 @@ export async function updateComplaintPriority(
   newPriority: string,
   userId: string
 ) {
-  const supabaseAdminClient = await createSupabaseUserServerActionClient();
+  // Use admin client for privileged operations
 
   // Update complaint
   const { error: updateError } = await supabaseAdminClient
