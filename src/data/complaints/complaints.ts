@@ -136,10 +136,22 @@ export async function getDeputyComplaints() {
     return { data: [], error: "User not authenticated" };
   }
 
+  // First, get the deputy_profile_id for this user
+  const { data: deputyProfile } = await supabaseClient
+    .from("deputy_profiles")
+    .select("id")
+    .eq("user_id", userId)
+    .single();
+
+  if (!deputyProfile) {
+    return { data: [], error: "Deputy profile not found" };
+  }
+
+  // Then get complaints assigned to this deputy_profile_id
   const { data, error } = await supabaseClient
     .from("complaints")
     .select("*")
-    .eq("assigned_deputy_id", userId)
+    .eq("assigned_deputy_id", deputyProfile.id)
     .order("created_at", { ascending: false });
 
   return { data: data || [], error: error?.message };
