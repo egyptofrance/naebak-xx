@@ -143,3 +143,25 @@ export async function getDeputyComplaints() {
   return { data: data || [], error: error?.message };
 }
 
+
+
+/**
+ * Get all complaints for managers and admins
+ */
+export async function getAllComplaints() {
+  const supabaseClient = await supabaseClientBasedOnUserRole();
+  const userType = await serverGetUserType();
+
+  // Only managers and admins can access all complaints
+  if (userType !== userRoles.MANAGER && userType !== userRoles.ADMIN) {
+    return { data: [], error: "Unauthorized" };
+  }
+
+  const { data, error } = await supabaseClient
+    .from("complaints")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  return { data: data || [], error: error?.message };
+}
+
