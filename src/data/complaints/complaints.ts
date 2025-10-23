@@ -709,3 +709,82 @@ export async function getPublicComplaints() {
   return { data: data || [], error: error?.message };
 }
 
+
+
+/**
+ * Close complaint and award points to deputy (Admin only)
+ * This should only be called for complaints in "resolved" status
+ */
+export const closeComplaint = adminActionClient
+  .schema(z.object({
+    complaintId: z.string().uuid(),
+  }))
+  .action(async ({ parsedInput: { complaintId } }) => {
+    // Get complaint details to find assigned deputy
+    const { data: complaint, error: fetchError } = await supabaseAdminClient
+      .from("complaints")
+      .select("assigned_deputy_id, status")
+      .eq("id", complaintId)
+      .single();
+
+    if (fetchError || !complaint) {
+      return { success: false, error: "Complaint not found" };
+    }
+
+    // Check if complaint is in resolved status
+    if (complaint.status !== "resolved") {
+      return { success: false, error: "Complaint must be in resolved status to close" };
+    }
+
+    // Check if deputy is assigned
+    if (!complaint.assigned_deputy_id) {
+      return { success: false, error: "No deputy assigned to this complaint" };
+    }
+
+    // Update complaint status to closed
+    const { error: updateError } = await supabaseAdminClient
+      .from("complaints")
+      .update({ 
+        status: "closed",
+        resolved_at: new Date().toISOString()
+      })
+      .eq("id", complaintId);
+
+    if (updateError) {
+      return { success: false, error: updateError.message };
+    }
+
+    // Get current points
+    const { data: deputyData, error: deputyError } = await supabaseAdminClient
+      .from("deputy_profiles")
+      .select("points")
+      .eq("id", complaint.assigned_deputy_id)
+      .single();
+
+    if (deputyError) {
+      return { 
+        success: true, 
+        warning: "Complaint closed but failed to fetch deputy points: " + deputyError.message 
+      };
+    }
+
+    // Award 10 points to the deputy
+    const currentPoints = deputyData?.points || 0;
+    const { error: pointsError } = await supabaseAdminClient
+      .from("deputy_profiles")
+      .update({ points: currentPoints + 10 })
+      .eq("id", complaint.assigned_deputy_id);
+
+    if (pointsError) {
+      return { 
+        success: true, 
+        warning: "Complaint closed but failed to award points: " + pointsError.message 
+      };
+    }
+
+    revalidatePath("/manager-complaints");
+    revalidatePath(`/manager-complaints/${complaintId}`);
+    
+    return { success: true, message: "Complaint closed and 10 points awarded to deputy" };
+  });
+
