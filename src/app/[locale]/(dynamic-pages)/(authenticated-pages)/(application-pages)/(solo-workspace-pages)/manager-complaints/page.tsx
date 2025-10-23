@@ -1,4 +1,5 @@
 import { getAllComplaints } from "@/data/complaints/complaints";
+import { RefreshComplaintsButton } from "@/components/complaints/RefreshComplaintsButton";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -14,7 +15,10 @@ export default async function ManagerComplaintsPage() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">إدارة الشكاوى</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">إدارة الشكاوى</h1>
+        <RefreshComplaintsButton />
+      </div>
 
       {/* Statistics */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
