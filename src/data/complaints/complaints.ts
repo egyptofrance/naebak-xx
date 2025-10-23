@@ -179,20 +179,26 @@ export async function getAllComplaints() {
 
 
 /**
- * Assign a complaint to a deputy
+ * Assign a complaint to one or more deputies
  */
 export async function assignComplaintToDeputy(
   complaintId: string,
-  deputyId: string,
+  deputyIds: string | string[], // Support single or multiple deputies
   assignedBy: string
 ) {
   // Use admin client for privileged operations
+  
+  // Convert to array if single ID
+  const deputyIdsArray = Array.isArray(deputyIds) ? deputyIds : [deputyIds];
+  
+  // For backward compatibility, set the first deputy as the primary assigned deputy
+  const primaryDeputyId = deputyIdsArray[0];
 
-  // Update complaint
+  // Update complaint with primary deputy
   const { error: updateError } = await supabaseAdminClient
     .from("complaints")
     .update({
-      assigned_deputy_id: deputyId,
+      assigned_deputy_id: primaryDeputyId,
       assigned_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     })
@@ -202,15 +208,18 @@ export async function assignComplaintToDeputy(
     return { success: false, error: updateError.message };
   }
 
-  // Log action
+  // Log action for each deputy
+  const actionInserts = deputyIdsArray.map((deputyId) => ({
+    complaint_id: complaintId,
+    action_type: "assignment" as const,
+    performed_by: assignedBy,
+    new_value: deputyId,
+    comment: deputyIdsArray.length > 1 ? `تم إسناد الشكوى لـ ${deputyIdsArray.length} نواب` : null,
+  }));
+
   const { error: actionError } = await supabaseAdminClient
     .from("complaint_actions")
-    .insert({
-      complaint_id: complaintId,
-      action_type: "assignment",
-      performed_by: assignedBy,
-      new_value: deputyId,
-    });
+    .insert(actionInserts);
 
   if (actionError) {
     console.error("Failed to log action:", actionError);
@@ -219,7 +228,7 @@ export async function assignComplaintToDeputy(
   revalidatePath("/manager-complaints");
   revalidatePath("/deputy-complaints");
 
-  return { success: true };
+  return { success: true, assignedCount: deputyIdsArray.length };
 }
 
 /**
@@ -420,34 +429,73 @@ export async function getComplaintDetails(complaintId: string) {
 }
 
 /**
- * Get list of available deputies for assignment
+ * Get list of available deputies for assignment with filters
  */
-export async function getAvailableDeputies() {
+export async function getAvailableDeputies(filters?: {
+  searchName?: string;
+  councilType?: string;
+  deputyStatus?: string;
+  gender?: string;
+  governorate?: string;
+}) {
   const supabaseClient = await supabaseClientBasedOnUserRole();
 
-  const { data, error } = await supabaseClient
+  let query = supabaseClient
     .from("deputy_profiles")
     .select(`
       id,
       governorate,
       party,
+      council_type,
+      deputy_status,
+      gender,
+      points,
       user_profiles!deputy_profiles_user_id_fkey(
         full_name
       )
-    `)
-    .order("user_profiles(full_name)", { ascending: true });
+    `);
+
+  // Apply filters
+  if (filters?.councilType) {
+    query = query.eq("council_type", filters.councilType);
+  }
+  if (filters?.deputyStatus) {
+    query = query.eq("deputy_status", filters.deputyStatus);
+  }
+  if (filters?.gender) {
+    query = query.eq("gender", filters.gender);
+  }
+  if (filters?.governorate) {
+    query = query.eq("governorate", filters.governorate);
+  }
+
+  query = query.order("user_profiles(full_name)", { ascending: true });
+
+  const { data, error } = await query;
 
   if (error) {
     return { data: [], error: error.message };
   }
 
   // Transform data to flatten user_profiles
-  const transformedData = data?.map((deputy: any) => ({
+  let transformedData = data?.map((deputy: any) => ({
     id: deputy.id,
     full_name: deputy.user_profiles?.full_name || "غير محدد",
-    governorate: deputy.governorate,
+    governorate: deputy.governorate || "غير محدد",
     party: deputy.party,
+    council_type: deputy.council_type || "parliament",
+    deputy_status: deputy.deputy_status || "current",
+    gender: deputy.gender,
+    points: deputy.points || 0,
   })) || [];
+
+  // Apply name search filter (client-side for Arabic support)
+  if (filters?.searchName) {
+    const searchLower = filters.searchName.toLowerCase();
+    transformedData = transformedData.filter((deputy: any) =>
+      deputy.full_name.toLowerCase().includes(searchLower)
+    );
+  }
 
   return { data: transformedData, error: null };
 }

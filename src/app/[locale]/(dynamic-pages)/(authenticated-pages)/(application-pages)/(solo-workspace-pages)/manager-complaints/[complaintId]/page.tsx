@@ -1,5 +1,5 @@
 import { getComplaintDetails, getAvailableDeputies } from "@/data/complaints/complaints";
-import { AssignDeputyForm } from "@/components/complaints/AssignDeputyForm";
+import { AssignDeputyFormAdvanced } from "@/components/complaints/AssignDeputyFormAdvanced";
 import { UpdateStatusForm } from "@/components/complaints/UpdateStatusForm";
 import { UpdatePriorityForm } from "@/components/complaints/UpdatePriorityForm";
 import { AddCommentForm } from "@/components/complaints/AddCommentForm";
@@ -123,7 +123,7 @@ export default async function ManagerComplaintDetailPage({ params }: Props) {
         {/* Sidebar - Management Actions */}
         <div className="space-y-6">
           {/* Assign Deputy */}
-          <AssignDeputyForm
+          <AssignDeputyFormAdvanced
             complaintId={complaint.id}
             currentDeputyId={complaint.assigned_deputy_id}
             deputies={deputies || []}
