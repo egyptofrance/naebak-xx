@@ -1,21 +1,24 @@
 "use client";
 
-import { addComplaintCommentAction } from "@/data/complaints/complaints";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { addComplaintComment } from "@/data/complaints/complaints";
 import { useRouter } from "next/navigation";
+import { getCurrentUser } from "@/utils/supabase/server-actions";
 
-interface AddCommentFormProps {
+interface Props {
   complaintId: string;
 }
 
-export function AddCommentForm({ complaintId }: AddCommentFormProps) {
+export function AddCommentForm({ complaintId }: Props) {
   const router = useRouter();
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function handleSubmit(e: React.FormEvent) {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!comment.trim()) {
       setError("يرجى كتابة تعليق");
       return;
@@ -24,56 +27,51 @@ export function AddCommentForm({ complaintId }: AddCommentFormProps) {
     setLoading(true);
     setError("");
 
-    const result = await addComplaintCommentAction({
-      complaintId,
-      comment: comment.trim(),
-    });
+    try {
+      const user = await getCurrentUser();
+      if (!user) {
+        setError("يجب تسجيل الدخول");
+        return;
+      }
 
-    if (result?.serverError || result?.validationErrors) {
-      setError(result.serverError || "حدث خطأ أثناء إضافة التعليق");
-      setLoading(false);
-    } else {
-      setComment("");
-      setLoading(false);
-      router.refresh();
+      const result = await addComplaintComment(complaintId, user.id, comment.trim());
+
+      if (result.success) {
+        setComment("");
+        router.refresh();
+      } else {
+        setError(result.error || "فشل إضافة التعليق");
+      }
+    } catch (err) {
+      setError("حدث خطأ غير متوقع");
     }
-  }
+
+    setLoading(false);
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="bg-card border rounded-lg p-4">
+      <h3 className="font-semibold mb-4">إضافة تعليق</h3>
+
       {error && (
-        <div className="bg-destructive/10 text-destructive p-3 rounded-md text-sm">
+        <div className="bg-destructive/10 text-destructive text-sm p-3 rounded-md mb-4">
           {error}
         </div>
       )}
 
-      <div>
-        <label htmlFor="comment" className="block text-sm font-medium mb-2">
-          الملاحظة
-        </label>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <textarea
-          id="comment"
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          rows={4}
-          className="w-full px-3 py-2 border rounded-md"
-          placeholder="اكتب ملاحظتك هنا..."
+          placeholder="اكتب تعليقك هنا..."
+          className="w-full px-3 py-2 border rounded-md min-h-[100px]"
           disabled={loading}
-          maxLength={2000}
         />
-        <p className="text-xs text-muted-foreground mt-1">
-          {comment.length} / 2000 حرف
-        </p>
-      </div>
 
-      <button
-        type="submit"
-        disabled={loading || !comment.trim()}
-        className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50"
-      >
-        {loading ? "جاري الإضافة..." : "إضافة ملاحظة"}
-      </button>
-    </form>
+        <Button type="submit" disabled={loading || !comment.trim()} className="w-full">
+          {loading ? "جاري الإضافة..." : "إضافة تعليق"}
+        </Button>
+      </form>
+    </div>
   );
 }
-

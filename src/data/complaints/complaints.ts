@@ -427,10 +427,29 @@ export async function getAvailableDeputies() {
 
   const { data, error } = await supabaseClient
     .from("deputy_profiles")
-    .select("id, full_name, governorate, party")
-    .order("full_name", { ascending: true });
+    .select(`
+      id,
+      governorate,
+      party,
+      user_profiles!deputy_profiles_user_id_fkey(
+        full_name
+      )
+    `)
+    .order("user_profiles(full_name)", { ascending: true });
 
-  return { data: data || [], error: error?.message };
+  if (error) {
+    return { data: [], error: error.message };
+  }
+
+  // Transform data to flatten user_profiles
+  const transformedData = data?.map((deputy: any) => ({
+    id: deputy.id,
+    full_name: deputy.user_profiles?.full_name || "غير محدد",
+    governorate: deputy.governorate,
+    party: deputy.party,
+  })) || [];
+
+  return { data: transformedData, error: null };
 }
 
 

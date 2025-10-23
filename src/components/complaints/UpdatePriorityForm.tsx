@@ -1,85 +1,81 @@
 "use client";
 
-import { updateComplaintPriorityAction } from "@/data/complaints/complaints";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { updateComplaintPriority } from "@/data/complaints/complaints";
 import { useRouter } from "next/navigation";
+import { getCurrentUser } from "@/utils/supabase/server-actions";
 
-interface UpdatePriorityFormProps {
+interface Props {
   complaintId: string;
   currentPriority: string;
 }
 
-export function UpdatePriorityForm({ complaintId, currentPriority }: UpdatePriorityFormProps) {
+export function UpdatePriorityForm({ complaintId, currentPriority }: Props) {
   const router = useRouter();
-  const [newPriority, setNewPriority] = useState(currentPriority);
+  const [priority, setPriority] = useState(currentPriority);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const priorityOptions = [
-    { value: "low", label: "منخفضة", color: "text-green-600" },
-    { value: "medium", label: "متوسطة", color: "text-yellow-600" },
-    { value: "high", label: "عالية", color: "text-orange-600" },
-    { value: "urgent", label: "عاجلة", color: "text-red-600" },
-  ];
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (newPriority === currentPriority) {
-      setError("الأولوية الجديدة مطابقة للأولوية الحالية");
-      return;
-    }
-
+  const handleUpdate = async () => {
     setLoading(true);
     setError("");
 
-    const result = await updateComplaintPriorityAction({
-      complaintId,
-      newPriority: newPriority as any,
-    });
+    try {
+      const user = await getCurrentUser();
+      if (!user) {
+        setError("يجب تسجيل الدخول");
+        return;
+      }
 
-    if (result?.serverError || result?.validationErrors) {
-      setError(result.serverError || "حدث خطأ أثناء التحديث");
-      setLoading(false);
-    } else {
-      router.refresh();
+      const result = await updateComplaintPriority(complaintId, priority, user.id);
+
+      if (result.success) {
+        router.refresh();
+      } else {
+        setError(result.error || "فشل تحديث الأولوية");
+      }
+    } catch (err) {
+      setError("حدث خطأ غير متوقع");
     }
-  }
+
+    setLoading(false);
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="bg-card border rounded-lg p-4">
+      <h3 className="font-semibold mb-4">تحديث الأولوية</h3>
+
       {error && (
-        <div className="bg-destructive/10 text-destructive p-3 rounded-md text-sm">
+        <div className="bg-destructive/10 text-destructive text-sm p-3 rounded-md mb-4">
           {error}
         </div>
       )}
 
-      <div>
-        <label htmlFor="priority" className="block text-sm font-medium mb-2">
-          الأولوية الجديدة
-        </label>
-        <select
-          id="priority"
-          value={newPriority}
-          onChange={(e) => setNewPriority(e.target.value)}
-          className="w-full px-3 py-2 border rounded-md"
-          disabled={loading}
-        >
-          {priorityOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium mb-2">الأولوية</label>
+          <select
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+            className="w-full px-3 py-2 border rounded-md"
+            disabled={loading}
+          >
+            <option value="low">منخفضة</option>
+            <option value="medium">متوسطة</option>
+            <option value="high">عالية</option>
+            <option value="urgent">عاجلة</option>
+          </select>
+        </div>
 
-      <button
-        type="submit"
-        disabled={loading || newPriority === currentPriority}
-        className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50"
-      >
-        {loading ? "جاري التحديث..." : "تحديث الأولوية"}
-      </button>
-    </form>
+        <Button
+          onClick={handleUpdate}
+          disabled={loading || priority === currentPriority}
+          className="w-full"
+        >
+          {loading ? "جاري التحديث..." : "تحديث الأولوية"}
+        </Button>
+      </div>
+    </div>
   );
 }
-

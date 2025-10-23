@@ -1,110 +1,102 @@
 "use client";
 
-import { updateComplaintStatusAction } from "@/data/complaints/complaints";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { updateComplaintStatus } from "@/data/complaints/complaints";
 import { useRouter } from "next/navigation";
+import { getCurrentUser } from "@/utils/supabase/server-actions";
 
-interface UpdateStatusFormProps {
+interface Props {
   complaintId: string;
   currentStatus: string;
 }
 
-export function UpdateStatusForm({ complaintId, currentStatus }: UpdateStatusFormProps) {
+export function UpdateStatusForm({ complaintId, currentStatus }: Props) {
   const router = useRouter();
-  const [newStatus, setNewStatus] = useState(currentStatus);
+  const [status, setStatus] = useState(currentStatus);
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const statusOptions = [
-    { value: "new", label: "جديدة" },
-    { value: "under_review", label: "قيد المراجعة" },
-    { value: "assigned_to_deputy", label: "مسندة لنائب" },
-    { value: "accepted", label: "مقبولة" },
-    { value: "rejected", label: "مرفوضة" },
-    { value: "in_progress", label: "قيد التنفيذ" },
-    { value: "on_hold", label: "معلقة" },
-    { value: "resolved", label: "تم الحل" },
-    { value: "closed", label: "مغلقة" },
-  ];
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (newStatus === currentStatus) {
-      setError("الحالة الجديدة مطابقة للحالة الحالية");
-      return;
-    }
-
+  const handleUpdate = async () => {
     setLoading(true);
     setError("");
 
-    const result = await updateComplaintStatusAction({
-      complaintId,
-      newStatus: newStatus as any,
-      comment: comment || undefined,
-    });
+    try {
+      const user = await getCurrentUser();
+      if (!user) {
+        setError("يجب تسجيل الدخول");
+        return;
+      }
 
-    if (result?.serverError || result?.validationErrors) {
-      setError(result.serverError || "حدث خطأ أثناء التحديث");
-      setLoading(false);
-    } else {
-      setComment("");
-      router.refresh();
+      const result = await updateComplaintStatus(
+        complaintId,
+        status,
+        user.id,
+        comment.trim() || undefined
+      );
+
+      if (result.success) {
+        router.refresh();
+      } else {
+        setError(result.error || "فشل تحديث الحالة");
+      }
+    } catch (err) {
+      setError("حدث خطأ غير متوقع");
     }
-  }
+
+    setLoading(false);
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="bg-card border rounded-lg p-4">
+      <h3 className="font-semibold mb-4">تحديث حالة الشكوى</h3>
+
       {error && (
-        <div className="bg-destructive/10 text-destructive p-3 rounded-md text-sm">
+        <div className="bg-destructive/10 text-destructive text-sm p-3 rounded-md mb-4">
           {error}
         </div>
       )}
 
-      <div>
-        <label htmlFor="status" className="block text-sm font-medium mb-2">
-          الحالة الجديدة
-        </label>
-        <select
-          id="status"
-          value={newStatus}
-          onChange={(e) => setNewStatus(e.target.value)}
-          className="w-full px-3 py-2 border rounded-md"
-          disabled={loading}
-        >
-          {statusOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {(newStatus === "rejected" || newStatus === "on_hold") && (
+      <div className="space-y-4">
         <div>
-          <label htmlFor="comment" className="block text-sm font-medium mb-2">
-            {newStatus === "rejected" ? "سبب الرفض" : "سبب التعليق"}
-          </label>
+          <label className="block text-sm font-medium mb-2">الحالة</label>
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="w-full px-3 py-2 border rounded-md"
+            disabled={loading}
+          >
+            <option value="new">جديدة</option>
+            <option value="accepted">مقبولة</option>
+            <option value="rejected">مرفوضة</option>
+            <option value="in_progress">قيد المعالجة</option>
+            <option value="on_hold">معلقة</option>
+            <option value="resolved">محلولة</option>
+            <option value="closed">مغلقة</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2">تعليق (اختياري)</label>
           <textarea
-            id="comment"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            rows={3}
+            placeholder="أضف ملاحظة..."
             className="w-full px-3 py-2 border rounded-md"
-            placeholder="اكتب السبب..."
+            rows={3}
             disabled={loading}
           />
         </div>
-      )}
 
-      <button
-        type="submit"
-        disabled={loading || newStatus === currentStatus}
-        className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50"
-      >
-        {loading ? "جاري التحديث..." : "تحديث الحالة"}
-      </button>
-    </form>
+        <Button
+          onClick={handleUpdate}
+          disabled={loading || status === currentStatus}
+          className="w-full"
+        >
+          {loading ? "جاري التحديث..." : "تحديث الحالة"}
+        </Button>
+      </div>
+    </div>
   );
 }
-
