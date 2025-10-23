@@ -4,13 +4,13 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { addComplaintComment } from "@/data/complaints/complaints";
 import { useRouter } from "next/navigation";
-import { getCurrentUser } from "@/utils/supabase/server-actions";
 
 interface Props {
   complaintId: string;
+  userId: string;
 }
 
-export function AddCommentForm({ complaintId }: Props) {
+export function AddCommentForm({ complaintId, userId }: Props) {
   const router = useRouter();
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
@@ -27,23 +27,13 @@ export function AddCommentForm({ complaintId }: Props) {
     setLoading(true);
     setError("");
 
-    try {
-      const user = await getCurrentUser();
-      if (!user) {
-        setError("يجب تسجيل الدخول");
-        return;
-      }
+    const result = await addComplaintComment(complaintId, userId, comment.trim());
 
-      const result = await addComplaintComment(complaintId, user.id, comment.trim());
-
-      if (result.success) {
-        setComment("");
-        router.refresh();
-      } else {
-        setError(result.error || "فشل إضافة التعليق");
-      }
-    } catch (err) {
-      setError("حدث خطأ غير متوقع");
+    if (result.success) {
+      setComment("");
+      router.refresh();
+    } else {
+      setError(result.error || "فشل إضافة التعليق");
     }
 
     setLoading(false);

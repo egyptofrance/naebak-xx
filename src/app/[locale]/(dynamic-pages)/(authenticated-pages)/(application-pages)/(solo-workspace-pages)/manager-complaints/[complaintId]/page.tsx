@@ -5,6 +5,7 @@ import { UpdatePriorityForm } from "@/components/complaints/UpdatePriorityForm";
 import { AddCommentForm } from "@/components/complaints/AddCommentForm";
 import { ComplaintActionsHistory } from "@/components/complaints/ComplaintActionsHistory";
 import Link from "next/link";
+import { getCurrentUser } from "@/utils/supabase/server";
 
 interface Props {
   params: Promise<{ complaintId: string }>;
@@ -12,6 +13,17 @@ interface Props {
 
 export default async function ManagerComplaintDetailPage({ params }: Props) {
   const { complaintId } = await params;
+  
+  const user = await getCurrentUser();
+  if (!user) {
+    return (
+      <div className="container mx-auto p-6">
+        <div className="bg-destructive/10 text-destructive p-4 rounded-md">
+          يجب تسجيل الدخول
+        </div>
+      </div>
+    );
+  }
   
   const { data, error } = await getComplaintDetails(complaintId);
   const { data: deputies } = await getAvailableDeputies();
@@ -105,7 +117,7 @@ export default async function ManagerComplaintDetailPage({ params }: Props) {
           <ComplaintActionsHistory actions={actions} />
 
           {/* Add Comment */}
-          <AddCommentForm complaintId={complaint.id} />
+          <AddCommentForm complaintId={complaint.id} userId={user.id} />
         </div>
 
         {/* Sidebar - Management Actions */}
@@ -121,12 +133,14 @@ export default async function ManagerComplaintDetailPage({ params }: Props) {
           <UpdateStatusForm
             complaintId={complaint.id}
             currentStatus={complaint.status}
+            userId={user.id}
           />
 
           {/* Update Priority */}
           <UpdatePriorityForm
             complaintId={complaint.id}
             currentPriority={complaint.priority}
+            userId={user.id}
           />
         </div>
       </div>

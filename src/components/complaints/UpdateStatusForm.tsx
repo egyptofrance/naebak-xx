@@ -4,14 +4,14 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { updateComplaintStatus } from "@/data/complaints/complaints";
 import { useRouter } from "next/navigation";
-import { getCurrentUser } from "@/utils/supabase/server-actions";
 
 interface Props {
   complaintId: string;
   currentStatus: string;
+  userId: string;
 }
 
-export function UpdateStatusForm({ complaintId, currentStatus }: Props) {
+export function UpdateStatusForm({ complaintId, currentStatus, userId }: Props) {
   const router = useRouter();
   const [status, setStatus] = useState(currentStatus);
   const [comment, setComment] = useState("");
@@ -22,27 +22,17 @@ export function UpdateStatusForm({ complaintId, currentStatus }: Props) {
     setLoading(true);
     setError("");
 
-    try {
-      const user = await getCurrentUser();
-      if (!user) {
-        setError("يجب تسجيل الدخول");
-        return;
-      }
+    const result = await updateComplaintStatus(
+      complaintId,
+      status,
+      userId,
+      comment.trim() || undefined
+    );
 
-      const result = await updateComplaintStatus(
-        complaintId,
-        status,
-        user.id,
-        comment.trim() || undefined
-      );
-
-      if (result.success) {
-        router.refresh();
-      } else {
-        setError(result.error || "فشل تحديث الحالة");
-      }
-    } catch (err) {
-      setError("حدث خطأ غير متوقع");
+    if (result.success) {
+      router.refresh();
+    } else {
+      setError(result.error || "فشل تحديث الحالة");
     }
 
     setLoading(false);

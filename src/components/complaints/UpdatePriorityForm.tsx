@@ -4,14 +4,14 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { updateComplaintPriority } from "@/data/complaints/complaints";
 import { useRouter } from "next/navigation";
-import { getCurrentUser } from "@/utils/supabase/server-actions";
 
 interface Props {
   complaintId: string;
   currentPriority: string;
+  userId: string;
 }
 
-export function UpdatePriorityForm({ complaintId, currentPriority }: Props) {
+export function UpdatePriorityForm({ complaintId, currentPriority, userId }: Props) {
   const router = useRouter();
   const [priority, setPriority] = useState(currentPriority);
   const [loading, setLoading] = useState(false);
@@ -21,22 +21,12 @@ export function UpdatePriorityForm({ complaintId, currentPriority }: Props) {
     setLoading(true);
     setError("");
 
-    try {
-      const user = await getCurrentUser();
-      if (!user) {
-        setError("يجب تسجيل الدخول");
-        return;
-      }
+    const result = await updateComplaintPriority(complaintId, priority, userId);
 
-      const result = await updateComplaintPriority(complaintId, priority, user.id);
-
-      if (result.success) {
-        router.refresh();
-      } else {
-        setError(result.error || "فشل تحديث الأولوية");
-      }
-    } catch (err) {
-      setError("حدث خطأ غير متوقع");
+    if (result.success) {
+      router.refresh();
+    } else {
+      setError(result.error || "فشل تحديث الأولوية");
     }
 
     setLoading(false);
