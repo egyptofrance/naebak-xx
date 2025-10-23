@@ -52,12 +52,12 @@ export default async function ManagerComplaintDetailPage({ params }: Props) {
                 <span className="text-xs px-3 py-1 rounded-full bg-secondary">
                   {complaint.status}
                 </span>
-                <span className={\`text-xs px-3 py-1 rounded-full \${
+                <span className={`text-xs px-3 py-1 rounded-full ${
                   complaint.priority === 'urgent' ? 'bg-red-100 text-red-800' :
                   complaint.priority === 'high' ? 'bg-orange-100 text-orange-800' :
                   complaint.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
                   'bg-green-100 text-green-800'
-                }\`}>
+                }`}>
                   {complaint.priority}
                 </span>
               </div>
