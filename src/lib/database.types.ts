@@ -1785,6 +1785,7 @@ export type Database = {
           office_phone: string | null
           office_hours: string | null
           council_id: string | null
+          points: number
         }
         Insert: {
           id?: string
@@ -1810,6 +1811,7 @@ export type Database = {
           office_phone?: string | null
           office_hours?: string | null
           council_id?: string | null
+          points?: number
         }
         Update: {
           id?: string
@@ -1835,6 +1837,7 @@ export type Database = {
           office_phone?: string | null
           office_hours?: string | null
           council_id?: string | null
+          points?: number
         }
         Relationships: [
           {
