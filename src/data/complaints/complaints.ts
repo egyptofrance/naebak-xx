@@ -88,3 +88,35 @@ export const createComplaintAction = authActionClient
     };
   });
 
+
+
+/**
+ * Get complaints for the current user
+ */
+export async function getMyComplaints() {
+  const supabaseClient = await supabaseClientBasedOnUserRole();
+  const userType = await serverGetUserType();
+  const { data: userData } = await supabaseClient.auth.getUser();
+  const userId = userData.user?.id;
+
+  if (!userId) {
+    return { data: [], error: "User not authenticated" };
+  }
+
+  let query = supabaseClient
+    .from("complaints")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  // Filter based on user type
+  if (userType === userRoles.USER) {
+    // Citizens see only their own complaints
+    query = query.eq("citizen_id", userId);
+  }
+  // Managers and Admins see all complaints (no filter needed)
+
+  const { data, error } = await query;
+
+  return { data: data || [], error: error?.message };
+}
+
