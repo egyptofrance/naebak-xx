@@ -274,6 +274,23 @@ export async function updateComplaintStatus(
     console.error("Failed to log action:", actionError);
   }
 
+  // Grant points to deputy if complaint is resolved
+  if (newStatus === "resolved") {
+    // Get complaint to find assigned deputy
+    const { data: complaint } = await supabaseAdminClient
+      .from("complaints")
+      .select("assigned_deputy_id")
+      .eq("id", complaintId)
+      .single();
+
+    if (complaint?.assigned_deputy_id) {
+      const pointsResult = await grantPointsToDeputy(complaint.assigned_deputy_id, 10);
+      if (!pointsResult.success) {
+        console.error("Failed to grant points:", pointsResult.error);
+      }
+    }
+  }
+
   revalidatePath("/manager-complaints");
   revalidatePath("/deputy-complaints");
   revalidatePath("/complaints");
@@ -414,5 +431,36 @@ export async function getAvailableDeputies() {
     .order("full_name", { ascending: true });
 
   return { data: data || [], error: error?.message };
+}
+
+
+
+
+/**
+ * Grant points to deputy when resolving a complaint
+ */
+export async function grantPointsToDeputy(deputyId: string, points: number = 10) {
+  const { data: currentProfile, error: fetchError } = await supabaseAdminClient
+    .from("deputy_profiles")
+    .select("points")
+    .eq("id", deputyId)
+    .single();
+
+  if (fetchError) {
+    return { success: false, error: fetchError.message };
+  }
+
+  const newPoints = (currentProfile?.points || 0) + points;
+
+  const { error: updateError } = await supabaseAdminClient
+    .from("deputy_profiles")
+    .update({ points: newPoints })
+    .eq("id", deputyId);
+
+  if (updateError) {
+    return { success: false, error: updateError.message };
+  }
+
+  return { success: true, newPoints };
 }
 
