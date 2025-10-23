@@ -471,8 +471,11 @@ export default function DeputiesListForManager() {
                               councilId: deputy.council_id,
                               electoralSymbol: deputy.electoral_symbol,
                               electoralNumber: deputy.electoral_number,
+                              partyId: deputy.user_profiles?.party_id,
+                              userId: deputy.user_id,
                             }}
                             councils={councils}
+                            parties={parties}
                           />
                         </div>
                       </TableCell>
