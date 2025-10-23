@@ -455,17 +455,18 @@ export async function getAvailableDeputies(filters?: {
       )
     `);
 
-  // Apply filters
-  if (filters?.councilType) {
+  // Apply filters only if provided and not 'all'
+  // This ensures deputies with NULL values are still returned when no filter is applied
+  if (filters?.councilType && filters.councilType !== "all") {
     query = query.eq("council_type", filters.councilType);
   }
-  if (filters?.deputyStatus) {
+  if (filters?.deputyStatus && filters.deputyStatus !== "all") {
     query = query.eq("deputy_status", filters.deputyStatus);
   }
-  if (filters?.gender) {
+  if (filters?.gender && filters.gender !== "all") {
     query = query.eq("gender", filters.gender);
   }
-  if (filters?.governorate) {
+  if (filters?.governorate && filters.governorate !== "all") {
     query = query.eq("governorate", filters.governorate);
   }
 
