@@ -5,7 +5,7 @@ import { UpdatePriorityForm } from "@/components/complaints/UpdatePriorityForm";
 import { AddCommentForm } from "@/components/complaints/AddCommentForm";
 import { ComplaintActionsHistory } from "@/components/complaints/ComplaintActionsHistory";
 import Link from "next/link";
-import { getCurrentUser } from "@/utils/supabase/server";
+import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
 
 interface Props {
   params: Promise<{ complaintId: string }>;
@@ -14,7 +14,7 @@ interface Props {
 export default async function ManagerComplaintDetailPage({ params }: Props) {
   const { complaintId } = await params;
   
-  const user = await getCurrentUser();
+  const user = await serverGetLoggedInUser();
   if (!user) {
     return (
       <div className="container mx-auto p-6">
