@@ -2402,18 +2402,13 @@ export type Database = {
         | "corruption"
         | "other"
       complaint_action_type:
-        | "created"
-        | "updated"
-        | "assigned"
-        | "reassigned"
-        | "accepted"
-        | "rejected"
-        | "in_progress"
-        | "on_hold"
-        | "resolved"
-        | "closed"
-        | "archived"
-        | "commented"
+        | "status_change"
+        | "priority_change"
+        | "assignment"
+        | "comment"
+        | "rejection"
+        | "hold"
+        | "resolution"
 
     }
     CompositeTypes: {
