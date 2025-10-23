@@ -5,6 +5,8 @@ import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClien
 import { supabaseClientBasedOnUserRole } from "@/supabase-clients/user-role-client";
 import { serverGetUserType } from "@/utils/server/serverGetUserType";
 import { userRoles } from "@/utils/userTypes";
+import { isSupabaseUserAppAdmin } from "@/utils/isSupabaseUserAppAdmin";
+import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -149,20 +151,24 @@ export async function getDeputyComplaints() {
  * Get all complaints for managers and admins
  */
 export async function getAllComplaints() {
-  const supabaseClient = await supabaseClientBasedOnUserRole();
-  const userType = await serverGetUserType();
-
-  console.log("[getAllComplaints] userType:", userType);
-  console.log("[getAllComplaints] userRoles.MANAGER:", userRoles.MANAGER);
-  console.log("[getAllComplaints] userRoles.ADMIN:", userRoles.ADMIN);
-
-  // Only managers and admins can access all complaints
-  if (userType !== userRoles.MANAGER && userType !== userRoles.ADMIN) {
-    console.log("[getAllComplaints] Unauthorized - userType:", userType);
+  const supabase = await createSupabaseUserServerComponentClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
     return { data: [], error: "User not authenticated" };
   }
 
-  const { data, error } = await supabaseClient
+  // Check if user is admin or manager
+  const isAdmin = isSupabaseUserAppAdmin(user);
+  const userType = await serverGetUserType();
+  const isManager = userType === userRoles.MANAGER;
+
+  // Only managers and admins can access all complaints
+  if (!isAdmin && !isManager) {
+    return { data: [], error: "Unauthorized access" };
+  }
+
+  const { data, error } = await supabase
     .from("complaints")
     .select("*")
     .order("created_at", { ascending: false });
