@@ -450,7 +450,7 @@ export async function getAvailableDeputies(filters?: {
       deputy_status,
       gender,
       points,
-      user_profiles!deputy_profiles_user_id_fkey(
+      user_profiles(
         full_name
       )
     `);
