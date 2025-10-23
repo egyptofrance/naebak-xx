@@ -14,6 +14,7 @@ import {
   Flag,
   HelpCircle,
   Map,
+  MessageSquareWarning,
   PenTool,
   Tags,
   UserCheck,
@@ -42,6 +43,11 @@ const adminLinks = [
     label: "بيانات المديرين",
     href: `/app_admin/managers`,
     icon: <Users className="h-5 w-5" />,
+  },
+  {
+    label: "إدارة الشكاوى",
+    href: `/manager-complaints`,
+    icon: <MessageSquareWarning className="h-5 w-5" />,
   },
   {
     label: "إدارة الأحزاب",
