@@ -39,6 +39,7 @@ const createComplaintSchema = z.object({
   location_lng: z.number().optional(),
   citizen_phone: z.string().optional(),
   citizen_email: z.string().email().optional(),
+  is_public: z.boolean().optional(),
 });
 
 // ============================================
@@ -69,6 +70,7 @@ export const createComplaintAction = authActionClient
         location_lng: parsedInput.location_lng,
         citizen_phone: parsedInput.citizen_phone,
         citizen_email: parsedInput.citizen_email,
+        is_public: parsedInput.is_public || false,
       })
       .select("*")
       .single();
