@@ -18,14 +18,19 @@ import {
 } from "lucide-react";
 import { ProFeatureGateDialog } from "./ProFeatureGateDialog";
 import { Link } from "./intl-link";
+import { serverGetUserType } from "@/utils/server/serverGetUserType";
+import { userRoles } from "@/utils/userTypes";
 
-export function SidebarWorkspaceNav({
+export async function SidebarWorkspaceNav({
   workspace,
   withLinkLabelPrefix = false,
 }: {
   workspace: SlimWorkspace;
   withLinkLabelPrefix?: boolean;
 }) {
+  const userType = await serverGetUserType();
+  const isAdmin = userType === userRoles.ADMIN;
+
   let sidebarLinks = [
     { label: "Home", href: "/home", icon: <Home className="h-5 w-5" /> },
     {
@@ -34,7 +39,7 @@ export function SidebarWorkspaceNav({
       icon: <Layers className="h-5 w-5" />,
     },
     {
-      label: "Complaints",
+      label: "شكاواي الشخصية",
       href: "/complaints",
       icon: <MessageSquare className="h-5 w-5" />,
     },
@@ -44,6 +49,11 @@ export function SidebarWorkspaceNav({
       icon: <Settings className="h-5 w-5" />,
     },
   ];
+
+  // Hide personal complaints from admin
+  if (isAdmin) {
+    sidebarLinks = sidebarLinks.filter(link => link.href !== "/complaints");
+  }
 
   if (workspace.membershipType === "team") {
     // pop the last item

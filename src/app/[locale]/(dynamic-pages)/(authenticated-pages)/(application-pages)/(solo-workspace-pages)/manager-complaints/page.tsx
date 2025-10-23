@@ -1,5 +1,8 @@
 import { getAllComplaints } from "@/data/complaints/complaints";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function ManagerComplaintsPage() {
   const { data: complaints, error } = await getAllComplaints();
 
