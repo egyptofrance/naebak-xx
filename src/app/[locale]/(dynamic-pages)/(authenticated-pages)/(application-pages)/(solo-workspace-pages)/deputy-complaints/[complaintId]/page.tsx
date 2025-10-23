@@ -7,8 +7,9 @@ import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user
 export default async function DeputyComplaintDetailsPage({
   params,
 }: {
-  params: { complaintId: string };
+  params: Promise<{ complaintId: string }>;
 }) {
+  const { complaintId } = await params;
   const supabase = await createSupabaseUserServerComponentClient();
   const {
     data: { user },
@@ -24,7 +25,6 @@ export default async function DeputyComplaintDetailsPage({
     );
   }
 
-  const complaintId = params.complaintId;
   const { data, error } = await getComplaintDetails(complaintId);
 
   if (error || !data) {
