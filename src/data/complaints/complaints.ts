@@ -470,8 +470,8 @@ export async function getAvailableDeputies(filters?: {
     query = query.eq("governorate", filters.governorate);
   }
 
-  query = query.order("user_profiles(full_name)", { ascending: true });
-
+  // Remove ordering from query as it causes issues with foreign key relationships
+  // We'll sort on the client side after transforming the data
   const { data, error } = await query;
 
   if (error) {
@@ -497,6 +497,9 @@ export async function getAvailableDeputies(filters?: {
       deputy.full_name.toLowerCase().includes(searchLower)
     );
   }
+
+  // Sort by full_name on client side
+  transformedData.sort((a, b) => a.full_name.localeCompare(b.full_name, 'ar'));
 
   return { data: transformedData, error: null };
 }
