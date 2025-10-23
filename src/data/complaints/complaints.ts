@@ -324,3 +324,95 @@ export async function updateComplaintPriority(
   return { success: true };
 }
 
+
+
+
+/**
+ * Add a comment to a complaint
+ */
+export async function addComplaintComment(
+  complaintId: string,
+  userId: string,
+  comment: string
+) {
+  // Log action with comment
+  const { error: actionError } = await supabaseAdminClient
+    .from("complaint_actions")
+    .insert({
+      complaint_id: complaintId,
+      action_type: "comment",
+      performed_by: userId,
+      comment: comment,
+    });
+
+  if (actionError) {
+    return { success: false, error: actionError.message };
+  }
+
+  // Update complaint timestamp
+  const { error: updateError } = await supabaseAdminClient
+    .from("complaints")
+    .update({
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", complaintId);
+
+  if (updateError) {
+    console.error("Failed to update complaint timestamp:", updateError);
+  }
+
+  revalidatePath("/manager-complaints");
+  revalidatePath("/deputy-complaints");
+  revalidatePath("/complaints");
+
+  return { success: true };
+}
+
+/**
+ * Get complaint details with action history
+ */
+export async function getComplaintDetails(complaintId: string) {
+  const supabaseClient = await supabaseClientBasedOnUserRole();
+
+  // Get complaint
+  const { data: complaint, error: complaintError } = await supabaseClient
+    .from("complaints")
+    .select("*")
+    .eq("id", complaintId)
+    .single();
+
+  if (complaintError) {
+    return { data: null, error: complaintError.message };
+  }
+
+  // Get action history
+  const { data: actions, error: actionsError } = await supabaseClient
+    .from("complaint_actions")
+    .select("*")
+    .eq("complaint_id", complaintId)
+    .order("created_at", { ascending: false });
+
+  if (actionsError) {
+    return { 
+      data: { complaint, actions: [] }, 
+      error: "Failed to load action history" 
+    };
+  }
+
+  return { data: { complaint, actions: actions || [] }, error: null };
+}
+
+/**
+ * Get list of available deputies for assignment
+ */
+export async function getAvailableDeputies() {
+  const supabaseClient = await supabaseClientBasedOnUserRole();
+
+  const { data, error } = await supabaseClient
+    .from("deputy_profiles")
+    .select("id, full_name, governorate, party")
+    .order("full_name", { ascending: true });
+
+  return { data: data || [], error: error?.message };
+}
+
