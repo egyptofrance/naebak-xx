@@ -295,7 +295,7 @@ export async function updateComplaintPriority(
   const { error: updateError } = await supabaseAdminClient
     .from("complaints")
     .update({
-      priority: newPriority,
+      priority: newPriority as "low" | "medium" | "high" | "urgent",
       updated_at: new Date().toISOString(),
     })
     .eq("id", complaintId);
