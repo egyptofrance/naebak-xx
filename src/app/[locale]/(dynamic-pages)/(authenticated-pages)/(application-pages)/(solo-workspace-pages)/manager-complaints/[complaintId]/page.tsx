@@ -26,7 +26,11 @@ export default async function ManagerComplaintDetailPage({ params }: Props) {
   }
   
   const { data, error } = await getComplaintDetails(complaintId);
-  const { data: deputies } = await getAvailableDeputies();
+  const deputiesResult = await getAvailableDeputies();
+  const deputies = deputiesResult?.data;
+  
+  console.log('Deputies result:', deputiesResult);
+  console.log('Deputies data:', deputies);
 
   if (error || !data) {
     return (
