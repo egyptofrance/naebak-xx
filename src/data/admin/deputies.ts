@@ -214,7 +214,8 @@ export const createDeputyAction = actionClient
       }
 
       // Get governorate name from user profile
-      const governorateName = userProfile?.governorates?.name_ar || "القاهرة";
+      // Note: governorates is returned as an array by Supabase
+      const governorateName = (userProfile?.governorates as any)?.[0]?.name_ar || "القاهرة";
       const gender = userProfile?.gender || "male";
 
       console.log("[createDeputyAction] User data:", { gender, governorateName });
