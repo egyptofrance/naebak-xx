@@ -51,6 +51,17 @@ export default async function DeputyPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Banner Image */}
+      {deputy.banner_image && (
+        <div className="w-full h-64 md:h-96 relative overflow-hidden">
+          <img
+            src={deputy.banner_image}
+            alt="Banner"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
+
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto space-y-6">
           {/* Header Card */}

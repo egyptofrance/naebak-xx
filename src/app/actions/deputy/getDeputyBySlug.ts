@@ -19,7 +19,8 @@ export async function getDeputyBySlug(slug: string) {
         office_phone,
         electoral_program,
         achievements,
-        events
+        events,
+        banner_image
       `)
       .eq("slug", slug)
       .maybeSingle();
