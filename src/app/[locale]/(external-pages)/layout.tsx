@@ -21,9 +21,11 @@ export default async function Layout(props: {
 
   unstable_setRequestLocale(locale);
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <ExternalNavigation />
-      {children}
+      <main className="flex-1">
+        {children}
+      </main>
       <Footer />
     </div>
   );
