@@ -46,6 +46,8 @@ export function DeputyEditForm({ deputy, councils }: DeputyEditFormProps) {
     socialMediaInstagram: deputy.social_media_instagram || "",
     socialMediaYoutube: deputy.social_media_youtube || "",
     councilId: deputy.council_id || "",
+    initialRatingAverage: deputy.initial_rating_average?.toString() || "0",
+    initialRatingCount: deputy.initial_rating_count?.toString() || "0",
   });
 
   const { execute: executeUpdate, isExecuting: isUpdating } = useAction(
@@ -231,6 +233,50 @@ export function DeputyEditForm({ deputy, councils }: DeputyEditFormProps) {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Initial Rating Values */}
+      <Card>
+        <CardHeader>
+          <CardTitle>القيم الابتدائية للتقييم</CardTitle>
+          <CardDescription>
+            يمكنك ضبط قيم ابتدائية للتقييم (للتحكم في البداية الظاهرة للتقييم)
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="initialRatingAverage">التقييم الابتدائي (0-5)</Label>
+              <Input
+                id="initialRatingAverage"
+                type="number"
+                min="0"
+                max="5"
+                step="0.1"
+                value={formData.initialRatingAverage}
+                onChange={(e) => handleChange("initialRatingAverage", e.target.value)}
+                placeholder="0.0"
+              />
+              <p className="text-sm text-muted-foreground">
+                متوسط التقييم الابتدائي (من 0 إلى 5)
+              </p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="initialRatingCount">عدد المقيّمين الابتدائي</Label>
+              <Input
+                id="initialRatingCount"
+                type="number"
+                min="0"
+                value={formData.initialRatingCount}
+                onChange={(e) => handleChange("initialRatingCount", e.target.value)}
+                placeholder="0"
+              />
+              <p className="text-sm text-muted-foreground">
+                عدد التقييمات الابتدائية
+              </p>
+            </div>
           </div>
         </CardContent>
       </Card>

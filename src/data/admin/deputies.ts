@@ -45,6 +45,9 @@ const updateDeputySchema = z.object({
   // User profile fields
   userId: z.string().uuid("Invalid user ID").optional(),
   partyId: z.string().uuid().optional().nullable(),
+  // Initial rating values
+  initialRatingAverage: z.string().optional(),
+  initialRatingCount: z.string().optional(),
 });
 
 /**
@@ -303,6 +306,9 @@ export const updateDeputyAction = actionClient
     if (updateData.gender !== undefined) dbUpdateData.gender = updateData.gender;
     if (updateData.governorate !== undefined) dbUpdateData.governorate = updateData.governorate;
     if (updateData.slug !== undefined) dbUpdateData.slug = updateData.slug;
+    // Initial rating values
+    if (updateData.initialRatingAverage !== undefined) dbUpdateData.initial_rating_average = parseFloat(updateData.initialRatingAverage) || 0;
+    if (updateData.initialRatingCount !== undefined) dbUpdateData.initial_rating_count = parseInt(updateData.initialRatingCount) || 0;
 
     const { data: deputy, error } = await supabase
       .from("deputy_profiles")
