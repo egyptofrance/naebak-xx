@@ -195,13 +195,39 @@ export const createDeputyAction = actionClient
 
       console.log("[createDeputyAction] Role added successfully:", roleData);
 
-      // Step 2: Create deputy profile
+      // Step 2: Get user profile data to copy gender and governorate
+      console.log("[createDeputyAction] Fetching user profile data...");
+      const { data: userProfile, error: userProfileError } = await supabase
+        .from("user_profiles")
+        .select("gender, governorate_id, governorates(name_ar)")
+        .eq("id", userId)
+        .single();
+
+      if (userProfileError) {
+        console.error("[createDeputyAction] Failed to fetch user profile:", userProfileError);
+        // Rollback: remove the role
+        await supabase
+          .from("user_roles")
+          .delete()
+          .eq("id", roleData.id);
+        throw new Error(`فشل جلب بيانات المستخدم: ${userProfileError.message}`);
+      }
+
+      // Get governorate name from user profile
+      const governorateName = userProfile?.governorates?.name_ar || "القاهرة";
+      const gender = userProfile?.gender || "male";
+
+      console.log("[createDeputyAction] User data:", { gender, governorateName });
+
+      // Step 3: Create deputy profile with copied data
       console.log("[createDeputyAction] Creating deputy profile...");
       const { data: deputy, error: deputyError } = await supabase
         .from("deputy_profiles")
         .insert({
           user_id: userId,
           deputy_status: "current", // Always set to 'current' when promoting
+          gender: gender as "male" | "female",
+          governorate: governorateName,
         })
         .select()
         .single();

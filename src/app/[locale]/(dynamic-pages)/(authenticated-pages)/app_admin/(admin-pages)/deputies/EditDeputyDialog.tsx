@@ -70,8 +70,6 @@ type EditDeputyDialogProps = {
     electoralSymbol: string | null;
     electoralNumber: string | null;
     councilType?: string | null;
-    gender?: string | null;
-    governorate?: string | null;
     partyId?: string | null;
     userId?: string;
     slug?: string | null;
@@ -104,8 +102,6 @@ export function EditDeputyDialog({
   );
   
   // New required fields
-  const [gender, setGender] = useState(currentData.gender || "male");
-  const [governorate, setGovernorate] = useState(currentData.governorate || "القاهرة");
   const [partyId, setPartyId] = useState(currentData.partyId || "none");
   const [slug, setSlug] = useState(currentData.slug || "");
   
@@ -335,9 +331,6 @@ export function EditDeputyDialog({
       councilId: councilId === "none" ? null : councilId || null,
       electoralSymbol: electoralSymbol.trim() || undefined,
       electoralNumber: electoralNumber.trim() || undefined,
-      // New required fields
-      gender: gender as "male" | "female",
-      governorate: governorate.trim(),
       slug: slug.trim() || undefined,
       // User profile fields
       userId: currentData.userId,
@@ -444,32 +437,6 @@ export function EditDeputyDialog({
 
               <Separator className="my-4" />
               
-              {/* Gender */}
-              <div className="space-y-2">
-                <Label htmlFor="gender">الجنس *</Label>
-                <Select value={gender} onValueChange={setGender}>
-                  <SelectTrigger id="gender">
-                    <SelectValue placeholder="اختر الجنس" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="male">ذكر</SelectItem>
-                    <SelectItem value="female">أنثى</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Governorate */}
-              <div className="space-y-2">
-                <Label htmlFor="governorate">المحافظة *</Label>
-                <Input
-                  id="governorate"
-                  value={governorate}
-                  onChange={(e) => setGovernorate(e.target.value)}
-                  placeholder="مثال: القاهرة"
-                  required
-                />
-              </div>
-
               {/* Slug */}
               <div className="space-y-2">
                 <Label htmlFor="slug">رابط الصفحة العامة (Slug)</Label>
