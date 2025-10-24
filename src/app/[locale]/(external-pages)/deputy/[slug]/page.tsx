@@ -49,7 +49,7 @@ export default async function DeputyPage({ params }: PageProps) {
                   {user.full_name || "غير محدد"}
                 </h1>
                 <p className="text-muted-foreground">
-                  معرف الصفحة: <span className="font-mono">{deputy.slug}</span>
+                  معرف الصفحة: <span className="font-mono">{slug}</span>
                 </p>
               </div>
             </div>

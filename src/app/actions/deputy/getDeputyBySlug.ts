@@ -11,7 +11,6 @@ export async function getDeputyBySlug(slug: string) {
       .from("deputy_profiles")
       .select(`
         id,
-        slug,
         user_id
       `)
       .eq("slug", slug)
