@@ -22,7 +22,7 @@ type DeputyData = {
   slug: string;
   user: {
     id: string;
-    full_name: string;
+    full_name: string | null;
     avatar_url: string | null;
     governorate_id: string | null;
     party_id: string | null;
