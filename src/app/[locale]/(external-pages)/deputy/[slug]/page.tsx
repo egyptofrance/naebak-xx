@@ -82,37 +82,36 @@ export default async function DeputyPage({ params }: PageProps) {
                   </Badge>
                 </div>
 
-                <div className="space-y-2 text-muted-foreground">
-                  <p className="flex items-center gap-2">
-                    <span className="font-semibold">المحافظة:</span>
-                    {governorate 
-                      ? (locale === "ar" ? governorate.name_ar : governorate.name_en)
-                      : <span className="text-sm italic">{noData}</span>
-                    }
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <span className="font-semibold">الحزب:</span>
-                    {party 
-                      ? (locale === "ar" ? party.name_ar : party.name_en)
-                      : <span className="text-sm italic">{noData}</span>
-                    }
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <span className="font-semibold">المجلس:</span>
-                    {council 
-                      ? (locale === "ar" ? council.name_ar : council.name_en)
-                      : <span className="text-sm italic">{noData}</span>
-                    }
-                  </p>
-                </div>
+
               </div>
             </div>
           </div>
 
           {/* Contact Info Card */}
           <div className="bg-card p-6 rounded-lg shadow-sm border">
-            <h2 className="text-2xl font-bold mb-4">معلومات الاتصال</h2>
+            <h2 className="text-2xl font-bold mb-4">البيانات الأساسية</h2>
             <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-muted-foreground">المحافظة:</span>
+                {governorate 
+                  ? (locale === "ar" ? governorate.name_ar : governorate.name_en)
+                  : <span className="text-sm italic text-muted-foreground">{noData}</span>
+                }
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-muted-foreground">الحزب:</span>
+                {party 
+                  ? (locale === "ar" ? party.name_ar : party.name_en)
+                  : <span className="text-sm italic text-muted-foreground">{noData}</span>
+                }
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-muted-foreground">المجلس:</span>
+                {council 
+                  ? (locale === "ar" ? council.name_ar : council.name_en)
+                  : <span className="text-sm italic text-muted-foreground">{noData}</span>
+                }
+              </div>
               <div className="flex items-center gap-2">
                 <span className="font-semibold text-muted-foreground">الهاتف الشخصي:</span>
                 {user.phone ? (
