@@ -116,7 +116,7 @@ export default function DeputiesGrid({ deputies }: { deputies: DeputiesData }) {
       {/* Filters */}
       <div className="bg-card p-6 rounded-lg shadow-sm border">
         <h2 className="text-xl font-bold mb-4">تصفية النتائج</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {/* Governorate Filter */}
           <div>
             <label className="text-sm font-medium mb-2 block">المحافظة</label>
