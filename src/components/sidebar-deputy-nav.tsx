@@ -59,7 +59,7 @@ export async function SidebarDeputyNav({ workspace }: { workspace: SlimWorkspace
         {deputyLinks.map((link) => (
           <SidebarMenuItem key={link.href}>
             <SidebarMenuButton asChild>
-              <Link href={getWorkspaceSubPath(workspace, link.href)}>
+              <Link href={link.href === "/deputies" ? link.href : getWorkspaceSubPath(workspace, link.href)}>
                 {link.icon}
                 {link.label}
               </Link>
