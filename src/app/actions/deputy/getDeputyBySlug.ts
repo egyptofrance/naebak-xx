@@ -11,7 +11,12 @@ export async function getDeputyBySlug(slug: string) {
       .from("deputy_profiles")
       .select(`
         id,
-        user_id
+        user_id,
+        deputy_status,
+        council_id,
+        bio,
+        office_address,
+        office_phone
       `)
       .eq("slug", slug)
       .maybeSingle();
@@ -31,7 +36,10 @@ export async function getDeputyBySlug(slug: string) {
       .select(`
         id,
         full_name,
-        avatar_url
+        avatar_url,
+        phone,
+        governorate_id,
+        party_id
       `)
       .eq("id", deputy.user_id)
       .single();
@@ -41,9 +49,40 @@ export async function getDeputyBySlug(slug: string) {
       return null;
     }
 
+    // Get related data
+    const [governorate, party, council] = await Promise.all([
+      user.governorate_id
+        ? supabase
+            .from("governorates")
+            .select("id, name_ar, name_en")
+            .eq("id", user.governorate_id)
+            .single()
+            .then((res) => res.data)
+        : null,
+      user.party_id
+        ? supabase
+            .from("parties")
+            .select("id, name_ar, name_en")
+            .eq("id", user.party_id)
+            .single()
+            .then((res) => res.data)
+        : null,
+      deputy.council_id
+        ? supabase
+            .from("councils")
+            .select("id, name_ar, name_en")
+            .eq("id", deputy.council_id)
+            .single()
+            .then((res) => res.data)
+        : null,
+    ]);
+
     return {
       deputy,
       user,
+      governorate,
+      party,
+      council,
     };
   } catch (error) {
     console.error("[getDeputyBySlug] Exception:", error);
