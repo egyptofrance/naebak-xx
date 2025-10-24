@@ -34,7 +34,7 @@ export default function DeputiesGrid({
   // Get unique values for filters
   const governorates = useMemo(() => {
     const unique = new Map();
-    deputies.forEach((d) => {
+    deputies.forEach((d: DeputyData) => {
       if (d.governorate) {
         unique.set(d.governorate.id, d.governorate);
       }
@@ -44,7 +44,7 @@ export default function DeputiesGrid({
 
   const parties = useMemo(() => {
     const unique = new Map();
-    deputies.forEach((d) => {
+    deputies.forEach((d: DeputyData) => {
       if (d.party) {
         unique.set(d.party.id, d.party);
       }
@@ -54,7 +54,7 @@ export default function DeputiesGrid({
 
   const councils = useMemo(() => {
     const unique = new Map();
-    deputies.forEach((d) => {
+    deputies.forEach((d: DeputyData) => {
       if (d.council) {
         unique.set(d.council.id, d.council);
       }
