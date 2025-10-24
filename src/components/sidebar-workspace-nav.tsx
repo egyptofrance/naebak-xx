@@ -32,9 +32,9 @@ export async function SidebarWorkspaceNav({
   const isAdmin = userType === userRoles.ADMIN;
 
   let sidebarLinks = [
-    { label: "Home", href: "/home", icon: <Home className="h-5 w-5" /> },
+    { label: "الرئيسية", href: "/home", icon: <Home className="h-5 w-5" /> },
     {
-      label: "Projects",
+      label: "المشاريع",
       href: "/projects",
       icon: <Layers className="h-5 w-5" />,
     },
@@ -44,7 +44,7 @@ export async function SidebarWorkspaceNav({
       icon: <MessageSquare className="h-5 w-5" />,
     },
     {
-      label: "Settings",
+      label: "الإعدادات",
       href: "/settings",
       icon: <Settings className="h-5 w-5" />,
     },
@@ -59,7 +59,7 @@ export async function SidebarWorkspaceNav({
     // pop the last item
     const lastItem = sidebarLinks.pop();
     sidebarLinks.push({
-      label: "Members",
+      label: "الأعضاء",
       href: "/settings/members",
       icon: <Users className="h-5 w-5" />,
     });
@@ -77,7 +77,7 @@ export async function SidebarWorkspaceNav({
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+      <SidebarGroupLabel>مساحة العمل</SidebarGroupLabel>
       <SidebarMenu>
         {sidebarLinks.map((link) => (
           <SidebarMenuItem key={link.label}>
