@@ -1,6 +1,7 @@
 import { getDeputyBySlug } from "@/app/actions/deputy/getDeputyBySlug";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import { BannerImage } from "./BannerImage";
 
 interface PageProps {
   params: Promise<{
@@ -59,17 +60,7 @@ export default async function DeputyPage({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Banner Image */}
-      <div className="w-full h-64 md:h-96 relative overflow-hidden bg-muted">
-        <img
-          src={displayBanner}
-          alt="Banner"
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            // Fallback to gradient if image fails to load
-            e.currentTarget.style.display = 'none';
-          }}
-        />
-      </div>
+      <BannerImage src={displayBanner} alt="Banner" />
 
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto space-y-6">
