@@ -75,6 +75,6 @@ export function DeputyRating({
         </div>
       </div>
     </div>
-  );}
+  );
 }
 
