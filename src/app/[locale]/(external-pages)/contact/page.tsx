@@ -1,6 +1,5 @@
 import { T } from "@/components/ui/Typography";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Footer } from "@/components/LandingPage/Footer";
 import { Metadata } from "next";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 
@@ -257,8 +256,6 @@ export default function ContactPage() {
           </div>
         </CardContent>
       </Card>
-      
-      <Footer />
     </div>
   );
 }

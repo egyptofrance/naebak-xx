@@ -1,6 +1,5 @@
 import { T } from "@/components/ui/Typography";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Footer } from "@/components/LandingPage/Footer";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -143,8 +142,6 @@ export default function AboutPage() {
           </T.P>
         </CardContent>
       </Card>
-      
-      <Footer />
     </div>
   );
 }
