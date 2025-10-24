@@ -18,8 +18,8 @@ type DeputyData = {
     user_id: string;
     deputy_status: string;
     council_id: string | null;
-    slug: string;
   };
+  slug: string;
   user: {
     id: string;
     full_name: string;
@@ -264,7 +264,7 @@ export default function DeputiesGrid({ deputies }: { deputies: DeputyData[] }) {
               </div>
 
               {/* Visit Button */}
-              <Link href={`/deputy/${deputyData.deputy.slug}`}>
+              <Link href={`/deputy/${deputyData.slug}`}>
                 <Button className="w-full" variant="default">
                   زيارة الصفحة
                 </Button>
