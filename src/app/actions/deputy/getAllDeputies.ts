@@ -7,15 +7,17 @@ export async function getAllDeputies() {
 
   try {
     // Get all deputy profiles (without slug to avoid TypeScript errors)
-    const { data: deputies, error: deputiesError } = await supabase
+    const { data: deputies, error: deputiesError } = (await supabase
       .from("deputy_profiles")
       .select(`
         id,
         user_id,
         deputy_status,
-        council_id
+        council_id,
+        rating_average,
+        rating_count
       `)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })) as any;
 
     if (deputiesError || !deputies || deputies.length === 0) {
       return [];

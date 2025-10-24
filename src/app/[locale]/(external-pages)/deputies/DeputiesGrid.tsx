@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { Link } from "@/components/intl-link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { DeputyCardRating } from "./DeputyCardRating";
 import {
   Select,
   SelectContent,
@@ -18,7 +19,13 @@ import { getAllDeputies } from "@/app/actions/deputy/getAllDeputies";
 type DeputiesData = Awaited<ReturnType<typeof getAllDeputies>>;
 type DeputyData = DeputiesData[number];
 
-export default function DeputiesGrid({ deputies }: { deputies: DeputiesData }) {
+export default function DeputiesGrid({ 
+  deputies,
+  isAuthenticated = false 
+}: { 
+  deputies: DeputiesData;
+  isAuthenticated?: boolean;
+}) {
   const [governorateFilter, setGovernorateFilter] = useState<string>("all");
   const [partyFilter, setPartyFilter] = useState<string>("all");
   const [councilFilter, setCouncilFilter] = useState<string>("all");
@@ -259,6 +266,14 @@ export default function DeputiesGrid({ deputies }: { deputies: DeputiesData }) {
                   {deputyData.council?.name_ar || "غير محدد"}
                 </div>
               </div>
+
+              {/* Rating */}
+              <DeputyCardRating
+                deputyId={deputyData.deputy.id}
+                rating={deputyData.deputy.rating_average || 0}
+                ratingCount={deputyData.deputy.rating_count || 0}
+                isAuthenticated={isAuthenticated}
+              />
 
               {/* Visit Button */}
               <Link href={`/deputy/${deputyData.slug}`}>
