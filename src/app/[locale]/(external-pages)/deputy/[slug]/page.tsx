@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { BannerImage } from "./BannerImage";
 import { DeputyRating } from "./DeputyRating";
+import { StarRating } from "@/components/StarRating";
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 
 interface PageProps {
@@ -103,8 +104,22 @@ export default async function DeputyPage({ params }: PageProps) {
                     {getStatusLabel(deputy.deputy_status)}
                   </Badge>
                 </div>
-
-
+                
+                {/* Rating Display */}
+                <div className="flex items-center gap-4 mt-3">
+                  <StarRating
+                    rating={deputy.rating_average || 0}
+                    totalRatings={deputy.rating_count || 0}
+                    readonly={true}
+                    size="md"
+                    showCount={true}
+                  />
+                  {(deputy.rating_count || 0) > 0 && (
+                    <span className="text-sm text-muted-foreground">
+                      ({deputy.rating_count} {deputy.rating_count === 1 ? "تقييم" : "تقييمات"})
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           </div>
