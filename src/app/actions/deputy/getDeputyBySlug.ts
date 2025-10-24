@@ -22,7 +22,7 @@ export async function getDeputyBySlug(slug: string) {
         events,
         rating_average,
         rating_count
-      `)
+      `) as any
       .eq("slug", slug)
       .maybeSingle();
 
