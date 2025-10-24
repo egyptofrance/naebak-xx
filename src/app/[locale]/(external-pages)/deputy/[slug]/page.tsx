@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { BannerImage } from "./BannerImage";
 import { DeputyRating } from "./DeputyRating";
-import { StarRating } from "@/components/StarRating";
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 
 interface PageProps {
@@ -105,20 +104,16 @@ export default async function DeputyPage({ params }: PageProps) {
                   </Badge>
                 </div>
                 
-                {/* Rating Display */}
-                <div className="flex items-center gap-4 mt-3">
-                  <StarRating
+                {/* Rating Display - Interactive */}
+                <div className="mt-3">
+                  <DeputyRating
+                    deputyId={deputy.id}
                     rating={deputy.rating_average || 0}
-                    totalRatings={deputy.rating_count || 0}
-                    readonly={true}
-                    size="md"
-                    showCount={true}
+                    ratingCount={deputy.rating_count || 0}
+                    userRating={userRating}
+                    isAuthenticated={isAuthenticated}
+                    compact={true}
                   />
-                  {(deputy.rating_count || 0) > 0 && (
-                    <span className="text-sm text-muted-foreground">
-                      ({deputy.rating_count} {deputy.rating_count === 1 ? "تقييم" : "تقييمات"})
-                    </span>
-                  )}
                 </div>
               </div>
             </div>
@@ -232,14 +227,7 @@ export default async function DeputyPage({ params }: PageProps) {
             )}
           </div>
 
-          {/* Rating Card */}
-          <DeputyRating
-            deputyId={deputy.id}
-            rating={deputy.rating_average || 0}
-            ratingCount={deputy.rating_count || 0}
-            userRating={userRating}
-            isAuthenticated={isAuthenticated}
-          />
+
         </div>
       </div>
     </div>

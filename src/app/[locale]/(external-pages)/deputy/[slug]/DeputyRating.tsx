@@ -12,6 +12,7 @@ interface DeputyRatingProps {
   ratingCount: number;
   userRating: number | null;
   isAuthenticated: boolean;
+  compact?: boolean; // Compact mode for header display
 }
 
 export function DeputyRating({
@@ -20,6 +21,7 @@ export function DeputyRating({
   ratingCount,
   userRating,
   isAuthenticated,
+  compact = false,
 }: DeputyRatingProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -42,6 +44,41 @@ export function DeputyRating({
     }
   };
 
+  if (compact) {
+    // Compact mode for header display
+    return (
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-3">
+          <StarRating
+            rating={rating}
+            totalRatings={ratingCount}
+            userRating={userRating}
+            onRate={isAuthenticated ? handleRate : undefined}
+            readonly={!isAuthenticated || isLoading}
+            size="md"
+            showCount={true}
+          />
+        </div>
+        {!isAuthenticated && (
+          <p className="text-xs text-muted-foreground">
+            سجل دخولك لتقييم النائب
+          </p>
+        )}
+        {isAuthenticated && userRating && (
+          <p className="text-xs text-primary font-medium">
+            تقييمك: {userRating} ⭐
+          </p>
+        )}
+        {isAuthenticated && !userRating && (
+          <p className="text-xs text-muted-foreground">
+            اضغط على النجوم للتقييم
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  // Full mode (not used anymore, but kept for compatibility)
   return (
     <div className="bg-card p-6 rounded-lg shadow-sm border">
       <h2 className="text-2xl font-bold mb-4">
