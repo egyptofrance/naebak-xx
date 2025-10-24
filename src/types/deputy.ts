@@ -30,19 +30,7 @@ export interface UserProfile {
   id: string;
   full_name: string | null;
   avatar_url: string | null;
-  phone: string | null;
-  email: string | null;
-  governorate_id: string | null;
-  city: string | null;
-  district: string | null;
-  village: string | null;
-  job_title: string | null;
-  party_id: string | null;
-  electoral_district: string | null;
-  address: string | null;
-  role: string | null;
-  gender: string | null;
-  english_name: string | null;
+  created_at: string;
 }
 
 export interface Party {
