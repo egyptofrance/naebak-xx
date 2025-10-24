@@ -23,17 +23,17 @@ type Deputy = {
   governorate: {
     id: string;
     name_ar: string;
-    name_en: string;
+    name_en: string | null;
   } | null;
   party: {
     id: string;
     name_ar: string;
-    name_en: string;
+    name_en: string | null;
   } | null;
   council: {
     id: string;
     name_ar: string;
-    name_en: string;
+    name_en: string | null;
   } | null;
 };
 
