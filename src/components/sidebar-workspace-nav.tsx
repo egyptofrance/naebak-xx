@@ -33,11 +33,12 @@ export async function SidebarWorkspaceNav({
 
   let sidebarLinks = [
     { label: "الرئيسية", href: "/home", icon: <Home className="h-5 w-5" /> },
-    {
-      label: "المشاريع",
-      href: "/projects",
-      icon: <Layers className="h-5 w-5" />,
-    },
+    // Projects feature hidden - not needed for Naebak platform
+    // {
+    //   label: "المشاريع",
+    //   href: "/projects",
+    //   icon: <Layers className="h-5 w-5" />,
+    // },
     {
       label: "شكاواي الشخصية",
       href: "/complaints",
