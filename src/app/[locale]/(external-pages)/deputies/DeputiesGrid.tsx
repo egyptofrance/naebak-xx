@@ -206,7 +206,7 @@ export default function DeputiesGrid({
 
       {/* Deputies Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredDeputies.map((deputyData) => (
+        {filteredDeputies.map((deputyData: DeputyData) => (
           <div
             key={deputyData.deputy.id}
             className="bg-card rounded-xl shadow-sm border overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
