@@ -44,13 +44,13 @@ export async function getAllDeputies() {
       .in("id", userIds);
 
     // Get unique IDs for related data (with proper type guards)
-    const governorateIds = [...new Set(
+    const governorateIds: string[] = [...new Set(
       users?.map((u: any) => u.governorate_id).filter((id: any): id is string => id !== null)
     )];
-    const partyIds = [...new Set(
+    const partyIds: string[] = [...new Set(
       users?.map((u: any) => u.party_id).filter((id: any): id is string => id !== null)
     )];
-    const councilIds = [...new Set(
+    const councilIds: string[] = [...new Set(
       deputiesWithSlugs.map((d: any) => d.council_id).filter((id: any): id is string => id !== null)
     )];
 
