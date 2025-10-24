@@ -93,7 +93,7 @@ export async function getDeputyBySlug(slug: string): Promise<DeputyFullData | nu
 
     // Construct full deputy data
     const fullData: DeputyFullData = {
-      deputy,
+      deputy: deputy as DeputyProfile,
       user,
       party: party || null,
       council: council || null,
