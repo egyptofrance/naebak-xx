@@ -1,7 +1,10 @@
 import { getDeputyBySlug } from "@/app/actions/deputy/getDeputyBySlug";
+import { getUserRating } from "@/app/actions/deputy/getUserRating";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { BannerImage } from "./BannerImage";
+import { DeputyRating } from "./DeputyRating";
+import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 
 interface PageProps {
   params: Promise<{
@@ -20,6 +23,14 @@ export default async function DeputyPage({ params }: PageProps) {
   if (!data) {
     notFound();
   }
+
+  // Get user's rating for this deputy
+  const userRating = await getUserRating(data.deputy.id);
+
+  // Check if user is authenticated
+  const supabase = await createSupabaseUserServerComponentClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  const isAuthenticated = !!user;
 
   const { deputy, user, governorate, party, council, bannerImage } = data;
   
@@ -205,6 +216,15 @@ export default async function DeputyPage({ params }: PageProps) {
               </p>
             )}
           </div>
+
+          {/* Rating Card */}
+          <DeputyRating
+            deputyId={deputy.id}
+            rating={deputy.rating_average || 0}
+            ratingCount={deputy.rating_count || 0}
+            userRating={userRating}
+            isAuthenticated={isAuthenticated}
+          />
         </div>
       </div>
     </div>
