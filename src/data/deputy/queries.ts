@@ -4,7 +4,7 @@
  */
 
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
-import type { DeputyFullData } from "@/types/deputy";
+import type { DeputyFullData, DeputyProfile } from "@/types/deputy";
 
 /**
  * Get deputy profile by slug for public page
