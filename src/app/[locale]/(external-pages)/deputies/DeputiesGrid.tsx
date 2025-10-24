@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+// Using exact types from database schema
 type DeputyData = {
   deputy: {
     id: string;
@@ -20,28 +21,39 @@ type DeputyData = {
     council_id: string | null;
   };
   slug: string;
-  user: {
-    id: string;
-    full_name: string | null;
-    avatar_url: string | null;
-    governorate_id: string | null;
-    party_id: string | null;
-  } | undefined;
-  governorate: {
-    id: string;
-    name_ar: string;
-    name_en: string | null;
-  } | null | undefined;
-  party: {
-    id: string;
-    name_ar: string;
-    name_en: string | null;
-  } | null | undefined;
-  council: {
-    id: string;
-    name_ar: string;
-    name_en: string | null;
-  } | null | undefined;
+  user:
+    | {
+        id: string;
+        full_name: string | null;
+        avatar_url: string | null;
+        governorate_id: string | null;
+        party_id: string | null;
+      }
+    | undefined;
+  governorate:
+    | {
+        id: string;
+        name_ar: string;
+        name_en: string | null;
+      }
+    | null
+    | undefined;
+  party:
+    | {
+        id: string;
+        name_ar: string;
+        name_en: string | null;
+      }
+    | null
+    | undefined;
+  council:
+    | {
+        id: string;
+        name_ar: string;
+        name_en: string | null;
+      }
+    | null
+    | undefined;
 };
 
 export default function DeputiesGrid({ deputies }: { deputies: DeputyData[] }) {
@@ -84,16 +96,25 @@ export default function DeputiesGrid({ deputies }: { deputies: DeputyData[] }) {
   // Filter deputies
   const filteredDeputies = useMemo(() => {
     return deputies.filter((deputyData) => {
-      if (governorateFilter !== "all" && deputyData.governorate?.id !== governorateFilter) {
+      if (
+        governorateFilter !== "all" &&
+        deputyData.governorate?.id !== governorateFilter
+      ) {
         return false;
       }
       if (partyFilter !== "all" && deputyData.party?.id !== partyFilter) {
         return false;
       }
-      if (councilFilter !== "all" && deputyData.council?.id !== councilFilter) {
+      if (
+        councilFilter !== "all" &&
+        deputyData.council?.id !== councilFilter
+      ) {
         return false;
       }
-      if (statusFilter !== "all" && deputyData.deputy.deputy_status !== statusFilter) {
+      if (
+        statusFilter !== "all" &&
+        deputyData.deputy.deputy_status !== statusFilter
+      ) {
         return false;
       }
       return true;
@@ -113,7 +134,9 @@ export default function DeputiesGrid({ deputies }: { deputies: DeputyData[] }) {
     }
   };
 
-  const getStatusVariant = (status: string): "default" | "secondary" | "outline" => {
+  const getStatusVariant = (
+    status: string
+  ): "default" | "secondary" | "outline" => {
     switch (status) {
       case "current":
         return "default";
@@ -135,7 +158,10 @@ export default function DeputiesGrid({ deputies }: { deputies: DeputyData[] }) {
           {/* Governorate Filter */}
           <div>
             <label className="text-sm font-medium mb-2 block">المحافظة</label>
-            <Select value={governorateFilter} onValueChange={setGovernorateFilter}>
+            <Select
+              value={governorateFilter}
+              onValueChange={setGovernorateFilter}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="الكل" />
               </SelectTrigger>
@@ -222,12 +248,12 @@ export default function DeputiesGrid({ deputies }: { deputies: DeputyData[] }) {
                 {deputyData.user?.avatar_url ? (
                   <img
                     src={deputyData.user.avatar_url}
-                    alt={deputyData.user.full_name}
+                    alt={deputyData.user.full_name || ""}
                     className="w-full h-full object-cover"
                   />
                 ) : (
                   <span className="text-3xl font-bold text-muted-foreground">
-                    {deputyData.user?.full_name.charAt(0) || "؟"}
+                    {deputyData.user?.full_name?.charAt(0) || "؟"}
                   </span>
                 )}
               </div>
@@ -242,7 +268,9 @@ export default function DeputiesGrid({ deputies }: { deputies: DeputyData[] }) {
 
               {/* Status Badge */}
               <div className="flex justify-center">
-                <Badge variant={getStatusVariant(deputyData.deputy.deputy_status)}>
+                <Badge
+                  variant={getStatusVariant(deputyData.deputy.deputy_status)}
+                >
                   {getStatusLabel(deputyData.deputy.deputy_status)}
                 </Badge>
               </div>
@@ -277,7 +305,9 @@ export default function DeputiesGrid({ deputies }: { deputies: DeputyData[] }) {
       {/* Empty State */}
       {filteredDeputies.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-lg text-muted-foreground">لا توجد نتائج تطابق الفلاتر المحددة</p>
+          <p className="text-lg text-muted-foreground">
+            لا توجد نتائج تطابق الفلاتر المحددة
+          </p>
         </div>
       )}
     </div>
