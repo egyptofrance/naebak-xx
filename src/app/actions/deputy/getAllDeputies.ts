@@ -1,9 +1,9 @@
 "use server";
 
-import { createClient } from "@/utils/supabase/server";
+import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 
 export async function getAllDeputies() {
-  const supabase = await createClient();
+  const supabase = await createSupabaseUserServerComponentClient();
 
   try {
     // Get all deputy profiles
