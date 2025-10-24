@@ -74,6 +74,7 @@ type EditDeputyDialogProps = {
     governorate?: string | null;
     partyId?: string | null;
     userId?: string;
+    slug?: string | null;
   };
   councils: Council[];
   parties: Party[];
@@ -106,6 +107,7 @@ export function EditDeputyDialog({
   const [gender, setGender] = useState(currentData.gender || "male");
   const [governorate, setGovernorate] = useState(currentData.governorate || "القاهرة");
   const [partyId, setPartyId] = useState(currentData.partyId || "none");
+  const [slug, setSlug] = useState(currentData.slug || "");
   
   // New structured content states
   const [electoralProgramItems, setElectoralProgramItems] = useState<ContentItem[]>([]);
@@ -131,6 +133,7 @@ export function EditDeputyDialog({
       setCouncilId(currentData.councilId || "none");
       setElectoralSymbol(currentData.electoralSymbol || "");
       setElectoralNumber(currentData.electoralNumber || "");
+      setSlug(currentData.slug || "");
       
       // Load structured content from database
       loadContentItems();
@@ -335,6 +338,7 @@ export function EditDeputyDialog({
       // New required fields
       gender: gender as "male" | "female",
       governorate: governorate.trim(),
+      slug: slug.trim() || undefined,
       // User profile fields
       userId: currentData.userId,
       partyId: partyId === "none" ? null : partyId,
@@ -464,6 +468,23 @@ export function EditDeputyDialog({
                   placeholder="مثال: القاهرة"
                   required
                 />
+              </div>
+
+              {/* Slug */}
+              <div className="space-y-2">
+                <Label htmlFor="slug">رابط الصفحة العامة (Slug)</Label>
+                <Input
+                  id="slug"
+                  value={slug}
+                  onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-'))}
+                  placeholder="مثال: ahmed-mohamed-deputy"
+                  dir="ltr"
+                />
+                <p className="text-xs text-muted-foreground">
+                  سيكون رابط الصفحة العامة: /deputy/{slug || "slug"}
+                  <br />
+                  اترك فارغاً إذا لم تكن بحاجة لصفحة عامة بعد.
+                </p>
               </div>
 
             </TabsContent>

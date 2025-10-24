@@ -41,6 +41,7 @@ const updateDeputySchema = z.object({
   councilType: z.enum(["parliament", "senate", "local"]).optional(),
   gender: z.enum(["male", "female"]).optional(),
   governorate: z.string().optional(),
+  slug: z.string().optional(),
   // User profile fields
   userId: z.string().uuid("Invalid user ID").optional(),
   partyId: z.string().uuid().optional().nullable(),
@@ -274,6 +275,7 @@ export const updateDeputyAction = actionClient
     if (updateData.councilType !== undefined) dbUpdateData.council_type = updateData.councilType;
     if (updateData.gender !== undefined) dbUpdateData.gender = updateData.gender;
     if (updateData.governorate !== undefined) dbUpdateData.governorate = updateData.governorate;
+    if (updateData.slug !== undefined) dbUpdateData.slug = updateData.slug;
 
     const { data: deputy, error } = await supabase
       .from("deputy_profiles")

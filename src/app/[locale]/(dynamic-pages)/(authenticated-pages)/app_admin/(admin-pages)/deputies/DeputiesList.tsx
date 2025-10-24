@@ -57,6 +57,7 @@ interface Deputy {
   events: string | null;
   created_at: string;
   council_id: string | null;
+  slug: string | null;
   user_profiles: {
     id: string;
     full_name: string | null;
@@ -478,6 +479,7 @@ export default function DeputiesList() {
                     <TableHead>الحزب</TableHead>
                     <TableHead>المجلس</TableHead>
                     <TableHead>الحالة</TableHead>
+                    <TableHead>الملف العام</TableHead>
                     <TableHead>Get Link</TableHead>
                     <TableHead>تعديل</TableHead>
                     <TableHead>حذف</TableHead>
@@ -527,6 +529,17 @@ export default function DeputiesList() {
                           </Badge>
                         </TableCell>
                         <TableCell>
+                          {deputy.slug ? (
+                            <Link href={`/deputy/${deputy.slug}`} target="_blank">
+                              <Button variant="outline" size="sm">
+                                عرض
+                              </Button>
+                            </Link>
+                          ) : (
+                            <span className="text-xs text-muted-foreground">لا يوجد</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
                           <GetLoginLinkDialog userId={deputy.user_id} />
                         </TableCell>
                         <TableCell>
@@ -542,6 +555,7 @@ export default function DeputiesList() {
                               electoralNumber: deputy.electoral_number,
                               partyId: userProfile?.party_id,
                               userId: deputy.user_id,
+                              slug: deputy.slug,
                             }}
                             councils={councils}
                             parties={parties}
