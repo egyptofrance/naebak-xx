@@ -35,6 +35,11 @@ const adminLinks = [
     icon: <UserCheck className="h-5 w-5" />,
   },
   {
+    label: "قائمة النواب (عامة)",
+    href: `/deputies`,
+    icon: <UserCheck className="h-5 w-5" />,
+  },
+  {
     label: "بيانات المواطنين",
     href: `/app_admin/users`,
     icon: <Users className="h-5 w-5" />,

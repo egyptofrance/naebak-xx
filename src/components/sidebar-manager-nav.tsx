@@ -28,6 +28,11 @@ const managerLinks = [
     icon: <UserCheck className="h-5 w-5" />,
   },
   {
+    label: "قائمة النواب (عامة)",
+    href: "/deputies",
+    icon: <UserCheck className="h-5 w-5" />,
+  },
+  {
     label: "التقارير والإحصائيات",
     href: "/manager-reports",
     icon: <BarChart3 className="h-5 w-5" />,
