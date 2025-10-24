@@ -12,32 +12,39 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-type Deputy = {
-  id: string;
-  slug: string;
-  deputy_status: string;
+type DeputyData = {
+  deputy: {
+    id: string;
+    user_id: string;
+    deputy_status: string;
+    council_id: string | null;
+    slug: string;
+  };
   user: {
+    id: string;
     full_name: string;
     avatar_url: string | null;
-  };
+    governorate_id: string | null;
+    party_id: string | null;
+  } | undefined;
   governorate: {
     id: string;
     name_ar: string;
     name_en: string | null;
-  } | null;
+  } | null | undefined;
   party: {
     id: string;
     name_ar: string;
     name_en: string | null;
-  } | null;
+  } | null | undefined;
   council: {
     id: string;
     name_ar: string;
     name_en: string | null;
-  } | null;
+  } | null | undefined;
 };
 
-export default function DeputiesGrid({ deputies }: { deputies: Deputy[] }) {
+export default function DeputiesGrid({ deputies }: { deputies: DeputyData[] }) {
   const [governorateFilter, setGovernorateFilter] = useState<string>("all");
   const [partyFilter, setPartyFilter] = useState<string>("all");
   const [councilFilter, setCouncilFilter] = useState<string>("all");
@@ -76,17 +83,17 @@ export default function DeputiesGrid({ deputies }: { deputies: Deputy[] }) {
 
   // Filter deputies
   const filteredDeputies = useMemo(() => {
-    return deputies.filter((deputy) => {
-      if (governorateFilter !== "all" && deputy.governorate?.id !== governorateFilter) {
+    return deputies.filter((deputyData) => {
+      if (governorateFilter !== "all" && deputyData.governorate?.id !== governorateFilter) {
         return false;
       }
-      if (partyFilter !== "all" && deputy.party?.id !== partyFilter) {
+      if (partyFilter !== "all" && deputyData.party?.id !== partyFilter) {
         return false;
       }
-      if (councilFilter !== "all" && deputy.council?.id !== councilFilter) {
+      if (councilFilter !== "all" && deputyData.council?.id !== councilFilter) {
         return false;
       }
-      if (statusFilter !== "all" && deputy.deputy_status !== statusFilter) {
+      if (statusFilter !== "all" && deputyData.deputy.deputy_status !== statusFilter) {
         return false;
       }
       return true;
@@ -134,7 +141,7 @@ export default function DeputiesGrid({ deputies }: { deputies: Deputy[] }) {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">الكل</SelectItem>
-                {governorates.map((gov) => (
+                {governorates.map((gov: any) => (
                   <SelectItem key={gov.id} value={gov.id}>
                     {gov.name_ar}
                   </SelectItem>
@@ -152,7 +159,7 @@ export default function DeputiesGrid({ deputies }: { deputies: Deputy[] }) {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">الكل</SelectItem>
-                {parties.map((party) => (
+                {parties.map((party: any) => (
                   <SelectItem key={party.id} value={party.id}>
                     {party.name_ar}
                   </SelectItem>
@@ -170,7 +177,7 @@ export default function DeputiesGrid({ deputies }: { deputies: Deputy[] }) {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">الكل</SelectItem>
-                {councils.map((council) => (
+                {councils.map((council: any) => (
                   <SelectItem key={council.id} value={council.id}>
                     {council.name_ar}
                   </SelectItem>
@@ -204,23 +211,23 @@ export default function DeputiesGrid({ deputies }: { deputies: Deputy[] }) {
 
       {/* Deputies Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredDeputies.map((deputy) => (
+        {filteredDeputies.map((deputyData) => (
           <div
-            key={deputy.id}
+            key={deputyData.deputy.id}
             className="bg-card rounded-lg shadow-sm border overflow-hidden hover:shadow-md transition-shadow"
           >
             {/* Avatar */}
             <div className="flex justify-center pt-6">
               <div className="w-24 h-24 rounded-full overflow-hidden bg-muted flex items-center justify-center">
-                {deputy.user.avatar_url ? (
+                {deputyData.user?.avatar_url ? (
                   <img
-                    src={deputy.user.avatar_url}
-                    alt={deputy.user.full_name}
+                    src={deputyData.user.avatar_url}
+                    alt={deputyData.user.full_name}
                     className="w-full h-full object-cover"
                   />
                 ) : (
                   <span className="text-3xl font-bold text-muted-foreground">
-                    {deputy.user.full_name.charAt(0)}
+                    {deputyData.user?.full_name.charAt(0) || "؟"}
                   </span>
                 )}
               </div>
@@ -229,12 +236,14 @@ export default function DeputiesGrid({ deputies }: { deputies: Deputy[] }) {
             {/* Content */}
             <div className="p-4 space-y-3">
               {/* Name */}
-              <h3 className="text-lg font-bold text-center">{deputy.user.full_name}</h3>
+              <h3 className="text-lg font-bold text-center">
+                {deputyData.user?.full_name || "غير محدد"}
+              </h3>
 
               {/* Status Badge */}
               <div className="flex justify-center">
-                <Badge variant={getStatusVariant(deputy.deputy_status)}>
-                  {getStatusLabel(deputy.deputy_status)}
+                <Badge variant={getStatusVariant(deputyData.deputy.deputy_status)}>
+                  {getStatusLabel(deputyData.deputy.deputy_status)}
                 </Badge>
               </div>
 
@@ -242,20 +251,20 @@ export default function DeputiesGrid({ deputies }: { deputies: Deputy[] }) {
               <div className="space-y-2 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <span className="font-semibold">المحافظة:</span>
-                  <span>{deputy.governorate?.name_ar || "غير محدد"}</span>
+                  <span>{deputyData.governorate?.name_ar || "غير محدد"}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="font-semibold">الحزب:</span>
-                  <span>{deputy.party?.name_ar || "غير محدد"}</span>
+                  <span>{deputyData.party?.name_ar || "غير محدد"}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="font-semibold">المجلس:</span>
-                  <span>{deputy.council?.name_ar || "غير محدد"}</span>
+                  <span>{deputyData.council?.name_ar || "غير محدد"}</span>
                 </div>
               </div>
 
               {/* Visit Button */}
-              <Link href={`/deputy/${deputy.slug}`}>
+              <Link href={`/deputy/${deputyData.deputy.slug}`}>
                 <Button className="w-full" variant="default">
                   زيارة الصفحة
                 </Button>

@@ -6,7 +6,7 @@ export async function getAllDeputies() {
   const supabase = await createSupabaseUserServerComponentClient();
 
   try {
-    // Get all deputy profiles
+    // Get all deputy profiles with slug
     const { data: deputies, error: deputiesError } = await supabase
       .from("deputy_profiles")
       .select(`
@@ -19,65 +19,62 @@ export async function getAllDeputies() {
       .not("slug", "is", null)
       .order("created_at", { ascending: false });
 
-    if (deputiesError) {
-      console.error("[getAllDeputies] Error fetching deputies:", deputiesError);
+    if (deputiesError || !deputies || deputies.length === 0) {
       return [];
     }
 
-    if (!deputies || deputies.length === 0) {
-      return [];
-    }
-
-    // Get all user profiles for these deputies
+    // Get all user profiles
     const userIds = deputies.map((d) => d.user_id);
     const { data: users } = await supabase
       .from("user_profiles")
       .select("id, full_name, avatar_url, governorate_id, party_id")
       .in("id", userIds);
 
-    // Get all governorates
-    const { data: governorates } = await supabase
-      .from("governorates")
-      .select("id, name_ar, name_en");
+    // Get unique IDs for related data
+    const governorateIds = [...new Set(users?.map((u) => u.governorate_id).filter(Boolean))];
+    const partyIds = [...new Set(users?.map((u) => u.party_id).filter(Boolean))];
+    const councilIds = [...new Set(deputies.map((d) => d.council_id).filter(Boolean))];
 
-    // Get all parties
-    const { data: parties } = await supabase
-      .from("parties")
-      .select("id, name_ar, name_en");
-
-    // Get all councils
-    const { data: councils } = await supabase
-      .from("councils")
-      .select("id, name_ar, name_en");
+    // Fetch all related data
+    const [governorates, parties, councils] = await Promise.all([
+      governorateIds.length > 0
+        ? supabase
+            .from("governorates")
+            .select("id, name_ar, name_en")
+            .in("id", governorateIds)
+            .then((res) => res.data || [])
+        : [],
+      partyIds.length > 0
+        ? supabase
+            .from("parties")
+            .select("id, name_ar, name_en")
+            .in("id", partyIds)
+            .then((res) => res.data || [])
+        : [],
+      councilIds.length > 0
+        ? supabase
+            .from("councils")
+            .select("id, name_ar, name_en")
+            .in("id", councilIds)
+            .then((res) => res.data || [])
+        : [],
+    ]);
 
     // Combine data
-    const result = deputies.map((deputy) => {
+    return deputies.map((deputy) => {
       const user = users?.find((u) => u.id === deputy.user_id);
       const governorate = governorates?.find((g) => g.id === user?.governorate_id);
       const party = parties?.find((p) => p.id === user?.party_id);
       const council = councils?.find((c) => c.id === deputy.council_id);
 
       return {
-        id: deputy.id,
-        slug: deputy.slug,
-        deputy_status: deputy.deputy_status,
-        user: {
-          full_name: user?.full_name || "",
-          avatar_url: user?.avatar_url || null,
-        },
-        governorate: governorate
-          ? { id: governorate.id, name_ar: governorate.name_ar, name_en: governorate.name_en }
-          : null,
-        party: party
-          ? { id: party.id, name_ar: party.name_ar, name_en: party.name_en }
-          : null,
-        council: council
-          ? { id: council.id, name_ar: council.name_ar, name_en: council.name_en }
-          : null,
+        deputy,
+        user,
+        governorate,
+        party,
+        council,
       };
     });
-
-    return result;
   } catch (error) {
     console.error("[getAllDeputies] Exception:", error);
     return [];
