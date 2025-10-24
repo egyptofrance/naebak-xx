@@ -202,11 +202,11 @@ export default function DeputiesGrid({ deputies }: { deputies: DeputiesData }) {
         {filteredDeputies.map((deputyData) => (
           <div
             key={deputyData.deputy.id}
-            className="bg-card rounded-lg shadow-sm border overflow-hidden hover:shadow-md transition-shadow"
+            className="bg-card rounded-xl shadow-sm border overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
           >
             {/* Avatar */}
-            <div className="flex justify-center pt-6">
-              <div className="w-24 h-24 rounded-full overflow-hidden bg-muted flex items-center justify-center">
+            <div className="flex justify-center pt-8 pb-4 bg-gradient-to-b from-muted/30 to-transparent">
+              <div className="w-28 h-28 rounded-full overflow-hidden bg-muted flex items-center justify-center ring-4 ring-background shadow-lg">
                 {deputyData.user?.avatar_url ? (
                   <img
                     src={deputyData.user.avatar_url}
@@ -214,7 +214,7 @@ export default function DeputiesGrid({ deputies }: { deputies: DeputiesData }) {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <span className="text-3xl font-bold text-muted-foreground">
+                  <span className="text-4xl font-bold text-muted-foreground">
                     {deputyData.user?.full_name?.charAt(0) || "؟"}
                   </span>
                 )}
@@ -222,40 +222,47 @@ export default function DeputiesGrid({ deputies }: { deputies: DeputiesData }) {
             </div>
 
             {/* Content */}
-            <div className="p-4 space-y-3">
-              {/* Name */}
-              <h3 className="text-lg font-bold text-center">
-                {deputyData.user?.full_name || "غير محدد"}
-              </h3>
-
-              {/* Status Badge */}
-              <div className="flex justify-center">
+            <div className="p-5 space-y-4">
+              {/* Name & Status */}
+              <div className="text-center space-y-2">
+                <h3 className="text-xl font-bold leading-tight">
+                  {deputyData.user?.full_name || "غير محدد"}
+                </h3>
                 <Badge
                   variant={getStatusVariant(deputyData.deputy.deputy_status)}
+                  className="text-xs"
                 >
                   {getStatusLabel(deputyData.deputy.deputy_status)}
                 </Badge>
               </div>
 
-              {/* Info */}
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <span className="font-semibold">المحافظة:</span>
-                  <span>{deputyData.governorate?.name_ar || "غير محدد"}</span>
+              {/* Info Grid - 2 columns */}
+              <div className="grid grid-cols-2 gap-3 text-sm pt-2 border-t">
+                <div className="space-y-1">
+                  <div className="text-xs text-muted-foreground font-medium">المحافظة</div>
+                  <div className="font-semibold text-foreground truncate">
+                    {deputyData.governorate?.name_ar || "غير محدد"}
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="font-semibold">الحزب:</span>
-                  <span>{deputyData.party?.name_ar || "غير محدد"}</span>
+                <div className="space-y-1">
+                  <div className="text-xs text-muted-foreground font-medium">الحزب</div>
+                  <div className="font-semibold text-foreground truncate">
+                    {deputyData.party?.name_ar || "غير محدد"}
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="font-semibold">المجلس:</span>
-                  <span>{deputyData.council?.name_ar || "غير محدد"}</span>
+              </div>
+
+              {/* Council - Full Width */}
+              <div className="space-y-1 text-sm pb-2">
+                <div className="text-xs text-muted-foreground font-medium">المجلس</div>
+                <div className="font-semibold text-foreground">
+                  {deputyData.council?.name_ar || "غير محدد"}
                 </div>
               </div>
 
               {/* Visit Button */}
               <Link href={`/deputy/${deputyData.slug}`}>
-                <Button className="w-full" variant="default">
+                <Button className="w-full" variant="default" size="lg">
                   زيارة الصفحة
                 </Button>
               </Link>
