@@ -80,12 +80,22 @@ export async function getDeputyBySlug(slug: string) {
         : null,
     ]);
 
+    // Get banner_image separately (to avoid TypeScript issues)
+    const { data: bannerData } = await supabase
+      .from("deputy_profiles")
+      .select("banner_image")
+      .eq("id", deputy.id)
+      .single();
+
+    const bannerImage = (bannerData as any)?.banner_image || null;
+
     return {
       deputy,
       user,
       governorate,
       party,
       council,
+      bannerImage,
     };
   } catch (error) {
     console.error("[getDeputyBySlug] Exception:", error);

@@ -20,7 +20,10 @@ export default async function DeputyPage({ params }: PageProps) {
     notFound();
   }
 
-  const { deputy, user, governorate, party, council } = data;
+  const { deputy, user, governorate, party, council, bannerImage } = data;
+  
+  // Use site-banner as default if no custom banner
+  const displayBanner = bannerImage || "/images/site-banner.jpg";
 
   // Get status label
   const getStatusLabel = (status: string) => {
@@ -51,6 +54,19 @@ export default async function DeputyPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Banner Image */}
+      <div className="w-full h-64 md:h-96 relative overflow-hidden bg-muted">
+        <img
+          src={displayBanner}
+          alt="Banner"
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            // Fallback to gradient if image fails to load
+            e.currentTarget.style.display = 'none';
+          }}
+        />
+      </div>
+
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto space-y-6">
           {/* Header Card */}
