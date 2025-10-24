@@ -21,6 +21,9 @@ export default async function DeputyPage({ params }: PageProps) {
   }
 
   const { deputy, user, governorate, party, council } = data;
+  
+  // Type assertion for banner_image (not yet in generated types)
+  const bannerImage = (deputy as any).banner_image as string | null;
 
   // Get status label
   const getStatusLabel = (status: string) => {
@@ -52,10 +55,10 @@ export default async function DeputyPage({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Banner Image */}
-      {deputy.banner_image && (
+      {bannerImage && (
         <div className="w-full h-64 md:h-96 relative overflow-hidden">
           <img
-            src={deputy.banner_image}
+            src={bannerImage}
             alt="Banner"
             className="w-full h-full object-cover"
           />
