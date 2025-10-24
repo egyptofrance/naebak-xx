@@ -7,7 +7,7 @@ export async function getDeputyBySlug(slug: string) {
 
   try {
     // Get deputy profile by slug
-    const { data: deputy, error: deputyError } = await supabase
+    const { data: deputy, error: deputyError } = (await supabase
       .from("deputy_profiles")
       .select(`
         id,
@@ -22,9 +22,9 @@ export async function getDeputyBySlug(slug: string) {
         events,
         rating_average,
         rating_count
-      `) as any
+      `)
       .eq("slug", slug)
-      .maybeSingle();
+      .maybeSingle()) as any;
 
     if (deputyError) {
       console.error("[getDeputyBySlug] Error:", deputyError);
