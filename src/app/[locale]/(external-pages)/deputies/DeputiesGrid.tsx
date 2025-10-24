@@ -12,51 +12,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-// Using exact types from database schema
-type DeputyData = {
-  deputy: {
-    id: string;
-    user_id: string;
-    deputy_status: string;
-    council_id: string | null;
-  };
-  slug: string;
-  user:
-    | {
-        id: string;
-        full_name: string | null;
-        avatar_url: string | null;
-        governorate_id: string | null;
-        party_id: string | null;
-      }
-    | undefined;
-  governorate:
-    | {
-        id: string;
-        name_ar: string;
-        name_en: string | null;
-      }
-    | null
-    | undefined;
-  party:
-    | {
-        id: string;
-        name_ar: string;
-        name_en: string | null;
-      }
-    | null
-    | undefined;
-  council:
-    | {
-        id: string;
-        name_ar: string;
-        name_en: string | null;
-      }
-    | null
-    | undefined;
-};
+// Use Awaited and ReturnType to infer types from getAllDeputies
+import { getAllDeputies } from "@/app/actions/deputy/getAllDeputies";
 
-export default function DeputiesGrid({ deputies }: { deputies: DeputyData[] }) {
+type DeputiesData = Awaited<ReturnType<typeof getAllDeputies>>;
+type DeputyData = DeputiesData[number];
+
+export default function DeputiesGrid({ deputies }: { deputies: DeputiesData }) {
   const [governorateFilter, setGovernorateFilter] = useState<string>("all");
   const [partyFilter, setPartyFilter] = useState<string>("all");
   const [councilFilter, setCouncilFilter] = useState<string>("all");
