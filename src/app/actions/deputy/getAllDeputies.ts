@@ -41,10 +41,16 @@ export async function getAllDeputies() {
       .select("id, full_name, avatar_url, governorate_id, party_id")
       .in("id", userIds);
 
-    // Get unique IDs for related data
-    const governorateIds = [...new Set(users?.map((u) => u.governorate_id).filter(Boolean))];
-    const partyIds = [...new Set(users?.map((u) => u.party_id).filter(Boolean))];
-    const councilIds = [...new Set(deputiesWithSlugs.map((d) => d.council_id).filter(Boolean))];
+    // Get unique IDs for related data (with proper type guards)
+    const governorateIds = [...new Set(
+      users?.map((u) => u.governorate_id).filter((id): id is string => id !== null)
+    )];
+    const partyIds = [...new Set(
+      users?.map((u) => u.party_id).filter((id): id is string => id !== null)
+    )];
+    const councilIds = [...new Set(
+      deputiesWithSlugs.map((d) => d.council_id).filter((id): id is string => id !== null)
+    )];
 
     // Fetch all related data
     const [governorates, parties, councils] = await Promise.all([
