@@ -29,8 +29,8 @@ export default async function DeputyPage({ params }: PageProps) {
 
   // Check if user is authenticated
   const supabase = await createSupabaseUserServerComponentClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  const isAuthenticated = !!user;
+  const { data: { user: authUser } } = await supabase.auth.getUser();
+  const isAuthenticated = !!authUser;
 
   const { deputy, user, governorate, party, council, bannerImage } = data;
   
