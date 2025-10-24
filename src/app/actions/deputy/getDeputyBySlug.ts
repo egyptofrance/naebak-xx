@@ -16,7 +16,10 @@ export async function getDeputyBySlug(slug: string) {
         council_id,
         bio,
         office_address,
-        office_phone
+        office_phone,
+        electoral_program,
+        achievements,
+        events
       `)
       .eq("slug", slug)
       .maybeSingle();

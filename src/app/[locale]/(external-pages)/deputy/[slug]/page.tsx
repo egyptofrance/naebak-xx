@@ -154,11 +154,46 @@ export default async function DeputyPage({ params }: PageProps) {
             )}
           </div>
 
-          {/* Placeholder for more content */}
+          {/* Electoral Program Card */}
           <div className="bg-card p-6 rounded-lg shadow-sm border">
-            <p className="text-muted-foreground text-center">
-              سيتم إضافة البرنامج الانتخابي والإنجازات والفعاليات قريباً...
-            </p>
+            <h2 className="text-2xl font-bold mb-4">البرنامج الانتخابي</h2>
+            {deputy.electoral_program ? (
+              <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                {deputy.electoral_program}
+              </div>
+            ) : (
+              <p className="text-sm italic text-muted-foreground text-center py-4">
+                {noData}
+              </p>
+            )}
+          </div>
+
+          {/* Achievements Card */}
+          <div className="bg-card p-6 rounded-lg shadow-sm border">
+            <h2 className="text-2xl font-bold mb-4">الإنجازات</h2>
+            {deputy.achievements ? (
+              <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                {deputy.achievements}
+              </div>
+            ) : (
+              <p className="text-sm italic text-muted-foreground text-center py-4">
+                {noData}
+              </p>
+            )}
+          </div>
+
+          {/* Events Card */}
+          <div className="bg-card p-6 rounded-lg shadow-sm border">
+            <h2 className="text-2xl font-bold mb-4">الفعاليات والمناسبات</h2>
+            {deputy.events ? (
+              <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                {deputy.events}
+              </div>
+            ) : (
+              <p className="text-sm italic text-muted-foreground text-center py-4">
+                {noData}
+              </p>
+            )}
           </div>
         </div>
       </div>
