@@ -22,8 +22,12 @@ export default async function DeputyPage({ params }: PageProps) {
 
   const { deputy, user, governorate, party, council, bannerImage } = data;
   
-  // Use site-banner as default if no custom banner
-  const displayBanner = bannerImage || "/images/site-banner.jpg";
+  // Get Supabase URL for storage
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  
+  // Use site-banner from Supabase Storage as default if no custom banner
+  const defaultBanner = `${supabaseUrl}/storage/v1/object/public/public-user-assets/site-banner.jpg`;
+  const displayBanner = bannerImage || defaultBanner;
 
   // Get status label
   const getStatusLabel = (status: string) => {
