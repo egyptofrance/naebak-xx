@@ -22,13 +22,6 @@ export interface DeputyProfile {
   office_phone: string | null;
   office_hours: string | null;
   council_id: string | null;
-  points: number;
-  gender: "male" | "female";
-  governorate: string;
-  council_type: "parliament" | "senate" | "local";
-  party_id: string | null;
-  banner_image: string | null;
-  slug: string | null;
   created_at: string;
   updated_at: string;
 }
