@@ -34,8 +34,8 @@ export async function rateDeputy(deputyId: string, rating: number) {
     }
 
     // Upsert rating (insert or update if exists)
-    const { error: upsertError } = await supabase
-      .from("deputy_ratings")
+    const { error: upsertError } = (await supabase
+      .from("deputy_ratings" as any)
       .upsert(
         {
           deputy_id: deputyId,
@@ -46,7 +46,7 @@ export async function rateDeputy(deputyId: string, rating: number) {
         {
           onConflict: "deputy_id,user_id",
         }
-      );
+      )) as any;
 
     if (upsertError) {
       console.error("[rateDeputy] Upsert error:", upsertError);

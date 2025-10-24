@@ -16,12 +16,12 @@ export async function getUserRating(deputyId: string): Promise<number | null> {
     }
 
     // Get user's rating for this deputy
-    const { data, error } = await supabase
-      .from("deputy_ratings")
+    const { data, error } = (await supabase
+      .from("deputy_ratings" as any)
       .select("rating")
       .eq("deputy_id", deputyId)
       .eq("user_id", user.id)
-      .maybeSingle();
+      .maybeSingle()) as any;
 
     if (error) {
       console.error("[getUserRating] Error:", error);
