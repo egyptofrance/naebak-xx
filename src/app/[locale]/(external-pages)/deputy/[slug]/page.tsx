@@ -47,6 +47,8 @@ export default async function DeputyPage({ params }: PageProps) {
     }
   };
 
+  const noData = "لا توجد بيانات متوفرة";
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-16">
@@ -73,7 +75,7 @@ export default async function DeputyPage({ params }: PageProps) {
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
                   <h1 className="text-4xl font-bold">
-                    {user.full_name || "غير محدد"}
+                    {user.full_name || noData}
                   </h1>
                   <Badge variant={getStatusVariant(deputy.deputy_status)}>
                     {getStatusLabel(deputy.deputy_status)}
@@ -81,65 +83,76 @@ export default async function DeputyPage({ params }: PageProps) {
                 </div>
 
                 <div className="space-y-2 text-muted-foreground">
-                  {governorate && (
-                    <p className="flex items-center gap-2">
-                      <span className="font-semibold">المحافظة:</span>
-                      {locale === "ar" ? governorate.name_ar : governorate.name_en}
-                    </p>
-                  )}
-                  {party && (
-                    <p className="flex items-center gap-2">
-                      <span className="font-semibold">الحزب:</span>
-                      {locale === "ar" ? party.name_ar : party.name_en}
-                    </p>
-                  )}
-                  {council && (
-                    <p className="flex items-center gap-2">
-                      <span className="font-semibold">المجلس:</span>
-                      {locale === "ar" ? council.name_ar : council.name_en}
-                    </p>
-                  )}
+                  <p className="flex items-center gap-2">
+                    <span className="font-semibold">المحافظة:</span>
+                    {governorate 
+                      ? (locale === "ar" ? governorate.name_ar : governorate.name_en)
+                      : <span className="text-sm italic">{noData}</span>
+                    }
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <span className="font-semibold">الحزب:</span>
+                    {party 
+                      ? (locale === "ar" ? party.name_ar : party.name_en)
+                      : <span className="text-sm italic">{noData}</span>
+                    }
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <span className="font-semibold">المجلس:</span>
+                    {council 
+                      ? (locale === "ar" ? council.name_ar : council.name_en)
+                      : <span className="text-sm italic">{noData}</span>
+                    }
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Contact Info Card */}
-          {(user.phone || deputy.office_phone || deputy.office_address) && (
-            <div className="bg-card p-6 rounded-lg shadow-sm border">
-              <h2 className="text-2xl font-bold mb-4">معلومات الاتصال</h2>
-              <div className="space-y-3">
-                {user.phone && (
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold text-muted-foreground">الهاتف الشخصي:</span>
-                    <span dir="ltr">{user.phone}</span>
-                  </div>
+          <div className="bg-card p-6 rounded-lg shadow-sm border">
+            <h2 className="text-2xl font-bold mb-4">معلومات الاتصال</h2>
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-muted-foreground">الهاتف الشخصي:</span>
+                {user.phone ? (
+                  <span dir="ltr">{user.phone}</span>
+                ) : (
+                  <span className="text-sm italic text-muted-foreground">{noData}</span>
                 )}
-                {deputy.office_phone && (
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold text-muted-foreground">هاتف المكتب:</span>
-                    <span dir="ltr">{deputy.office_phone}</span>
-                  </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-muted-foreground">هاتف المكتب:</span>
+                {deputy.office_phone ? (
+                  <span dir="ltr">{deputy.office_phone}</span>
+                ) : (
+                  <span className="text-sm italic text-muted-foreground">{noData}</span>
                 )}
-                {deputy.office_address && (
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold text-muted-foreground">عنوان المكتب:</span>
-                    <span>{deputy.office_address}</span>
-                  </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-muted-foreground">عنوان المكتب:</span>
+                {deputy.office_address ? (
+                  <span>{deputy.office_address}</span>
+                ) : (
+                  <span className="text-sm italic text-muted-foreground">{noData}</span>
                 )}
               </div>
             </div>
-          )}
+          </div>
 
           {/* Bio Card */}
-          {deputy.bio && (
-            <div className="bg-card p-6 rounded-lg shadow-sm border">
-              <h2 className="text-2xl font-bold mb-4">السيرة الذاتية</h2>
+          <div className="bg-card p-6 rounded-lg shadow-sm border">
+            <h2 className="text-2xl font-bold mb-4">السيرة الذاتية</h2>
+            {deputy.bio ? (
               <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
                 {deputy.bio}
               </p>
-            </div>
-          )}
+            ) : (
+              <p className="text-sm italic text-muted-foreground text-center py-4">
+                {noData}
+              </p>
+            )}
+          </div>
 
           {/* Placeholder for more content */}
           <div className="bg-card p-6 rounded-lg shadow-sm border">
