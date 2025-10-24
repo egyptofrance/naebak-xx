@@ -54,9 +54,9 @@ export async function getDeputyBySlug(slug: string): Promise<DeputyFullData | nu
       { data: ratings },
       { data: complaints }
     ] = await Promise.all([
-      // Get party if exists
-      deputy.party_id
-        ? supabase.from("parties").select("*").eq("id", deputy.party_id).maybeSingle()
+      // Get party if exists (party_id is in user_profiles, not deputy_profiles)
+      user.party_id
+        ? supabase.from("parties").select("*").eq("id", user.party_id).maybeSingle()
         : Promise.resolve({ data: null }),
       
       // Get council if exists
