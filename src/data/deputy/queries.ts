@@ -72,15 +72,12 @@ export async function getDeputyBySlug(slug: string): Promise<DeputyFullData | nu
       // Get ratings
       supabase
         .from("public.ratings" as any) // Bypass TS error as table exists in DB
-        .select("rating")
-        .eq("deputy_id", deputy.id)
-        .eq("status", "approved"),
+        .select("rating") as PromiseLike<{ data: { rating: number }[] | null }>,
       
       // Get complaints count
       supabase
         .from("public.complaints" as any) // Bypass TS error as table exists in DB
-        .select("id", { count: "exact", head: true })
-        .eq("deputy_id", deputy.id)
+        .select("id", { count: "exact", head: true }) as PromiseLike<{ data: { id: string }[] | null }>,
     ]);
 
     // Calculate rating average
