@@ -64,7 +64,7 @@ export default function DeputiesGrid({
 
   // Filter deputies
   const filteredDeputies = useMemo(() => {
-    return deputies.filter((deputyData) => {
+    return deputies.filter((deputyData: DeputyData) => {
       if (
         governorateFilter !== "all" &&
         deputyData.governorate?.id !== governorateFilter
