@@ -24,7 +24,7 @@ export async function getAllDeputies() {
         candidate_type,
         rating_average,
         rating_count,
-        user_profiles!inner (
+        user_profiles (
           id,
           full_name,
           avatar_url,
