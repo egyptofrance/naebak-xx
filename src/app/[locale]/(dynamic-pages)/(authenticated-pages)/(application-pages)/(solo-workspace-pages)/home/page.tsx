@@ -40,6 +40,13 @@ export default async function CitizenHomePage() {
     getAllCouncils(),
   ]);
 
+  // Debug logging
+  console.log('[Home] Profile electoral_district:', profile?.electoral_district);
+  console.log('[Home] Total deputies:', deputies.length);
+  if (deputies.length > 0) {
+    console.log('[Home] First deputy electoral_district_id:', deputies[0].deputy.electoral_district_id);
+  }
+
   // Filter deputies by user's electoral district
   const myDeputies = deputies.filter(deputy => {
     if (profile?.electoral_district) {
