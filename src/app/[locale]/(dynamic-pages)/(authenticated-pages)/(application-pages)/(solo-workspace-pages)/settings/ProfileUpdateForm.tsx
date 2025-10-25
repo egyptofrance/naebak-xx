@@ -74,9 +74,10 @@ export function ProfileUpdateForm({
   useEffect(() => {
     const governorateId = form.watch("governorateId");
     if (governorateId && typeof governorateId === 'string') {
+      const selectedGovernorateId: string = governorateId;
       async function loadDistricts() {
         try {
-          const districts = await getElectoralDistrictsByGovernorate(governorateId);
+          const districts = await getElectoralDistrictsByGovernorate(selectedGovernorateId);
           setElectoralDistricts(districts);
         } catch (error) {
           console.error("Error loading electoral districts:", error);
