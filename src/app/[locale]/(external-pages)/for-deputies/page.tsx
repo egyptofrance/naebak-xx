@@ -241,7 +241,7 @@ export default function ForDeputiesPage() {
             viewport={{ once: true }}
             variants={staggerContainer}
           >
-            <BentoGrid className="max-w-7xl mx-auto auto-rows-[16rem] md:auto-rows-[20rem]">
+            <BentoGrid className="max-w-7xl mx-auto auto-rows-[14rem] md:auto-rows-[20rem]">
               {features.map((feature, idx) => (
                 <motion.div key={idx} variants={fadeIn}>
                   <BentoCard {...feature} />
