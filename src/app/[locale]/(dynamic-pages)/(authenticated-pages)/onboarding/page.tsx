@@ -59,7 +59,19 @@ async function OnboardingFlowWrapper() {
   ]);
   const { userProfile } = onboardingConditions;
 
-  const onboardingStatus = authUserMetadataSchema.parse(user.user_metadata);
+  // Parse user metadata with fallback to defaults if parsing fails
+  let onboardingStatus;
+  try {
+    onboardingStatus = authUserMetadataSchema.parse(user.user_metadata || {});
+  } catch (error) {
+    console.error('Failed to parse user metadata:', error);
+    // Use default values if parsing fails
+    onboardingStatus = {
+      onboardingHasAcceptedTerms: false,
+      onboardingHasCompletedProfile: false,
+      onboardingHasCreatedWorkspace: false,
+    };
+  }
 
   return (
     <OnboardingProvider
