@@ -11,7 +11,7 @@ const BentoGrid = ({
   return (
     <div
       className={cn(
-        "grid w-full auto-rows-[22rem] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4",
+        "grid w-full grid-cols-1 md:grid-cols-2 md:auto-rows-[22rem] lg:grid-cols-3 gap-2 md:gap-4",
         className,
       )}
     >
@@ -34,7 +34,7 @@ const BentoCard = ({
   <div
     key={name}
     className={cn(
-      "group relative  flex flex-col justify-between overflow-hidden rounded-xl",
+      "group relative flex flex-col justify-between overflow-hidden rounded-xl min-h-[180px] md:min-h-0",
       // light styles
       "bg-white [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)]",
       // dark styles
@@ -43,8 +43,8 @@ const BentoCard = ({
     )}
   >
     <div>{background}</div>
-    <div className="pointer-events-none z-10 flex bg-background transform-gpu flex-col gap-1 p-3 md:p-6 ">
-      <h3 className="text-base md:text-xl font-semibold ">{name}</h3>
+    <div className="pointer-events-none z-10 flex bg-background transform-gpu flex-col gap-1 p-3 md:p-6 text-right">
+      <h3 className="text-base md:text-xl font-semibold">{name}</h3>
       <p className="text-xs md:text-base max-w-lg leading-snug md:leading-relaxed text-slate-500 dark:text-slate-400">
         {description}
       </p>
