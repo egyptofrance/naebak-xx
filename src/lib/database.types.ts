@@ -1766,7 +1766,7 @@ export type Database = {
           name: string
           name_en: string | null
           governorate_id: string
-          district_type: string
+          district_type: "individual" | "list"
           created_at: string
           updated_at: string
         }
@@ -1775,7 +1775,7 @@ export type Database = {
           name: string
           name_en?: string | null
           governorate_id: string
-          district_type: string
+          district_type: "individual" | "list"
           created_at?: string
           updated_at?: string
         }
@@ -1784,7 +1784,7 @@ export type Database = {
           name?: string
           name_en?: string | null
           governorate_id?: string
-          district_type?: string
+          district_type?: "individual" | "list"
           created_at?: string
           updated_at?: string
         }
