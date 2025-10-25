@@ -5,8 +5,8 @@ import { getBreakingNews } from "@/app/actions/breaking-news/getBreakingNews";
 import { routing } from "@/i18n/routing";
 import { unstable_setRequestLocale } from "next-intl/server";
 import "./layout.css";
-export const dynamic = "force-static";
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -25,6 +25,7 @@ export default async function Layout(props: {
   
   // Fetch breaking news
   const breakingNews = await getBreakingNews();
+  console.log('[Layout] Breaking news count:', breakingNews.length);
   
   return (
     <div className="flex flex-col min-h-screen">

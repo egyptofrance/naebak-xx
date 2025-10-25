@@ -15,7 +15,10 @@ interface BreakingNewsTickerProps {
 export function BreakingNewsTicker({ newsItems }: BreakingNewsTickerProps) {
   const [isVisible, setIsVisible] = useState(true);
 
+  console.log('[BreakingNewsTicker] Received news items:', newsItems);
+
   if (!newsItems || newsItems.length === 0) {
+    console.log('[BreakingNewsTicker] No news items, returning null');
     return null;
   }
 
