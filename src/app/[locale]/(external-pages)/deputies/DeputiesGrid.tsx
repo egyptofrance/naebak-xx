@@ -58,8 +58,8 @@ export default function DeputiesGrid({
   isAuthenticated?: boolean;
   userGovernorateId?: string | null;
 }) {
-  // Default governorate: user's governorate if authenticated, otherwise "all"
-  const defaultGovernorateId = isAuthenticated && userGovernorateId ? userGovernorateId : "all";
+  // Default governorate: always show all deputies by default
+  const defaultGovernorateId = "all";
 
   const [governorateFilter, setGovernorateFilter] = useState<string>(defaultGovernorateId);
   const [partyFilter, setPartyFilter] = useState<string>("all");
@@ -498,11 +498,17 @@ export default function DeputiesGrid({
               />
 
               {/* Visit Button */}
-              <Link href={`/deputy/${deputyData.slug}`}>
-                <Button className="w-full" variant="default" size="lg">
-                  زيارة الصفحة
+              {deputyData.slug ? (
+                <Link href={`/deputy/${deputyData.slug}`}>
+                  <Button className="w-full" variant="default" size="lg">
+                    زيارة الصفحة
+                  </Button>
+                </Link>
+              ) : (
+                <Button className="w-full" variant="outline" size="lg" disabled>
+                  الصفحة غير متوفرة
                 </Button>
-              </Link>
+              )}
             </div>
           </div>
         ))}

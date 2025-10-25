@@ -47,7 +47,6 @@ export async function getAllDeputies() {
           district_type
         )
       `)
-      .not("slug", "is", null)
       .order("created_at", { ascending: false });
 
     if (deputiesError) {
