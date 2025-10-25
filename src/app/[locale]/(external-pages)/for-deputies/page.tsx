@@ -46,7 +46,7 @@ export default function ForDeputiesPage() {
           <Calendar className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[#F87B1B] opacity-20" />
         </div>
       ),
-      className: "md:col-span-2"
+      className: "col-span-1 md:col-span-2"
     },
     {
       name: "سجل الإنجازات",
@@ -56,7 +56,7 @@ export default function ForDeputiesPage() {
           <Trophy className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[#004030] opacity-20" />
         </div>
       ),
-      className: "md:col-span-1"
+      className: "col-span-1"
     },
     {
       name: "البرنامج الانتخابي",
@@ -66,7 +66,7 @@ export default function ForDeputiesPage() {
           <FileText className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[#F87B1B] opacity-20" />
         </div>
       ),
-      className: "md:col-span-1"
+      className: "col-span-1"
     },
     {
       name: "صفحة شخصية احترافية",
@@ -76,7 +76,7 @@ export default function ForDeputiesPage() {
           <User className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[#004030] opacity-20" />
         </div>
       ),
-      className: "md:col-span-1"
+      className: "col-span-1"
     },
     {
       name: "تواصل مباشر",
@@ -86,7 +86,7 @@ export default function ForDeputiesPage() {
           <MessageCircle className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[#F87B1B] opacity-20" />
         </div>
       ),
-      className: "md:col-span-1"
+      className: "col-span-1"
     }
   ];
 
@@ -270,7 +270,7 @@ export default function ForDeputiesPage() {
             viewport={{ once: true }}
             variants={staggerContainer}
           >
-            <BentoGrid className="max-w-7xl mx-auto md:auto-rows-[20rem]">
+            <BentoGrid className="max-w-7xl mx-auto auto-rows-[18rem] md:auto-rows-[20rem]">
               {features.map((feature, idx) => (
                 <motion.div key={idx} variants={fadeIn}>
                   <BentoCard {...feature} />

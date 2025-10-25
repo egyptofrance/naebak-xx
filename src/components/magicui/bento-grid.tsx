@@ -11,7 +11,7 @@ const BentoGrid = ({
   return (
     <div
       className={cn(
-        "grid w-full auto-rows-[22rem] grid-cols-3 gap-4",
+        "grid w-full auto-rows-[22rem] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4",
         className,
       )}
     >
@@ -43,9 +43,9 @@ const BentoCard = ({
     )}
   >
     <div>{background}</div>
-    <div className="pointer-events-none z-10 flex bg-background transform-gpu flex-col gap-1 p-6 ">
-      <h3 className="text-xl font-semibold ">{name}</h3>
-      <p className="max-w-lg leading-relaxed text-slate-500 dark:text-slate-400">
+    <div className="pointer-events-none z-10 flex bg-background transform-gpu flex-col gap-2 p-4 md:p-6 ">
+      <h3 className="text-lg md:text-xl font-semibold ">{name}</h3>
+      <p className="text-sm md:text-base max-w-lg leading-relaxed text-slate-500 dark:text-slate-400">
         {description}
       </p>
     </div>
