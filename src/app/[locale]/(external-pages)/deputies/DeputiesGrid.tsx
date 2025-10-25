@@ -15,6 +15,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 // Use Awaited and ReturnType to infer types from getAllDeputies
 import { getAllDeputies } from "@/app/actions/deputy/getAllDeputies";
@@ -29,6 +38,8 @@ type GovernoratesData = Awaited<ReturnType<typeof getAllGovernorates>>;
 type PartiesData = Awaited<ReturnType<typeof getAllParties>>;
 type ElectoralDistrictsData = Awaited<ReturnType<typeof getAllElectoralDistricts>>;
 type CouncilsData = Awaited<ReturnType<typeof getAllCouncils>>;
+
+const ITEMS_PER_PAGE = 20;
 
 export default function DeputiesGrid({ 
   deputies,
@@ -57,11 +68,17 @@ export default function DeputiesGrid({
   const [councilFilter, setCouncilFilter] = useState<string>("all");
   const [statusFilters, setStatusFilters] = useState<string[]>(["current", "former", "candidate"]);
   const [genderFilter, setGenderFilter] = useState<string>("all");
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   // Update governorate filter when userGovernorateId changes
   useEffect(() => {
     setGovernorateFilter(defaultGovernorateId);
   }, [defaultGovernorateId]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [governorateFilter, partyFilter, electoralDistrictFilter, councilFilter, statusFilters, genderFilter]);
 
   // Filter electoral districts by selected governorate
   const filteredElectoralDistricts = useMemo(() => {
@@ -133,6 +150,48 @@ export default function DeputiesGrid({
     });
   }, [deputies, governorateFilter, partyFilter, electoralDistrictFilter, councilFilter, statusFilters, genderFilter]);
 
+  // Pagination
+  const totalPages = Math.ceil(filteredDeputies.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedDeputies = filteredDeputies.slice(startIndex, endIndex);
+
+  // Generate page numbers for pagination
+  const getPageNumbers = () => {
+    const pages: (number | string)[] = [];
+    const maxVisible = 5;
+    
+    if (totalPages <= maxVisible) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        for (let i = 1; i <= 4; i++) {
+          pages.push(i);
+        }
+        pages.push('ellipsis');
+        pages.push(totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pages.push(1);
+        pages.push('ellipsis');
+        for (let i = totalPages - 3; i <= totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        pages.push(1);
+        pages.push('ellipsis');
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          pages.push(i);
+        }
+        pages.push('ellipsis');
+        pages.push(totalPages);
+      }
+    }
+    
+    return pages;
+  };
+
   const getStatusLabel = (status: string) => {
     switch (status) {
       case "current":
@@ -165,166 +224,176 @@ export default function DeputiesGrid({
     <div className="space-y-8">
       {/* Filters */}
       <div className="bg-card p-6 rounded-lg shadow-sm border">
-        <h2 className="text-xl font-bold mb-4">تصفية النتائج</h2>
+        <h2 className="text-xl font-bold mb-6">تصفية النتائج</h2>
         
-        {/* Dropdowns Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          {/* Governorate Filter */}
-          <div>
-            <label className="text-sm font-medium mb-2 block">المحافظة</label>
-            <Select
-              value={governorateFilter}
-              onValueChange={(value) => {
-                setGovernorateFilter(value);
-                setElectoralDistrictFilter("all"); // Reset electoral district when governorate changes
-              }}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="الكل" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">الكل</SelectItem>
-                {governorates.map((gov: any) => (
-                  <SelectItem key={gov.id} value={gov.id}>
-                    {gov.name_ar}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+        {/* Main Filters Grid */}
+        <div className="space-y-6">
+          {/* Row 1: Location Filters */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium mb-2 block">المحافظة</label>
+              <Select
+                value={governorateFilter}
+                onValueChange={(value) => {
+                  setGovernorateFilter(value);
+                  setElectoralDistrictFilter("all");
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="اختر المحافظة" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">جميع المحافظات</SelectItem>
+                  {governorates.map((gov: any) => (
+                    <SelectItem key={gov.id} value={gov.id}>
+                      {gov.name_ar}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-          {/* Electoral District Filter */}
-          <div>
-            <label className="text-sm font-medium mb-2 block">الدائرة الانتخابية</label>
-            <Select
-              value={electoralDistrictFilter}
-              onValueChange={setElectoralDistrictFilter}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="الكل" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">الكل</SelectItem>
-                {filteredElectoralDistricts.map((district: any) => (
-                  <SelectItem key={district.id} value={district.id}>
-                    {district.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Party Filter */}
-          <div>
-            <label className="text-sm font-medium mb-2 block">الحزب</label>
-            <Select value={partyFilter} onValueChange={setPartyFilter}>
-              <SelectTrigger>
-                <SelectValue placeholder="الكل" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">الكل</SelectItem>
-                {parties.map((party: any) => (
-                  <SelectItem key={party.id} value={party.id}>
-                    {party.name_ar}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Council Filter */}
-          <div>
-            <label className="text-sm font-medium mb-2 block">المجلس</label>
-            <Select value={councilFilter} onValueChange={setCouncilFilter}>
-              <SelectTrigger>
-                <SelectValue placeholder="الكل" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">الكل</SelectItem>
-                {councils.map((council: any) => (
-                  <SelectItem key={council.id} value={council.id}>
-                    {council.name_ar}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        {/* Status Checkboxes and Gender Radio Buttons Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t">
-          {/* Status Filter (Checkboxes) */}
-          <div>
-            <label className="text-sm font-medium mb-3 block">الحالة</label>
-            <div className="flex flex-col space-y-2">
-              <div className="flex items-center space-x-2 space-x-reverse">
-                <Checkbox
-                  id="status-current"
-                  checked={statusFilters.includes("current")}
-                  onCheckedChange={(checked) => handleStatusChange("current", checked as boolean)}
-                />
-                <Label htmlFor="status-current" className="cursor-pointer">
-                  نائب حالي
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2 space-x-reverse">
-                <Checkbox
-                  id="status-former"
-                  checked={statusFilters.includes("former")}
-                  onCheckedChange={(checked) => handleStatusChange("former", checked as boolean)}
-                />
-                <Label htmlFor="status-former" className="cursor-pointer">
-                  نائب سابق
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2 space-x-reverse">
-                <Checkbox
-                  id="status-candidate"
-                  checked={statusFilters.includes("candidate")}
-                  onCheckedChange={(checked) => handleStatusChange("candidate", checked as boolean)}
-                />
-                <Label htmlFor="status-candidate" className="cursor-pointer">
-                  مرشح
-                </Label>
-              </div>
+            <div>
+              <label className="text-sm font-medium mb-2 block">الدائرة الانتخابية</label>
+              <Select
+                value={electoralDistrictFilter}
+                onValueChange={setElectoralDistrictFilter}
+                disabled={governorateFilter === "all"}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder={governorateFilter === "all" ? "اختر محافظة أولاً" : "اختر الدائرة"} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">جميع الدوائر</SelectItem>
+                  {filteredElectoralDistricts.map((district: any) => (
+                    <SelectItem key={district.id} value={district.id}>
+                      {district.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
-          {/* Gender Filter (Radio Buttons) */}
-          <div>
-            <label className="text-sm font-medium mb-3 block">الجنس</label>
-            <RadioGroup value={genderFilter} onValueChange={setGenderFilter}>
-              <div className="flex items-center space-x-2 space-x-reverse">
-                <RadioGroupItem value="all" id="gender-all" />
-                <Label htmlFor="gender-all" className="cursor-pointer">
-                  الكل
-                </Label>
+          {/* Row 2: Party and Council Filters */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium mb-2 block">الحزب أو التحالف</label>
+              <Select value={partyFilter} onValueChange={setPartyFilter}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="اختر الحزب" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">جميع الأحزاب</SelectItem>
+                  {parties.map((party: any) => (
+                    <SelectItem key={party.id} value={party.id}>
+                      {party.name_ar}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium mb-2 block">المجلس</label>
+              <Select value={councilFilter} onValueChange={setCouncilFilter}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="اختر المجلس" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">جميع المجالس</SelectItem>
+                  {councils.map((council: any) => (
+                    <SelectItem key={council.id} value={council.id}>
+                      {council.name_ar}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Row 3: Status and Gender Filters */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t">
+            {/* Status Filter (Checkboxes) */}
+            <div>
+              <label className="text-sm font-medium mb-3 block">حالة العضوية</label>
+              <div className="flex flex-wrap gap-4">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox
+                    id="status-current"
+                    checked={statusFilters.includes("current")}
+                    onCheckedChange={(checked) => handleStatusChange("current", checked as boolean)}
+                  />
+                  <Label htmlFor="status-current" className="cursor-pointer font-normal">
+                    نائب حالي
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox
+                    id="status-former"
+                    checked={statusFilters.includes("former")}
+                    onCheckedChange={(checked) => handleStatusChange("former", checked as boolean)}
+                  />
+                  <Label htmlFor="status-former" className="cursor-pointer font-normal">
+                    نائب سابق
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Checkbox
+                    id="status-candidate"
+                    checked={statusFilters.includes("candidate")}
+                    onCheckedChange={(checked) => handleStatusChange("candidate", checked as boolean)}
+                  />
+                  <Label htmlFor="status-candidate" className="cursor-pointer font-normal">
+                    مرشح
+                  </Label>
+                </div>
               </div>
-              <div className="flex items-center space-x-2 space-x-reverse">
-                <RadioGroupItem value="male" id="gender-male" />
-                <Label htmlFor="gender-male" className="cursor-pointer">
-                  ذكر
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2 space-x-reverse">
-                <RadioGroupItem value="female" id="gender-female" />
-                <Label htmlFor="gender-female" className="cursor-pointer">
-                  أنثى
-                </Label>
-              </div>
-            </RadioGroup>
+            </div>
+
+            {/* Gender Filter (Radio Buttons) */}
+            <div>
+              <label className="text-sm font-medium mb-3 block">الجنس</label>
+              <RadioGroup value={genderFilter} onValueChange={setGenderFilter} className="flex flex-wrap gap-4">
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <RadioGroupItem value="all" id="gender-all" />
+                  <Label htmlFor="gender-all" className="cursor-pointer font-normal">
+                    الكل
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <RadioGroupItem value="male" id="gender-male" />
+                  <Label htmlFor="gender-male" className="cursor-pointer font-normal">
+                    ذكر
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <RadioGroupItem value="female" id="gender-female" />
+                  <Label htmlFor="gender-female" className="cursor-pointer font-normal">
+                    أنثى
+                  </Label>
+                </div>
+              </RadioGroup>
+            </div>
           </div>
         </div>
 
         {/* Results count */}
-        <div className="mt-4 text-sm text-muted-foreground">
-          عرض {filteredDeputies.length} من {deputies.length} نائب
+        <div className="mt-6 pt-4 border-t flex items-center justify-between text-sm text-muted-foreground">
+          <div>
+            عرض <span className="font-semibold text-foreground">{startIndex + 1}</span> - <span className="font-semibold text-foreground">{Math.min(endIndex, filteredDeputies.length)}</span> من <span className="font-semibold text-foreground">{filteredDeputies.length}</span> نتيجة
+          </div>
+          {filteredDeputies.length < deputies.length && (
+            <div className="text-xs">
+              (تم تصفية {deputies.length - filteredDeputies.length} نتيجة)
+            </div>
+          )}
         </div>
       </div>
 
       {/* Deputies Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredDeputies.map((deputyData: DeputyData) => (
+        {paginatedDeputies.map((deputyData: DeputyData) => (
           <div
             key={deputyData.deputy.id}
             className="bg-card rounded-xl shadow-sm border overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
@@ -428,6 +497,59 @@ export default function DeputiesGrid({
           <p className="text-lg text-muted-foreground">
             لا توجد نتائج تطابق الفلاتر المحددة
           </p>
+          <Button
+            variant="outline"
+            className="mt-4"
+            onClick={() => {
+              setGovernorateFilter("all");
+              setPartyFilter("all");
+              setElectoralDistrictFilter("all");
+              setCouncilFilter("all");
+              setStatusFilters(["current", "former", "candidate"]);
+              setGenderFilter("all");
+            }}
+          >
+            إعادة تعيين الفلاتر
+          </Button>
+        </div>
+      )}
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                  className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                />
+              </PaginationItem>
+              
+              {getPageNumbers().map((page, index) => (
+                <PaginationItem key={index}>
+                  {page === 'ellipsis' ? (
+                    <PaginationEllipsis />
+                  ) : (
+                    <PaginationLink
+                      onClick={() => setCurrentPage(page as number)}
+                      isActive={currentPage === page}
+                      className="cursor-pointer"
+                    >
+                      {page}
+                    </PaginationLink>
+                  )}
+                </PaginationItem>
+              ))}
+              
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                  className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </div>
       )}
     </div>
