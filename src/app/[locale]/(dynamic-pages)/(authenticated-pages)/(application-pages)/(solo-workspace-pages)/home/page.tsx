@@ -43,11 +43,11 @@ export default async function CitizenHomePage() {
   // Filter deputies by user's electoral district
   const myDeputies = deputies.filter(deputy => {
     if (profile?.electoral_district_id) {
-      return deputy.electoral_district_id === profile.electoral_district_id;
+      return deputy.deputy.electoral_district_id === profile.electoral_district_id;
     }
     // Fallback to governorate if electoral district is not set
     if (profile?.governorate_id) {
-      return deputy.governorate_id === profile.governorate_id;
+      return deputy.user?.governorate_id === profile.governorate_id;
     }
     return false;
   });
