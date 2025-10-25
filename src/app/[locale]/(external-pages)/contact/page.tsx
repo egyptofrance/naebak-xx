@@ -2,7 +2,7 @@ import { T } from "@/components/ui/Typography";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Metadata } from "next";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
-import ContactForm from "@/components/ContactForm";
+
 
 export const metadata: Metadata = {
   title: "اتصل بنا - نائبك",
@@ -104,7 +104,11 @@ export default function ContactPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ContactForm />
+            <div className="space-y-4 text-center py-8">
+              <T.P className="text-base text-muted-foreground">
+                للتواصل معنا، يرجى استخدام معلومات الاتصال المذكورة
+              </T.P>
+            </div>
           </CardContent>
         </Card>
       </div>
