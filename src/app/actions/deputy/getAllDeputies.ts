@@ -6,107 +6,104 @@ export async function getAllDeputies() {
   const supabase = await createSupabaseUserServerComponentClient();
 
   try {
-    // Get all deputy profiles (without slug to avoid TypeScript errors)
-    const { data: deputies, error: deputiesError } = (await supabase
+    // Get all deputy profiles with their related data using joins
+    const { data: deputies, error: deputiesError } = await supabase
       .from("deputy_profiles")
       .select(`
         id,
         user_id,
+        slug,
         deputy_status,
         council_id,
         electoral_district_id,
+        candidate_type,
         rating_average,
-        rating_count
+        rating_count,
+        user_profiles!inner (
+          id,
+          full_name,
+          avatar_url,
+          governorate_id,
+          party_id,
+          governorates (
+            id,
+            name_ar,
+            name_en
+          ),
+          parties (
+            id,
+            name_ar,
+            name_en
+          )
+        ),
+        councils (
+          id,
+          name_ar,
+          name_en
+        ),
+        electoral_districts (
+          id,
+          name,
+          district_type
+        )
       `)
-      .order("created_at", { ascending: false })) as any;
+      .not("slug", "is", null)
+      .order("created_at", { ascending: false });
 
-    if (deputiesError || !deputies || deputies.length === 0) {
+    if (deputiesError) {
+      console.error("[getAllDeputies] Error:", deputiesError);
       return [];
     }
 
-    // Get slugs separately
-    const { data: slugData } = await supabase
-      .from("deputy_profiles")
-      .select("id, slug")
-      .not("slug", "is", null);
+    if (!deputies || deputies.length === 0) {
+      return [];
+    }
 
-    // Filter deputies that have slugs
-    const deputiesWithSlugs = deputies.filter((d: any) => 
-      slugData?.some((s: any) => s.id === d.id && s.slug)
-    );
+    // Transform the data to match the expected structure
+    return deputies.map((deputy: any) => {
+      const userProfile = Array.isArray(deputy.user_profiles) 
+        ? deputy.user_profiles[0] 
+        : deputy.user_profiles;
 
-    // Get all user profiles
-    const userIds = deputiesWithSlugs.map((d: any) => d.user_id);
-    if (userIds.length === 0) return [];
+      const governorate = Array.isArray(userProfile?.governorates)
+        ? userProfile.governorates[0]
+        : userProfile?.governorates;
 
-    const { data: users } = await supabase
-      .from("user_profiles")
-      .select("id, full_name, avatar_url, governorate_id, party_id")
-      .in("id", userIds);
+      const party = Array.isArray(userProfile?.parties)
+        ? userProfile.parties[0]
+        : userProfile?.parties;
 
-    // Get unique IDs for related data
-    const governorateIds = [...new Set(
-      users?.map((u: any) => u.governorate_id).filter((id: any) => id !== null)
-    )] as string[];
-    const partyIds = [...new Set(
-      users?.map((u: any) => u.party_id).filter((id: any) => id !== null)
-    )] as string[];
-    const councilIds = [...new Set(
-      deputiesWithSlugs.map((d: any) => d.council_id).filter((id: any) => id !== null)
-    )] as string[];
-    const electoralDistrictIds = [...new Set(
-      deputiesWithSlugs.map((d: any) => d.electoral_district_id).filter((id: any) => id !== null)
-    )] as string[];
+      const council = Array.isArray(deputy.councils)
+        ? deputy.councils[0]
+        : deputy.councils;
 
-    // Fetch all related data
-    const [governorates, parties, councils, electoralDistricts] = await Promise.all([
-      governorateIds.length > 0
-        ? supabase
-            .from("governorates")
-            .select("id, name_ar, name_en")
-            .in("id", governorateIds)
-            .then((res) => res.data || [])
-        : [],
-      partyIds.length > 0
-        ? supabase
-            .from("parties")
-            .select("id, name_ar, name_en")
-            .in("id", partyIds)
-            .then((res) => res.data || [])
-        : [],
-      councilIds.length > 0
-        ? supabase
-            .from("councils")
-            .select("id, name_ar, name_en")
-            .in("id", councilIds)
-            .then((res) => res.data || [])
-        : [],
-      electoralDistrictIds.length > 0
-        ? supabase
-            .from("electoral_districts")
-            .select("id, name, district_type")
-            .in("id", electoralDistrictIds)
-            .then((res) => res.data || [])
-        : [],
-    ]);
-
-    // Combine data
-    return deputiesWithSlugs.map((deputy: any) => {
-      const user = users?.find((u: any) => u.id === deputy.user_id);
-      const governorate = governorates?.find((g: any) => g.id === user?.governorate_id);
-      const party = parties?.find((p: any) => p.id === user?.party_id);
-      const council = councils?.find((c: any) => c.id === deputy.council_id);
-      const electoral_district = electoralDistricts?.find((ed: any) => ed.id === deputy.electoral_district_id);
-      const slug = (slugData?.find((s: any) => s.id === deputy.id) as any)?.slug || "";
+      const electoral_district = Array.isArray(deputy.electoral_districts)
+        ? deputy.electoral_districts[0]
+        : deputy.electoral_districts;
 
       return {
-        deputy,
-        user,
-        governorate,
-        party,
-        council,
-        electoral_district,
-        slug,
+        deputy: {
+          id: deputy.id,
+          user_id: deputy.user_id,
+          deputy_status: deputy.deputy_status,
+          council_id: deputy.council_id,
+          electoral_district_id: deputy.electoral_district_id,
+          candidate_type: deputy.candidate_type,
+          rating_average: deputy.rating_average,
+          rating_count: deputy.rating_count,
+        },
+        user: userProfile ? {
+          id: userProfile.id,
+          full_name: userProfile.full_name,
+          avatar_url: userProfile.avatar_url,
+          governorate_id: userProfile.governorate_id,
+          party_id: userProfile.party_id,
+        } : null,
+        governorate: governorate || null,
+        party: party || null,
+        council: council || null,
+        electoral_district: electoral_district || null,
+        slug: deputy.slug,
       };
     });
   } catch (error) {
