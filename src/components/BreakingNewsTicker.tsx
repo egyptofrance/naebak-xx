@@ -22,9 +22,9 @@ export function BreakingNewsTicker({ newsItems }: BreakingNewsTickerProps) {
       {/* Top orange line (2px) */}
       <div className="h-[2px] bg-orange-500" />
       
-      {/* Main ticker area - reduced height to h-8 */}
+      {/* Main ticker area - reduced height to h-6 (24px, 25% less than 32px) */}
       <div className="relative bg-gray-800 overflow-hidden">
-        <div className="flex items-center h-8">
+        <div className="flex items-center h-6">
           {/* Enhanced "أخبار عاجلة" label on the right */}
           <div className="absolute right-0 top-0 bottom-0 z-10 flex items-center">
             <div className="relative bg-gradient-to-l from-orange-600 to-orange-500 px-2 h-full flex items-center shadow-xl">
