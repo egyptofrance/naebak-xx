@@ -363,7 +363,7 @@ export default function DeputiesGrid({
             <div>
               <label className="text-sm font-medium mb-3 block">حالة العضوية</label>
               <div className="flex flex-wrap gap-4">
-                <div className="flex items-center space-x-2 space-x-reverse">
+                <div className="flex items-center gap-3">
                   <Checkbox
                     id="status-current"
                     checked={statusFilters.includes("current")}
@@ -373,7 +373,7 @@ export default function DeputiesGrid({
                     نائب حالي
                   </Label>
                 </div>
-                <div className="flex items-center space-x-2 space-x-reverse">
+                <div className="flex items-center gap-3">
                   <Checkbox
                     id="status-former"
                     checked={statusFilters.includes("former")}
@@ -383,7 +383,7 @@ export default function DeputiesGrid({
                     نائب سابق
                   </Label>
                 </div>
-                <div className="flex items-center space-x-2 space-x-reverse">
+                <div className="flex items-center gap-3">
                   <Checkbox
                     id="status-candidate"
                     checked={statusFilters.includes("candidate")}
@@ -400,19 +400,19 @@ export default function DeputiesGrid({
             <div>
               <label className="text-sm font-medium mb-3 block">الجنس</label>
               <RadioGroup value={genderFilter} onValueChange={setGenderFilter} className="flex flex-wrap gap-4">
-                <div className="flex items-center space-x-2 space-x-reverse">
+                <div className="flex items-center gap-3">
                   <RadioGroupItem value="all" id="gender-all" />
                   <Label htmlFor="gender-all" className="cursor-pointer font-normal">
                     الكل
                   </Label>
                 </div>
-                <div className="flex items-center space-x-2 space-x-reverse">
+                <div className="flex items-center gap-3">
                   <RadioGroupItem value="male" id="gender-male" />
                   <Label htmlFor="gender-male" className="cursor-pointer font-normal">
                     ذكر
                   </Label>
                 </div>
-                <div className="flex items-center space-x-2 space-x-reverse">
+                <div className="flex items-center gap-3">
                   <RadioGroupItem value="female" id="gender-female" />
                   <Label htmlFor="gender-female" className="cursor-pointer font-normal">
                     أنثى
