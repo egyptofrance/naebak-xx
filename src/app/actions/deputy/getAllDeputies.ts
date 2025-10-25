@@ -59,7 +59,7 @@ export async function getAllDeputies() {
     }
 
     // Transform the data to match the expected structure
-    return deputies.map((deputy: any) => {
+    const transformedDeputies = deputies.map((deputy: any) => {
       const userProfile = Array.isArray(deputy.user_profiles) 
         ? deputy.user_profiles[0] 
         : deputy.user_profiles;
@@ -105,6 +105,28 @@ export async function getAllDeputies() {
         slug: deputy.slug,
       };
     });
+
+    // Sort by rating using Bayesian average (IMDB-style)
+    // Formula: weighted_rating = (v/(v+m)) * R + (m/(v+m)) * C
+    // Where: v = number of votes, m = minimum votes threshold, R = average rating, C = mean rating across all deputies
+    const minVotes = 5; // Minimum votes to be considered
+    const meanRating = 3.0; // Assume mean rating of 3.0 (middle of 1-5 scale)
+    
+    transformedDeputies.sort((a, b) => {
+      const aVotes = a.deputy.rating_count || 0;
+      const aRating = a.deputy.rating_average || 0;
+      const bVotes = b.deputy.rating_count || 0;
+      const bRating = b.deputy.rating_average || 0;
+      
+      // Calculate weighted rating (Bayesian average)
+      const aWeighted = (aVotes / (aVotes + minVotes)) * aRating + (minVotes / (aVotes + minVotes)) * meanRating;
+      const bWeighted = (bVotes / (bVotes + minVotes)) * bRating + (minVotes / (bVotes + minVotes)) * meanRating;
+      
+      // Sort descending (highest rating first)
+      return bWeighted - aWeighted;
+    });
+
+    return transformedDeputies;
   } catch (error) {
     console.error("[getAllDeputies] Exception:", error);
     return [];
