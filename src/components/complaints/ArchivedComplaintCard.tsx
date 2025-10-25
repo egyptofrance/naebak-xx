@@ -9,9 +9,10 @@ import { Button } from "@/components/ui/button";
 
 interface ArchivedComplaintCardProps {
   complaint: any;
+  userRole?: string;
 }
 
-export function ArchivedComplaintCard({ complaint }: ArchivedComplaintCardProps) {
+export function ArchivedComplaintCard({ complaint, userRole }: ArchivedComplaintCardProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -120,16 +121,18 @@ export function ArchivedComplaintCard({ complaint }: ArchivedComplaintCardProps)
             <ArchiveRestore className="h-4 w-4 mr-2" />
             استعادة
           </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={handleDelete}
-            disabled={loading}
-            className="min-w-[100px]"
-          >
-            <Trash2 className="h-4 w-4 mr-2" />
-            حذف
-          </Button>
+          {userRole === 'admin' && (
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={handleDelete}
+              disabled={loading}
+              className="min-w-[100px]"
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              حذف
+            </Button>
+          )}
         </div>
       </div>
     </div>

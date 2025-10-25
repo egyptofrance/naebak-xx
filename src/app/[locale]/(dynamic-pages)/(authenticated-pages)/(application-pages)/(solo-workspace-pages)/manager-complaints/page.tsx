@@ -69,7 +69,7 @@ export default async function ManagerComplaintsPage() {
 
       <div className="grid gap-4">
         {complaints && complaints.map((complaint: any) => (
-          <ComplaintCard key={complaint.id} complaint={complaint} />
+          <ComplaintCard key={complaint.id} complaint={complaint} userRole="manager" />
         ))}
       </div>
     </div>

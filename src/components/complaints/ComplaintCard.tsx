@@ -9,9 +9,10 @@ import { Button } from "@/components/ui/button";
 
 interface ComplaintCardProps {
   complaint: any;
+  userRole?: string;
 }
 
-export function ComplaintCard({ complaint }: ComplaintCardProps) {
+export function ComplaintCard({ complaint, userRole }: ComplaintCardProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -118,16 +119,18 @@ export function ComplaintCard({ complaint }: ComplaintCardProps) {
             <Archive className="h-4 w-4 mr-2" />
             أرشفة
           </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={handleDelete}
-            disabled={loading}
-            className="min-w-[100px]"
-          >
-            <Trash2 className="h-4 w-4 mr-2" />
-            حذف
-          </Button>
+          {userRole === 'admin' && (
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={handleDelete}
+              disabled={loading}
+              className="min-w-[100px]"
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              حذف
+            </Button>
+          )}
         </div>
       </div>
     </div>
