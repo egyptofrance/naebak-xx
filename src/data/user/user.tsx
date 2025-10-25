@@ -294,6 +294,7 @@ export async function acceptTermsOfService(): Promise<boolean> {
   }
 
   await refreshSessionAction();
+  revalidatePath("/", "layout");
 
   return true;
 }
