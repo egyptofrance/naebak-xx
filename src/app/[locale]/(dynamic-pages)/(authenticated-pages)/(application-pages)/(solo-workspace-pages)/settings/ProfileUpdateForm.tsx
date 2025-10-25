@@ -24,9 +24,10 @@ import { profileUpdateFormSchema } from "@/utils/zod-schemas/profile";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { getElectoralDistrictsByGovernorate } from "@/data/deputy/queries";
 
 type Governorate = Database["public"]["Tables"]["governorates"]["Row"];
 type Party = Database["public"]["Tables"]["parties"]["Row"];
@@ -46,6 +47,7 @@ export function ProfileUpdateForm({
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [electoralDistricts, setElectoralDistricts] = useState<any[]>([]);
 
   const form = useForm<z.infer<typeof profileUpdateFormSchema>>({
     resolver: zodResolver(profileUpdateFormSchema),
@@ -60,13 +62,32 @@ export function ProfileUpdateForm({
       district: userProfile.district || "",
       village: userProfile.village || "",
       address: userProfile.address || "",
-      electoralDistrict: userProfile.electoral_district || "",
+      electoralDistrictId: userProfile.electoral_district_id || "",
       partyId: userProfile.party_id || undefined,
       avatarUrl: userProfile.avatar_url || "",
     },
   });
 
   const { control, handleSubmit } = form;
+
+  // Load electoral districts when governorate changes
+  useEffect(() => {
+    const governorateId = form.watch("governorateId");
+    if (governorateId) {
+      async function loadDistricts() {
+        try {
+          const districts = await getElectoralDistrictsByGovernorate(governorateId);
+          setElectoralDistricts(districts);
+        } catch (error) {
+          console.error("Error loading electoral districts:", error);
+          setElectoralDistricts([]);
+        }
+      }
+      loadDistricts();
+    } else {
+      setElectoralDistricts([]);
+    }
+  }, [form.watch("governorateId")]);
 
   // Remove duplicate parties and sort "مستقل" first
   const uniqueParties = Array.from(
@@ -272,11 +293,38 @@ export function ProfileUpdateForm({
                 البيانات الانتخابية
               </h3>
 
-              <FormInputNoLabel
-                id="electoral-district"
+              <FormField
                 control={control}
-                name="electoralDistrict"
-                inputProps={{ placeholder: "الدائرة الانتخابية *" }}
+                name="electoralDistrictId"
+                render={({ field }) => (
+                  <FormItem>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      disabled={!form.watch("governorateId")}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="الدائرة الانتخابية *" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {electoralDistricts.length === 0 ? (
+                          <SelectItem value="" disabled>
+                            {form.watch("governorateId") ? "لا توجد دوائر انتخابية" : "اختر المحافظة أولاً"}
+                          </SelectItem>
+                        ) : (
+                          electoralDistricts.map((district) => (
+                            <SelectItem key={district.id} value={district.id}>
+                              {district.name} ({district.district_type === "individual" ? "فردي" : "قائمة"})
+                            </SelectItem>
+                          ))
+                        )}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
 
               <FormField
