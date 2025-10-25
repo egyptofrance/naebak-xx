@@ -8,12 +8,7 @@ interface BreakingNewsTickerProps {
 }
 
 export function BreakingNewsTicker({ newsItems }: BreakingNewsTickerProps) {
-  const [isVisible, setIsVisible] = useState(true);
-
-  console.log('[BreakingNewsTicker] Received news items:', newsItems);
-
   if (!newsItems || newsItems.length === 0) {
-    console.log('[BreakingNewsTicker] No news items, returning null');
     return null;
   }
 
@@ -23,22 +18,33 @@ export function BreakingNewsTicker({ newsItems }: BreakingNewsTickerProps) {
   const fullNewsText = `${newsText} • ${newsText}`;
 
   return (
-    <div className="breaking-news-container">
+    <div className="breaking-news-container w-full">
       {/* Top orange line (2px) */}
       <div className="h-[2px] bg-orange-500" />
       
-      {/* Main ticker area */}
+      {/* Main ticker area - reduced height to h-8 */}
       <div className="relative bg-gray-800 overflow-hidden">
-        <div className="flex items-center h-10">
-          {/* "أخبار عاجلة" label on the right */}
-          <div className="absolute right-0 top-0 bottom-0 z-10 bg-orange-500 px-6 flex items-center shadow-lg">
-            <span className="text-white font-bold text-sm whitespace-nowrap" style={{ fontFamily: 'Tajawal, sans-serif' }}>
-              أخبار عاجلة
-            </span>
+        <div className="flex items-center h-8">
+          {/* Enhanced "أخبار عاجلة" label on the right */}
+          <div className="absolute right-0 top-0 bottom-0 z-10 flex items-center">
+            <div className="relative bg-gradient-to-l from-orange-600 to-orange-500 px-8 h-full flex items-center shadow-xl">
+              {/* Decorative pulse line */}
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-red-600 animate-pulse" />
+              
+              {/* Breaking news icon */}
+              <span className="text-white text-lg mr-2 animate-pulse">⚡</span>
+              
+              <span className="text-white font-bold text-base tracking-wide whitespace-nowrap" style={{ fontFamily: 'Tajawal, sans-serif' }}>
+                أخبار عاجلة
+              </span>
+              
+              {/* Diagonal stripe effect */}
+              <div className="absolute -left-2 top-0 bottom-0 w-4 bg-gradient-to-r from-orange-600 to-transparent transform -skew-x-12" />
+            </div>
           </div>
 
-          {/* Scrolling news text */}
-          <div className="flex-1 overflow-hidden pr-32">
+          {/* Scrolling news text - TRUE RTL: moving from LEFT to RIGHT */}
+          <div className="flex-1 overflow-hidden pr-44">
             <div className="breaking-news-scroll">
               <span 
                 className="inline-block text-white text-sm whitespace-nowrap"
@@ -60,16 +66,17 @@ export function BreakingNewsTicker({ newsItems }: BreakingNewsTickerProps) {
       <style jsx>{`
         .breaking-news-scroll {
           display: inline-block;
-          animation: scroll-rtl 60s linear infinite;
-          padding-right: 100%;
+          animation: scroll-left-to-right 60s linear infinite;
+          padding-left: 100%;
         }
 
-        @keyframes scroll-rtl {
+        /* TRUE RTL animation: text moves from LEFT to RIGHT */
+        @keyframes scroll-left-to-right {
           0% {
-            transform: translateX(0);
+            transform: translateX(-100%);
           }
           100% {
-            transform: translateX(-50%);
+            transform: translateX(100%);
           }
         }
 
