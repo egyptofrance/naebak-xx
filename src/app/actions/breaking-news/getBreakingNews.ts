@@ -1,6 +1,6 @@
 "use server";
 
-import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
+import { supabaseAnonClient } from "@/supabase-clients/anon/supabaseAnonClient";
 
 export interface BreakingNewsItem {
   id: string;
@@ -14,7 +14,7 @@ export interface BreakingNewsItem {
 
 export async function getBreakingNews(): Promise<BreakingNewsItem[]> {
   try {
-    const supabase = await createSupabaseUserServerComponentClient();
+    const supabase = supabaseAnonClient;
 
     const { data, error } = await supabase
       .from("breaking_news")
