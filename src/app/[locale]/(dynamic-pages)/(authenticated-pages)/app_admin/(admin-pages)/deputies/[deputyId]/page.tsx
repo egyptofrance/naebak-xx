@@ -59,6 +59,12 @@ export default async function DeputyPage({ params }: DeputyPageProps) {
     .eq("is_active", true)
     .order("display_order", { ascending: true });
 
+  // Fetch governorates for dropdown
+  const { data: governorates } = await supabase
+    .from("governorates")
+    .select("id, name_ar, name_en")
+    .order("name_ar", { ascending: true });
+
   const userProfile = Array.isArray(deputy.user_profiles)
     ? deputy.user_profiles[0]
     : deputy.user_profiles;
@@ -97,7 +103,7 @@ export default async function DeputyPage({ params }: DeputyPageProps) {
         </Button>
       </div>
 
-      <DeputyEditForm deputy={deputy} councils={councils || []} />
+      <DeputyEditForm deputy={deputy} councils={councils || []} governorates={governorates || []} />
     </div>
   );
 }

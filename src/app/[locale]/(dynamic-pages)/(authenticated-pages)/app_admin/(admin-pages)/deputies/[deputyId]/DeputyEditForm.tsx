@@ -20,16 +20,18 @@ import {
 } from "@/components/ui/select";
 import { updateDeputyAction } from "@/data/admin/deputies";
 import { Save } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
+import { getElectoralDistrictsByGovernorate } from "@/data/deputy/queries";
 
 interface DeputyEditFormProps {
   deputy: any;
   councils: any[];
+  governorates: any[];
 }
 
-export function DeputyEditForm({ deputy, councils }: DeputyEditFormProps) {
+export function DeputyEditForm({ deputy, councils, governorates }: DeputyEditFormProps) {
   const [formData, setFormData] = useState({
     bio: deputy.bio || "",
     officeAddress: deputy.office_address || "",
@@ -48,7 +50,12 @@ export function DeputyEditForm({ deputy, councils }: DeputyEditFormProps) {
     councilId: deputy.council_id || "",
     initialRatingAverage: deputy.initial_rating_average?.toString() || "0",
     initialRatingCount: deputy.initial_rating_count?.toString() || "0",
+    candidateType: deputy.candidate_type || "",
+    electoralDistrictId: deputy.electoral_district_id || "",
+    governorateId: deputy.governorate_id || "",
   });
+
+  const [electoralDistricts, setElectoralDistricts] = useState<any[]>([]);
 
   const { execute: executeUpdate, isExecuting: isUpdating } = useAction(
     updateDeputyAction,
@@ -72,7 +79,31 @@ export function DeputyEditForm({ deputy, councils }: DeputyEditFormProps) {
 
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+    
+    // Reset electoral district when governorate changes
+    if (field === "governorateId") {
+      setFormData((prev) => ({ ...prev, electoralDistrictId: "" }));
+    }
   };
+
+  // Load electoral districts when governorate changes
+  useEffect(() => {
+    const governorateId = formData.governorateId;
+    if (governorateId && typeof governorateId === 'string') {
+      async function loadDistricts() {
+        try {
+          const districts = await getElectoralDistrictsByGovernorate(governorateId);
+          setElectoralDistricts(districts);
+        } catch (error) {
+          console.error("Error loading electoral districts:", error);
+          setElectoralDistricts([]);
+        }
+      }
+      loadDistricts();
+    } else {
+      setElectoralDistricts([]);
+    }
+  }, [formData.governorateId]);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -85,6 +116,67 @@ export function DeputyEditForm({ deputy, councils }: DeputyEditFormProps) {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="governorateId">المحافظة</Label>
+              <Select
+                value={formData.governorateId}
+                onValueChange={(value) => handleChange("governorateId", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="اختر المحافظة" />
+                </SelectTrigger>
+                <SelectContent>
+                  {governorates.map((gov) => (
+                    <SelectItem key={gov.id} value={gov.id}>
+                      {gov.name_ar}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="electoralDistrictId">الدائرة الانتخابية</Label>
+              <Select
+                value={formData.electoralDistrictId}
+                onValueChange={(value) => handleChange("electoralDistrictId", value)}
+                disabled={!formData.governorateId}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="اختر الدائرة الانتخابية" />
+                </SelectTrigger>
+                <SelectContent>
+                  {electoralDistricts.length === 0 ? (
+                    <SelectItem value="" disabled>
+                      {formData.governorateId ? "لا توجد دوائر انتخابية" : "اختر المحافظة أولاً"}
+                    </SelectItem>
+                  ) : (
+                    electoralDistricts.map((district) => (
+                      <SelectItem key={district.id} value={district.id}>
+                        {district.name} ({district.district_type === "individual" ? "فردي" : "قائمة"})
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="candidateType">نوع الترشح</Label>
+              <Select
+                value={formData.candidateType}
+                onValueChange={(value) => handleChange("candidateType", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="اختر نوع الترشح" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="individual">فردي</SelectItem>
+                  <SelectItem value="list">قائمة</SelectItem>
+                  <SelectItem value="both">كلاهما</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="electoralNumber">الرقم الانتخابي</Label>

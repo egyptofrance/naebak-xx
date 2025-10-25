@@ -48,6 +48,10 @@ const updateDeputySchema = z.object({
   // Initial rating values
   initialRatingAverage: z.string().optional(),
   initialRatingCount: z.string().optional(),
+  // Electoral district fields
+  candidateType: z.enum(["individual", "list", "both"]).optional(),
+  electoralDistrictId: z.string().uuid().optional().nullable(),
+  governorateId: z.string().uuid().optional().nullable(),
 });
 
 /**
@@ -309,6 +313,10 @@ export const updateDeputyAction = actionClient
     // Initial rating values
     if (updateData.initialRatingAverage !== undefined) dbUpdateData.initial_rating_average = parseFloat(updateData.initialRatingAverage) || 0;
     if (updateData.initialRatingCount !== undefined) dbUpdateData.initial_rating_count = parseInt(updateData.initialRatingCount) || 0;
+    // Electoral district fields
+    if (updateData.candidateType !== undefined) dbUpdateData.candidate_type = updateData.candidateType;
+    if (updateData.electoralDistrictId !== undefined) dbUpdateData.electoral_district_id = updateData.electoralDistrictId;
+    if (updateData.governorateId !== undefined) dbUpdateData.governorate_id = updateData.governorateId;
 
     const { data: deputy, error } = await supabase
       .from("deputy_profiles")
