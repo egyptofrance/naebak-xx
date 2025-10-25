@@ -1,10 +1,10 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 
 export async function getBreakingNews() {
   try {
-    const supabase = await createClient();
+    const supabase = await createSupabaseUserServerComponentClient();
 
     const { data, error } = await supabase
       .from("breaking_news")
