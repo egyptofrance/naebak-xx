@@ -1,0 +1,38 @@
+name: Import Test Sample (10 Candidates)
+
+on:
+  workflow_dispatch:  # Manual trigger only
+
+jobs:
+  import-sample:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install pandas openpyxl supabase python-slugify
+      
+      - name: Run import script (10 candidates)
+        env:
+          SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          cd scripts
+          python import_test_sample.py
+      
+      - name: Upload import log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: import-log
+          path: scripts/*.log
+          if-no-files-found: ignore
+
