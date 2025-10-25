@@ -10,10 +10,10 @@ export async function getAllElectoralDistricts(): Promise<ElectoralDistrict[]> {
   const supabase = await createSupabaseUserServerComponentClient();
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = (await supabase
       .from("electoral_districts")
       .select("*")
-      .order("name", { ascending: true });
+      .order("name", { ascending: true })) as any;
 
     if (error) {
       console.error("[getAllElectoralDistricts] Error:", error);
@@ -37,7 +37,7 @@ export async function getElectoralDistrictsByGovernorate(
   const supabase = await createSupabaseUserServerComponentClient();
 
   try {
-    let query = supabase
+    let query = (supabase as any)
       .from("electoral_districts")
       .select("*")
       .eq("governorate_id", governorateId);
@@ -69,7 +69,7 @@ export async function getElectoralDistrictById(
   const supabase = await createSupabaseUserServerComponentClient();
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = (await supabase
       .from("electoral_districts")
       .select(`
         *,
@@ -80,7 +80,7 @@ export async function getElectoralDistrictById(
         )
       `)
       .eq("id", districtId)
-      .single();
+      .single()) as any;
 
     if (error) {
       console.error("[getElectoralDistrictById] Error:", error);
@@ -125,7 +125,7 @@ export async function getElectoralDistrictsGroupedByGovernorate() {
   const supabase = await createSupabaseUserServerComponentClient();
 
   try {
-    const { data: districts, error: districtsError } = await supabase
+    const { data: districts, error: districtsError } = (await supabase
       .from("electoral_districts")
       .select(`
         *,
@@ -135,7 +135,7 @@ export async function getElectoralDistrictsGroupedByGovernorate() {
           name_en
         )
       `)
-      .order("name", { ascending: true });
+      .order("name", { ascending: true })) as any;
 
     if (districtsError) {
       console.error("[getElectoralDistrictsGroupedByGovernorate] Error:", districtsError);
