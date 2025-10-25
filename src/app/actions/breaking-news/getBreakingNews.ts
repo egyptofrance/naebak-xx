@@ -2,7 +2,17 @@
 
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 
-export async function getBreakingNews() {
+export interface BreakingNewsItem {
+  id: string;
+  content: string;
+  is_active: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+  created_by: string | null;
+}
+
+export async function getBreakingNews(): Promise<BreakingNewsItem[]> {
   try {
     const supabase = await createSupabaseUserServerComponentClient();
 

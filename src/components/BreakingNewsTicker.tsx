@@ -1,12 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-interface BreakingNewsItem {
-  id: string;
-  content: string;
-  display_order: number;
-}
+import type { BreakingNewsItem } from "@/app/actions/breaking-news/getBreakingNews";
 
 interface BreakingNewsTickerProps {
   newsItems: BreakingNewsItem[];
