@@ -2,24 +2,11 @@ import { Link } from "@/components/intl-link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronRight, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
-
 
 export default function HeroSection() {
   const t = useTranslations("HomePage");
   return (
     <>
-      {/* بانر السيسي الرئيسي */}
-      <div className="w-full">
-        <Image
-          alt="بانر نائبك"
-          src="/images/sisi-banner.jpg"
-          width={1920}
-          height={400}
-          className="w-full h-auto object-cover"
-          priority
-        />
-      </div>
       <section className="py-10 lg:py-20 text-left px-6 lg:text-center max-w-5xl mx-auto">
       <div className="flex flex-col gap-10 w-full">
         <div className="space-y-4 flex flex-col  lg:items-center  flex-1">

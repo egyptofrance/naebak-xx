@@ -1,7 +1,5 @@
 import { ExternalNavigation } from "@/components/NavigationMenu/ExternalNavbar/ExternalNavigation";
 import { Footer } from "@/components/LandingPage/Footer";
-import { BreakingNewsTicker } from "@/components/BreakingNewsTicker";
-import { getBreakingNews } from "@/app/actions/breaking-news/getBreakingNews";
 import { routing } from "@/i18n/routing";
 import { unstable_setRequestLocale } from "next-intl/server";
 import "./layout.css";
@@ -23,14 +21,9 @@ export default async function Layout(props: {
 
   unstable_setRequestLocale(locale);
   
-  // Fetch breaking news
-  const breakingNews = await getBreakingNews();
-  console.log('[Layout] Breaking news count:', breakingNews.length);
-  
   return (
     <div className="flex flex-col min-h-screen">
       <ExternalNavigation />
-      <BreakingNewsTicker newsItems={breakingNews} />
       <main className="flex-1">
         {children}
       </main>
