@@ -9,7 +9,7 @@ export async function getContactMessages(filters?: {
   try {
     const supabase = await createSupabaseUserServerActionClient();
 
-    let query = supabase
+    let query = (supabase as any)
       .from('contact_messages')
       .select('*')
       .order('created_at', { ascending: false });
@@ -49,7 +49,7 @@ export async function updateContactMessageStatus(
       updateData.admin_notes = adminNotes;
     }
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('contact_messages')
       .update(updateData)
       .eq('id', messageId);
@@ -70,7 +70,7 @@ export async function deleteContactMessage(messageId: string) {
   try {
     const supabase = await createSupabaseUserServerActionClient();
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('contact_messages')
       .delete()
       .eq('id', messageId);
