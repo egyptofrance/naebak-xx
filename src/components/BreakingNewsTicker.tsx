@@ -47,7 +47,7 @@ export function BreakingNewsTicker({ newsItems }: BreakingNewsTickerProps) {
           <div className="flex-1 overflow-hidden pr-20">
             <div className="breaking-news-scroll">
               <span 
-                className="inline-block text-white text-sm whitespace-nowrap"
+                className="inline-block text-white text-xs whitespace-nowrap"
                 style={{ fontFamily: 'Tajawal, sans-serif' }}
               >
                 {fullNewsText}
