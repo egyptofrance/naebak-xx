@@ -90,6 +90,18 @@ export default async function CitizenHomePage() {
             </p>
           </div>
 
+          {/* Debug Info */}
+          <div className="mb-4 p-4 bg-yellow-100 border border-yellow-400 rounded text-sm">
+            <p><strong>Debug Info:</strong></p>
+            <p>Profile electoral_district: {profile?.electoral_district || 'null'}</p>
+            <p>Profile governorate_id: {profile?.governorate_id || 'null'}</p>
+            <p>Total deputies: {deputies.length}</p>
+            <p>Filtered deputies: {myDeputies.length}</p>
+            {deputies.length > 0 && (
+              <p>First deputy district ID: {deputies[0].deputy.electoral_district_id || 'null'}</p>
+            )}
+          </div>
+
           {/* Deputies Count */}
           {myDeputies.length > 0 && (
             <div className="mb-6">
