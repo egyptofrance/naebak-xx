@@ -17,7 +17,8 @@ import {
   BarChart,
   Zap,
   Globe,
-  Share2
+  Share2,
+  LineChart
 } from 'lucide-react';
 import Link from 'next/link';
 import { BentoCard, BentoGrid } from '@/components/magicui/bento-grid';
@@ -90,6 +91,16 @@ export default function ForDeputiesPage() {
         </div>
       ),
       className: "col-span-1"
+    },
+    {
+      name: "تحليل احتياجات الدائرة",
+      description: "احصل على معلومات كاملة عن متطلبات ومشاكل أبناء دائرتك لصياغة برنامج انتخابي دقيق يلبي احتياجاتهم الفعلية.",
+      background: (
+        <div className="absolute inset-0 bg-gradient-to-br from-[#004030]/20 to-[#003020]/10">
+          <LineChart className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[#004030] opacity-20" />
+        </div>
+      ),
+      className: "col-span-1 md:col-span-2"
     }
   ];
 
