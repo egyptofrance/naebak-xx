@@ -259,7 +259,7 @@ export default function DeputiesGrid({
                 </div>
               </div>
 
-              {/* Electoral District & Council */}
+              {/* Electoral District & Candidate Type */}
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div className="space-y-1">
                   <div className="text-xs text-muted-foreground font-medium">الدائرة الانتخابية</div>
@@ -267,6 +267,16 @@ export default function DeputiesGrid({
                     {deputyData.electoral_district?.name || "غير محدد"}
                   </div>
                 </div>
+                <div className="space-y-1">
+                  <div className="text-xs text-muted-foreground font-medium">نوع الترشح</div>
+                  <div className="font-semibold text-foreground truncate">
+                    {deputyData.deputy.candidate_type === 'individual' ? 'فردي' : deputyData.deputy.candidate_type === 'list' ? 'قائمة' : deputyData.deputy.candidate_type === 'both' ? 'فردي وقائمة' : 'غير محدد'}
+                  </div>
+                </div>
+              </div>
+
+              {/* Council */}
+              <div className="text-sm">
                 <div className="space-y-1">
                   <div className="text-xs text-muted-foreground font-medium">المجلس</div>
                   <div className="font-semibold text-foreground truncate">
