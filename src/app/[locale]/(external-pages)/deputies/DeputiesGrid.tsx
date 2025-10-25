@@ -104,16 +104,6 @@ export default function DeputiesGrid({
 
   // Filter deputies
   const filteredDeputies = useMemo(() => {
-    console.log('[DeputiesGrid] Filtering deputies:', {
-      totalDeputies: deputies.length,
-      governorateFilter,
-      partyFilter,
-      electoralDistrictFilter,
-      councilFilter,
-      statusFilters,
-      genderFilter
-    });
-    
     return deputies.filter((deputyData: DeputyData) => {
       // Name search filter
       if (searchName.trim() !== "") {
@@ -169,14 +159,6 @@ export default function DeputiesGrid({
       return true;
     });
   }, [deputies, searchName, governorateFilter, partyFilter, electoralDistrictFilter, councilFilter, statusFilters, genderFilter]);
-  
-  // Debug: Log filtered results
-  useEffect(() => {
-    console.log('[DeputiesGrid] Filtered deputies:', filteredDeputies.length);
-    if (filteredDeputies.length > 0) {
-      console.log('[DeputiesGrid] Sample deputy:', filteredDeputies[0]);
-    }
-  }, [filteredDeputies]);
 
   // Pagination
   const totalPages = Math.ceil(filteredDeputies.length / ITEMS_PER_PAGE);

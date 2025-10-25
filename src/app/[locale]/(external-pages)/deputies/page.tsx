@@ -13,19 +13,6 @@ export default async function DeputiesPage() {
   const electoralDistricts = await getAllElectoralDistricts();
   const councils = await getAllCouncils();
   
-  // Debug logging
-  console.log('[DeputiesPage] Data fetched:', {
-    deputies: deputies.length,
-    governorates: governorates.length,
-    parties: parties.length,
-    electoralDistricts: electoralDistricts.length,
-    councils: councils.length
-  });
-  
-  if (deputies.length > 0) {
-    console.log('[DeputiesPage] Sample deputy:', deputies[0]);
-  }
-  
   // Check if user is authenticated and get user profile
   const supabase = await createSupabaseUserServerComponentClient();
   const { data: { user } } = await supabase.auth.getUser();
