@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Complete script to import candidates with auth user creation
+Resume import from where it stopped - continues after row 550
 """
 
 import pandas as pd
@@ -32,8 +32,6 @@ DEFAULT_AVATAR_URL = 'https://fvpwvnghkkhrzupglsrh.supabase.co/storage/v1/object
 # Cache for governorates and districts
 governorate_cache = {}
 district_cache = {}
-
-
 
 def generate_temp_email(name, candidate_type):
     """Generate temporary email for candidate"""
@@ -145,9 +143,18 @@ def create_user_profile(user_id, full_name, governorate_id):
         print(f"   ❌ Error with user profile: {e}")
         return False
 
-def create_deputy_profile(user_id, slug, governorate_id, district_id, candidate_type, party):
+def create_deputy_profile(user_id, slug, district_id, candidate_type):
     """Create deputy profile"""
     try:
+        # Check if already exists
+        existing = supabase.table('deputy_profiles')\
+            .select('id')\
+            .eq('user_id', user_id)\
+            .execute()
+        
+        if existing.data and len(existing.data) > 0:
+            return True  # Already exists, skip
+        
         result = supabase.table('deputy_profiles').insert({
             'user_id': user_id,
             'slug': slug,
@@ -160,33 +167,40 @@ def create_deputy_profile(user_id, slug, governorate_id, district_id, candidate_
     except Exception as e:
         print(f"   ❌ Error creating deputy profile: {e}")
         return False
-def import_individual_candidates(dry_run=False, limit=None):
-    """Import individual candidates"""
-    print("\n👤 استيراد المرشحين الأفراد...")
+
+def resume_import(start_from=550):
+    """Resume import from specific row"""
+    print("\n" + "="*80)
+    print("🔄 استئناف استيراد المرشحين الأفراد")
+    print("="*80 + "\n")
     
-    # Get the project root directory (parent of scripts directory)
-    import os
+    # Get the project root directory
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
     data_file = os.path.join(project_root, 'data', 'جميعالمرشحين.xlsx')
     
+    print(f"📖 قراءة ملف Excel...")
     df = pd.read_excel(data_file)
+    total_rows = len(df)
+    print(f"✅ إجمالي المرشحين: {total_rows}")
+    print(f"🔄 البدء من الصف: {start_from + 1}\n")
     
-    # Limit to first N rows if specified
-    if limit:
-        df = df.head(limit)
-        print(f"   🔍 وضع الاختبار: استيراد أول {limit} مرشح فقط")
+    # Start from the specified row
+    df = df.iloc[start_from:]
+    remaining = len(df)
+    print(f"📊 المرشحين المتبقيين: {remaining}\n")
     
     success_count = 0
     error_count = 0
     skipped_count = 0
+    
+    print("🚀 بدء الاستيراد...\n")
     
     for idx, row in df.iterrows():
         try:
             candidate_name = row['اسم المرشح']
             governorate_name = row['المحافظة']
             district_name = row['دائرة فردي']
-            party = row.get('الانتماء الحزبي', 'مستقل')
             
             # Get governorate ID
             gov_id = get_governorate_id(governorate_name)
@@ -198,11 +212,6 @@ def import_individual_candidates(dry_run=False, limit=None):
             district_id = create_or_get_electoral_district(district_name, gov_id, 'individual')
             if not district_id:
                 error_count += 1
-                continue
-            
-            if dry_run:
-                print(f"   [DRY RUN] Would create: {candidate_name} ({governorate_name} - {district_name})")
-                success_count += 1
                 continue
             
             # Generate temp credentials
@@ -218,139 +227,37 @@ def import_individual_candidates(dry_run=False, limit=None):
             # Generate slug from user_id
             slug = f"candidate-{user_id[:8]}"
             
-            # Check if already exists
-            existing = supabase.table('deputy_profiles')\
-                .select('id')\
-                .eq('slug', slug)\
-                .execute()
-            
-            if existing.data and len(existing.data) > 0:
-                skipped_count += 1
-                continue
-            
             # Create user profile
             if not create_user_profile(user_id, candidate_name, gov_id):
                 error_count += 1
                 continue
             
             # Create deputy profile
-            if not create_deputy_profile(user_id, slug, gov_id, district_id, 'individual', party):
+            if not create_deputy_profile(user_id, slug, district_id, 'individual'):
                 error_count += 1
                 continue
             
             success_count += 1
             
-            if (idx + 1) % 50 == 0:
-                print(f"   📊 {idx + 1}/{len(df)} | ✅ {success_count} | ❌ {error_count} | ⏭️  {skipped_count}")
+            # Progress update every 50 candidates
+            current_row = idx + 1
+            if current_row % 50 == 0:
+                print(f"   📊 {current_row}/{total_rows} | ✅ {success_count} | ❌ {error_count} | ⏭️  {skipped_count}")
                 time.sleep(0.5)  # Rate limiting
             
         except Exception as e:
             print(f"   ❌ {row.get('اسم المرشح', 'Unknown')}: {e}")
             error_count += 1
     
-    print(f"\n   ✅ نجح: {success_count}")
-    print(f"   ❌ فشل: {error_count}")
-    print(f"   ⏭️  تم تخطيه: {skipped_count}")
-    
-    return success_count
-
-def import_list_candidates(dry_run=False):
-    """Import list candidates"""
-    print("\n📋 استيراد مرشحي القوائم...")
-    
-    df = pd.read_excel('جميعمرشحيالقوائم.xls')
-    
-    success_count = 0
-    error_count = 0
-    skipped_count = 0
-    
-    for idx, row in df.iterrows():
-        try:
-            candidate_name = row['اسم المرشح']
-            list_district = row['دائرة القوائم']
-            
-            # For list candidates, we need to handle differently
-            # as they're not tied to specific governorates
-            # We'll skip governorate for now
-            
-            slug = slugify(candidate_name)
-            
-            # Check if already exists
-            existing = supabase.table('deputy_profiles')\
-                .select('id')\
-                .eq('slug', slug)\
-                .execute()
-            
-            if existing.data and len(existing.data) > 0:
-                skipped_count += 1
-                continue
-            
-            if dry_run:
-                print(f"   [DRY RUN] Would create: {candidate_name} ({list_district})")
-                success_count += 1
-                continue
-            
-            # Generate temp credentials
-            temp_email = generate_temp_email(candidate_name, 'list')
-            temp_password = generate_temp_password()
-            
-            # Create auth user
-            user_id = create_auth_user(temp_email, temp_password, candidate_name)
-            if not user_id:
-                error_count += 1
-                continue
-            
-            # Create user profile (without governorate for now)
-            if not create_user_profile(user_id, candidate_name, None):
-                error_count += 1
-                continue
-            
-            # Create deputy profile (without district for now)
-            if not create_deputy_profile(user_id, slug, None, None, 'list', None):
-                error_count += 1
-                continue
-            
-            success_count += 1
-            
-            if (idx + 1) % 50 == 0:
-                print(f"   📊 {idx + 1}/{len(df)} | ✅ {success_count} | ❌ {error_count} | ⏭️  {skipped_count}")
-                time.sleep(0.5)
-            
-        except Exception as e:
-            print(f"   ❌ {row.get('اسم المرشح', 'Unknown')}: {e}")
-            error_count += 1
-    
-    print(f"\n   ✅ نجح: {success_count}")
-    print(f"   ❌ فشل: {error_count}")
-    print(f"   ⏭️  تم تخطيه: {skipped_count}")
-    
-    return success_count
-
-def main():
-    """Main import function"""
-    print("="*60)
-    print("🧪 وضع الاختبار: استيراد 10 مرشحين فقط")
-    print("="*60)
-    
-    print("\n📝 هذا السكريبت سيقوم بـ:")
-    print("   1. استيراد أول 10 مرشحين أفراد كعينة اختبار")
-    print("   2. إنشاء حسابات لهم في النظام")
-    print("   3. ربطهم بالدوائر الانتخابية")
-    print("\n🚀 بدء الاستيراد...\n")
-    
-    # Import only first 10 individual candidates (REAL import, not dry run)
-    individual_count = import_individual_candidates(dry_run=False, limit=10)
-    
-    # Skip list candidates for now
-    list_count = 0
-    
-    print("\n" + "="*60)
-    print("📊 ملخص الاستيراد:")
-    print(f"   - مرشحو الفردي: {individual_count}")
-    print(f"   - مرشحو القوائم: {list_count}")
-    print(f"   - الإجمالي: {individual_count + list_count}")
-    print("="*60)
+    print("\n" + "="*80)
+    print("✅ اكتمل الاستيراد!")
+    print("="*80)
+    print(f"\n📊 الإحصائيات النهائية:")
+    print(f"   ✅ تم الاستيراد بنجاح: {success_count}")
+    print(f"   ❌ فشل الاستيراد: {error_count}")
+    print(f"   ⏭️  تم التخطي: {skipped_count}")
+    print(f"   📊 الإجمالي: {success_count + error_count + skipped_count}\n")
 
 if __name__ == "__main__":
-    main()
+    resume_import(start_from=550)
 

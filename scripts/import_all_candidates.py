@@ -329,17 +329,18 @@ def import_list_candidates(dry_run=False):
 def main():
     """Main import function"""
     print("="*60)
-    print("🧪 وضع الاختبار: استيراد 10 مرشحين فقط")
+    print("🚀 استيراد جميع المرشحين الأفراد")
     print("="*60)
     
     print("\n📝 هذا السكريبت سيقوم بـ:")
-    print("   1. استيراد أول 10 مرشحين أفراد كعينة اختبار")
+    print("   1. استيراد جميع المرشحين الأفراد (2,620 مرشح)")
     print("   2. إنشاء حسابات لهم في النظام")
     print("   3. ربطهم بالدوائر الانتخابية")
+    print("\n⚠️  هذه العملية قد تستغرق 10-15 دقيقة...")
     print("\n🚀 بدء الاستيراد...\n")
     
-    # Import only first 10 individual candidates (REAL import, not dry run)
-    individual_count = import_individual_candidates(dry_run=False, limit=10)
+    # Import ALL individual candidates (no limit)
+    individual_count = import_individual_candidates(dry_run=False, limit=None)
     
     # Skip list candidates for now
     list_count = 0

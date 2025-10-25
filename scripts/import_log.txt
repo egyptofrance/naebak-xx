@@ -1,0 +1,174 @@
+============================================================
+🚀 استيراد جميع المرشحين الأفراد
+============================================================
+
+📝 هذا السكريبت سيقوم بـ:
+   1. استيراد جميع المرشحين الأفراد (2,620 مرشح)
+   2. إنشاء حسابات لهم في النظام
+   3. ربطهم بالدوائر الانتخابية
+
+⚠️  هذه العملية قد تستغرق 10-15 دقيقة...
+
+🚀 بدء الاستيراد...
+
+
+👤 استيراد المرشحين الأفراد...
+   📊 50/2620 | ✅ 50 | ❌ 0 | ⏭️  0
+   📊 100/2620 | ✅ 100 | ❌ 0 | ⏭️  0
+   📊 150/2620 | ✅ 150 | ❌ 0 | ⏭️  0
+   📊 200/2620 | ✅ 200 | ❌ 0 | ⏭️  0
+   📊 250/2620 | ✅ 250 | ❌ 0 | ⏭️  0
+   📊 300/2620 | ✅ 300 | ❌ 0 | ⏭️  0
+   ⚠️  Governorate not found: البحر الاحمر
+   ⚠️  Governorate not found: البحر الاحمر
+   ⚠️  Governorate not found: البحر الاحمر
+   ⚠️  Governorate not found: البحر الاحمر
+   ⚠️  Governorate not found: البحر الاحمر
+   ⚠️  Governorate not found: البحر الاحمر
+   ⚠️  Governorate not found: البحر الاحمر
+   ⚠️  Governorate not found: البحر الاحمر
+   ⚠️  Governorate not found: البحر الاحمر
+   ⚠️  Governorate not found: البحر الاحمر
+   ⚠️  Governorate not found: البحر الاحمر
+   📊 350/2620 | ✅ 339 | ❌ 11 | ⏭️  0
+   📊 400/2620 | ✅ 389 | ❌ 11 | ⏭️  0
+   📊 450/2620 | ✅ 439 | ❌ 11 | ⏭️  0
+   📊 500/2620 | ✅ 489 | ❌ 11 | ⏭️  0
+   📊 550/2620 | ✅ 539 | ❌ 11 | ⏭️  0
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
+   ⚠️  Governorate not found: الجيزه
