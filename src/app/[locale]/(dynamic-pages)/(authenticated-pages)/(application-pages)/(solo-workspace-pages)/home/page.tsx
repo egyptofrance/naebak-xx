@@ -40,16 +40,7 @@ export default async function CitizenHomePage() {
     getAllCouncils(),
   ]);
 
-  // Debug logging
-  console.log('[Home] Profile electoral_district:', profile?.electoral_district);
-  console.log('[Home] Total deputies:', deputies.length);
-  if (deputies.length > 0) {
-    console.log('[Home] First deputy electoral_district_id:', deputies[0].deputy.electoral_district_id);
-    console.log('[Home] First 5 deputies electoral_district_ids:');
-    deputies.slice(0, 5).forEach((d, i) => {
-      console.log(`  [${i}] electoral_district_id:`, d.deputy.electoral_district_id, 'Type:', typeof d.deputy.electoral_district_id);
-    });
-  }
+
 
   // Filter deputies by user's electoral district
   const myDeputies = deputies.filter(deputy => {
@@ -92,27 +83,6 @@ export default async function CitizenHomePage() {
                 "يرجى تحديث بياناتك في الإعدادات لعرض نواب دائرتك"
               )}
             </p>
-          </div>
-
-          {/* Debug Info */}
-          <div className="mb-4 p-4 bg-yellow-100 border border-yellow-400 rounded text-sm">
-            <p><strong>Debug Info:</strong></p>
-            <p>Profile electoral_district: {profile?.electoral_district || 'null'}</p>
-            <p>Profile governorate_id: {profile?.governorate_id || 'null'}</p>
-            <p>Total deputies: {deputies.length}</p>
-            <p>Filtered deputies: {myDeputies.length}</p>
-            {deputies.length > 0 && (
-              <>
-                <p>First deputy district ID: {deputies[0].deputy.electoral_district_id || 'null'}</p>
-                <p>Comparison: {deputies[0].deputy.electoral_district_id === profile?.electoral_district ? 'MATCH ✓' : 'NO MATCH ✗'}</p>
-                <p className="mt-2"><strong>First 3 deputies:</strong></p>
-                {deputies.slice(0, 3).map((d, i) => (
-                  <p key={i} className="ml-4 text-xs">
-                    [{i}] {d.user?.full_name} - District: {d.deputy.electoral_district_id || 'null'}
-                  </p>
-                ))}
-              </>
-            )}
           </div>
 
           {/* Deputies Count */}

@@ -3,10 +3,6 @@
 import { createClient } from "@supabase/supabase-js";
 
 export async function getAllDeputies() {
-  console.log('[getAllDeputies] Starting...');
-  console.log('[getAllDeputies] SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
-  console.log('[getAllDeputies] SERVICE_ROLE_KEY exists:', !!process.env.SUPABASE_SERVICE_ROLE_KEY);
-  
   // Use service role client to bypass RLS issues
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -18,7 +14,6 @@ export async function getAllDeputies() {
       },
     }
   );
-  console.log('[getAllDeputies] Supabase client created with Service Role Key');
 
   try {
     // Get all deputy profiles with their related data using joins
@@ -68,14 +63,10 @@ export async function getAllDeputies() {
 
     if (deputiesError) {
       console.error("[getAllDeputies] Error:", deputiesError);
-      console.error("[getAllDeputies] Error details:", JSON.stringify(deputiesError, null, 2));
       return [];
     }
 
-    console.log('[getAllDeputies] Query successful, deputies count:', deputies?.length || 0);
-
     if (!deputies || deputies.length === 0) {
-      console.log('[getAllDeputies] No deputies found');
       return [];
     }
 
@@ -147,11 +138,9 @@ export async function getAllDeputies() {
       return bWeighted - aWeighted;
     });
 
-    console.log('[getAllDeputies] Returning', transformedDeputies.length, 'deputies');
     return transformedDeputies;
   } catch (error) {
     console.error("[getAllDeputies] Exception:", error);
-    console.error("[getAllDeputies] Exception stack:", error instanceof Error ? error.stack : 'No stack');
     return [];
   }
 }
