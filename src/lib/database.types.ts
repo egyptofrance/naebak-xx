@@ -1322,6 +1322,7 @@ export type Database = {
           job_title: string | null
           party_id: string | null
           electoral_district: string | null
+          electoral_district_id: string | null
           address: string | null
           email: string | null
           role: string
@@ -1340,6 +1341,7 @@ export type Database = {
           job_title?: string | null
           party_id?: string | null
           electoral_district?: string | null
+          electoral_district_id?: string | null
           address?: string | null
           email?: string | null
           role?: string
@@ -1358,6 +1360,7 @@ export type Database = {
           job_title?: string | null
           party_id?: string | null
           electoral_district?: string | null
+          electoral_district_id?: string | null
           address?: string | null
           email?: string | null
           role?: string
@@ -1376,6 +1379,13 @@ export type Database = {
             columns: ["party_id"]
             isOneToOne: false
             referencedRelation: "parties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_profiles_electoral_district_id_fkey"
+            columns: ["electoral_district_id"]
+            isOneToOne: false
+            referencedRelation: "electoral_districts"
             referencedColumns: ["id"]
           },
         ]
