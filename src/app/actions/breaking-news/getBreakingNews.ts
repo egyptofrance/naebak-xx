@@ -16,7 +16,6 @@ export async function getBreakingNews(): Promise<BreakingNewsItem[]> {
   try {
     const supabase = supabaseAnonClient;
 
-    // @ts-ignore - breaking_news table not yet in generated types
     const { data, error } = await supabase
       .from("breaking_news")
       .select("*")

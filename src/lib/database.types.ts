@@ -354,6 +354,36 @@ export type Database = {
         }
         Relationships: []
       }
+      breaking_news: {
+        Row: {
+          id: string
+          content: string
+          is_active: boolean
+          display_order: number
+          created_at: string
+          updated_at: string
+          created_by: string | null
+        }
+        Insert: {
+          id?: string
+          content: string
+          is_active?: boolean
+          display_order?: number
+          created_at?: string
+          updated_at?: string
+          created_by?: string | null
+        }
+        Update: {
+          id?: string
+          content?: string
+          is_active?: boolean
+          display_order?: number
+          created_at?: string
+          updated_at?: string
+          created_by?: string | null
+        }
+        Relationships: []
+      }
       billing_subscriptions: {
         Row: {
           cancel_at_period_end: boolean
