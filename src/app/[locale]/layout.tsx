@@ -5,16 +5,61 @@ import { getMessages } from "next-intl/server";
 import "server-only";
 import { AffonsoWrapper } from "./AffonsoWrapper";
 import { AppProviders } from "./AppProviders";
+import { SchemaOrg } from "@/components/SchemaOrg";
 
 export const metadata: Metadata = {
-  icons: {
-    icon: "/images/logo-black-main.ico",
-  },
-  title: "نائبك",
-  description: "نائبك",
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? `https://usenextbase.com`,
+    process.env.NEXT_PUBLIC_SITE_URL ?? `https://naebak.com`,
   ),
+  title: {
+    default: "نائبك - المنصة الأولى للنواب في مصر",
+    template: "%s | نائبك"
+  },
+  description: "المنصة الأولى التي تربط النواب بأبناء دوائرهم، توثق إنجازاتهم، وتبني سيرتهم الذاتية الحقيقية أمام الشعب",
+  keywords: ["نائبك", "نواب مصر", "مجلس النواب", "برلمان مصر", "الدائرة الانتخابية", "شكاوى المواطنين", "إنجازات النواب"],
+  authors: [{ name: "نائبك" }],
+  creator: "نائبك",
+  publisher: "نائبك",
+  icons: {
+    icon: [
+      { url: "/logo-green.png", sizes: "any" },
+      { url: "/images/logo-black-main.ico", sizes: "any" }
+    ],
+    apple: "/logo-green.png",
+  },
+  openGraph: {
+    type: "website",
+    locale: "ar_EG",
+    url: "https://naebak.com",
+    siteName: "نائبك",
+    title: "نائبك - المنصة الأولى للنواب في مصر",
+    description: "المنصة الأولى التي تربط النواب بأبناء دوائرهم، توثق إنجازاتهم، وتبني سيرتهم الذاتية الحقيقية أمام الشعب",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "نائبك - المنصة الأولى للنواب في مصر",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "نائبك - المنصة الأولى للنواب في مصر",
+    description: "المنصة الأولى التي تربط النواب بأبناء دوائرهم، توثق إنجازاتهم، وتبني سيرتهم الذاتية الحقيقية أمام الشعب",
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default async function RootLayout(props: {
@@ -40,6 +85,7 @@ export default async function RootLayout(props: {
     >
       <head>
         <AffonsoWrapper />
+        <SchemaOrg />
       </head>
       <body className="flex flex-col min-h-screen">
         <AppProviders locale={locale} messages={messages}>
