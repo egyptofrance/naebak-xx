@@ -1,13 +1,13 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
+import { createSupabaseUserServerActionClient } from '@/supabase-clients/user/createSupabaseUserServerActionClient';
 
 export async function getContactMessages(filters?: {
   status?: string;
   message_type?: string;
 }) {
   try {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerActionClient();
 
     let query = supabase
       .from('contact_messages')
@@ -42,7 +42,7 @@ export async function updateContactMessageStatus(
   adminNotes?: string
 ) {
   try {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerActionClient();
 
     const updateData: any = { status };
     if (adminNotes !== undefined) {
@@ -68,7 +68,7 @@ export async function updateContactMessageStatus(
 
 export async function deleteContactMessage(messageId: string) {
   try {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerActionClient();
 
     const { error } = await supabase
       .from('contact_messages')

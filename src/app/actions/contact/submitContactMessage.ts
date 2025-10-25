@@ -1,6 +1,6 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
+import { createSupabaseUserServerActionClient } from '@/supabase-clients/user/createSupabaseUserServerActionClient';
 
 export interface ContactMessageData {
   name: string;
@@ -13,7 +13,7 @@ export interface ContactMessageData {
 
 export async function submitContactMessage(data: ContactMessageData) {
   try {
-    const supabase = await createClient();
+    const supabase = createSupabaseUserServerActionClient();
 
     const { error } = await supabase
       .from('contact_messages')
