@@ -2,6 +2,7 @@ import { T } from "@/components/ui/Typography";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Metadata } from "next";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import ContactForm from "@/components/ContactForm";
 
 export const metadata: Metadata = {
   title: "اتصل بنا - نائبك",
@@ -103,83 +104,7 @@ export default function ContactPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <form className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-2">
-                  الاسم الكامل
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="أدخل اسمك الكامل"
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-2">
-                  البريد الإلكتروني
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="example@email.com"
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium mb-2">
-                  رقم الهاتف
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="01xxxxxxxxx"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="subject" className="block text-sm font-medium mb-2">
-                  الموضوع
-                </label>
-                <input
-                  type="text"
-                  id="subject"
-                  name="subject"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="موضوع رسالتك"
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium mb-2">
-                  الرسالة
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={5}
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-                  placeholder="اكتب رسالتك هنا..."
-                  required
-                ></textarea>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-primary text-primary-foreground py-3 px-6 rounded-lg font-medium hover:bg-primary/90 transition-colors"
-              >
-                إرسال الرسالة
-              </button>
-            </form>
+            <ContactForm />
           </CardContent>
         </Card>
       </div>

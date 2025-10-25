@@ -13,6 +13,7 @@ import {
   FileLineChart,
   Flag,
   HelpCircle,
+  Mail,
   Map,
   MessageSquareWarning,
   PenTool,
@@ -53,6 +54,11 @@ const adminLinks = [
     label: "إدارة الشكاوى",
     href: `/manager-complaints`,
     icon: <MessageSquareWarning className="h-5 w-5" />,
+  },
+  {
+    label: "رسائل اتصل بنا",
+    href: `/app_admin/messages`,
+    icon: <Mail className="h-5 w-5" />,
   },
   {
     label: "إدارة الأحزاب",

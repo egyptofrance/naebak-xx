@@ -404,6 +404,16 @@ export default function ForDeputiesPage() {
               <p className="text-lg mb-6 leading-relaxed">
                 نقوم بإطلاق حملات إعلانية منتظمة للترويج لمنصة نائبك.com على Google و Facebook. يمكنك رعاية هذه الحملات وظهور اسمك وصورتك كراعي رسمي، مما يمنحك انتشاراً واسعاً ومصداقية عالية أمام المواطنين.
               </p>
+              <Button
+                asChild
+                size="lg"
+                className="bg-[#F87B1B] hover:bg-[#E6690A] text-white px-8 py-6 text-lg font-bold mb-6"
+              >
+                <Link href="/contact">
+                  اتصل بنا للمزيد من المعلومات عن خدمات الدعاية الرقمية للتواصل مع أكبر عدد من أبناء دائرتك
+                  <ArrowRight className="mr-2 w-5 h-5" />
+                </Link>
+              </Button>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
                 <div className="bg-white/10 backdrop-blur-sm p-4 rounded-xl">
                   <div className="text-3xl font-bold text-[#F87B1B] mb-2">1</div>
