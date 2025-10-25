@@ -27,7 +27,7 @@ export default async function CitizenHomePage() {
   // Get user profile with governorate and electoral district
   const { data: profile } = await supabase
     .from('user_profiles')
-    .select('governorate_id, electoral_district_id, full_name')
+    .select('governorate_id, electoral_district, full_name')
     .eq('id', user.id)
     .single();
 
@@ -42,8 +42,8 @@ export default async function CitizenHomePage() {
 
   // Filter deputies by user's electoral district
   const myDeputies = deputies.filter(deputy => {
-    if (profile?.electoral_district_id) {
-      return deputy.deputy.electoral_district_id === profile.electoral_district_id;
+    if (profile?.electoral_district) {
+      return deputy.deputy.electoral_district_id === profile.electoral_district;
     }
     // Fallback to governorate if electoral district is not set
     if (profile?.governorate_id) {
@@ -54,7 +54,7 @@ export default async function CitizenHomePage() {
 
   // Get user's governorate and electoral district names
   const userGovernorate = governorates.find(g => g.id === profile?.governorate_id);
-  const userElectoralDistrict = electoralDistricts.find(d => d.id === profile?.electoral_district_id);
+  const userElectoralDistrict = electoralDistricts.find(d => d.id === profile?.electoral_district);
 
   return (
     <div className="min-h-screen bg-background">
@@ -99,7 +99,7 @@ export default async function CitizenHomePage() {
           {myDeputies.length === 0 && (
             <div className="bg-muted/50 border border-border rounded-lg p-8 text-center">
               <p className="text-lg text-muted-foreground mb-4">
-                {!profile?.electoral_district_id && !profile?.governorate_id ? (
+                {!profile?.electoral_district && !profile?.governorate_id ? (
                   <>
                     لم تقم بتحديد دائرتك الانتخابية بعد
                     <br />
