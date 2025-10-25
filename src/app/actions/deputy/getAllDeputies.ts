@@ -3,7 +3,12 @@
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 
 export async function getAllDeputies() {
+  console.log('[getAllDeputies] Starting...');
+  console.log('[getAllDeputies] SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+  console.log('[getAllDeputies] SUPABASE_ANON_KEY exists:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  
   const supabase = await createSupabaseUserServerComponentClient();
+  console.log('[getAllDeputies] Supabase client created');
 
   try {
     // Get all deputy profiles with their related data using joins
@@ -51,10 +56,14 @@ export async function getAllDeputies() {
 
     if (deputiesError) {
       console.error("[getAllDeputies] Error:", deputiesError);
+      console.error("[getAllDeputies] Error details:", JSON.stringify(deputiesError, null, 2));
       return [];
     }
 
+    console.log('[getAllDeputies] Query successful, deputies count:', deputies?.length || 0);
+
     if (!deputies || deputies.length === 0) {
+      console.log('[getAllDeputies] No deputies found');
       return [];
     }
 
@@ -126,9 +135,11 @@ export async function getAllDeputies() {
       return bWeighted - aWeighted;
     });
 
+    console.log('[getAllDeputies] Returning', transformedDeputies.length, 'deputies');
     return transformedDeputies;
   } catch (error) {
     console.error("[getAllDeputies] Exception:", error);
+    console.error("[getAllDeputies] Exception stack:", error instanceof Error ? error.stack : 'No stack');
     return [];
   }
 }
