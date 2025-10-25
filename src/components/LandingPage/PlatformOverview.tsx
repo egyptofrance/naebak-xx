@@ -26,7 +26,7 @@ export default function PlatformOverview() {
               </div>
               <h3 className="text-2xl font-bold mb-4">المواطنون</h3>
               <p className="text-muted-foreground mb-6">
-                المواطن المصري يمكنه تقديم الشكاوى ومتابعتها بشفافية كاملة
+                مشاركة فعالة في تقديم الشكاوى وتقييم أداء النواب
               </p>
               <ul className="text-right w-full space-y-3">
                 <li className="flex items-start gap-2">
@@ -35,11 +35,15 @@ export default function PlatformOverview() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-blue-500 mt-1">✓</span>
-                  <span>متابعة حالة الشكوى</span>
+                  <span>متابعة حالة الشكوى بشفافية</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-blue-500 mt-1">✓</span>
                   <span>تقييم أداء النواب</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-500 mt-1">✓</span>
+                  <span>مشاركة فعالة في العملية النيابية</span>
                 </li>
               </ul>
             </div>
@@ -65,7 +69,7 @@ export default function PlatformOverview() {
               </div>
               <h3 className="text-2xl font-bold mb-4">النواب</h3>
               <p className="text-muted-foreground mb-6">
-                ممثلو الشعب في المجالس النيابية والمحلية
+                التواصل مع أبناء الدائرة وحل مشاكلهم عن قرب ونقل صوتهم للمجلس
               </p>
               <ul className="text-right w-full space-y-3">
                 <li className="flex items-start gap-2">
