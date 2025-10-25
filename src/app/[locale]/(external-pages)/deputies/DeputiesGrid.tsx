@@ -5,6 +5,7 @@ import { Link } from "@/components/intl-link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { DeputyCardRating } from "./DeputyCardRating";
@@ -61,6 +62,7 @@ export default function DeputiesGrid({
   // Default governorate: always show all deputies by default
   const defaultGovernorateId = "all";
 
+  const [searchName, setSearchName] = useState<string>("");
   const [governorateFilter, setGovernorateFilter] = useState<string>(defaultGovernorateId);
   const [partyFilter, setPartyFilter] = useState<string>("all");
   const [electoralDistrictFilter, setElectoralDistrictFilter] = useState<string>("all");
@@ -77,7 +79,7 @@ export default function DeputiesGrid({
   // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [governorateFilter, partyFilter, electoralDistrictFilter, councilFilter, statusFilters, genderFilter]);
+  }, [searchName, governorateFilter, partyFilter, electoralDistrictFilter, councilFilter, statusFilters, genderFilter]);
 
   // Filter electoral districts by selected governorate
   const filteredElectoralDistricts = useMemo(() => {
@@ -111,6 +113,15 @@ export default function DeputiesGrid({
     });
     
     return deputies.filter((deputyData: DeputyData) => {
+      // Name search filter
+      if (searchName.trim() !== "") {
+        const fullName = deputyData.user?.full_name?.toLowerCase() || "";
+        const searchTerm = searchName.toLowerCase().trim();
+        if (!fullName.includes(searchTerm)) {
+          return false;
+        }
+      }
+      
       // Governorate filter
       if (
         governorateFilter !== "all" &&
@@ -157,7 +168,7 @@ export default function DeputiesGrid({
       
       return true;
     });
-  }, [deputies, governorateFilter, partyFilter, electoralDistrictFilter, councilFilter, statusFilters, genderFilter]);
+  }, [deputies, searchName, governorateFilter, partyFilter, electoralDistrictFilter, councilFilter, statusFilters, genderFilter]);
   
   // Debug: Log filtered results
   useEffect(() => {
@@ -242,6 +253,23 @@ export default function DeputiesGrid({
       {/* Filters */}
       <div className="bg-card p-6 rounded-lg shadow-sm border">
         <h2 className="text-xl font-bold mb-6">تصفية النتائج</h2>
+        
+        {/* Search by Name */}
+        <div className="mb-6">
+          <label className="text-sm font-medium mb-2 block">البحث بالاسم</label>
+          <Input
+            type="text"
+            placeholder="ابحث عن نائب بالاسم... (مثال: احمد، محمد، فاطمة)"
+            value={searchName}
+            onChange={(e) => setSearchName(e.target.value)}
+            className="w-full"
+          />
+          {searchName && (
+            <p className="text-xs text-muted-foreground mt-1">
+              البحث عن: <span className="font-semibold">{searchName}</span>
+            </p>
+          )}
+        </div>
         
         {/* Main Filters Grid */}
         <div className="space-y-6">
@@ -524,6 +552,7 @@ export default function DeputiesGrid({
             variant="outline"
             className="mt-4"
             onClick={() => {
+              setSearchName("");
               setGovernorateFilter("all");
               setPartyFilter("all");
               setElectoralDistrictFilter("all");
