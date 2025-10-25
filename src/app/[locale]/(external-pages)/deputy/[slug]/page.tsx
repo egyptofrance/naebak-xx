@@ -160,22 +160,7 @@ export default async function DeputyPage({ params }: PageProps) {
                   </span>
                 </div>
               )}
-              <div className="flex items-center gap-2">
-                <span className="font-semibold text-muted-foreground">هاتف المكتب:</span>
-                {deputy.office_phone ? (
-                  <span dir="ltr">{deputy.office_phone}</span>
-                ) : (
-                  <span className="text-sm italic text-muted-foreground">{noData}</span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-semibold text-muted-foreground">عنوان المكتب:</span>
-                {deputy.office_address ? (
-                  <span>{deputy.office_address}</span>
-                ) : (
-                  <span className="text-sm italic text-muted-foreground">{noData}</span>
-                )}
-              </div>
+
             </div>
           </div>
 
