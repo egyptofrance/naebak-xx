@@ -127,7 +127,7 @@ export default function DeputiesGrid({
       // Governorate filter
       if (
         governorateFilter !== "all" &&
-        deputyData.governorate?.id !== governorateFilter
+        deputyData.user?.governorate_id !== governorateFilter
       ) {
         return false;
       }
@@ -162,10 +162,8 @@ export default function DeputiesGrid({
       }
       
       // Gender filter (radio buttons)
-      if (genderFilter !== "all") {
-        // Assuming gender is stored in user_profiles
-        // You may need to add gender field to the query
-        // For now, we'll skip this filter until gender field is confirmed
+      if (genderFilter !== "all" && deputyData.deputy.gender !== genderFilter) {
+        return false;
       }
       
       return true;
