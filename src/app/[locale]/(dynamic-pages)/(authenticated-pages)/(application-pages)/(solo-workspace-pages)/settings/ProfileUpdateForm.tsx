@@ -73,7 +73,7 @@ export function ProfileUpdateForm({
   // Load electoral districts when governorate changes
   useEffect(() => {
     const governorateId = form.watch("governorateId");
-    if (governorateId) {
+    if (governorateId && typeof governorateId === 'string') {
       async function loadDistricts() {
         try {
           const districts = await getElectoralDistrictsByGovernorate(governorateId);
