@@ -22,6 +22,7 @@ export async function getAllDeputies() {
 
   try {
     // Get all deputy profiles with their related data using joins
+    // Filter to only include deputies with electoral_district_id set
     const { data: deputies, error: deputiesError } = await supabase
       .from("deputy_profiles")
       .select(`
@@ -62,6 +63,7 @@ export async function getAllDeputies() {
           district_type
         )
       `)
+      .not('electoral_district_id', 'is', null)
       .order("created_at", { ascending: false });
 
     if (deputiesError) {
