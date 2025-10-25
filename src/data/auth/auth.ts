@@ -45,7 +45,7 @@ export const signUpWithPasswordAction = actionClient
       const errorDetails = handleSupabaseAuthPasswordSignUpErrors(error);
       if (errorDetails.field) {
         returnValidationErrors(signUpWithPasswordSchema, {
-          [email]: {
+          email: {
             _errors: [errorDetails.message],
           },
         });
@@ -54,6 +54,7 @@ export const signUpWithPasswordAction = actionClient
           _errors: [errorDetails.message],
         });
       }
+      return;
     }
 
     return data;
