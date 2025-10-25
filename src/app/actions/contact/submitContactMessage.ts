@@ -13,7 +13,7 @@ export interface ContactMessageData {
 
 export async function submitContactMessage(data: ContactMessageData) {
   try {
-    const supabase = createSupabaseUserServerActionClient();
+    const supabase = await createSupabaseUserServerActionClient();
 
     const { error } = await supabase
       .from('contact_messages')

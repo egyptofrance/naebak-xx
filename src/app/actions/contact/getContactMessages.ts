@@ -7,7 +7,7 @@ export async function getContactMessages(filters?: {
   message_type?: string;
 }) {
   try {
-    const supabase = createSupabaseUserServerActionClient();
+    const supabase = await createSupabaseUserServerActionClient();
 
     let query = supabase
       .from('contact_messages')
@@ -42,7 +42,7 @@ export async function updateContactMessageStatus(
   adminNotes?: string
 ) {
   try {
-    const supabase = createSupabaseUserServerActionClient();
+    const supabase = await createSupabaseUserServerActionClient();
 
     const updateData: any = { status };
     if (adminNotes !== undefined) {
@@ -68,7 +68,7 @@ export async function updateContactMessageStatus(
 
 export async function deleteContactMessage(messageId: string) {
   try {
-    const supabase = createSupabaseUserServerActionClient();
+    const supabase = await createSupabaseUserServerActionClient();
 
     const { error } = await supabase
       .from('contact_messages')
