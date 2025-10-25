@@ -7,9 +7,9 @@ export default function HeroSection() {
   const t = useTranslations("HomePage");
   return (
     <>
-      <section className="py-10 lg:py-20 text-left px-6 lg:text-center max-w-5xl mx-auto">
+      <section className="py-10 lg:py-20 text-center px-6 max-w-5xl mx-auto">
       <div className="flex flex-col gap-10 w-full">
-        <div className="space-y-4 flex flex-col  lg:items-center  flex-1">
+        <div className="space-y-4 flex flex-col items-center flex-1">
           <Link href={"#"}>
             <div className="flex items-center  gap-2 py-1 px-3 w-fit rounded-full border border-border dark:border-none bg-secondary">
               <Sparkles size={16} />
