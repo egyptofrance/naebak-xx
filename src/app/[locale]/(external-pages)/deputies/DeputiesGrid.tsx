@@ -49,7 +49,8 @@ export default function DeputiesGrid({
   electoralDistricts,
   councils,
   isAuthenticated = false,
-  userGovernorateId = null
+  userGovernorateId = null,
+  hideFilters = false
 }: { 
   deputies: DeputiesData;
   governorates: GovernoratesData;
@@ -58,6 +59,7 @@ export default function DeputiesGrid({
   councils: CouncilsData;
   isAuthenticated?: boolean;
   userGovernorateId?: string | null;
+  hideFilters?: boolean;
 }) {
   // Default governorate: always show all deputies by default
   const defaultGovernorateId = "all";
@@ -251,6 +253,7 @@ export default function DeputiesGrid({
   return (
     <div className="space-y-8">
       {/* Filters */}
+      {!hideFilters && (
       <div className="bg-card p-6 rounded-lg shadow-sm border">
         <h2 className="text-xl font-bold mb-6">تصفية النتائج</h2>
         
@@ -435,6 +438,7 @@ export default function DeputiesGrid({
           )}
         </div>
       </div>
+      )}
 
       {/* Deputies Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
