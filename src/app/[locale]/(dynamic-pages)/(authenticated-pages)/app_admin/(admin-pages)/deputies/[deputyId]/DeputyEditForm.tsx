@@ -147,7 +147,7 @@ export function DeputyEditForm({ deputy, councils, governorates }: DeputyEditFor
                 </SelectTrigger>
                 <SelectContent>
                   {electoralDistricts.length === 0 ? (
-                    <SelectItem value="" disabled>
+                    <SelectItem value="no-districts" disabled>
                       {formData.governorateId ? "لا توجد دوائر انتخابية" : "اختر المحافظة أولاً"}
                     </SelectItem>
                   ) : (
@@ -317,7 +317,7 @@ export function DeputyEditForm({ deputy, councils, governorates }: DeputyEditFor
                 <SelectValue placeholder="اختر المجلس" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">بدون مجلس</SelectItem>
+                <SelectItem value="no-council">بدون مجلس</SelectItem>
                 {councils.map((council) => (
                   <SelectItem key={council.id} value={council.id}>
                     {council.name_ar}

@@ -311,7 +311,7 @@ export function ProfileUpdateForm({
                       </FormControl>
                       <SelectContent>
                         {electoralDistricts.length === 0 ? (
-                          <SelectItem value="" disabled>
+                          <SelectItem value="no-districts" disabled>
                             {form.watch("governorateId") ? "لا توجد دوائر انتخابية" : "اختر المحافظة أولاً"}
                           </SelectItem>
                         ) : (
