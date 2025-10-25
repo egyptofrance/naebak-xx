@@ -187,3 +187,83 @@ apiVersion: "2025-02-24.acacia"
 
 **آخر تحديث:** 18 أكتوبر 2025
 
+
+
+### 5. ⚠️ **مشكلة Database Types عند إضافة جداول جديدة** (حرج جداً!)
+
+**الأعراض:**
+```
+Type error: Argument of type '"new_table_name"' is not assignable to parameter of type '"existing_table1" | "existing_table2" | ...'
+```
+أو:
+```
+Type error: Property 'from' does not exist on type 'Promise<SupabaseClient<...>>'
+```
+
+**السبب:**
+- عند إنشاء جدول جديد في Supabase، الـ TypeScript types **لا تتحدث تلقائياً**
+- الجدول الجديد غير موجود في ملف `src/types/supabase.ts`
+- TypeScript لا يعرف الجدول الجديد فيرفض الكود
+
+**الحل الصحيح (يجب تطبيقه فوراً بعد إنشاء أي جدول جديد):**
+
+#### الخطوة 1: تحديث Database Types من Supabase
+```bash
+cd /home/ubuntu/naebak-xx
+
+# استخدام Access Token لتحديث الـ types
+SUPABASE_ACCESS_TOKEN=sbp_6d8bac35adfa6042736de8efa3e9d71e9edd4545 \
+npx supabase gen types typescript \
+--project-id fvpwvnghkkhrzupglsrh \
+> src/types/supabase.ts
+```
+
+#### الخطوة 2: التحقق من نجاح التحديث
+```bash
+# تحقق من حجم الملف (يجب أن يكون > 100KB)
+ls -lh src/types/supabase.ts
+
+# تحقق من وجود الجدول الجديد
+grep "new_table_name" src/types/supabase.ts
+```
+
+#### الخطوة 3: إزالة Type Assertions المؤقتة
+```typescript
+// ❌ قبل (مؤقت)
+const { data } = await (supabase as any)
+  .from('new_table_name')
+  .select('*');
+
+// ✅ بعد (نظيف)
+const { data } = await supabase
+  .from('new_table_name')
+  .select('*');
+```
+
+**القاعدة الذهبية:**
+> **أي جدول جديد في Supabase = تحديث فوري للـ database types**
+> 
+> لا تستخدم `(supabase as any)` كحل دائم - هذا حل مؤقت فقط!
+
+**متى يجب تطبيق هذا؟**
+- ✅ فوراً بعد تنفيذ migration جديدة
+- ✅ فوراً بعد إنشاء جدول جديد في Supabase Dashboard
+- ✅ قبل كتابة أي كود يستخدم الجدول الجديد
+- ✅ عند ظهور أخطاء TypeScript تتعلق بأسماء الجداول
+
+**معلومات Supabase للمشروع:**
+```
+Project ID: fvpwvnghkkhrzupglsrh
+Access Token: sbp_6d8bac35adfa6042736de8efa3e9d71e9edd4545
+```
+
+**ملاحظة مهمة:**
+- تحديث الـ types **لا يؤثر** على قاعدة البيانات نفسها
+- هو فقط لمساعدة TypeScript على فهم البنية
+- يجب عمله في بيئة التطوير قبل Push
+
+---
+
+**آخر تحديث:** 25 أكتوبر 2025
+
+
