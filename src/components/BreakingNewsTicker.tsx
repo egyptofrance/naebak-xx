@@ -27,14 +27,14 @@ export function BreakingNewsTicker({ newsItems }: BreakingNewsTickerProps) {
         <div className="flex items-center h-8">
           {/* Enhanced "أخبار عاجلة" label on the right */}
           <div className="absolute right-0 top-0 bottom-0 z-10 flex items-center">
-            <div className="relative bg-gradient-to-l from-orange-600 to-orange-500 px-8 h-full flex items-center shadow-xl">
+            <div className="relative bg-gradient-to-l from-orange-600 to-orange-500 px-4 h-full flex items-center shadow-xl">
               {/* Decorative pulse line */}
               <div className="absolute left-0 top-0 bottom-0 w-1 bg-red-600 animate-pulse" />
               
               {/* Breaking news icon */}
-              <span className="text-white text-lg mr-2 animate-pulse">⚡</span>
+              <span className="text-white text-base mr-1.5 animate-pulse">⚡</span>
               
-              <span className="text-white font-bold text-base tracking-wide whitespace-nowrap" style={{ fontFamily: 'Tajawal, sans-serif' }}>
+              <span className="text-white font-bold text-sm tracking-wide whitespace-nowrap" style={{ fontFamily: 'Tajawal, sans-serif' }}>
                 أخبار عاجلة
               </span>
               
@@ -44,7 +44,7 @@ export function BreakingNewsTicker({ newsItems }: BreakingNewsTickerProps) {
           </div>
 
           {/* Scrolling news text - TRUE RTL: moving from LEFT to RIGHT */}
-          <div className="flex-1 overflow-hidden pr-44">
+          <div className="flex-1 overflow-hidden pr-32">
             <div className="breaking-news-scroll">
               <span 
                 className="inline-block text-white text-sm whitespace-nowrap"
