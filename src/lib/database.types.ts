@@ -1760,6 +1760,44 @@ export type Database = {
         }
         Relationships: []
       }
+      electoral_districts: {
+        Row: {
+          id: string
+          name: string
+          name_en: string | null
+          governorate_id: string
+          district_type: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          name_en?: string | null
+          governorate_id: string
+          district_type: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          name_en?: string | null
+          governorate_id?: string
+          district_type?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "electoral_districts_governorate_id_fkey"
+            columns: ["governorate_id"]
+            isOneToOne: false
+            referencedRelation: "governorates"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       deputy_profiles: {
         Row: {
           id: string
@@ -1786,6 +1824,8 @@ export type Database = {
           office_hours: string | null
           council_id: string | null
           points: number
+          candidate_type: string | null
+          electoral_district_id: string | null
         }
         Insert: {
           id?: string
@@ -1812,6 +1852,8 @@ export type Database = {
           office_hours?: string | null
           council_id?: string | null
           points?: number
+          candidate_type?: string | null
+          electoral_district_id?: string | null
         }
         Update: {
           id?: string
@@ -1838,6 +1880,8 @@ export type Database = {
           office_hours?: string | null
           council_id?: string | null
           points?: number
+          candidate_type?: string | null
+          electoral_district_id?: string | null
         }
         Relationships: [
           {
@@ -1852,6 +1896,13 @@ export type Database = {
             columns: ["council_id"]
             isOneToOne: false
             referencedRelation: "councils"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deputy_profiles_electoral_district_id_fkey"
+            columns: ["electoral_district_id"]
+            isOneToOne: false
+            referencedRelation: "electoral_districts"
             referencedColumns: ["id"]
           },
         ]
