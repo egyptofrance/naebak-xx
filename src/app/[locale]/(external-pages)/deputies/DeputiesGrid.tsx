@@ -58,9 +58,8 @@ export default function DeputiesGrid({
   isAuthenticated?: boolean;
   userGovernorateId?: string | null;
 }) {
-  // Find Cairo governorate ID for default
-  const cairoGov = governorates.find(g => g.name_ar === "القاهرة");
-  const defaultGovernorateId = userGovernorateId || cairoGov?.id || "all";
+  // Default governorate: user's governorate if authenticated, otherwise "all"
+  const defaultGovernorateId = isAuthenticated && userGovernorateId ? userGovernorateId : "all";
 
   const [governorateFilter, setGovernorateFilter] = useState<string>(defaultGovernorateId);
   const [partyFilter, setPartyFilter] = useState<string>("all");
