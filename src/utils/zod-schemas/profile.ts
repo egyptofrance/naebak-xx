@@ -13,7 +13,7 @@ export const profileUpdateFormSchema = z.object({
   phone: z.string().optional(),
   governorateId: z.string().optional(),
   city: z.string().optional(),
-  electoralDistrict: z.string().optional(),
+  electoralDistrictId: z.string().optional(),
   gender: z.enum(["male", "female"]).optional(),
   district: z.string().optional(),
   village: z.string().optional(),
@@ -37,7 +37,7 @@ export const completeProfileSchema = z.object({
   // Geographic Information
   governorateId: z.string().uuid("المحافظة غير صحيحة").min(1, "المحافظة مطلوبة"),
   city: z.string().min(1, "المدينة مطلوبة"),
-  electoralDistrict: z.string().min(1, "الدائرة الانتخابية مطلوبة"),
+  electoralDistrictId: z.string().uuid("الدائرة الانتخابية غير صحيحة").min(1, "الدائرة الانتخابية مطلوبة"),
   
   // Optional Fields
   gender: z.enum(["male", "female"]).optional(),
@@ -65,7 +65,7 @@ export const updateCompleteProfileSchema = z.object({
   // Geographic Information
   governorateId: z.string().uuid("المحافظة غير صحيحة").optional(),
   city: z.string().optional(),
-  electoralDistrict: z.string().optional(),
+  electoralDistrictId: z.string().optional(),
   
   // Optional Fields
   gender: z.enum(["male", "female"]).optional(),

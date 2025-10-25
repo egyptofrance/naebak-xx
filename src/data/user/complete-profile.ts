@@ -99,7 +99,7 @@ export const updateCompleteProfileAction = actionClient
     if (profileData.phone !== undefined) updateData.phone = profileData.phone;
     if (profileData.governorateId !== undefined) updateData.governorate_id = profileData.governorateId;
     if (profileData.city !== undefined) updateData.city = profileData.city;
-    if (profileData.electoralDistrict !== undefined) updateData.electoral_district = profileData.electoralDistrict;
+    if (profileData.electoralDistrictId !== undefined) updateData.electoral_district_id = profileData.electoralDistrictId;
     if (profileData.gender !== undefined) updateData.gender = profileData.gender;
     if (profileData.district !== undefined) updateData.district = profileData.district;
     if (profileData.village !== undefined) updateData.village = profileData.village;
@@ -152,7 +152,7 @@ export const createCompleteProfileAction = actionClient
       phone: profileData.phone,
       governorate_id: profileData.governorateId,
       city: profileData.city,
-      electoral_district: profileData.electoralDistrict,
+      electoral_district_id: profileData.electoralDistrictId,
       gender: profileData.gender,
       district: profileData.district,
       village: profileData.village,

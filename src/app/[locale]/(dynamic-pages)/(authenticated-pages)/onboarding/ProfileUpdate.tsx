@@ -34,6 +34,7 @@ import { useRef, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useOnboarding } from "./OnboardingContext";
 import { getGovernorates, getParties } from "@/data/user/complete-profile";
+import { getElectoralDistrictsByGovernorate } from "@/data/deputy/queries";
 
 export function ProfileUpdate() {
   const {
@@ -46,6 +47,7 @@ export function ProfileUpdate() {
 
   const [governorates, setGovernorates] = useState<any[]>([]);
   const [parties, setParties] = useState<any[]>([]);
+  const [electoralDistricts, setElectoralDistricts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -86,6 +88,25 @@ export function ProfileUpdate() {
     loadData();
   }, []);
 
+  // Load electoral districts when governorate changes
+  useEffect(() => {
+    const governorateId = form.watch("governorateId");
+    if (governorateId) {
+      async function loadDistricts() {
+        try {
+          const districts = await getElectoralDistrictsByGovernorate(governorateId);
+          setElectoralDistricts(districts);
+        } catch (error) {
+          console.error("Error loading electoral districts:", error);
+          setElectoralDistricts([]);
+        }
+      }
+      loadDistricts();
+    } else {
+      setElectoralDistricts([]);
+    }
+  }, [form.watch("governorateId")]);
+
   const { hookFormValidationErrors } = useHookFormActionErrorMapper<
     typeof profileUpdateFormSchema
   >(profileUpdateActionState.result.validationErrors, { joinBy: "\n" });
@@ -98,7 +119,7 @@ export function ProfileUpdate() {
       phone: userProfile.phone ?? "",
       governorateId: userProfile.governorate_id ?? "",
       city: userProfile.city ?? "",
-      electoralDistrict: userProfile.electoral_district ?? "",
+      electoralDistrictId: userProfile.electoral_district_id ?? "",
       gender: userProfile.gender as "male" | "female" | undefined,
       district: userProfile.district ?? "",
       village: userProfile.village ?? "",
@@ -344,12 +365,38 @@ export function ProfileUpdate() {
               البيانات الانتخابية
             </h3>
 
-            <FormInputNoLabel
-              id="electoral-district"
+            <FormField
               control={control}
-              name="electoralDistrict"
-              inputProps={{ placeholder: "الدائرة الانتخابية *" }}
-              data-testid="electoral-district-input"
+              name="electoralDistrictId"
+              render={({ field }) => (
+                <FormItem>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={!form.watch("governorateId")}
+                  >
+                    <FormControl>
+                      <SelectTrigger data-testid="electoral-district-select" className="w-full">
+                        <SelectValue placeholder="الدائرة الانتخابية *" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {electoralDistricts.length === 0 ? (
+                        <SelectItem value="" disabled>
+                          {form.watch("governorateId") ? "لا توجد دوائر انتخابية" : "اختر المحافظة أولاً"}
+                        </SelectItem>
+                      ) : (
+                        electoralDistricts.map((district) => (
+                          <SelectItem key={district.id} value={district.id}>
+                            {district.name} ({district.district_type === "individual" ? "فردي" : "قائمة"})
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
 
             <FormField
