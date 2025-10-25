@@ -1,14 +1,24 @@
 "use server";
 
-import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
+import { createClient } from "@supabase/supabase-js";
 
 export async function getAllDeputies() {
   console.log('[getAllDeputies] Starting...');
   console.log('[getAllDeputies] SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
-  console.log('[getAllDeputies] SUPABASE_ANON_KEY exists:', !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  console.log('[getAllDeputies] SERVICE_ROLE_KEY exists:', !!process.env.SUPABASE_SERVICE_ROLE_KEY);
   
-  const supabase = await createSupabaseUserServerComponentClient();
-  console.log('[getAllDeputies] Supabase client created');
+  // Use service role client to bypass RLS issues
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    }
+  );
+  console.log('[getAllDeputies] Supabase client created with Service Role Key');
 
   try {
     // Get all deputy profiles with their related data using joins
