@@ -15,7 +15,7 @@ export async function submitContactMessage(data: ContactMessageData) {
   try {
     const supabase = await createSupabaseUserServerActionClient();
 
-    const { error } = await (supabase as any)
+    const { error } = await supabase
       .from('contact_messages')
       .insert({
         name: data.name,
