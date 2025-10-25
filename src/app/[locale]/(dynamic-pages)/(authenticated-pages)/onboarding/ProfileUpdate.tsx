@@ -88,26 +88,6 @@ export function ProfileUpdate() {
     loadData();
   }, []);
 
-  // Load electoral districts when governorate changes
-  useEffect(() => {
-    const governorateId = form.watch("governorateId");
-    if (governorateId && typeof governorateId === 'string') {
-      const selectedGovernorateId: string = governorateId;
-      async function loadDistricts() {
-        try {
-          const districts = await getElectoralDistrictsByGovernorate(selectedGovernorateId);
-          setElectoralDistricts(districts);
-        } catch (error) {
-          console.error("Error loading electoral districts:", error);
-          setElectoralDistricts([]);
-        }
-      }
-      loadDistricts();
-    } else {
-      setElectoralDistricts([]);
-    }
-  }, [form.watch("governorateId")]);
-
   const { hookFormValidationErrors } = useHookFormActionErrorMapper<
     typeof profileUpdateFormSchema
   >(profileUpdateActionState.result.validationErrors, { joinBy: "\n" });
@@ -133,6 +113,26 @@ export function ProfileUpdate() {
   });
 
   const { handleSubmit, control } = form;
+
+  // Load electoral districts when governorate changes
+  useEffect(() => {
+    const governorateId = form.watch("governorateId");
+    if (governorateId && typeof governorateId === 'string') {
+      const selectedGovernorateId: string = governorateId;
+      async function loadDistricts() {
+        try {
+          const districts = await getElectoralDistrictsByGovernorate(selectedGovernorateId);
+          setElectoralDistricts(districts);
+        } catch (error) {
+          console.error("Error loading electoral districts:", error);
+          setElectoralDistricts([]);
+        }
+      }
+      loadDistricts();
+    } else {
+      setElectoralDistricts([]);
+    }
+  }, [form.watch("governorateId")]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
