@@ -64,7 +64,7 @@ export async function getAllDeputies() {
         )
       `)
       .not('electoral_district_id', 'is', null)
-      .order("created_at", { ascending: false });
+      .limit(5000);
 
     if (deputiesError) {
       console.error("[getAllDeputies] Error:", deputiesError);
