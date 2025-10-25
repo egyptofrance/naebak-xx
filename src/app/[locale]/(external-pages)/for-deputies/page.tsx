@@ -6,15 +6,12 @@ import {
   Trophy, 
   FileText, 
   User, 
-  MessageCircle, 
-  Star,
+  MessageCircle,
   CheckCircle,
-  TrendingUp,
   Users,
   MapPin,
   Sparkles,
-  ArrowRight,
-  BarChart3
+  ArrowRight
 } from 'lucide-react';
 import Link from 'next/link';
 import { BentoCard, BentoGrid } from '@/components/magicui/bento-grid';
@@ -97,33 +94,7 @@ export default function ForDeputiesPage() {
     { icon: MapPin, value: "27", label: "محافظة", color: "text-[#004030]" }
   ];
 
-  const benefits = [
-    {
-      icon: BarChart3,
-      title: "سيرة ذاتية حية للشعب",
-      description: "كل نشاط تقوم به يُسجل ويُعرض. أبناء دائرتك يرون جهودك الحقيقية."
-    },
-    {
-      icon: TrendingUp,
-      title: "زيادة الثقة والمصداقية",
-      description: "الشفافية في عرض إنجازاتك تزيد من ثقة المواطنين بك."
-    },
-    {
-      icon: Users,
-      title: "فهم احتياجات دائرتك",
-      description: "من خلال الشكاوى تفهم بدقة ما يحتاجه أبناء دائرتك."
-    },
-    {
-      icon: MessageCircle,
-      title: "تواصل مستمر وفعال",
-      description: "ابقَ على تواصل دائم واصنع علاقة قوية ومستدامة."
-    },
-    {
-      icon: Star,
-      title: "قياس أدائك",
-      description: "نظام التقييم يساعدك على معرفة مستوى أدائك وتحسينه."
-    }
-  ];
+
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
@@ -270,7 +241,7 @@ export default function ForDeputiesPage() {
             viewport={{ once: true }}
             variants={staggerContainer}
           >
-            <BentoGrid className="max-w-7xl mx-auto auto-rows-[18rem] md:auto-rows-[20rem]">
+            <BentoGrid className="max-w-7xl mx-auto auto-rows-[16rem] md:auto-rows-[20rem]">
               {features.map((feature, idx) => (
                 <motion.div key={idx} variants={fadeIn}>
                   <BentoCard {...feature} />
@@ -317,45 +288,6 @@ export default function ForDeputiesPage() {
                     </div>
                     <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
                     <p className="text-gray-600">{item.desc}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="py-20 bg-gradient-to-br from-[#004030] to-[#003020] text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-[#F87B1B] rounded-full filter blur-3xl" />
-        </div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
-            variants={fadeIn}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold mb-4">ماذا تستفيد كنائب؟</h2>
-          </motion.div>
-
-          <motion.div 
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
-            variants={staggerContainer}
-            className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            {benefits.map((benefit, index) => (
-              <motion.div key={index} variants={fadeIn}>
-                <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all transform hover:-translate-y-2 h-full">
-                  <CardContent className="pt-6">
-                    <benefit.icon className="w-12 h-12 text-[#F87B1B] mb-4" />
-                    <h3 className="text-xl font-bold mb-2 text-white">{benefit.title}</h3>
-                    <p className="text-gray-200">{benefit.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>
