@@ -1,0 +1,582 @@
+{
+  "list_districts": [
+    "دائرة قطاع القاهرة وجنوب ووسط الدلتا",
+    "دائرة قطاع شرق الدلتا",
+    "دائرة قطاع شمال ووسط وجنوب الصعيد",
+    "دائرة قطاع غرب الدلتا"
+  ],
+  "individual_districts": [
+    {
+      "governorate": "اسوان",
+      "district": "أدفو"
+    },
+    {
+      "governorate": "اسوان",
+      "district": "أول اسوان"
+    },
+    {
+      "governorate": "اسوان",
+      "district": "كوم أمبو"
+    },
+    {
+      "governorate": "اسوان",
+      "district": "نصر النوبة"
+    },
+    {
+      "governorate": "اسيوط",
+      "district": "أبو تيج"
+    },
+    {
+      "governorate": "اسيوط",
+      "district": "أول اسيوط"
+    },
+    {
+      "governorate": "اسيوط",
+      "district": "الفتح"
+    },
+    {
+      "governorate": "اسيوط",
+      "district": "القوصية"
+    },
+    {
+      "governorate": "الاسكندرية",
+      "district": "أول الرمل"
+    },
+    {
+      "governorate": "الاسكندرية",
+      "district": "أول المنتزه"
+    },
+    {
+      "governorate": "الاسكندرية",
+      "district": "الدخيلة"
+    },
+    {
+      "governorate": "الاسكندرية",
+      "district": "سيدى جابر"
+    },
+    {
+      "governorate": "الاسكندرية",
+      "district": "محرم بك"
+    },
+    {
+      "governorate": "الاسماعيلية",
+      "district": "القصاصين الجديدة"
+    },
+    {
+      "governorate": "الاسماعيلية",
+      "district": "القنطرة غرب"
+    },
+    {
+      "governorate": "الاسماعيلية",
+      "district": "ثان الإسماعيلية"
+    },
+    {
+      "governorate": "الاقصر",
+      "district": "إسنا"
+    },
+    {
+      "governorate": "الاقصر",
+      "district": "الأقصر"
+    },
+    {
+      "governorate": "الاقصر",
+      "district": "القرنة"
+    },
+    {
+      "governorate": "البحر الاحمر",
+      "district": "أول الغردقة"
+    },
+    {
+      "governorate": "البحر الاحمر",
+      "district": "الشلاتين"
+    },
+    {
+      "governorate": "البحر الاحمر",
+      "district": "سفاجا"
+    },
+    {
+      "governorate": "البحيرة",
+      "district": "أبو المطامير"
+    },
+    {
+      "governorate": "البحيرة",
+      "district": "أبو حمص"
+    },
+    {
+      "governorate": "البحيرة",
+      "district": "إيتاي البارود"
+    },
+    {
+      "governorate": "البحيرة",
+      "district": "الدلنجات"
+    },
+    {
+      "governorate": "البحيرة",
+      "district": "المحموديه"
+    },
+    {
+      "governorate": "البحيرة",
+      "district": "حوش عيسى"
+    },
+    {
+      "governorate": "البحيرة",
+      "district": "دمنهور"
+    },
+    {
+      "governorate": "البحيرة",
+      "district": "كفر الدوار"
+    },
+    {
+      "governorate": "البحيرة",
+      "district": "كوم حماده"
+    },
+    {
+      "governorate": "الجيزه",
+      "district": "أبوالنمرس"
+    },
+    {
+      "governorate": "الجيزه",
+      "district": "أطفيح"
+    },
+    {
+      "governorate": "الجيزه",
+      "district": "أول أكتوبر"
+    },
+    {
+      "governorate": "الجيزه",
+      "district": "إمبابه"
+    },
+    {
+      "governorate": "الجيزه",
+      "district": "الاهرام"
+    },
+    {
+      "governorate": "الجيزه",
+      "district": "البدرشين"
+    },
+    {
+      "governorate": "الجيزه",
+      "district": "الجيزة"
+    },
+    {
+      "governorate": "الجيزه",
+      "district": "الصف"
+    },
+    {
+      "governorate": "الجيزه",
+      "district": "العمرانيه"
+    },
+    {
+      "governorate": "الجيزه",
+      "district": "بولاق الدكرور"
+    },
+    {
+      "governorate": "الجيزه",
+      "district": "كرداسة"
+    },
+    {
+      "governorate": "الجيزه",
+      "district": "منشأة القناطر"
+    },
+    {
+      "governorate": "الدقهلية",
+      "district": "أول المنصوره"
+    },
+    {
+      "governorate": "الدقهلية",
+      "district": "اجا"
+    },
+    {
+      "governorate": "الدقهلية",
+      "district": "السنبلاوين"
+    },
+    {
+      "governorate": "الدقهلية",
+      "district": "المنزلة"
+    },
+    {
+      "governorate": "الدقهلية",
+      "district": "المنصورة"
+    },
+    {
+      "governorate": "الدقهلية",
+      "district": "بلقاس"
+    },
+    {
+      "governorate": "الدقهلية",
+      "district": "دكرنس"
+    },
+    {
+      "governorate": "الدقهلية",
+      "district": "طلخا"
+    },
+    {
+      "governorate": "الدقهلية",
+      "district": "منية النصر"
+    },
+    {
+      "governorate": "الدقهلية",
+      "district": "ميت غمر"
+    },
+    {
+      "governorate": "السويس",
+      "district": "السويس"
+    },
+    {
+      "governorate": "الشرقية",
+      "district": "أبو حماد"
+    },
+    {
+      "governorate": "الشرقية",
+      "district": "أبو كبير"
+    },
+    {
+      "governorate": "الشرقية",
+      "district": "أول الزقازيق"
+    },
+    {
+      "governorate": "الشرقية",
+      "district": "الحسينية"
+    },
+    {
+      "governorate": "الشرقية",
+      "district": "اول العاشر من رمضان"
+    },
+    {
+      "governorate": "الشرقية",
+      "district": "بلبيس"
+    },
+    {
+      "governorate": "الشرقية",
+      "district": "ديرب نجم"
+    },
+    {
+      "governorate": "الشرقية",
+      "district": "فاقوس"
+    },
+    {
+      "governorate": "الشرقية",
+      "district": "منيا القمح"
+    },
+    {
+      "governorate": "الغربية",
+      "district": "أول المحلة الكبرى"
+    },
+    {
+      "governorate": "الغربية",
+      "district": "أول طنطا"
+    },
+    {
+      "governorate": "الغربية",
+      "district": "المحلة الكبرى"
+    },
+    {
+      "governorate": "الغربية",
+      "district": "زفتى"
+    },
+    {
+      "governorate": "الغربية",
+      "district": "سمنود"
+    },
+    {
+      "governorate": "الغربية",
+      "district": "قطور"
+    },
+    {
+      "governorate": "الغربية",
+      "district": "كفر الزيات"
+    },
+    {
+      "governorate": "الفيوم",
+      "district": "أبشواى"
+    },
+    {
+      "governorate": "الفيوم",
+      "district": "أطسا"
+    },
+    {
+      "governorate": "الفيوم",
+      "district": "الفيوم"
+    },
+    {
+      "governorate": "الفيوم",
+      "district": "سنورس"
+    },
+    {
+      "governorate": "القاهره",
+      "district": "أول السلام"
+    },
+    {
+      "governorate": "القاهره",
+      "district": "أول مدينه نصر"
+    },
+    {
+      "governorate": "القاهره",
+      "district": "البساتين"
+    },
+    {
+      "governorate": "القاهره",
+      "district": "التجمع الخامس"
+    },
+    {
+      "governorate": "القاهره",
+      "district": "الجمالية"
+    },
+    {
+      "governorate": "القاهره",
+      "district": "الخليفة"
+    },
+    {
+      "governorate": "القاهره",
+      "district": "الزاوية الحمراء"
+    },
+    {
+      "governorate": "القاهره",
+      "district": "الزيتون"
+    },
+    {
+      "governorate": "القاهره",
+      "district": "الساحل"
+    },
+    {
+      "governorate": "القاهره",
+      "district": "السيدة زينب"
+    },
+    {
+      "governorate": "القاهره",
+      "district": "الظاهر"
+    },
+    {
+      "governorate": "القاهره",
+      "district": "المرج"
+    },
+    {
+      "governorate": "القاهره",
+      "district": "المطرية"
+    },
+    {
+      "governorate": "القاهره",
+      "district": "المعادى"
+    },
+    {
+      "governorate": "القاهره",
+      "district": "حدائق القبة"
+    },
+    {
+      "governorate": "القاهره",
+      "district": "حلوان"
+    },
+    {
+      "governorate": "القاهره",
+      "district": "روض الفرج"
+    },
+    {
+      "governorate": "القاهره",
+      "district": "عين شمس"
+    },
+    {
+      "governorate": "القاهره",
+      "district": "مصر القديمة"
+    },
+    {
+      "governorate": "القليوبية",
+      "district": "الخانكه"
+    },
+    {
+      "governorate": "القليوبية",
+      "district": "بنها"
+    },
+    {
+      "governorate": "القليوبية",
+      "district": "ثان شبرا الخيمه"
+    },
+    {
+      "governorate": "القليوبية",
+      "district": "شبين القناطر"
+    },
+    {
+      "governorate": "القليوبية",
+      "district": "طوخ"
+    },
+    {
+      "governorate": "القليوبية",
+      "district": "قليوب"
+    },
+    {
+      "governorate": "المنوفية",
+      "district": "أشمون"
+    },
+    {
+      "governorate": "المنوفية",
+      "district": "الباجور"
+    },
+    {
+      "governorate": "المنوفية",
+      "district": "تلا"
+    },
+    {
+      "governorate": "المنوفية",
+      "district": "شبين الكوم"
+    },
+    {
+      "governorate": "المنوفية",
+      "district": "قويسنا"
+    },
+    {
+      "governorate": "المنوفية",
+      "district": "منوف"
+    },
+    {
+      "governorate": "المنيا",
+      "district": "أبو قرقاص"
+    },
+    {
+      "governorate": "المنيا",
+      "district": "أول المنيا"
+    },
+    {
+      "governorate": "المنيا",
+      "district": "دير مواس"
+    },
+    {
+      "governorate": "المنيا",
+      "district": "غرب سمالوط"
+    },
+    {
+      "governorate": "المنيا",
+      "district": "مغاغه"
+    },
+    {
+      "governorate": "المنيا",
+      "district": "ملوى"
+    },
+    {
+      "governorate": "الوادى الجديد",
+      "district": "الخارجه"
+    },
+    {
+      "governorate": "الوادى الجديد",
+      "district": "الداخله"
+    },
+    {
+      "governorate": "بنى سويف",
+      "district": "إهناسيا"
+    },
+    {
+      "governorate": "بنى سويف",
+      "district": "ببا"
+    },
+    {
+      "governorate": "بنى سويف",
+      "district": "بني سويف"
+    },
+    {
+      "governorate": "بنى سويف",
+      "district": "ناصر"
+    },
+    {
+      "governorate": "بورسعيد",
+      "district": "أول بورفؤاد"
+    },
+    {
+      "governorate": "بورسعيد",
+      "district": "الزهور"
+    },
+    {
+      "governorate": "جنوب سيناء",
+      "district": "أول شرم الشيخ"
+    },
+    {
+      "governorate": "جنوب سيناء",
+      "district": "الطور"
+    },
+    {
+      "governorate": "دمياط",
+      "district": "أول دمياط"
+    },
+    {
+      "governorate": "دمياط",
+      "district": "كفر سعد"
+    },
+    {
+      "governorate": "سوهاج",
+      "district": "أخميم"
+    },
+    {
+      "governorate": "سوهاج",
+      "district": "البلينا"
+    },
+    {
+      "governorate": "سوهاج",
+      "district": "المراغة"
+    },
+    {
+      "governorate": "سوهاج",
+      "district": "المنشأة"
+    },
+    {
+      "governorate": "سوهاج",
+      "district": "جرجا"
+    },
+    {
+      "governorate": "سوهاج",
+      "district": "دار السلام"
+    },
+    {
+      "governorate": "سوهاج",
+      "district": "سوهاج"
+    },
+    {
+      "governorate": "سوهاج",
+      "district": "طهطا"
+    },
+    {
+      "governorate": "شمال سيناء",
+      "district": "أول العريش"
+    },
+    {
+      "governorate": "شمال سيناء",
+      "district": "الحسنة"
+    },
+    {
+      "governorate": "قنا",
+      "district": "أبو تشت"
+    },
+    {
+      "governorate": "قنا",
+      "district": "قنا"
+    },
+    {
+      "governorate": "قنا",
+      "district": "قوص"
+    },
+    {
+      "governorate": "قنا",
+      "district": "نجع حمادي"
+    },
+    {
+      "governorate": "كفر الشيخ",
+      "district": "الحامول"
+    },
+    {
+      "governorate": "كفر الشيخ",
+      "district": "دسوق"
+    },
+    {
+      "governorate": "كفر الشيخ",
+      "district": "سيدى سالم"
+    },
+    {
+      "governorate": "كفر الشيخ",
+      "district": "كفر الشيخ"
+    },
+    {
+      "governorate": "مرسى مطروح",
+      "district": "الحمام"
+    },
+    {
+      "governorate": "مرسى مطروح",
+      "district": "مطروح"
+    }
+  ]
+}
