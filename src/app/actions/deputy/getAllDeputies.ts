@@ -14,6 +14,7 @@ export async function getAllDeputies() {
         user_id,
         deputy_status,
         council_id,
+        electoral_district_id,
         rating_average,
         rating_count
       `)
@@ -53,9 +54,12 @@ export async function getAllDeputies() {
     const councilIds = [...new Set(
       deputiesWithSlugs.map((d: any) => d.council_id).filter((id: any) => id !== null)
     )] as string[];
+    const electoralDistrictIds = [...new Set(
+      deputiesWithSlugs.map((d: any) => d.electoral_district_id).filter((id: any) => id !== null)
+    )] as string[];
 
     // Fetch all related data
-    const [governorates, parties, councils] = await Promise.all([
+    const [governorates, parties, councils, electoralDistricts] = await Promise.all([
       governorateIds.length > 0
         ? supabase
             .from("governorates")
@@ -77,6 +81,13 @@ export async function getAllDeputies() {
             .in("id", councilIds)
             .then((res) => res.data || [])
         : [],
+      electoralDistrictIds.length > 0
+        ? supabase
+            .from("electoral_districts")
+            .select("id, name, district_type")
+            .in("id", electoralDistrictIds)
+            .then((res) => res.data || [])
+        : [],
     ]);
 
     // Combine data
@@ -85,6 +96,7 @@ export async function getAllDeputies() {
       const governorate = governorates?.find((g: any) => g.id === user?.governorate_id);
       const party = parties?.find((p: any) => p.id === user?.party_id);
       const council = councils?.find((c: any) => c.id === deputy.council_id);
+      const electoral_district = electoralDistricts?.find((ed: any) => ed.id === deputy.electoral_district_id);
       const slug = (slugData?.find((s: any) => s.id === deputy.id) as any)?.slug || "";
 
       return {
@@ -93,6 +105,7 @@ export async function getAllDeputies() {
         governorate,
         party,
         council,
+        electoral_district,
         slug,
       };
     });

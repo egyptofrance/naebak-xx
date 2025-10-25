@@ -32,7 +32,7 @@ export default async function DeputyPage({ params }: PageProps) {
   const { data: { user: authUser } } = await supabase.auth.getUser();
   const isAuthenticated = !!authUser;
 
-  const { deputy, user, governorate, party, council, bannerImage } = data;
+  const { deputy, user, governorate, party, council, electoral_district, bannerImage } = data;
   
   // Get Supabase URL for storage
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -144,6 +144,22 @@ export default async function DeputyPage({ params }: PageProps) {
                   : <span className="text-sm italic text-muted-foreground">{noData}</span>
                 }
               </div>
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-muted-foreground">الدائرة الانتخابية:</span>
+                {electoral_district 
+                  ? electoral_district.name
+                  : <span className="text-sm italic text-muted-foreground">{noData}</span>
+                }
+              </div>
+              {deputy.candidate_type && (
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-muted-foreground">نوع الترشح:</span>
+                  <span>
+                    {deputy.candidate_type === "individual" ? "فردي" : 
+                     deputy.candidate_type === "list" ? "قائمة" : "كلاهما"}
+                  </span>
+                </div>
+              )}
               <div className="flex items-center gap-2">
                 <span className="font-semibold text-muted-foreground">الهاتف الشخصي:</span>
                 {user.phone ? (

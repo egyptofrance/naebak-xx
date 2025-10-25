@@ -259,11 +259,19 @@ export default function DeputiesGrid({
                 </div>
               </div>
 
-              {/* Council - Full Width */}
-              <div className="space-y-1 text-sm pb-2">
-                <div className="text-xs text-muted-foreground font-medium">المجلس</div>
-                <div className="font-semibold text-foreground">
-                  {deputyData.council?.name_ar || "غير محدد"}
+              {/* Electoral District & Council */}
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="space-y-1">
+                  <div className="text-xs text-muted-foreground font-medium">الدائرة الانتخابية</div>
+                  <div className="font-semibold text-foreground truncate">
+                    {deputyData.electoral_district?.name || "غير محدد"}
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <div className="text-xs text-muted-foreground font-medium">المجلس</div>
+                  <div className="font-semibold text-foreground truncate">
+                    {deputyData.council?.name_ar || "غير محدد"}
+                  </div>
                 </div>
               </div>
 

@@ -14,6 +14,8 @@ export async function getDeputyBySlug(slug: string) {
         user_id,
         deputy_status,
         council_id,
+        electoral_district_id,
+        candidate_type,
         bio,
         office_address,
         office_phone,
@@ -55,7 +57,7 @@ export async function getDeputyBySlug(slug: string) {
     }
 
     // Get related data
-    const [governorate, party, council] = await Promise.all([
+    const [governorate, party, council, electoral_district] = await Promise.all([
       user.governorate_id
         ? supabase
             .from("governorates")
@@ -80,6 +82,14 @@ export async function getDeputyBySlug(slug: string) {
             .single()
             .then((res) => res.data)
         : null,
+      deputy.electoral_district_id
+        ? supabase
+            .from("electoral_districts")
+            .select("id, name, district_type")
+            .eq("id", deputy.electoral_district_id)
+            .single()
+            .then((res) => res.data)
+        : null,
     ]);
 
     // Get banner_image separately (to avoid TypeScript issues)
@@ -97,6 +107,7 @@ export async function getDeputyBySlug(slug: string) {
       governorate,
       party,
       council,
+      electoral_district,
       bannerImage,
     };
   } catch (error) {
