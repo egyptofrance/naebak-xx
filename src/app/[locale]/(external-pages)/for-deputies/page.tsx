@@ -11,7 +11,13 @@ import {
   Users,
   MapPin,
   Sparkles,
-  ArrowRight
+  ArrowRight,
+  Megaphone,
+  Target,
+  BarChart,
+  Zap,
+  Globe,
+  Share2
 } from 'lucide-react';
 import Link from 'next/link';
 import { BentoCard, BentoGrid } from '@/components/magicui/bento-grid';
@@ -292,6 +298,116 @@ export default function ForDeputiesPage() {
                 </Card>
               </motion.div>
             ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Digital Services Section */}
+      <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            variants={fadeIn}
+            className="text-center mb-16"
+          >
+            <Badge className="mb-4 bg-[#004030] hover:bg-[#003020]">
+              <Megaphone className="w-3 h-3 ml-1" />
+              خدمات رقمية
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              خدمات <span className="text-[#F87B1B]">التسويق الرقمي</span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              نقدم لك فرصة رعاية حملاتنا الإعلانية على Google و Facebook للوصول لأكبر عدد من المواطنين
+            </p>
+          </motion.div>
+
+          <motion.div 
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {[
+              {
+                icon: Globe,
+                title: "رعاية حملات Google Ads",
+                description: "كن راعياً لحملاتنا الإعلانية على محرك البحث Google واظهر كراعي رسمي للمنصة",
+                color: "text-[#4285F4]"
+              },
+              {
+                icon: Share2,
+                title: "رعاية حملات Facebook Ads",
+                description: "رعاية الحملات الإعلانية على Facebook و Instagram للوصول لملايين المستخدمين",
+                color: "text-[#1877F2]"
+              },
+              {
+                icon: Target,
+                title: "إعلانات مستهدفة داخل الموقع",
+                description: "نوافذ إعلانية منبثقة مستهدفة حسب المحافظة أو الدائرة الانتخابية المحددة",
+                color: "text-[#F87B1B]"
+              },
+              {
+                icon: Zap,
+                title: "نظام الرعاية المرن",
+                description: "إمكانية رعاية الحملات بشكل فردي أو مشترك مع رعاة آخرين حسب الميزانية",
+                color: "text-[#004030]"
+              },
+              {
+                icon: BarChart,
+                title: "تقارير وإحصائيات دقيقة",
+                description: "متابعة أداء الحملات وعدد المشاهدات والتفاعل بشكل مباشر ومفصل",
+                color: "text-[#F87B1B]"
+              },
+              {
+                icon: Users,
+                title: "وصول واسع ومضمون",
+                description: "استفد من انتشار المنصة للوصول لأكبر عدد من المواطنين في دائرتك ومحافظتك",
+                color: "text-[#004030]"
+              }
+            ].map((service, index) => (
+              <motion.div key={index} variants={fadeIn}>
+                <Card className="hover:shadow-xl transition-all transform hover:-translate-y-2 h-full border-2 hover:border-[#F87B1B]/50">
+                  <CardContent className="pt-6">
+                    <service.icon className={`w-12 h-12 ${service.color} mb-4`} />
+                    <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3">{service.title}</h3>
+                    <p className="text-sm md:text-base text-gray-600 leading-snug md:leading-relaxed">{service.description}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <motion.div
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            variants={fadeIn}
+            className="mt-12 text-center"
+          >
+            <div className="bg-gradient-to-r from-[#004030] to-[#003020] text-white p-8 rounded-2xl max-w-4xl mx-auto">
+              <h3 className="text-2xl md:text-3xl font-bold mb-4">كيف تعمل الرعاية؟</h3>
+              <p className="text-lg mb-6 leading-relaxed">
+                نقوم بإطلاق حملات إعلانية منتظمة للترويج لمنصة نائبك.com على Google و Facebook. يمكنك رعاية هذه الحملات وظهور اسمك وصورتك كراعي رسمي، مما يمنحك انتشاراً واسعاً ومصداقية عالية أمام المواطنين.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                <div className="bg-white/10 backdrop-blur-sm p-4 rounded-xl">
+                  <div className="text-3xl font-bold text-[#F87B1B] mb-2">1</div>
+                  <p className="text-sm">اختر نوع الحملة (Google أو Facebook أو داخل الموقع)</p>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm p-4 rounded-xl">
+                  <div className="text-3xl font-bold text-[#F87B1B] mb-2">2</div>
+                  <p className="text-sm">حدد الميزانية والمدة والمنطقة المستهدفة</p>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm p-4 rounded-xl">
+                  <div className="text-3xl font-bold text-[#F87B1B] mb-2">3</div>
+                  <p className="text-sm">تابع النتائج والإحصائيات بشكل مباشر</p>
+                </div>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
