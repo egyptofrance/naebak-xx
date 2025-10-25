@@ -29,7 +29,7 @@ export async function getContactMessages(filters?: {
       return { success: false, error: 'فشل في جلب الرسائل' };
     }
 
-    return { success: true, data };
+    return { success: true, data: data as any };
   } catch (error) {
     console.error('Unexpected error:', error);
     return { success: false, error: 'حدث خطأ غير متوقع' };
