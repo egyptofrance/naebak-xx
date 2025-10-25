@@ -44,7 +44,7 @@ export default function ForDeputiesPage() {
   const features = [
     {
       name: "توثيق المناسبات",
-      description: "سجّل حضورك في الأفراح، العزاءات، والفعاليات المجتمعية. كل مناسبة تحضرها تُضاف إلى سجلك.",
+      description: "سجّل حضور النائب في الأفراح، العزاءات، والفعاليات المجتمعية. كل مناسبة يحضرها النائب تُضاف إلى سجله.",
       background: (
         <div className="absolute inset-0 bg-gradient-to-br from-[#F87B1B]/20 to-[#E6690A]/10">
           <Calendar className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[#F87B1B] opacity-20" />
@@ -53,8 +53,8 @@ export default function ForDeputiesPage() {
       className: "col-span-1 md:col-span-2"
     },
     {
-      name: "سجل الإنجازات",
-      description: "وثّق كل مشكلة حلّيتها لمواطن. اعرض إنجازاتك بشكل واضح ومنظم.",
+      name: "سجل إنجازات النائب",
+      description: "توثيق كل مشكلة حلّها النائب للمواطنين. عرض إنجازات النائب بشكل واضح ومنظم.",
       background: (
         <div className="absolute inset-0 bg-gradient-to-br from-[#004030]/20 to-[#003020]/10">
           <Trophy className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[#004030] opacity-20" />
@@ -63,8 +63,8 @@ export default function ForDeputiesPage() {
       className: "col-span-1"
     },
     {
-      name: "البرنامج الانتخابي",
-      description: "اعرض برنامجك الانتخابي وأهدافك بوضوح للمواطنين.",
+      name: "البرنامج الانتخابي للنائب",
+      description: "عرض البرنامج الانتخابي للنائب وأهدافه بوضوح للمواطنين.",
       background: (
         <div className="absolute inset-0 bg-gradient-to-br from-[#F87B1B]/20 to-[#E6690A]/10">
           <FileText className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[#F87B1B] opacity-20" />
@@ -73,8 +73,8 @@ export default function ForDeputiesPage() {
       className: "col-span-1"
     },
     {
-      name: "صفحة شخصية احترافية",
-      description: "اعرض بياناتك الشخصية وخبراتك بشكل احترافي.",
+      name: "صفحة شخصية احترافية للنائب",
+      description: "عرض بيانات النائب الشخصية وخبراته بشكل احترافي.",
       background: (
         <div className="absolute inset-0 bg-gradient-to-br from-[#004030]/20 to-[#003020]/10">
           <User className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[#004030] opacity-20" />
@@ -83,8 +83,8 @@ export default function ForDeputiesPage() {
       className: "col-span-1"
     },
     {
-      name: "تواصل مباشر",
-      description: "استقبل الشكاوى والمقترحات مباشرة من المواطنين.",
+      name: "تواصل مباشر مع المواطنين",
+      description: "استقبال النائب للشكاوى والمقترحات مباشرة من المواطنين.",
       background: (
         <div className="absolute inset-0 bg-gradient-to-br from-[#F87B1B]/20 to-[#E6690A]/10">
           <MessageCircle className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[#F87B1B] opacity-20" />
@@ -160,7 +160,7 @@ export default function ForDeputiesPage() {
             <motion.h1 variants={fadeIn} className="text-5xl md:text-7xl font-bold mb-6">
               انضم إلى{' '}
               <span className="bg-gradient-to-r from-[#F87B1B] to-[#E6690A] bg-clip-text text-transparent">
-                نائبك.com
+                نائبك
               </span>
             </motion.h1>
             
@@ -245,7 +245,7 @@ export default function ForDeputiesPage() {
               المميزات
             </Badge>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              لماذا <span className="text-[#F87B1B]">نائبك.com</span>؟
+              لماذا <span className="text-[#F87B1B]">نائبك</span>؟
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               منصة شاملة توثق كل نشاطاتك وإنجازاتك وتربطك بأبناء دائرتك بشكل مباشر وفعال
@@ -280,7 +280,7 @@ export default function ForDeputiesPage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              كيف يعمل <span className="text-[#F87B1B]">نائبك.com</span>؟
+              كيف يعمل <span className="text-[#F87B1B]">نائبك</span>؟
             </h2>
             <p className="text-xl text-gray-600">ثلاث خطوات بسيطة للبدء</p>
           </motion.div>
@@ -331,7 +331,7 @@ export default function ForDeputiesPage() {
               خدمات <span className="text-[#F87B1B]">التسويق الرقمي</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              نقدم لك فرصة رعاية حملاتنا الإعلانية على Google و Facebook للوصول لأكبر عدد من المواطنين
+              نقدم للنائب فرصة توسيع نطاق الوصول للمواطنين من أبناء دائرتهم
             </p>
           </motion.div>
 
@@ -340,86 +340,31 @@ export default function ForDeputiesPage() {
             whileInView="animate"
             viewport={{ once: true }}
             variants={staggerContainer}
-            className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8"
           >
-            {[
-              {
-                icon: Globe,
-                title: "رعاية حملات Google Ads",
-                description: "كن راعياً لحملاتنا الإعلانية على محرك البحث Google واظهر كراعي رسمي للمنصة",
-                color: "text-[#4285F4]"
-              },
-              {
-                icon: Share2,
-                title: "رعاية حملات Facebook Ads",
-                description: "رعاية الحملات الإعلانية على Facebook و Instagram للوصول لملايين المستخدمين",
-                color: "text-[#1877F2]"
-              },
-              {
-                icon: Target,
-                title: "إعلانات مستهدفة داخل الموقع",
-                description: "نوافذ إعلانية منبثقة مستهدفة حسب المحافظة أو الدائرة الانتخابية المحددة",
-                color: "text-[#F87B1B]"
-              },
-              {
-                icon: Zap,
-                title: "نظام الرعاية المرن",
-                description: "إمكانية رعاية الحملات بشكل فردي أو مشترك مع رعاة آخرين حسب الميزانية",
-                color: "text-[#004030]"
-              },
-              {
-                icon: BarChart,
-                title: "تقارير وإحصائيات دقيقة",
-                description: "متابعة أداء الحملات وعدد المشاهدات والتفاعل بشكل مباشر ومفصل",
-                color: "text-[#F87B1B]"
-              },
-              {
-                icon: Users,
-                title: "وصول واسع ومضمون",
-                description: "استفد من انتشار المنصة للوصول لأكبر عدد من المواطنين في دائرتك ومحافظتك",
-                color: "text-[#004030]"
-              }
-            ].map((service, index) => (
-              <motion.div key={index} variants={fadeIn}>
-                <Card className="hover:shadow-xl transition-all transform hover:-translate-y-2 h-full border-2 hover:border-[#F87B1B]/50">
-                  <CardContent className="pt-6">
-                    <service.icon className={`w-12 h-12 ${service.color} mb-4`} />
-                    <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3">{service.title}</h3>
-                    <p className="text-sm md:text-base text-gray-600 leading-snug md:leading-relaxed">{service.description}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </motion.div>
+            <motion.div variants={fadeIn}>
+              <Card className="hover:shadow-xl transition-all h-full border-2 hover:border-[#F87B1B]/50">
+                <CardContent className="pt-8 pb-8">
+                  <Globe className="w-16 h-16 text-[#004030] mb-6" />
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">رعاية حملات نائبك</h3>
+                  <p className="text-base text-gray-700 leading-relaxed">
+                    يمكن للنائب أن يكون راعياً رسمياً لموقع نائبك والاستفادة من حملاتنا الإعلانية على جوجل وفيسبوك للوصول لأكبر عدد من المواطنين في دائرته.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
 
-          <motion.div
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
-            variants={fadeIn}
-            className="mt-12 text-center"
-          >
-            <div className="bg-gradient-to-r from-[#004030] to-[#003020] text-white p-8 rounded-2xl max-w-4xl mx-auto">
-              <h3 className="text-2xl md:text-3xl font-bold mb-4">كيف تعمل الرعاية؟</h3>
-              <p className="text-lg mb-6 leading-relaxed">
-                نقوم بإطلاق حملات إعلانية منتظمة للترويج لمنصة نائبك.com على Google و Facebook. يمكنك رعاية هذه الحملات وظهور اسمك وصورتك كراعي رسمي، مما يمنحك انتشاراً واسعاً ومصداقية عالية أمام المواطنين.
-              </p>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-                <div className="bg-white/10 backdrop-blur-sm p-4 rounded-xl">
-                  <div className="text-3xl font-bold text-[#F87B1B] mb-2">1</div>
-                  <p className="text-sm">اختر نوع الحملة (Google أو Facebook أو داخل الموقع)</p>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm p-4 rounded-xl">
-                  <div className="text-3xl font-bold text-[#F87B1B] mb-2">2</div>
-                  <p className="text-sm">حدد الميزانية والمدة والمنطقة المستهدفة</p>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm p-4 rounded-xl">
-                  <div className="text-3xl font-bold text-[#F87B1B] mb-2">3</div>
-                  <p className="text-sm">تابع النتائج والإحصائيات بشكل مباشر</p>
-                </div>
-              </div>
-            </div>
+            <motion.div variants={fadeIn}>
+              <Card className="hover:shadow-xl transition-all h-full border-2 hover:border-[#F87B1B]/50">
+                <CardContent className="pt-8 pb-8">
+                  <Target className="w-16 h-16 text-[#F87B1B] mb-6" />
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">إعلانات مدفوعة على نائبك</h3>
+                  <p className="text-base text-gray-700 leading-relaxed">
+                    نوافذ إعلانية منبثقة مستهدفة حسب المحافظة أو الدائرة الانتخابية مع إحصائيات دقيقة عن عدد المشاهدات والوصول لأبناء دائرتك.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -447,7 +392,7 @@ export default function ForDeputiesPage() {
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-6">جاهز للانضمام؟</h2>
             <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-              انضم الآن إلى مئات النواب الذين يستخدمون نائبك.com لخدمة دوائرهم بشكل أفضل
+              انضم الآن إلى مئات النواب الذين يستخدمون نائبك لخدمة دوائرهم بشكل أفضل
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
