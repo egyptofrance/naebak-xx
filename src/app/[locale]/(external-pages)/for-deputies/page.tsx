@@ -1,316 +1,415 @@
-import { useTranslations } from 'next-intl';
-import { getTranslations } from 'next-intl/server';
-import Link from 'next/link';
+'use client';
 
-export async function generateMetadata({ params }: { params: { locale: string } }) {
-  const t = await getTranslations({ locale: params.locale, namespace: 'ForDeputiesPage' });
-  
-  return {
-    title: t('meta_title'),
-    description: t('meta_description'),
-  };
-}
+import { motion } from 'framer-motion';
+import { 
+  Calendar, 
+  Trophy, 
+  FileText, 
+  User, 
+  MessageCircle, 
+  Star,
+  CheckCircle,
+  TrendingUp,
+  Users,
+  MapPin,
+  Sparkles,
+  ArrowRight,
+  BarChart3
+} from 'lucide-react';
+import Link from 'next/link';
+import { BentoCard, BentoGrid } from '@/components/magicui/bento-grid';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+
+const fadeIn = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.5 }
+};
+
+const staggerContainer = {
+  animate: {
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
 
 export default function ForDeputiesPage() {
+  const features = [
+    {
+      name: "توثيق المناسبات",
+      description: "سجّل حضورك في الأفراح، العزاءات، والفعاليات المجتمعية. كل مناسبة تحضرها تُضاف إلى سجلك.",
+      background: (
+        <div className="absolute inset-0 bg-gradient-to-br from-[#F87B1B]/20 to-[#E6690A]/10">
+          <Calendar className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[#F87B1B] opacity-20" />
+        </div>
+      ),
+      className: "md:col-span-2"
+    },
+    {
+      name: "سجل الإنجازات",
+      description: "وثّق كل مشكلة حلّيتها لمواطن. اعرض إنجازاتك بشكل واضح ومنظم.",
+      background: (
+        <div className="absolute inset-0 bg-gradient-to-br from-[#004030]/20 to-[#003020]/10">
+          <Trophy className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[#004030] opacity-20" />
+        </div>
+      ),
+      className: "md:col-span-1"
+    },
+    {
+      name: "البرنامج الانتخابي",
+      description: "اعرض برنامجك الانتخابي وأهدافك بوضوح للمواطنين.",
+      background: (
+        <div className="absolute inset-0 bg-gradient-to-br from-[#F87B1B]/20 to-[#E6690A]/10">
+          <FileText className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[#F87B1B] opacity-20" />
+        </div>
+      ),
+      className: "md:col-span-1"
+    },
+    {
+      name: "صفحة شخصية احترافية",
+      description: "اعرض بياناتك الشخصية وخبراتك بشكل احترافي.",
+      background: (
+        <div className="absolute inset-0 bg-gradient-to-br from-[#004030]/20 to-[#003020]/10">
+          <User className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[#004030] opacity-20" />
+        </div>
+      ),
+      className: "md:col-span-1"
+    },
+    {
+      name: "تواصل مباشر",
+      description: "استقبل الشكاوى والمقترحات مباشرة من المواطنين.",
+      background: (
+        <div className="absolute inset-0 bg-gradient-to-br from-[#F87B1B]/20 to-[#E6690A]/10">
+          <MessageCircle className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[#F87B1B] opacity-20" />
+        </div>
+      ),
+      className: "md:col-span-1"
+    }
+  ];
+
+  const stats = [
+    { icon: Users, value: "1000+", label: "نائب مسجل", color: "text-[#F87B1B]" },
+    { icon: Users, value: "50K+", label: "مواطن نشط", color: "text-[#004030]" },
+    { icon: CheckCircle, value: "10K+", label: "شكوى تم حلها", color: "text-[#F87B1B]" },
+    { icon: MapPin, value: "27", label: "محافظة", color: "text-[#004030]" }
+  ];
+
+  const benefits = [
+    {
+      icon: BarChart3,
+      title: "سيرة ذاتية حية للشعب",
+      description: "كل نشاط تقوم به يُسجل ويُعرض. أبناء دائرتك يرون جهودك الحقيقية."
+    },
+    {
+      icon: TrendingUp,
+      title: "زيادة الثقة والمصداقية",
+      description: "الشفافية في عرض إنجازاتك تزيد من ثقة المواطنين بك."
+    },
+    {
+      icon: Users,
+      title: "فهم احتياجات دائرتك",
+      description: "من خلال الشكاوى تفهم بدقة ما يحتاجه أبناء دائرتك."
+    },
+    {
+      icon: MessageCircle,
+      title: "تواصل مستمر وفعال",
+      description: "ابقَ على تواصل دائم واصنع علاقة قوية ومستدامة."
+    },
+    {
+      icon: Star,
+      title: "قياس أدائك",
+      description: "نظام التقييم يساعدك على معرفة مستوى أدائك وتحسينه."
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-[#004030] via-[#005040] to-[#003020] text-white py-20 overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-[#F87B1B] rounded-full filter blur-3xl"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#F87B1B] rounded-full filter blur-3xl"></div>
+      <section className="relative bg-gradient-to-br from-[#004030] via-[#005040] to-[#003020] text-white py-24 overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0 opacity-20">
+          <motion.div
+            animate={{
+              scale: [1, 1.2, 1],
+              rotate: [0, 90, 0],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            className="absolute top-0 left-0 w-96 h-96 bg-[#F87B1B] rounded-full filter blur-3xl"
+          />
+          <motion.div
+            animate={{
+              scale: [1.2, 1, 1.2],
+              rotate: [90, 0, 90],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            className="absolute bottom-0 right-0 w-96 h-96 bg-[#F87B1B] rounded-full filter blur-3xl"
+          />
         </div>
         
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 animate-fade-in">
-              انضم إلى <span className="text-[#F87B1B]">نائبك.com</span>
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 text-gray-200">
-              المنصة الأولى التي تربطك بأبناء دائرتك وتوثق إنجازاتك
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link 
-                href="/sign-up" 
-                className="bg-[#F87B1B] hover:bg-[#E6690A] text-white px-8 py-4 rounded-lg font-bold text-lg transition-all transform hover:scale-105 shadow-lg"
+          <motion.div 
+            className="max-w-5xl mx-auto text-center"
+            initial="initial"
+            animate="animate"
+            variants={staggerContainer}
+          >
+            <motion.div variants={fadeIn} className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/20">
+              <Sparkles className="w-4 h-4 text-[#F87B1B]" />
+              <span className="text-sm">المنصة الأولى للنواب في مصر</span>
+            </motion.div>
+            
+            <motion.h1 variants={fadeIn} className="text-5xl md:text-7xl font-bold mb-6">
+              انضم إلى{' '}
+              <span className="bg-gradient-to-r from-[#F87B1B] to-[#E6690A] bg-clip-text text-transparent">
+                نائبك.com
+              </span>
+            </motion.h1>
+            
+            <motion.p variants={fadeIn} className="text-xl md:text-2xl mb-8 text-gray-200 max-w-3xl mx-auto leading-relaxed">
+              المنصة الأولى التي تربطك بأبناء دائرتك، توثق إنجازاتك، وتبني سيرتك الذاتية الحقيقية أمام الشعب
+            </motion.p>
+            
+            <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                asChild
+                size="lg"
+                className="bg-gradient-to-r from-[#F87B1B] to-[#E6690A] hover:from-[#E6690A] hover:to-[#D45800] text-white px-8 py-6 text-lg font-bold shadow-2xl transform hover:scale-105 transition-all"
               >
-                ابدأ الآن مجاناً
-              </Link>
-              <a 
-                href="#features" 
-                className="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-lg font-bold text-lg transition-all border-2 border-white/30"
+                <Link href="/sign-up">
+                  ابدأ الآن مجاناً
+                  <ArrowRight className="mr-2 w-5 h-5" />
+                </Link>
+              </Button>
+              <Button 
+                asChild
+                size="lg"
+                variant="outline"
+                className="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border-2 border-white/30 px-8 py-6 text-lg font-bold"
               >
-                اكتشف المميزات
-              </a>
-            </div>
-          </div>
+                <a href="#features">
+                  اكتشف المميزات
+                </a>
+              </Button>
+            </motion.div>
+          </motion.div>
         </div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        >
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center pt-2">
+            <div className="w-1 h-3 bg-white/50 rounded-full" />
+          </div>
+        </motion.div>
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-white relative">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            <div className="text-center">
-              <div className="text-5xl font-bold text-[#F87B1B] mb-2">1000+</div>
-              <div className="text-gray-600">نائب مسجل</div>
-            </div>
-            <div className="text-center">
-              <div className="text-5xl font-bold text-[#004030] mb-2">50K+</div>
-              <div className="text-gray-600">مواطن نشط</div>
-            </div>
-            <div className="text-center">
-              <div className="text-5xl font-bold text-[#F87B1B] mb-2">10K+</div>
-              <div className="text-gray-600">شكوى تم حلها</div>
-            </div>
-            <div className="text-center">
-              <div className="text-5xl font-bold text-[#004030] mb-2">27</div>
-              <div className="text-gray-600">محافظة</div>
-            </div>
-          </div>
+          <motion.div 
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-6xl mx-auto"
+          >
+            {stats.map((stat, index) => (
+              <motion.div key={index} variants={fadeIn}>
+                <Card className="text-center hover:shadow-xl transition-all transform hover:-translate-y-2 border-2">
+                  <CardContent className="pt-6">
+                    <stat.icon className={`w-12 h-12 mx-auto mb-4 ${stat.color}`} />
+                    <div className={`text-5xl font-bold mb-2 ${stat.color}`}>{stat.value}</div>
+                    <div className="text-gray-600">{stat.label}</div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Features Section with Bento Grid */}
       <section id="features" className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <motion.div 
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            variants={fadeIn}
+            className="text-center mb-16"
+          >
+            <Badge className="mb-4 bg-[#F87B1B] hover:bg-[#E6690A]">
+              <Sparkles className="w-3 h-3 ml-1" />
+              المميزات
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               لماذا <span className="text-[#F87B1B]">نائبك.com</span>؟
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               منصة شاملة توثق كل نشاطاتك وإنجازاتك وتربطك بأبناء دائرتك بشكل مباشر وفعال
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            {/* Feature 1: Events */}
-            <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2">
-              <div className="w-16 h-16 bg-gradient-to-br from-[#F87B1B] to-[#E6690A] rounded-lg flex items-center justify-center mb-6">
-                <span className="text-3xl">🎉</span>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">توثيق المناسبات</h3>
-              <p className="text-gray-600 leading-relaxed">
-                سجّل حضورك في الأفراح، العزاءات، والفعاليات المجتمعية. كل مناسبة تحضرها تُضاف إلى سجلك وتظهر لأبناء دائرتك.
-              </p>
-            </div>
-
-            {/* Feature 2: Achievements */}
-            <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2">
-              <div className="w-16 h-16 bg-gradient-to-br from-[#004030] to-[#003020] rounded-lg flex items-center justify-center mb-6">
-                <span className="text-3xl">🏆</span>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">سجل الإنجازات</h3>
-              <p className="text-gray-600 leading-relaxed">
-                وثّق كل مشكلة حلّيتها لمواطن. اعرض إنجازاتك بشكل واضح ومنظم. اصنع سيرة ذاتية حقيقية للشعب.
-              </p>
-            </div>
-
-            {/* Feature 3: Electoral Program */}
-            <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2">
-              <div className="w-16 h-16 bg-gradient-to-br from-[#F87B1B] to-[#E6690A] rounded-lg flex items-center justify-center mb-6">
-                <span className="text-3xl">📋</span>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">البرنامج الانتخابي</h3>
-              <p className="text-gray-600 leading-relaxed">
-                اعرض برنامجك الانتخابي وأهدافك بوضوح. دع المواطنين يعرفون رؤيتك وما تخطط لتحقيقه.
-              </p>
-            </div>
-
-            {/* Feature 4: Personal Profile */}
-            <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2">
-              <div className="w-16 h-16 bg-gradient-to-br from-[#004030] to-[#003020] rounded-lg flex items-center justify-center mb-6">
-                <span className="text-3xl">👤</span>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">صفحة شخصية احترافية</h3>
-              <p className="text-gray-600 leading-relaxed">
-                اعرض بياناتك الشخصية، خلفيتك، وخبراتك. دع أبناء دائرتك يتعرفون عليك بشكل أعمق وأكثر واقعية.
-              </p>
-            </div>
-
-            {/* Feature 5: Direct Communication */}
-            <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2">
-              <div className="w-16 h-16 bg-gradient-to-br from-[#F87B1B] to-[#E6690A] rounded-lg flex items-center justify-center mb-6">
-                <span className="text-3xl">💬</span>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">تواصل مباشر</h3>
-              <p className="text-gray-600 leading-relaxed">
-                استقبل الشكاوى والمقترحات مباشرة من المواطنين. رد عليهم وحل مشاكلهم بكفاءة وشفافية.
-              </p>
-            </div>
-
-            {/* Feature 6: Rating System */}
-            <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2">
-              <div className="w-16 h-16 bg-gradient-to-br from-[#004030] to-[#003020] rounded-lg flex items-center justify-center mb-6">
-                <span className="text-3xl">⭐</span>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">نظام التقييم</h3>
-              <p className="text-gray-600 leading-relaxed">
-                احصل على تقييمات من المواطنين. كلما زاد أداؤك، زاد تقييمك وثقة الناخبين بك.
-              </p>
-            </div>
-          </div>
+          <motion.div
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
+            <BentoGrid className="max-w-7xl mx-auto md:auto-rows-[20rem]">
+              {features.map((feature, idx) => (
+                <motion.div key={idx} variants={fadeIn}>
+                  <BentoCard {...feature} />
+                </motion.div>
+              ))}
+            </BentoGrid>
+          </motion.div>
         </div>
       </section>
 
       {/* How It Works */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+          <motion.div 
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            variants={fadeIn}
+            className="text-center mb-16"
+          >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
               كيف يعمل <span className="text-[#F87B1B]">نائبك.com</span>؟
             </h2>
             <p className="text-xl text-gray-600">ثلاث خطوات بسيطة للبدء</p>
-          </div>
+          </motion.div>
 
-          <div className="max-w-5xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="w-20 h-20 bg-[#F87B1B] text-white rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6">
-                  1
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">سجّل حسابك</h3>
-                <p className="text-gray-600">
-                  أنشئ حسابك مجاناً وأكمل بياناتك الشخصية والانتخابية
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-20 h-20 bg-[#004030] text-white rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6">
-                  2
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">وثّق نشاطاتك</h3>
-                <p className="text-gray-600">
-                  سجّل مناسباتك، إنجازاتك، وفعالياتك بشكل منتظم
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-20 h-20 bg-[#F87B1B] text-white rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6">
-                  3
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">تواصل مع دائرتك</h3>
-                <p className="text-gray-600">
-                  استقبل الشكاوى، حل المشاكل، وابنِ علاقة قوية مع ناخبيك
-                </p>
-              </div>
-            </div>
-          </div>
+          <motion.div 
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8"
+          >
+            {[
+              { step: 1, title: "سجّل حسابك", desc: "أنشئ حسابك مجاناً وأكمل بياناتك", color: "from-[#F87B1B] to-[#E6690A]" },
+              { step: 2, title: "وثّق نشاطاتك", desc: "سجّل مناسباتك وإنجازاتك بشكل منتظم", color: "from-[#004030] to-[#003020]" },
+              { step: 3, title: "تواصل مع دائرتك", desc: "استقبل الشكاوى وحل المشاكل", color: "from-[#F87B1B] to-[#E6690A]" }
+            ].map((item, index) => (
+              <motion.div key={index} variants={fadeIn}>
+                <Card className="text-center hover:shadow-xl transition-all transform hover:-translate-y-2 h-full">
+                  <CardContent className="pt-6">
+                    <div className={`w-20 h-20 bg-gradient-to-br ${item.color} text-white rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6 shadow-lg`}>
+                      {item.step}
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
+                    <p className="text-gray-600">{item.desc}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
       {/* Benefits Section */}
-      <section className="py-20 bg-gradient-to-br from-[#004030] to-[#003020] text-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold text-center mb-12">
-              ماذا تستفيد كنائب؟
-            </h2>
+      <section className="py-20 bg-gradient-to-br from-[#004030] to-[#003020] text-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-[#F87B1B] rounded-full filter blur-3xl" />
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            variants={fadeIn}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4">ماذا تستفيد كنائب؟</h2>
+          </motion.div>
 
-            <div className="space-y-6">
-              <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg border-r-4 border-[#F87B1B]">
-                <h3 className="text-xl font-bold mb-2">📊 سيرة ذاتية حية للشعب</h3>
-                <p className="text-gray-200">
-                  كل نشاط تقوم به يُسجل ويُعرض. أبناء دائرتك يرون جهودك الحقيقية وليس مجرد وعود.
-                </p>
-              </div>
-
-              <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg border-r-4 border-[#F87B1B]">
-                <h3 className="text-xl font-bold mb-2">🎯 زيادة الثقة والمصداقية</h3>
-                <p className="text-gray-200">
-                  الشفافية في عرض إنجازاتك تزيد من ثقة المواطنين بك وتعزز فرصك في الانتخابات القادمة.
-                </p>
-              </div>
-
-              <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg border-r-4 border-[#F87B1B]">
-                <h3 className="text-xl font-bold mb-2">💡 فهم احتياجات دائرتك</h3>
-                <p className="text-gray-200">
-                  من خلال الشكاوى والمقترحات، تفهم بدقة ما يحتاجه أبناء دائرتك وتستطيع خدمتهم بشكل أفضل.
-                </p>
-              </div>
-
-              <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg border-r-4 border-[#F87B1B]">
-                <h3 className="text-xl font-bold mb-2">🔗 تواصل مستمر وفعال</h3>
-                <p className="text-gray-200">
-                  لا تنتظر الانتخابات لتتواصل مع ناخبيك. ابقَ على تواصل دائم واصنع علاقة قوية ومستدامة.
-                </p>
-              </div>
-
-              <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg border-r-4 border-[#F87B1B]">
-                <h3 className="text-xl font-bold mb-2">📈 قياس أدائك</h3>
-                <p className="text-gray-200">
-                  نظام التقييم والإحصائيات يساعدك على معرفة مستوى أدائك وتحسينه باستمرار.
-                </p>
-              </div>
-            </div>
-          </div>
+          <motion.div 
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {benefits.map((benefit, index) => (
+              <motion.div key={index} variants={fadeIn}>
+                <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all transform hover:-translate-y-2 h-full">
+                  <CardContent className="pt-6">
+                    <benefit.icon className="w-12 h-12 text-[#F87B1B] mb-4" />
+                    <h3 className="text-xl font-bold mb-2 text-white">{benefit.title}</h3>
+                    <p className="text-gray-200">{benefit.description}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-[#F87B1B] to-[#E6690A] text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            جاهز للانضمام؟
-          </h2>
-          <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-            انضم الآن إلى مئات النواب الذين يستخدمون نائبك.com لخدمة دوائرهم بشكل أفضل
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link 
-              href="/sign-up" 
-              className="bg-white text-[#F87B1B] hover:bg-gray-100 px-10 py-4 rounded-lg font-bold text-lg transition-all transform hover:scale-105 shadow-lg"
-            >
-              ابدأ الآن - مجاناً
-            </Link>
-            <Link 
-              href="/contact" 
-              className="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-10 py-4 rounded-lg font-bold text-lg transition-all border-2 border-white"
-            >
-              تواصل معنا
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">
-              أسئلة شائعة
-            </h2>
-
-            <div className="space-y-6">
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">هل التسجيل مجاني؟</h3>
-                <p className="text-gray-600">
-                  نعم، التسجيل والاستخدام الأساسي مجاني تماماً لجميع النواب.
-                </p>
-              </div>
-
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">كيف أوثق إنجازاتي؟</h3>
-                <p className="text-gray-600">
-                  من خلال لوحة التحكم الخاصة بك، يمكنك إضافة إنجازاتك ومناسباتك بسهولة مع إمكانية إرفاق صور ووثائق.
-                </p>
-              </div>
-
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">هل بياناتي آمنة؟</h3>
-                <p className="text-gray-600">
-                  نعم، نستخدم أحدث تقنيات الأمان لحماية بياناتك الشخصية والمهنية.
-                </p>
-              </div>
-
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">كيف يتواصل معي المواطنون؟</h3>
-                <p className="text-gray-600">
-                  من خلال نظام الشكاوى والرسائل المدمج في المنصة. تستقبل إشعارات فورية بكل رسالة جديدة.
-                </p>
-              </div>
+      <section className="py-20 bg-gradient-to-r from-[#F87B1B] to-[#E6690A] text-white relative overflow-hidden">
+        <motion.div
+          animate={{
+            scale: [1, 1.1, 1],
+            opacity: [0.3, 0.5, 0.3]
+          }}
+          transition={{
+            duration: 5,
+            repeat: Infinity
+          }}
+          className="absolute inset-0 bg-[url('/grid.svg')] opacity-20"
+        />
+        
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <motion.div
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            variants={fadeIn}
+          >
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">جاهز للانضمام؟</h2>
+            <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+              انضم الآن إلى مئات النواب الذين يستخدمون نائبك.com لخدمة دوائرهم بشكل أفضل
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                asChild
+                size="lg"
+                className="bg-white text-[#F87B1B] hover:bg-gray-100 px-10 py-6 text-lg font-bold shadow-2xl transform hover:scale-105 transition-all"
+              >
+                <Link href="/sign-up">
+                  ابدأ الآن - مجاناً
+                  <ArrowRight className="mr-2 w-5 h-5" />
+                </Link>
+              </Button>
+              <Button 
+                asChild
+                size="lg"
+                variant="outline"
+                className="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white border-2 border-white px-10 py-6 text-lg font-bold"
+              >
+                <Link href="/contact">تواصل معنا</Link>
+              </Button>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
     </div>
