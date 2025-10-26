@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/table";
 import { deleteMultipleUsersAction } from "@/data/admin/user";
 import { format } from "date-fns";
-import { Mail, Trash2 } from "lucide-react";
+import { Mail, Trash2, Link2, Send, UserPlus, Shield, Edit } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { Suspense, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -130,14 +130,7 @@ export function UsersListWithBulkDelete({ users }: { users: User[] }) {
                 />
               </TableHead>
               <TableHead>Full Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Contact User</TableHead>
-              <TableHead>Send Login Link</TableHead>
-              <TableHead>Get Login Link</TableHead>
-              <TableHead>Promote to Deputy</TableHead>
-              <TableHead>Promote to Manager</TableHead>
-              <TableHead>Edit</TableHead>
-              <TableHead>Delete</TableHead>
+              <TableHead className="text-center">إجراءات</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -152,58 +145,45 @@ export function UsersListWithBulkDelete({ users }: { users: User[] }) {
                       onCheckedChange={() => toggleUser(user.id)}
                     />
                   </TableCell>
-                  <TableCell> {user.full_name ?? "-"} </TableCell>
                   <TableCell>
-                    <Link href={`/app_admin/users/${user.id}`}>{email}</Link>
+                    <Link href={`/app_admin/users/${user.id}`} className="hover:underline">
+                      {user.full_name ?? "-"}
+                    </Link>
+                    <div className="text-xs text-muted-foreground">{email}</div>
                   </TableCell>
                   <TableCell>
-                    <span className="flex items-center space-x-4">
+                    <div className="flex items-center justify-center gap-1">
                       <a
                         title="Contact User by email"
-                        className="flex items-center "
                         href={`mailto:${email}`}
                         target="_blank"
                         rel="noreferrer"
                       >
-                        <Mail className="h-5 w-5 mr-2 " />{" "}
-                        <T.Small className=" font-medium underline underline-offset-4 ">
-                          Contact User by email
-                        </T.Small>
+                        <Button variant="ghost" size="icon">
+                          <Mail className="h-4 w-4" />
+                        </Button>
                       </a>
-                    </span>
-                  </TableCell>
-
-                  <TableCell>
-                    <Suspense>
-                      <ConfirmSendLoginLinkDialog userEmail={email} />
-                    </Suspense>
-                  </TableCell>
-                  <TableCell>
-                    <Suspense>
-                      <GetLoginLinkDialog userId={user.id} />
-                    </Suspense>
-                  </TableCell>
-                  <TableCell>
-                    <PromoteToDeputyDialog
-                      userId={user.id}
-                      userName={user.full_name ?? email}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <PromoteToManagerButton
-                      userId={user.id}
-                      userName={user.full_name ?? email}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <EditUserDialog
-                      userId={user.id}
-                      currentFullName={user.full_name}
-                      currentPhone={user.phone}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <DeleteUserDialog userId={user.id} userEmail={email} />
+                      <Suspense>
+                        <ConfirmSendLoginLinkDialog userEmail={email} />
+                      </Suspense>
+                      <Suspense>
+                        <GetLoginLinkDialog userId={user.id} />
+                      </Suspense>
+                      <PromoteToDeputyDialog
+                        userId={user.id}
+                        userName={user.full_name ?? email}
+                      />
+                      <PromoteToManagerButton
+                        userId={user.id}
+                        userName={user.full_name ?? email}
+                      />
+                      <EditUserDialog
+                        userId={user.id}
+                        currentFullName={user.full_name}
+                        currentPhone={user.phone}
+                      />
+                      <DeleteUserDialog userId={user.id} userEmail={email} />
+                    </div>
                   </TableCell>
                 </TableRow>
               );

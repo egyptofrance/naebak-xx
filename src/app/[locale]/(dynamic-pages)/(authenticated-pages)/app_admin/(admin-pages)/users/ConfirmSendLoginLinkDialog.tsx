@@ -49,8 +49,8 @@ export const ConfirmSendLoginLinkDialog = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant={"ghost"} aria-disabled={isSending}>
-          Send login link
+        <Button variant="ghost" size="icon" aria-disabled={isSending} title="Send login link">
+          <Send className="h-4 w-4" />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

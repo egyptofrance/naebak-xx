@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { promoteToManagerAction } from "@/data/admin/managers";
-import { UserCog } from "lucide-react";
+import { Shield } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -33,14 +33,13 @@ export function PromoteToManagerButton({ userId, userName }: PromoteToManagerBut
 
   return (
     <Button
-      size="sm"
-      variant="outline"
+      size="icon"
+      variant="ghost"
       onClick={handlePromote}
       disabled={isExecuting}
-      className="border-blue-500 text-blue-600 hover:bg-blue-50"
+      title="ترقية إلى مدير"
     >
-      <UserCog className="h-4 w-4 mr-2" />
-      {isExecuting ? "جاري الترقية..." : "ترقية إلى مدير"}
+      <Shield className="h-4 w-4" />
     </Button>
   );
 }

@@ -54,8 +54,8 @@ export const DeleteUserDialog = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="sm" disabled={isDeleting}>
-          <Trash2 className="w-4 h-4 text-destructive" />
+        <Button variant="ghost" size="icon" disabled={isDeleting} title="حذف">
+          <Trash2 className="h-4 w-4 text-destructive" />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

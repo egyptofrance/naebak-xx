@@ -50,12 +50,12 @@ export function PromoteToDeputyDialog({ userId, userName }: PromoteToDeputyDialo
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          size="sm"
-          variant="outline"
+          size="icon"
+          variant="ghost"
           type="button"
+          title="ترقية إلى نائب"
         >
-          <UserPlus className="h-4 w-4 mr-2" />
-          ترقية إلى نائب
+          <UserPlus className="h-4 w-4" />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
