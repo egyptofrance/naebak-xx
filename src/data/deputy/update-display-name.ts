@@ -11,14 +11,14 @@ const updateDisplayNameSchema = z.object({
 
 export const updateDisplayNameAction = authActionClient
   .schema(updateDisplayNameSchema)
-  .action(async ({ parsedInput: { displayName }, ctx: { user } }) => {
+  .action(async ({ parsedInput: { displayName }, ctx: { userId } }) => {
     const supabase = await createSupabaseUserServerActionClient();
 
     // Get deputy profile
     const { data: deputyProfile, error: fetchError } = await supabase
       .from("deputy_profiles")
       .select("id")
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .single();
 
     if (fetchError || !deputyProfile) {
