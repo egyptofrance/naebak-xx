@@ -1,6 +1,6 @@
 "use server";
 
-import { adminActionClient } from "@/lib/safe-action";
+import { adminActionClient, deputyOrAdminActionClient } from "@/lib/safe-action";
 import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClient";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -39,7 +39,7 @@ const getContentItemsSchema = z.object({
 // ELECTORAL PROGRAMS
 // ============================================
 
-export const createElectoralProgramAction = adminActionClient
+export const createElectoralProgramAction = deputyOrAdminActionClient
   .schema(createContentItemSchema)
   .action(async ({ parsedInput }) => {
     const { deputyId, title, description, imageUrl, displayOrder } = parsedInput;
@@ -62,10 +62,11 @@ export const createElectoralProgramAction = adminActionClient
     }
 
     revalidatePath("/app_admin/deputies");
+    revalidatePath("/deputy");
     return { success: true, data };
   });
 
-export const updateElectoralProgramAction = adminActionClient
+export const updateElectoralProgramAction = deputyOrAdminActionClient
   .schema(updateContentItemSchema)
   .action(async ({ parsedInput }) => {
     const { id, ...updates } = parsedInput;
@@ -89,10 +90,11 @@ export const updateElectoralProgramAction = adminActionClient
     }
 
     revalidatePath("/app_admin/deputies");
+    revalidatePath("/deputy");
     return { success: true, data };
   });
 
-export const deleteElectoralProgramAction = adminActionClient
+export const deleteElectoralProgramAction = deputyOrAdminActionClient
   .schema(deleteContentItemSchema)
   .action(async ({ parsedInput }) => {
     const { id } = parsedInput;
@@ -108,10 +110,11 @@ export const deleteElectoralProgramAction = adminActionClient
     }
 
     revalidatePath("/app_admin/deputies");
+    revalidatePath("/deputy");
     return { success: true };
   });
 
-export const getElectoralProgramsAction = adminActionClient
+export const getElectoralProgramsAction = deputyOrAdminActionClient
   .schema(getContentItemsSchema)
   .action(async ({ parsedInput }) => {
     const { deputyId } = parsedInput;
@@ -134,7 +137,7 @@ export const getElectoralProgramsAction = adminActionClient
 // ACHIEVEMENTS
 // ============================================
 
-export const createAchievementAction = adminActionClient
+export const createAchievementAction = deputyOrAdminActionClient
   .schema(createContentItemSchema)
   .action(async ({ parsedInput }) => {
     const { deputyId, title, description, imageUrl, displayOrder } = parsedInput;
@@ -157,10 +160,11 @@ export const createAchievementAction = adminActionClient
     }
 
     revalidatePath("/app_admin/deputies");
+    revalidatePath("/deputy");
     return { success: true, data };
   });
 
-export const updateAchievementAction = adminActionClient
+export const updateAchievementAction = deputyOrAdminActionClient
   .schema(updateContentItemSchema)
   .action(async ({ parsedInput }) => {
     const { id, ...updates } = parsedInput;
@@ -184,10 +188,11 @@ export const updateAchievementAction = adminActionClient
     }
 
     revalidatePath("/app_admin/deputies");
+    revalidatePath("/deputy");
     return { success: true, data };
   });
 
-export const deleteAchievementAction = adminActionClient
+export const deleteAchievementAction = deputyOrAdminActionClient
   .schema(deleteContentItemSchema)
   .action(async ({ parsedInput }) => {
     const { id } = parsedInput;
@@ -203,10 +208,11 @@ export const deleteAchievementAction = adminActionClient
     }
 
     revalidatePath("/app_admin/deputies");
+    revalidatePath("/deputy");
     return { success: true };
   });
 
-export const getAchievementsAction = adminActionClient
+export const getAchievementsAction = deputyOrAdminActionClient
   .schema(getContentItemsSchema)
   .action(async ({ parsedInput }) => {
     const { deputyId } = parsedInput;
@@ -229,7 +235,7 @@ export const getAchievementsAction = adminActionClient
 // EVENTS
 // ============================================
 
-export const createEventAction = adminActionClient
+export const createEventAction = deputyOrAdminActionClient
   .schema(createContentItemSchema)
   .action(async ({ parsedInput }) => {
     const { deputyId, title, description, imageUrl, eventDate, displayOrder } = parsedInput;
@@ -253,10 +259,11 @@ export const createEventAction = adminActionClient
     }
 
     revalidatePath("/app_admin/deputies");
+    revalidatePath("/deputy");
     return { success: true, data };
   });
 
-export const updateEventAction = adminActionClient
+export const updateEventAction = deputyOrAdminActionClient
   .schema(updateContentItemSchema)
   .action(async ({ parsedInput }) => {
     const { id, ...updates } = parsedInput;
@@ -281,10 +288,11 @@ export const updateEventAction = adminActionClient
     }
 
     revalidatePath("/app_admin/deputies");
+    revalidatePath("/deputy");
     return { success: true, data };
   });
 
-export const deleteEventAction = adminActionClient
+export const deleteEventAction = deputyOrAdminActionClient
   .schema(deleteContentItemSchema)
   .action(async ({ parsedInput }) => {
     const { id } = parsedInput;
@@ -300,10 +308,11 @@ export const deleteEventAction = adminActionClient
     }
 
     revalidatePath("/app_admin/deputies");
+    revalidatePath("/deputy");
     return { success: true };
   });
 
-export const getEventsAction = adminActionClient
+export const getEventsAction = deputyOrAdminActionClient
   .schema(getContentItemsSchema)
   .action(async ({ parsedInput }) => {
     const { deputyId } = parsedInput;
