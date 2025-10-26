@@ -49,7 +49,7 @@ export default async function CitizenHomePage() {
     }
     // Fallback to governorate if electoral district is not set
     if (profile?.governorate_id) {
-      return deputy.user?.governorate_id === profile.governorate_id;
+      return deputy.electoral_district?.governorate_id === profile.governorate_id;
     }
     return false;
   });
