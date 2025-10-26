@@ -25,6 +25,17 @@ export const serverGetUserType = cache(async () => {
       return userRoles.ADMIN;
     }
 
+    // Check if user is a deputy
+    const { data: deputyData } = await supabase
+      .from("deputy_profiles")
+      .select("user_id")
+      .eq("user_id", user.id)
+      .single();
+
+    if (deputyData) {
+      return userRoles.DEPUTY;
+    }
+
     // Check if user is a manager
     const { data: managerData } = await supabase
       .from("manager_permissions")

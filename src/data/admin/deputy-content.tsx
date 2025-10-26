@@ -1,7 +1,10 @@
 "use server";
 
-import { adminActionClient, deputyOrAdminActionClient } from "@/lib/safe-action";
+import { deputyOrAdminActionClient } from "@/lib/safe-action";
 import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClient";
+import { createSupabaseUserServerActionClient } from "@/supabase-clients/user/createSupabaseUserServerActionClient";
+import { serverGetUserType } from "@/utils/server/serverGetUserType";
+import { userRoles } from "@/utils/userTypes";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -36,13 +39,80 @@ const getContentItemsSchema = z.object({
 });
 
 // ============================================
+// HELPER FUNCTIONS
+// ============================================
+
+async function verifyDeputyOwnership(deputyId: string, userId: string) {
+  const userType = await serverGetUserType();
+  
+  // Admins can access any deputy's data
+  if (userType === userRoles.ADMIN) {
+    return true;
+  }
+  
+  // Deputies can only access their own data
+  if (userType === userRoles.DEPUTY) {
+    const { data: deputyProfile } = await supabaseAdminClient
+      .from("deputy_profiles")
+      .select("user_id")
+      .eq("id", deputyId)
+      .single();
+    
+    if (!deputyProfile || deputyProfile.user_id !== userId) {
+      throw new Error("ليس لديك صلاحية للوصول إلى هذه البيانات");
+    }
+    return true;
+  }
+  
+  throw new Error("ليس لديك صلاحية للوصول إلى هذه البيانات");
+}
+
+async function verifyItemOwnership(itemId: string, userId: string, tableName: string) {
+  const userType = await serverGetUserType();
+  
+  // Admins can access any item
+  if (userType === userRoles.ADMIN) {
+    return true;
+  }
+  
+  // Deputies can only access their own items
+  if (userType === userRoles.DEPUTY) {
+    const { data: item } = await supabaseAdminClient
+      .from(tableName)
+      .select("deputy_id")
+      .eq("id", itemId)
+      .single();
+    
+    if (!item) {
+      throw new Error("البند غير موجود");
+    }
+    
+    const { data: deputyProfile } = await supabaseAdminClient
+      .from("deputy_profiles")
+      .select("user_id")
+      .eq("id", item.deputy_id)
+      .single();
+    
+    if (!deputyProfile || deputyProfile.user_id !== userId) {
+      throw new Error("ليس لديك صلاحية للوصول إلى هذه البيانات");
+    }
+    return true;
+  }
+  
+  throw new Error("ليس لديك صلاحية للوصول إلى هذه البيانات");
+}
+
+// ============================================
 // ELECTORAL PROGRAMS
 // ============================================
 
 export const createElectoralProgramAction = deputyOrAdminActionClient
   .schema(createContentItemSchema)
-  .action(async ({ parsedInput }) => {
+  .action(async ({ parsedInput, ctx }) => {
     const { deputyId, title, description, imageUrl, displayOrder } = parsedInput;
+    
+    // Verify ownership
+    await verifyDeputyOwnership(deputyId, ctx.userId);
 
     const { data, error } = await supabaseAdminClient
       .from("deputy_electoral_programs")
@@ -68,8 +138,11 @@ export const createElectoralProgramAction = deputyOrAdminActionClient
 
 export const updateElectoralProgramAction = deputyOrAdminActionClient
   .schema(updateContentItemSchema)
-  .action(async ({ parsedInput }) => {
+  .action(async ({ parsedInput, ctx }) => {
     const { id, ...updates } = parsedInput;
+    
+    // Verify ownership
+    await verifyItemOwnership(id, ctx.userId, "deputy_electoral_programs");
 
     const updateData: any = {};
     if (updates.title) updateData.title = updates.title;
@@ -96,8 +169,11 @@ export const updateElectoralProgramAction = deputyOrAdminActionClient
 
 export const deleteElectoralProgramAction = deputyOrAdminActionClient
   .schema(deleteContentItemSchema)
-  .action(async ({ parsedInput }) => {
+  .action(async ({ parsedInput, ctx }) => {
     const { id } = parsedInput;
+    
+    // Verify ownership
+    await verifyItemOwnership(id, ctx.userId, "deputy_electoral_programs");
 
     const { error } = await supabaseAdminClient
       .from("deputy_electoral_programs")
@@ -116,8 +192,11 @@ export const deleteElectoralProgramAction = deputyOrAdminActionClient
 
 export const getElectoralProgramsAction = deputyOrAdminActionClient
   .schema(getContentItemsSchema)
-  .action(async ({ parsedInput }) => {
+  .action(async ({ parsedInput, ctx }) => {
     const { deputyId } = parsedInput;
+    
+    // Verify ownership
+    await verifyDeputyOwnership(deputyId, ctx.userId);
 
     const { data, error } = await supabaseAdminClient
       .from("deputy_electoral_programs")
@@ -139,8 +218,11 @@ export const getElectoralProgramsAction = deputyOrAdminActionClient
 
 export const createAchievementAction = deputyOrAdminActionClient
   .schema(createContentItemSchema)
-  .action(async ({ parsedInput }) => {
+  .action(async ({ parsedInput, ctx }) => {
     const { deputyId, title, description, imageUrl, displayOrder } = parsedInput;
+    
+    // Verify ownership
+    await verifyDeputyOwnership(deputyId, ctx.userId);
 
     const { data, error } = await supabaseAdminClient
       .from("deputy_achievements")
@@ -166,8 +248,11 @@ export const createAchievementAction = deputyOrAdminActionClient
 
 export const updateAchievementAction = deputyOrAdminActionClient
   .schema(updateContentItemSchema)
-  .action(async ({ parsedInput }) => {
+  .action(async ({ parsedInput, ctx }) => {
     const { id, ...updates } = parsedInput;
+    
+    // Verify ownership
+    await verifyItemOwnership(id, ctx.userId, "deputy_achievements");
 
     const updateData: any = {};
     if (updates.title) updateData.title = updates.title;
@@ -194,8 +279,11 @@ export const updateAchievementAction = deputyOrAdminActionClient
 
 export const deleteAchievementAction = deputyOrAdminActionClient
   .schema(deleteContentItemSchema)
-  .action(async ({ parsedInput }) => {
+  .action(async ({ parsedInput, ctx }) => {
     const { id } = parsedInput;
+    
+    // Verify ownership
+    await verifyItemOwnership(id, ctx.userId, "deputy_achievements");
 
     const { error } = await supabaseAdminClient
       .from("deputy_achievements")
@@ -214,8 +302,11 @@ export const deleteAchievementAction = deputyOrAdminActionClient
 
 export const getAchievementsAction = deputyOrAdminActionClient
   .schema(getContentItemsSchema)
-  .action(async ({ parsedInput }) => {
+  .action(async ({ parsedInput, ctx }) => {
     const { deputyId } = parsedInput;
+    
+    // Verify ownership
+    await verifyDeputyOwnership(deputyId, ctx.userId);
 
     const { data, error } = await supabaseAdminClient
       .from("deputy_achievements")
@@ -237,8 +328,11 @@ export const getAchievementsAction = deputyOrAdminActionClient
 
 export const createEventAction = deputyOrAdminActionClient
   .schema(createContentItemSchema)
-  .action(async ({ parsedInput }) => {
+  .action(async ({ parsedInput, ctx }) => {
     const { deputyId, title, description, imageUrl, eventDate, displayOrder } = parsedInput;
+    
+    // Verify ownership
+    await verifyDeputyOwnership(deputyId, ctx.userId);
 
     const { data, error } = await supabaseAdminClient
       .from("deputy_events")
@@ -265,8 +359,11 @@ export const createEventAction = deputyOrAdminActionClient
 
 export const updateEventAction = deputyOrAdminActionClient
   .schema(updateContentItemSchema)
-  .action(async ({ parsedInput }) => {
+  .action(async ({ parsedInput, ctx }) => {
     const { id, ...updates } = parsedInput;
+    
+    // Verify ownership
+    await verifyItemOwnership(id, ctx.userId, "deputy_events");
 
     const updateData: any = {};
     if (updates.title) updateData.title = updates.title;
@@ -294,8 +391,11 @@ export const updateEventAction = deputyOrAdminActionClient
 
 export const deleteEventAction = deputyOrAdminActionClient
   .schema(deleteContentItemSchema)
-  .action(async ({ parsedInput }) => {
+  .action(async ({ parsedInput, ctx }) => {
     const { id } = parsedInput;
+    
+    // Verify ownership
+    await verifyItemOwnership(id, ctx.userId, "deputy_events");
 
     const { error } = await supabaseAdminClient
       .from("deputy_events")
@@ -314,8 +414,11 @@ export const deleteEventAction = deputyOrAdminActionClient
 
 export const getEventsAction = deputyOrAdminActionClient
   .schema(getContentItemsSchema)
-  .action(async ({ parsedInput }) => {
+  .action(async ({ parsedInput, ctx }) => {
     const { deputyId } = parsedInput;
+    
+    // Verify ownership
+    await verifyDeputyOwnership(deputyId, ctx.userId);
 
     const { data, error } = await supabaseAdminClient
       .from("deputy_events")
