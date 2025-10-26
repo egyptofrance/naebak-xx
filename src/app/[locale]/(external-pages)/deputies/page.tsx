@@ -6,6 +6,9 @@ import { getAllCouncils } from "@/app/actions/council/getAllCouncils";
 import DeputiesGrid from "./DeputiesGrid";
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 
+// Force dynamic rendering - no caching
+export const revalidate = 0;
+
 export default async function DeputiesPage() {
   const deputies = await getAllDeputies();
   const governorates = await getAllGovernorates();
