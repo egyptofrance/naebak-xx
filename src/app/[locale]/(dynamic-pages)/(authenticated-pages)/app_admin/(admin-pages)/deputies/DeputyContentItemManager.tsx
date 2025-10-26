@@ -132,7 +132,7 @@ export function DeputyContentItemManager({
 
   const triggerFileInput = (index: number) => {
     console.error("[DeputyContentItemManager] triggerFileInput called for index:", index);
-    const inputElement = fileInputRefs.current[index];
+    const inputElement = document.getElementById(`file-input-${index}`) as HTMLInputElement;
     console.error("[DeputyContentItemManager] Input element:", inputElement);
     if (inputElement) {
       inputElement.click();
@@ -222,7 +222,7 @@ export function DeputyContentItemManager({
                 {/* Hidden file input */}
                 <input
                   type="file"
-                  ref={(el) => { fileInputRefs.current[index] = el; }}
+                  id={`file-input-${index}`}
                   onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (file) {
