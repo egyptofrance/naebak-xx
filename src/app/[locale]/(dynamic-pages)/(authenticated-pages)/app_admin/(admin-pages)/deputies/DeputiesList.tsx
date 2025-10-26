@@ -45,6 +45,7 @@ import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 import { EditDeputyDialog } from "./EditDeputyDialog";
 import { GetLoginLinkDialog } from "../users/GetLoginLinkDialog";
+import { SetInitialRatingDialog } from "./SetInitialRatingDialog";
 
 interface Deputy {
   id: string;
@@ -58,6 +59,8 @@ interface Deputy {
   created_at: string;
   council_id: string | null;
   slug: string | null;
+  initial_rating_average: number | null;
+  initial_rating_count: number | null;
   user_profiles: {
     id: string;
     full_name: string | null;
@@ -481,6 +484,7 @@ export default function DeputiesList() {
                     <TableHead>الحالة</TableHead>
                     <TableHead>الملف العام</TableHead>
                     <TableHead>Get Link</TableHead>
+                    <TableHead>تقييم مبدئي</TableHead>
                     <TableHead>تعديل</TableHead>
                     <TableHead>حذف</TableHead>
                   </TableRow>
@@ -541,6 +545,14 @@ export default function DeputiesList() {
                         </TableCell>
                         <TableCell>
                           <GetLoginLinkDialog userId={deputy.user_id} />
+                        </TableCell>
+                        <TableCell>
+                          <SetInitialRatingDialog
+                            deputyId={deputy.id}
+                            deputyName={userProfile?.full_name || "غير محدد"}
+                            currentRating={deputy.initial_rating_average || 0}
+                            currentCount={deputy.initial_rating_count || 0}
+                          />
                         </TableCell>
                         <TableCell>
                           <EditDeputyDialog
