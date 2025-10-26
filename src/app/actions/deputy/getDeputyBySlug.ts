@@ -105,6 +105,28 @@ export async function getDeputyBySlug(slug: string) {
 
     const bannerImage = (bannerData as any)?.banner_image || null;
 
+    // Get electoral programs, achievements, and events
+    const [electoralPrograms, achievements, events] = await Promise.all([
+      supabase
+        .from("deputy_electoral_programs")
+        .select("*")
+        .eq("deputy_id", deputy.id)
+        .order("display_order", { ascending: true })
+        .then((res) => res.data || []),
+      supabase
+        .from("deputy_achievements")
+        .select("*")
+        .eq("deputy_id", deputy.id)
+        .order("display_order", { ascending: true })
+        .then((res) => res.data || []),
+      supabase
+        .from("deputy_events")
+        .select("*")
+        .eq("deputy_id", deputy.id)
+        .order("display_order", { ascending: true })
+        .then((res) => res.data || []),
+    ]);
+
     return {
       deputy,
       user,
@@ -113,6 +135,9 @@ export async function getDeputyBySlug(slug: string) {
       council,
       electoral_district,
       bannerImage,
+      electoralPrograms,
+      achievements,
+      events,
     };
   } catch (error) {
     console.error("[getDeputyBySlug] Exception:", error);

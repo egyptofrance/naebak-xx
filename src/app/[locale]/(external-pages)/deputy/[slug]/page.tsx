@@ -33,7 +33,7 @@ export default async function DeputyPage({ params }: PageProps) {
   const { data: { user: authUser } } = await supabase.auth.getUser();
   const isAuthenticated = !!authUser;
 
-  const { deputy, user, governorate, party, council, electoral_district, bannerImage } = data;
+  const { deputy, user, governorate, party, council, electoral_district, bannerImage, electoralPrograms, achievements, events } = data;
   
   // Get Supabase URL for storage
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -182,7 +182,27 @@ export default async function DeputyPage({ params }: PageProps) {
           {/* Electoral Program Card */}
           <div className="bg-card p-6 rounded-lg shadow-sm border">
             <h2 className="text-2xl font-bold mb-4">البرنامج الانتخابي</h2>
-            {deputy.electoral_program ? (
+            {electoralPrograms && electoralPrograms.length > 0 ? (
+              <div className="space-y-6">
+                {electoralPrograms.map((item: any) => (
+                  <div key={item.id} className="border-b pb-6 last:border-b-0 last:pb-0">
+                    <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
+                    {item.description && (
+                      <p className="text-muted-foreground mb-3 whitespace-pre-wrap">
+                        {item.description}
+                      </p>
+                    )}
+                    {item.image_url && (
+                      <img
+                        src={item.image_url}
+                        alt={item.title}
+                        className="w-full max-w-2xl rounded-lg object-cover"
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : deputy.electoral_program ? (
               <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
                 {deputy.electoral_program}
               </div>
@@ -196,7 +216,27 @@ export default async function DeputyPage({ params }: PageProps) {
           {/* Achievements Card */}
           <div className="bg-card p-6 rounded-lg shadow-sm border">
             <h2 className="text-2xl font-bold mb-4">الإنجازات</h2>
-            {deputy.achievements ? (
+            {achievements && achievements.length > 0 ? (
+              <div className="space-y-6">
+                {achievements.map((item: any) => (
+                  <div key={item.id} className="border-b pb-6 last:border-b-0 last:pb-0">
+                    <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
+                    {item.description && (
+                      <p className="text-muted-foreground mb-3 whitespace-pre-wrap">
+                        {item.description}
+                      </p>
+                    )}
+                    {item.image_url && (
+                      <img
+                        src={item.image_url}
+                        alt={item.title}
+                        className="w-full max-w-2xl rounded-lg object-cover"
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : deputy.achievements ? (
               <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
                 {deputy.achievements}
               </div>
@@ -210,7 +250,32 @@ export default async function DeputyPage({ params }: PageProps) {
           {/* Events Card */}
           <div className="bg-card p-6 rounded-lg shadow-sm border">
             <h2 className="text-2xl font-bold mb-4">الفعاليات والمناسبات</h2>
-            {deputy.events ? (
+            {events && events.length > 0 ? (
+              <div className="space-y-6">
+                {events.map((item: any) => (
+                  <div key={item.id} className="border-b pb-6 last:border-b-0 last:pb-0">
+                    <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
+                    {item.event_date && (
+                      <p className="text-sm text-muted-foreground mb-2">
+                        التاريخ: {new Date(item.event_date).toLocaleDateString('ar-EG')}
+                      </p>
+                    )}
+                    {item.description && (
+                      <p className="text-muted-foreground mb-3 whitespace-pre-wrap">
+                        {item.description}
+                      </p>
+                    )}
+                    {item.image_url && (
+                      <img
+                        src={item.image_url}
+                        alt={item.title}
+                        className="w-full max-w-2xl rounded-lg object-cover"
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : deputy.events ? (
               <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
                 {deputy.events}
               </div>
