@@ -1,6 +1,7 @@
 // OrganizationSidebar.tsx (Server Component)
 
 import { SidebarAdminPanelNav } from "@/components/sidebar-admin-panel-nav";
+import { SidebarUserNav } from "@/components/sidebar-user-nav";
 import { SwitcherAndToggle } from "@/components/sidebar-components/switcher-and-toggle";
 import { SidebarFooterUserNav } from "@/components/sidebar-footer-user-nav";
 
@@ -23,6 +24,7 @@ export async function UserSidebar() {
           <SwitcherAndToggle slimWorkspaces={slimWorkspaces} />
         </SidebarHeader>
         <SidebarContent>
+          <SidebarUserNav />
           <SidebarAdminPanelNav />
         </SidebarContent>
         <SidebarFooter>
