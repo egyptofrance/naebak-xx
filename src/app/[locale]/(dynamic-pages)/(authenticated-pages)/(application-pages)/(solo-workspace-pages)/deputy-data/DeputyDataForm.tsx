@@ -5,16 +5,30 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-// TODO: Import server action for updating deputy data
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { updateDeputyDataAction } from "@/data/deputy/update-data";
+import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
 import { toast } from "sonner";
+import { 
+  User, 
+  Vote, 
+  FileText, 
+  MapPin, 
+  Phone, 
+  Clock, 
+  Share2, 
+  Globe,
+  Loader2,
+  Save
+} from "lucide-react";
 
 type DeputyDataFormProps = {
   deputyProfile: any;
 };
 
 export function DeputyDataForm({ deputyProfile }: DeputyDataFormProps) {
-  const [deputyStatus, setDeputyStatus] = useState(deputyProfile.deputy_status || "");
+  const [deputyStatus, setDeputyStatus] = useState(deputyProfile.deputy_status || "current");
   const [electoralSymbol, setElectoralSymbol] = useState(deputyProfile.electoral_symbol || "");
   const [electoralNumber, setElectoralNumber] = useState(deputyProfile.electoral_number || "");
   const [bio, setBio] = useState(deputyProfile.bio || "");
@@ -27,182 +41,296 @@ export function DeputyDataForm({ deputyProfile }: DeputyDataFormProps) {
   const [youtube, setYoutube] = useState(deputyProfile.social_media_youtube || "");
   const [tiktok, setTiktok] = useState(deputyProfile.social_media_tiktok || "");
   const [website, setWebsite] = useState(deputyProfile.website || "");
-  const [isSaving, setIsSaving] = useState(false);
 
-  const handleSave = async () => {
-    setIsSaving(true);
-    
-    try {
-      // TODO: Implement server action to update deputy data
-      toast.info("لم يتم تفعيل الحفظ بعد");
-    } catch (error) {
-      toast.error("فشل حفظ التغييرات");
-    } finally {
-      setIsSaving(false);
-    }
+  const { execute: updateData, isExecuting } = useAction(updateDeputyDataAction, {
+    onSuccess: ({ data }) => {
+      if (data?.success) {
+        toast.success(data.message || "تم حفظ التغييرات بنجاح");
+      }
+    },
+    onError: ({ error }) => {
+      toast.error(error.serverError || "فشل حفظ التغييرات");
+    },
+  });
+
+  const handleSave = () => {
+    updateData({
+      deputyStatus,
+      electoralSymbol,
+      electoralNumber,
+      bio,
+      officeAddress,
+      officePhone,
+      officeHours,
+      facebook,
+      twitter,
+      instagram,
+      youtube,
+      tiktok,
+      website,
+    });
   };
 
   return (
     <div className="space-y-6">
-      {/* Deputy Status */}
-      <div className="space-y-2">
-        <Label htmlFor="deputy_status">حالة النائب *</Label>
-        <Select value={deputyStatus} onValueChange={setDeputyStatus}>
-          <SelectTrigger>
-            <SelectValue placeholder="اختر الحالة" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="current">نائب حالي</SelectItem>
-            <SelectItem value="candidate">مرشح</SelectItem>
-            <SelectItem value="former">نائب سابق</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      {/* Basic Information */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <User className="h-5 w-5 text-primary" />
+            <CardTitle>المعلومات الأساسية</CardTitle>
+          </div>
+          <CardDescription>
+            حالة النائب والمعلومات الانتخابية الأساسية
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Deputy Status */}
+            <div className="space-y-2">
+              <Label htmlFor="deputy_status">حالة النائب *</Label>
+              <Select value={deputyStatus} onValueChange={setDeputyStatus}>
+                <SelectTrigger>
+                  <SelectValue placeholder="اختر الحالة" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="current">نائب حالي</SelectItem>
+                  <SelectItem value="candidate">مرشح</SelectItem>
+                  <SelectItem value="former">نائب سابق</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-      {/* Council */}
-      <div className="space-y-2">
-        <Label htmlFor="council">المجلس</Label>
-        <p className="text-sm text-muted-foreground">
-          سيتم إضافة قائمة المجالس قريباً
-        </p>
-      </div>
+            {/* Electoral Symbol */}
+            <div className="space-y-2">
+              <Label htmlFor="electoral_symbol">الرمز الانتخابي</Label>
+              <Input
+                id="electoral_symbol"
+                value={electoralSymbol}
+                onChange={(e) => setElectoralSymbol(e.target.value)}
+                placeholder="مثال: الأسد"
+              />
+            </div>
 
-      {/* Electoral Symbol */}
-      <div className="space-y-2">
-        <Label htmlFor="electoral_symbol">الرمز الانتخابي</Label>
-        <Input
-          id="electoral_symbol"
-          value={electoralSymbol}
-          onChange={(e) => setElectoralSymbol(e.target.value)}
-          placeholder="مثال: الأسد"
-        />
-      </div>
+            {/* Electoral Number */}
+            <div className="space-y-2">
+              <Label htmlFor="electoral_number">الرقم الانتخابي</Label>
+              <Input
+                id="electoral_number"
+                value={electoralNumber}
+                onChange={(e) => setElectoralNumber(e.target.value)}
+                placeholder="مثال: 123"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
-      {/* Electoral Number */}
-      <div className="space-y-2">
-        <Label htmlFor="electoral_number">الرقم الانتخابي</Label>
-        <Input
-          id="electoral_number"
-          value={electoralNumber}
-          onChange={(e) => setElectoralNumber(e.target.value)}
-          placeholder="مثال: 123"
-        />
-      </div>
+      {/* Biography */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <FileText className="h-5 w-5 text-primary" />
+            <CardTitle>السيرة الذاتية</CardTitle>
+          </div>
+          <CardDescription>
+            نبذة عن خلفيتك ومسيرتك المهنية والسياسية
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <Textarea
+              id="bio"
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              placeholder="اكتب نبذة عن سيرتك الذاتية، خلفيتك التعليمية، خبراتك المهنية، وإنجازاتك السياسية..."
+              rows={6}
+              className="resize-none"
+            />
+            <p className="text-xs text-muted-foreground">
+              ستظهر هذه المعلومات في صفحتك العامة
+            </p>
+          </div>
+        </CardContent>
+      </Card>
 
-      {/* Bio */}
-      <div className="space-y-2">
-        <Label htmlFor="bio">السيرة الذاتية</Label>
-        <Textarea
-          id="bio"
-          value={bio}
-          onChange={(e) => setBio(e.target.value)}
-          placeholder="نبذة عن السيرة الذاتية"
-          rows={4}
-        />
-      </div>
+      {/* Office Information */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <MapPin className="h-5 w-5 text-primary" />
+            <CardTitle>معلومات المكتب</CardTitle>
+          </div>
+          <CardDescription>
+            عنوان وتفاصيل الاتصال بمكتبك الانتخابي
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Office Address */}
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="office_address">
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4" />
+                  عنوان المكتب
+                </div>
+              </Label>
+              <Input
+                id="office_address"
+                value={officeAddress}
+                onChange={(e) => setOfficeAddress(e.target.value)}
+                placeholder="العنوان الكامل للمكتب الانتخابي"
+              />
+            </div>
 
-      {/* Office Address */}
-      <div className="space-y-2">
-        <Label htmlFor="office_address">عنوان المكتب</Label>
-        <Input
-          id="office_address"
-          value={officeAddress}
-          onChange={(e) => setOfficeAddress(e.target.value)}
-          placeholder="العنوان الكامل للمكتب"
-        />
-      </div>
+            {/* Office Phone */}
+            <div className="space-y-2">
+              <Label htmlFor="office_phone">
+                <div className="flex items-center gap-2">
+                  <Phone className="h-4 w-4" />
+                  هاتف المكتب
+                </div>
+              </Label>
+              <Input
+                id="office_phone"
+                value={officePhone}
+                onChange={(e) => setOfficePhone(e.target.value)}
+                placeholder="مثال: 01234567890"
+                dir="ltr"
+              />
+            </div>
 
-      {/* Office Phone */}
-      <div className="space-y-2">
-        <Label htmlFor="office_phone">هاتف المكتب</Label>
-        <Input
-          id="office_phone"
-          value={officePhone}
-          onChange={(e) => setOfficePhone(e.target.value)}
-          placeholder="رقم هاتف المكتب"
-        />
-      </div>
-
-      {/* Office Hours */}
-      <div className="space-y-2">
-        <Label htmlFor="office_hours">ساعات العمل</Label>
-        <Input
-          id="office_hours"
-          value={officeHours}
-          onChange={(e) => setOfficeHours(e.target.value)}
-          placeholder="مثال: من 9 صباحاً إلى 5 مساءً"
-        />
-      </div>
+            {/* Office Hours */}
+            <div className="space-y-2">
+              <Label htmlFor="office_hours">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4" />
+                  ساعات العمل
+                </div>
+              </Label>
+              <Input
+                id="office_hours"
+                value={officeHours}
+                onChange={(e) => setOfficeHours(e.target.value)}
+                placeholder="مثال: من 9 صباحاً إلى 5 مساءً"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Social Media */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold">وسائل التواصل الاجتماعي</h3>
-        
-        <div className="space-y-2">
-          <Label htmlFor="facebook">Facebook</Label>
-          <Input
-            id="facebook"
-            value={facebook}
-            onChange={(e) => setFacebook(e.target.value)}
-            placeholder="رابط صفحة Facebook"
-          />
-        </div>
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Share2 className="h-5 w-5 text-primary" />
+            <CardTitle>وسائل التواصل الاجتماعي</CardTitle>
+          </div>
+          <CardDescription>
+            روابط حساباتك على منصات التواصل الاجتماعي
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Facebook */}
+            <div className="space-y-2">
+              <Label htmlFor="facebook">Facebook</Label>
+              <Input
+                id="facebook"
+                value={facebook}
+                onChange={(e) => setFacebook(e.target.value)}
+                placeholder="https://facebook.com/username"
+                dir="ltr"
+              />
+            </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="twitter">Twitter/X</Label>
-          <Input
-            id="twitter"
-            value={twitter}
-            onChange={(e) => setTwitter(e.target.value)}
-            placeholder="رابط حساب Twitter"
-          />
-        </div>
+            {/* Twitter */}
+            <div className="space-y-2">
+              <Label htmlFor="twitter">Twitter/X</Label>
+              <Input
+                id="twitter"
+                value={twitter}
+                onChange={(e) => setTwitter(e.target.value)}
+                placeholder="https://twitter.com/username"
+                dir="ltr"
+              />
+            </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="instagram">Instagram</Label>
-          <Input
-            id="instagram"
-            value={instagram}
-            onChange={(e) => setInstagram(e.target.value)}
-            placeholder="رابط حساب Instagram"
-          />
-        </div>
+            {/* Instagram */}
+            <div className="space-y-2">
+              <Label htmlFor="instagram">Instagram</Label>
+              <Input
+                id="instagram"
+                value={instagram}
+                onChange={(e) => setInstagram(e.target.value)}
+                placeholder="https://instagram.com/username"
+                dir="ltr"
+              />
+            </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="youtube">YouTube</Label>
-          <Input
-            id="youtube"
-            value={youtube}
-            onChange={(e) => setYoutube(e.target.value)}
-            placeholder="رابط قناة YouTube"
-          />
-        </div>
+            {/* YouTube */}
+            <div className="space-y-2">
+              <Label htmlFor="youtube">YouTube</Label>
+              <Input
+                id="youtube"
+                value={youtube}
+                onChange={(e) => setYoutube(e.target.value)}
+                placeholder="https://youtube.com/@username"
+                dir="ltr"
+              />
+            </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="tiktok">TikTok</Label>
-          <Input
-            id="tiktok"
-            value={tiktok}
-            onChange={(e) => setTiktok(e.target.value)}
-            placeholder="رابط حساب TikTok"
-          />
-        </div>
-      </div>
+            {/* TikTok */}
+            <div className="space-y-2">
+              <Label htmlFor="tiktok">TikTok</Label>
+              <Input
+                id="tiktok"
+                value={tiktok}
+                onChange={(e) => setTiktok(e.target.value)}
+                placeholder="https://tiktok.com/@username"
+                dir="ltr"
+              />
+            </div>
 
-      {/* Website */}
-      <div className="space-y-2">
-        <Label htmlFor="website">الموقع الإلكتروني</Label>
-        <Input
-          id="website"
-          value={website}
-          onChange={(e) => setWebsite(e.target.value)}
-          placeholder="رابط الموقع الشخصي"
-        />
-      </div>
+            {/* Website */}
+            <div className="space-y-2">
+              <Label htmlFor="website">
+                <div className="flex items-center gap-2">
+                  <Globe className="h-4 w-4" />
+                  الموقع الإلكتروني
+                </div>
+              </Label>
+              <Input
+                id="website"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                placeholder="https://example.com"
+                dir="ltr"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
+      {/* Save Button */}
       <div className="flex justify-end">
-        <Button onClick={handleSave} disabled={isSaving}>
-          {isSaving ? "جاري الحفظ..." : "حفظ التغييرات"}
+        <Button 
+          onClick={handleSave} 
+          disabled={isExecuting}
+          size="lg"
+          className="gap-2"
+        >
+          {isExecuting ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              جاري الحفظ...
+            </>
+          ) : (
+            <>
+              <Save className="h-4 w-4" />
+              حفظ التغييرات
+            </>
+          )}
         </Button>
       </div>
     </div>
