@@ -78,7 +78,7 @@ async function verifyItemOwnership(itemId: string, userId: string, tableName: st
   // Deputies can only access their own items
   if (userType === userRoles.DEPUTY) {
     const { data: item } = await supabaseAdminClient
-      .from(tableName)
+      .from(tableName as any)
       .select("deputy_id")
       .eq("id", itemId)
       .single();
