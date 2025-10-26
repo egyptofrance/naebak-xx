@@ -33,7 +33,7 @@ const adminSections = [
         icon: <FileLineChart className="h-5 w-5" />,
       },
       {
-        label: "قائمة النواب (عامة)",
+        label: "قائمة النواب",
         href: `/deputies`,
         icon: <UserCheck className="h-5 w-5" />,
       },
