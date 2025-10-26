@@ -12,7 +12,7 @@ export function ClientLayout({ children }: { children: ReactNode }) {
       <div className="hidden lg:flex w-3/5 border-l-2 items-center relative justify-center h-full bg-white">
         <div className="w-full px-32 flex items-center justify-center">
           <Image
-            src="/images/logo-naebak-green.png"
+            src="https://fvpwvnghkkhrzupglsrh.supabase.co/storage/v1/object/public/public-user-assets/logo-naebak-green.png"
             alt="نائبك Logo"
             width={400}
             height={400}
