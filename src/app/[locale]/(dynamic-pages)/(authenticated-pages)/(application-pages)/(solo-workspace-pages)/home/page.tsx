@@ -24,6 +24,18 @@ export default async function CitizenHomePage() {
     redirect("/sign-in");
   }
 
+  // Check if user is a deputy
+  const { data: userRole } = await supabase
+    .from('user_roles')
+    .select('role')
+    .eq('user_id', user.id)
+    .single();
+
+  // If deputy, redirect to complaints page
+  if (userRole?.role === 'deputy') {
+    redirect('/deputy-complaints');
+  }
+
   // Get user profile with governorate and electoral district
   const { data: profile } = await supabase
     .from('user_profiles')
