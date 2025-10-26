@@ -111,6 +111,21 @@ export default async function CitizenHomePage() {
             </div>
           )}
 
+          {/* Debug Info */}
+          <div className="bg-yellow-100 border border-yellow-400 rounded-lg p-4 mb-6">
+            <h3 className="font-bold mb-2">Debug Info:</h3>
+            <pre className="text-xs text-left">
+              {JSON.stringify({
+                profile_governorate_id: profile?.governorate_id,
+                profile_electoral_district: profile?.electoral_district,
+                total_deputies: deputies.length,
+                filtered_deputies: myDeputies.length,
+                first_deputy_district_gov: deputies[0]?.electoral_district?.governorate_id,
+                first_deputy_name: deputies[0]?.user?.full_name
+              }, null, 2)}
+            </pre>
+          </div>
+
           {/* No Deputies Message */}
           {myDeputies.length === 0 && (
             <div className="bg-muted/50 border border-border rounded-lg p-8 text-center">
