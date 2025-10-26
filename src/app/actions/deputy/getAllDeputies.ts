@@ -60,7 +60,7 @@ export async function getAllDeputies() {
           governorate_id
         )
       `)
-      .limit(10000);
+      .limit(100000);
 
     if (deputiesError) {
       console.error("[getAllDeputies] Error:", deputiesError);
