@@ -24,17 +24,20 @@ export function ElectoralProgramManager({ deputyId }: ElectoralProgramManagerPro
 
   // Debug: Log deputyId
   useEffect(() => {
-    console.log("[ElectoralProgramManager] deputyId:", deputyId);
+    console.error("[ElectoralProgramManager] deputyId:", deputyId);
+    if (!deputyId) {
+      console.error("[ElectoralProgramManager] ERROR: deputyId is undefined!");
+    }
   }, [deputyId]);
 
   // Load existing items
   useEffect(() => {
     async function loadItems() {
       setIsLoading(true);
-      console.log("[ElectoralProgramManager] Loading items for deputyId:", deputyId);
+      console.error("[ElectoralProgramManager] Loading items for deputyId:", deputyId);
       
       const result = await getElectoralProgramsAction({ deputyId });
-      console.log("[ElectoralProgramManager] Load result:", result);
+      console.error("[ElectoralProgramManager] Load result:", result);
       
       if (result?.data?.success && result.data.data) {
         const loadedItems: ContentItem[] = result.data.data.map((item: any) => ({
@@ -46,7 +49,7 @@ export function ElectoralProgramManager({ deputyId }: ElectoralProgramManagerPro
         }));
         setItems(loadedItems);
         setOriginalItems(loadedItems);
-        console.log("[ElectoralProgramManager] Loaded items:", loadedItems.length);
+        console.error("[ElectoralProgramManager] Loaded items:", loadedItems.length);
       } else if (result?.serverError) {
         console.error("[ElectoralProgramManager] Server error:", result.serverError);
         toast.error(`خطأ في تحميل البيانات: ${result.serverError}`);
