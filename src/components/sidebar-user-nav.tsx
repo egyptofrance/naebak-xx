@@ -31,6 +31,14 @@ export function SidebarUserNav() {
         </SidebarMenuItem>
         <SidebarMenuItem>
           <SidebarMenuButton asChild>
+            <Link href="/complaints">
+              <MessageSquare className="h-4 w-4" />
+              <span>شكاويي</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild>
             <Link href="/user/settings">
               <Settings className="h-4 w-4" />
               <span>الإعدادات</span>
