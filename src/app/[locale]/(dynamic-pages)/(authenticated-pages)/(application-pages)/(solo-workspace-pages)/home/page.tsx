@@ -49,10 +49,24 @@ export default async function CitizenHomePage() {
     }
     // Fallback to governorate if electoral district is not set
     if (profile?.governorate_id) {
-      return deputy.electoral_district?.governorate_id === profile.governorate_id;
+      const match = deputy.electoral_district?.governorate_id === profile.governorate_id;
+      // Debug logging
+      if (deputies.indexOf(deputy) < 3) {
+        console.log(`Deputy ${deputies.indexOf(deputy)}:`, {
+          name: deputy.user?.full_name,
+          electoral_district_governorate: deputy.electoral_district?.governorate_id,
+          user_governorate: profile.governorate_id,
+          match
+        });
+      }
+      return match;
     }
     return false;
   });
+
+  console.log('Profile:', { governorate_id: profile?.governorate_id, electoral_district: profile?.electoral_district });
+  console.log('Total deputies:', deputies.length);
+  console.log('Filtered deputies:', myDeputies.length);
 
   // Get user's governorate and electoral district names
   const userGovernorate = governorates.find(g => g.id === profile?.governorate_id);
