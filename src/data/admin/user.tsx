@@ -56,7 +56,7 @@ export const uploadImageAction = authActionClient
     const userImagesPath = `${userId}/images/${slugifiedFilename}`;
 
     const { data, error } = await supabaseAdminClient.storage
-      .from("changelog-assets")
+      .from("public-deputy-assets")
       .upload(userImagesPath, file, fileOptions);
 
     if (error) {
@@ -71,7 +71,7 @@ export const uploadImageAction = authActionClient
     const filePath = path.split(",")[0];
     const supabaseFileUrl = urlJoin(
       process.env.NEXT_PUBLIC_SUPABASE_URL,
-      "/storage/v1/object/public/changelog-assets",
+      "/storage/v1/object/public/public-deputy-assets",
       filePath,
     );
 
