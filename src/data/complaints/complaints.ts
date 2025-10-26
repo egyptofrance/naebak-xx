@@ -511,7 +511,7 @@ export async function getAvailableDeputies(filters?: {
   }
 
   // Sort by full_name on client side
-  transformedData.sort((a, b) => a.full_name.localeCompare(b.full_name, 'ar'));
+  transformedData.sort((a: any, b: any) => a.full_name.localeCompare(b.full_name, 'ar'));
 
   return { data: transformedData, error: null };
 }
