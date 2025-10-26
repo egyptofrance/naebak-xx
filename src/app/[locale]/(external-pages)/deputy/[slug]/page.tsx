@@ -31,6 +31,13 @@ interface PageProps {
   }>;
 }
 
+// Default images for each section
+const DEFAULT_IMAGES = {
+  electoral_program: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=400&fit=crop", // Planning/Goals
+  achievement: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=400&fit=crop", // Success/Achievement
+  event: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=400&fit=crop", // Events/Gatherings
+};
+
 export default async function DeputyPage({ params }: PageProps) {
   const { slug, locale } = await params;
 
@@ -327,22 +334,29 @@ export default async function DeputyPage({ params }: PageProps) {
                 <div className="space-y-8">
                   {electoralPrograms.map((item: any, index: number) => (
                     <div key={item.id} className="border-b pb-8 last:border-b-0 last:pb-0">
-                      <h3 className="text-xl font-bold mb-3 text-primary">{item.title}</h3>
-                      {item.description && (
-                        <p className="text-base leading-relaxed whitespace-pre-wrap mb-4">
-                          {item.description}
-                        </p>
-                      )}
-                      {item.image_url && (
-                        <div className="mt-4">
-                          <img
-                            src={item.image_url}
-                            alt={item.title}
-                            className="w-full rounded-lg object-cover shadow-md"
-                            style={{ maxHeight: '500px' }}
-                          />
+                      <div className="flex flex-col md:flex-row gap-6">
+                        {/* Image - Default or Custom */}
+                        <div className="flex-shrink-0">
+                          <div className="relative group">
+                            <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+                            <img
+                              src={item.image_url || DEFAULT_IMAGES.electoral_program}
+                              alt={item.title}
+                              className="relative w-full md:w-48 h-48 rounded-2xl object-cover border-4 border-primary/10 shadow-lg group-hover:border-primary/30 group-hover:shadow-2xl group-hover:scale-105 transition-all duration-300"
+                            />
+                          </div>
                         </div>
-                      )}
+                        
+                        {/* Content */}
+                        <div className="flex-1">
+                          <h3 className="text-xl font-bold mb-3 text-primary">{item.title}</h3>
+                          {item.description && (
+                            <p className="text-base leading-relaxed whitespace-pre-wrap">
+                              {item.description}
+                            </p>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -365,22 +379,29 @@ export default async function DeputyPage({ params }: PageProps) {
                 <div className="space-y-8">
                   {achievements.map((item: any) => (
                     <div key={item.id} className="border-b pb-8 last:border-b-0 last:pb-0">
-                      <h3 className="text-xl font-bold mb-3 text-primary">{item.title}</h3>
-                      {item.description && (
-                        <p className="text-base leading-relaxed whitespace-pre-wrap mb-4">
-                          {item.description}
-                        </p>
-                      )}
-                      {item.image_url && (
-                        <div className="mt-4">
-                          <img
-                            src={item.image_url}
-                            alt={item.title}
-                            className="w-full rounded-lg object-cover shadow-md"
-                            style={{ maxHeight: '500px' }}
-                          />
+                      <div className="flex flex-col md:flex-row gap-6">
+                        {/* Image - Default or Custom */}
+                        <div className="flex-shrink-0">
+                          <div className="relative group">
+                            <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+                            <img
+                              src={item.image_url || DEFAULT_IMAGES.achievement}
+                              alt={item.title}
+                              className="relative w-full md:w-48 h-48 rounded-2xl object-cover border-4 border-primary/10 shadow-lg group-hover:border-primary/30 group-hover:shadow-2xl group-hover:scale-105 transition-all duration-300"
+                            />
+                          </div>
                         </div>
-                      )}
+                        
+                        {/* Content */}
+                        <div className="flex-1">
+                          <h3 className="text-xl font-bold mb-3 text-primary">{item.title}</h3>
+                          {item.description && (
+                            <p className="text-base leading-relaxed whitespace-pre-wrap">
+                              {item.description}
+                            </p>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -403,31 +424,38 @@ export default async function DeputyPage({ params }: PageProps) {
                 <div className="space-y-8">
                   {events.map((item: any) => (
                     <div key={item.id} className="border-b pb-8 last:border-b-0 last:pb-0">
-                      <h3 className="text-xl font-bold mb-2 text-primary">{item.title}</h3>
-                      {item.event_date && (
-                        <p className="text-sm font-medium text-muted-foreground mb-3">
-                          📅 التاريخ: {new Date(item.event_date).toLocaleDateString('ar-EG', { 
-                            year: 'numeric', 
-                            month: 'long', 
-                            day: 'numeric' 
-                          })}
-                        </p>
-                      )}
-                      {item.description && (
-                        <p className="text-base leading-relaxed whitespace-pre-wrap mb-4">
-                          {item.description}
-                        </p>
-                      )}
-                      {item.image_url && (
-                        <div className="mt-4">
-                          <img
-                            src={item.image_url}
-                            alt={item.title}
-                            className="w-full rounded-lg object-cover shadow-md"
-                            style={{ maxHeight: '500px' }}
-                          />
+                      <div className="flex flex-col md:flex-row gap-6">
+                        {/* Image - Default or Custom */}
+                        <div className="flex-shrink-0">
+                          <div className="relative group">
+                            <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+                            <img
+                              src={item.image_url || DEFAULT_IMAGES.event}
+                              alt={item.title}
+                              className="relative w-full md:w-48 h-48 rounded-2xl object-cover border-4 border-primary/10 shadow-lg group-hover:border-primary/30 group-hover:shadow-2xl group-hover:scale-105 transition-all duration-300"
+                            />
+                          </div>
                         </div>
-                      )}
+                        
+                        {/* Content */}
+                        <div className="flex-1">
+                          <h3 className="text-xl font-bold mb-2 text-primary">{item.title}</h3>
+                          {item.event_date && (
+                            <p className="text-sm font-medium text-muted-foreground mb-3">
+                              📅 التاريخ: {new Date(item.event_date).toLocaleDateString('ar-EG', { 
+                                year: 'numeric', 
+                                month: 'long', 
+                                day: 'numeric' 
+                              })}
+                            </p>
+                          )}
+                          {item.description && (
+                            <p className="text-base leading-relaxed whitespace-pre-wrap">
+                              {item.description}
+                            </p>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
