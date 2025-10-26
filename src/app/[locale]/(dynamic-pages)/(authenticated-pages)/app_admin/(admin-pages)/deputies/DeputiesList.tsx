@@ -464,84 +464,97 @@ export default function DeputiesList() {
             </div>
           ) : deputies && deputies.length > 0 ? (
             <>
-              <div className="space-y-2">
-                {deputies.map((deputy) => {
-                  const userProfile = deputy.user_profiles;
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-12">
+                      <Checkbox
+                        checked={
+                          deputies.length > 0 && selectedDeputies.size === deputies.length
+                        }
+                        onCheckedChange={toggleAll}
+                      />
+                    </TableHead>
+                    <TableHead>الاسم</TableHead>
+                    <TableHead>البريد الإلكتروني</TableHead>
+                    <TableHead>الهاتف</TableHead>
+                    <TableHead>المحافظة</TableHead>
+                    <TableHead>الحزب</TableHead>
+                    <TableHead>المجلس</TableHead>
+                    <TableHead>الحالة</TableHead>
+                    <TableHead>الملف العام</TableHead>
+                    <TableHead>Get Link</TableHead>
+                    <TableHead>تقييم مبدئي</TableHead>
+                    <TableHead>تعديل</TableHead>
+                    <TableHead>حذف</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {deputies.map((deputy) => {
+                    const userProfile = deputy.user_profiles;
 
-                  return (
-                    <div key={deputy.id} className="border rounded-lg p-4 space-y-3">
-                      {/* Row 1: Main Info */}
-                      <div className="flex items-start gap-4">
-                        <Checkbox
-                          checked={selectedDeputies.has(deputy.id)}
-                          onCheckedChange={() => toggleDeputy(deputy.id)}
-                          className="mt-1"
-                        />
-                        <div className="flex-1 grid grid-cols-1 md:grid-cols-5 gap-3">
-                          <div>
-                            <div className="text-xs text-muted-foreground mb-1">الاسم</div>
-                            <div className="font-medium">{userProfile?.full_name || "غير محدد"}</div>
-                          </div>
-                          <div>
-                            <div className="text-xs text-muted-foreground mb-1">المحافظة</div>
-                            <div className="text-sm">{userProfile?.governorates?.name_ar || "غير محدد"}</div>
-                          </div>
-                          <div>
-                            <div className="text-xs text-muted-foreground mb-1">الحزب</div>
-                            <div className="text-sm">{userProfile?.parties?.name_ar || "غير محدد"}</div>
-                          </div>
-                          <div>
-                            <div className="text-xs text-muted-foreground mb-1">المجلس</div>
-                            <div className="text-sm">{deputy.councils?.name_ar || "غير محدد"}</div>
-                          </div>
-                          <div>
-                            <div className="text-xs text-muted-foreground mb-1">الحالة</div>
-                            <Badge
-                              variant={
-                                deputy.deputy_status === "current"
-                                  ? "default"
-                                  : deputy.deputy_status === "candidate"
-                                  ? "secondary"
-                                  : "outline"
-                              }
-                            >
-                              {deputy.deputy_status === "current"
-                                ? "نائب حالي"
+                    return (
+                      <TableRow key={deputy.id}>
+                        <TableCell>
+                          <Checkbox
+                            checked={selectedDeputies.has(deputy.id)}
+                            onCheckedChange={() => toggleDeputy(deputy.id)}
+                          />
+                        </TableCell>
+                        <TableCell className="font-medium">
+                          {userProfile?.full_name || "غير محدد"}
+                        </TableCell>
+                        <TableCell>{userProfile?.email || "غير محدد"}</TableCell>
+                        <TableCell>{userProfile?.phone || "غير محدد"}</TableCell>
+                        <TableCell>
+                          {userProfile?.governorates?.name_ar || "غير محدد"}
+                        </TableCell>
+                        <TableCell>
+                          {userProfile?.parties?.name_ar || "غير محدد"}
+                        </TableCell>
+                        <TableCell>
+                          {deputy.councils?.name_ar || "غير محدد"}
+                        </TableCell>
+                        <TableCell>
+                          <Badge
+                            variant={
+                              deputy.deputy_status === "current"
+                                ? "default"
                                 : deputy.deputy_status === "candidate"
-                                ? "مرشح"
-                                : "نائب سابق"}
-                            </Badge>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Row 2: Contact & Actions */}
-                      <div className="flex items-center gap-4 pt-2 border-t">
-                        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                          <div>
-                            <span className="text-muted-foreground">البريد:</span>{" "}
-                            <span>{userProfile?.email || "غير محدد"}</span>
-                          </div>
-                          <div>
-                            <span className="text-muted-foreground">الهاتف:</span>{" "}
-                            <span>{userProfile?.phone || "غير محدد"}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2 flex-shrink-0">
+                                ? "secondary"
+                                : "outline"
+                            }
+                          >
+                            {deputy.deputy_status === "current"
+                              ? "نائب حالي"
+                              : deputy.deputy_status === "candidate"
+                              ? "مرشح"
+                              : "نائب سابق"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
                           {deputy.slug ? (
                             <Link href={`/deputy/${deputy.slug}`} target="_blank">
                               <Button variant="outline" size="sm">
                                 عرض
                               </Button>
                             </Link>
-                          ) : null}
+                          ) : (
+                            <span className="text-xs text-muted-foreground">لا يوجد</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
                           <GetLoginLinkDialog userId={deputy.user_id} />
+                        </TableCell>
+                        <TableCell>
                           <SetInitialRatingDialog
                             deputyId={deputy.id}
                             deputyName={userProfile?.full_name || "غير محدد"}
                             currentRating={deputy.initial_rating_average || 0}
                             currentCount={deputy.initial_rating_count || 0}
                           />
+                        </TableCell>
+                        <TableCell>
                           <EditDeputyDialog
                             deputyId={deputy.id}
                             currentData={{
@@ -559,6 +572,8 @@ export default function DeputiesList() {
                             councils={councils}
                             parties={parties}
                           />
+                        </TableCell>
+                        <TableCell>
                           <Button
                             variant="ghost"
                             size="icon"
@@ -571,12 +586,12 @@ export default function DeputiesList() {
                           >
                             <Trash2 className="h-4 w-4 text-destructive" />
                           </Button>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })
-              </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
 
               {/* Pagination */}
               {totalPages > 1 && (
