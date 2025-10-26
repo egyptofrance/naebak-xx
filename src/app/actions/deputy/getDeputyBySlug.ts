@@ -6,7 +6,10 @@ export async function getDeputyBySlug(slug: string) {
   const supabase = await createSupabaseUserServerComponentClient();
 
   try {
-    // Get deputy profile by slug
+    // Check if slug is a UUID (id) or actual slug
+    const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug);
+    
+    // Get deputy profile by slug or id
     const { data: deputy, error: deputyError } = (await supabase
       .from("deputy_profiles")
       .select(`
@@ -25,7 +28,7 @@ export async function getDeputyBySlug(slug: string) {
         rating_average,
         rating_count
       `)
-      .eq("slug", slug)
+      .eq(isUUID ? "id" : "slug", slug)
       .maybeSingle()) as any;
 
     if (deputyError) {

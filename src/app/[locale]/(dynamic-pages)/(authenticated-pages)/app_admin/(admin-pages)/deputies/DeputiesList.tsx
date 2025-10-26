@@ -526,12 +526,11 @@ export default function DeputiesList() {
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center justify-center gap-1">
-                            <Link href={deputy.slug ? `/deputy/${deputy.slug}` : '#'} target="_blank">
+                            <Link href={`/deputy/${deputy.slug || deputy.id}`} target="_blank">
                               <Button 
                                 variant="ghost" 
                                 size="icon" 
                                 title="معاينة صفحة النائب"
-                                disabled={!deputy.slug}
                               >
                                 <Eye className="h-4 w-4" />
                               </Button>
