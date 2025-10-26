@@ -255,7 +255,9 @@ export function DeputyContentItemManager({
                 {/* Hidden file input */}
                 <input
                   type="file"
-                  ref={(el) => (fileInputRefs.current[index] = el)}
+                  ref={(el) => {
+                    fileInputRefs.current[index] = el;
+                  }}
                   onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (file) {
