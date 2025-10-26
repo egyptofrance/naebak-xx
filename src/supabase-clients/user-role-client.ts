@@ -14,6 +14,7 @@ export async function supabaseClientBasedOnUserRole() {
     [userRoles.ADMIN]: () => supabaseAdminClient,
     [userRoles.USER]: async () => await createSupabaseUserServerActionClient(),
     [userRoles.MANAGER]: async () => await createSupabaseUserServerActionClient(),
+    [userRoles.DEPUTY]: async () => await createSupabaseUserServerActionClient(),
   }[userRoleType]();
 
   return supabaseClient;
