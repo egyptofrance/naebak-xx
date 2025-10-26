@@ -1,5 +1,4 @@
 "use client";
-
 import { Users, Building2, MessageSquare, ArrowRight } from "lucide-react";
 
 export default function PlatformOverview() {
@@ -52,8 +51,8 @@ export default function PlatformOverview() {
           {/* Connection Arrow */}
           <div className="hidden lg:flex flex-col items-center justify-center">
             <div className="relative">
-              <MessageSquare className="w-16 h-16 text-orange-500 mb-4" />
-              <div className="flex items-center gap-2 text-orange-500 font-bold">
+              <MessageSquare className="w-16 h-16 text-[#F87B1B] mb-4" />
+              <div className="flex items-center gap-2 text-[#F87B1B] font-bold">
                 <ArrowRight className="w-6 h-6" />
                 <span>تواصل مباشر</span>
                 <ArrowRight className="w-6 h-6" />
@@ -95,7 +94,7 @@ export default function PlatformOverview() {
 
         {/* Bottom Stats or CTA */}
         <div className="mt-12 text-center">
-          <div className="inline-flex items-center gap-2 px-6 py-3 bg-orange-500 text-white rounded-full font-bold text-lg hover:bg-orange-600 transition-colors cursor-pointer">
+          <div className="inline-flex items-center gap-2 px-6 py-3 bg-[#F87B1B] text-white rounded-full font-bold text-lg hover:bg-[#E06A0A] transition-colors cursor-pointer">
             <span>ابدأ الآن في تقديم شكواك</span>
             <ArrowRight className="w-5 h-5" />
           </div>
@@ -104,4 +103,3 @@ export default function PlatformOverview() {
     </section>
   );
 }
-
