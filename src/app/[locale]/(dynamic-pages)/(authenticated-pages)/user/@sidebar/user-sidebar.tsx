@@ -3,7 +3,7 @@
 import { SidebarAdminPanelNav } from "@/components/sidebar-admin-panel-nav";
 import { SwitcherAndToggle } from "@/components/sidebar-components/switcher-and-toggle";
 import { SidebarFooterUserNav } from "@/components/sidebar-footer-user-nav";
-import { SidebarTipsNav } from "@/components/sidebar-tips-nav";
+
 import {
   Sidebar,
   SidebarContent,
@@ -11,22 +11,8 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import {
-  getCachedSlimWorkspaces,
-  getCachedSoloWorkspace,
-} from "@/rsc-data/user/workspaces";
+import { getCachedSlimWorkspaces } from "@/rsc-data/user/workspaces";
 import { unstable_rethrow } from "next/navigation";
-import { Suspense } from "react";
-
-async function SoloWorkspaceTips() {
-  try {
-    const workspace = await getCachedSoloWorkspace();
-    return <SidebarTipsNav workspace={workspace} />;
-  } catch (e) {
-    console.log(e);
-    return null;
-  }
-}
 
 export async function UserSidebar() {
   try {
@@ -38,9 +24,6 @@ export async function UserSidebar() {
         </SidebarHeader>
         <SidebarContent>
           <SidebarAdminPanelNav />
-          <Suspense>
-            <SoloWorkspaceTips />
-          </Suspense>
         </SidebarContent>
         <SidebarFooter>
           <SidebarFooterUserNav />
