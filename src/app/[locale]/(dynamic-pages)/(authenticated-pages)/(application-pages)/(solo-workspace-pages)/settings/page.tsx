@@ -29,7 +29,7 @@ export default async function SettingsPage() {
         title="الإعدادات"
         subTitle="قم بتحديث بياناتك الشخصية والانتخابية"
       />
-      <Suspense fallback={<div>جاري التحميل...</div>>
+      <Suspense fallback={<div>جاري التحميل...</div>}>
         {deputyProfile && (
           <DeputyDisplayNameForm
             currentDisplayName={deputyProfile.display_name}
@@ -41,7 +41,7 @@ export default async function SettingsPage() {
           governorates={governorates}
           parties={parties}
         />
-      </Suspense>>
+      </Suspense>
     </div>
   );
 }
