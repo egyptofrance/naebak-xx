@@ -22,11 +22,19 @@ export function ElectoralProgramManager({ deputyId }: ElectoralProgramManagerPro
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
+  // Debug: Log deputyId
+  useEffect(() => {
+    console.log("[ElectoralProgramManager] deputyId:", deputyId);
+  }, [deputyId]);
+
   // Load existing items
   useEffect(() => {
     async function loadItems() {
       setIsLoading(true);
+      console.log("[ElectoralProgramManager] Loading items for deputyId:", deputyId);
+      
       const result = await getElectoralProgramsAction({ deputyId });
+      console.log("[ElectoralProgramManager] Load result:", result);
       
       if (result?.data?.success && result.data.data) {
         const loadedItems: ContentItem[] = result.data.data.map((item: any) => ({
@@ -38,6 +46,13 @@ export function ElectoralProgramManager({ deputyId }: ElectoralProgramManagerPro
         }));
         setItems(loadedItems);
         setOriginalItems(loadedItems);
+        console.log("[ElectoralProgramManager] Loaded items:", loadedItems.length);
+      } else if (result?.serverError) {
+        console.error("[ElectoralProgramManager] Server error:", result.serverError);
+        toast.error(`خطأ في تحميل البيانات: ${result.serverError}`);
+      } else if (result?.validationErrors) {
+        console.error("[ElectoralProgramManager] Validation errors:", result.validationErrors);
+        toast.error("خطأ في البيانات المُرسلة");
       }
       setIsLoading(false);
     }
@@ -45,6 +60,7 @@ export function ElectoralProgramManager({ deputyId }: ElectoralProgramManagerPro
   }, [deputyId]);
 
   const handleSave = async () => {
+    console.log("[ElectoralProgramManager] Saving...", { deputyId, itemsCount: items.length });
     setIsSaving(true);
 
     try {
@@ -56,7 +72,11 @@ export function ElectoralProgramManager({ deputyId }: ElectoralProgramManagerPro
       // Delete removed items
       for (const item of itemsToDelete) {
         if (item.id) {
-          await deleteElectoralProgramAction({ id: item.id });
+          const deleteResult = await deleteElectoralProgramAction({ id: item.id });
+          console.log("[ElectoralProgramManager] Delete result:", deleteResult);
+          if (deleteResult?.serverError) {
+            throw new Error(deleteResult.serverError);
+          }
         }
       }
 
@@ -64,22 +84,30 @@ export function ElectoralProgramManager({ deputyId }: ElectoralProgramManagerPro
       for (const item of items) {
         if (item.id) {
           // Update existing item
-          await updateElectoralProgramAction({
+          const updateResult = await updateElectoralProgramAction({
             id: item.id,
             title: item.title,
             description: item.description,
             imageUrl: item.imageUrl,
             displayOrder: item.displayOrder || 0,
           });
+          console.log("[ElectoralProgramManager] Update result:", updateResult);
+          if (updateResult?.serverError) {
+            throw new Error(updateResult.serverError);
+          }
         } else {
           // Create new item
-          await createElectoralProgramAction({
+          const createResult = await createElectoralProgramAction({
             deputyId,
             title: item.title,
             description: item.description,
             imageUrl: item.imageUrl,
             displayOrder: item.displayOrder || 0,
           });
+          console.log("[ElectoralProgramManager] Create result:", createResult);
+          if (createResult?.serverError) {
+            throw new Error(createResult.serverError);
+          }
         }
       }
 
