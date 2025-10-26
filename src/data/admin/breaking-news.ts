@@ -1,7 +1,7 @@
 "use server";
 
 import { adminActionClient } from "@/lib/safe-action";
-import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClient";
+import { createClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -9,7 +9,16 @@ import { z } from "zod";
 export const getBreakingNewsAdminAction = adminActionClient
   .schema(z.object({}))
   .action(async () => {
-    const supabase = await supabaseAdminClient();
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
 
     const { data, error } = await supabase
       .from("breaking_news")
@@ -33,7 +42,16 @@ export const createBreakingNewsAction = adminActionClient
     })
   )
   .action(async ({ parsedInput: input, ctx }) => {
-    const supabase = await supabaseAdminClient();
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
 
     const { error } = await supabase.from("breaking_news").insert({
       content: input.content,
@@ -63,7 +81,16 @@ export const updateBreakingNewsAction = adminActionClient
     })
   )
   .action(async ({ parsedInput: input }) => {
-    const supabase = await supabaseAdminClient();
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
 
     const updateData: any = {};
     if (input.content !== undefined) updateData.content = input.content;
@@ -94,7 +121,16 @@ export const deleteBreakingNewsAction = adminActionClient
     })
   )
   .action(async ({ parsedInput: input }) => {
-    const supabase = await supabaseAdminClient();
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
 
     const { error } = await supabase
       .from("breaking_news")
