@@ -98,7 +98,7 @@ export default async function DeputyPage({ params }: PageProps) {
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
                   <h1 className="text-4xl font-bold">
-                    {formatDeputyName(user.full_name)}
+                    {formatDeputyName(user.full_name, deputy.display_name)}
                   </h1>
                   <Badge variant={getStatusVariant(deputy.deputy_status)}>
                     {getStatusLabel(deputy.deputy_status)}

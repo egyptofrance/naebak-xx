@@ -31,6 +31,7 @@ export async function getAllDeputies() {
         rating_average,
         rating_count,
         gender,
+        display_name,
         user_profiles (
           id,
           full_name,
@@ -105,6 +106,7 @@ export async function getAllDeputies() {
           rating_average: deputy.rating_average,
           rating_count: deputy.rating_count,
           gender: deputy.gender,
+          display_name: deputy.display_name,
         },
         user: userProfile ? {
           id: userProfile.id,

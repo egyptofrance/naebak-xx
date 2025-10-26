@@ -26,7 +26,8 @@ export async function getDeputyBySlug(slug: string) {
         achievements,
         events,
         rating_average,
-        rating_count
+        rating_count,
+        display_name
       `)
       .eq(isUUID ? "id" : "slug", slug)
       .maybeSingle()) as any;

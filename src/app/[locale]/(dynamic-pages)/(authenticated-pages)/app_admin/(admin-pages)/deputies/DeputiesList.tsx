@@ -62,6 +62,7 @@ interface Deputy {
   slug: string | null;
   initial_rating_average: number | null;
   initial_rating_count: number | null;
+  display_name: string | null;
   user_profiles: {
     id: string;
     full_name: string | null;
@@ -497,7 +498,7 @@ export default function DeputiesList() {
                           />
                         </TableCell>
                         <TableCell className="font-medium">
-                          {formatDeputyName(userProfile?.full_name)}
+                          {formatDeputyName(userProfile?.full_name, deputy.display_name)}
                         </TableCell>
                         <TableCell>
                           {userProfile?.governorates?.name_ar || "غير محدد"}
@@ -539,7 +540,7 @@ export default function DeputiesList() {
                             <GetLoginLinkDialog userId={deputy.user_id} />
                             <SetInitialRatingDialog
                               deputyId={deputy.id}
-                              deputyName={formatDeputyName(userProfile?.full_name)}
+                              deputyName={formatDeputyName(userProfile?.full_name, deputy.display_name)}
                               currentRating={deputy.initial_rating_average || 0}
                               currentCount={deputy.initial_rating_count || 0}
                             />

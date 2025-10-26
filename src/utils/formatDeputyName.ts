@@ -1,12 +1,23 @@
 /**
- * تنسيق اسم النائب ليكون: "النائب/ الاسم الأول + اسم الأب"
+ * تنسيق اسم النائب ليكون: "النائب/ اسم العرض المخصص" أو "النائب/ الاسم الأول + اسم الأب"
  * @param fullName - الاسم الكامل (الرباعي)
+ * @param displayName - اسم العرض المخصص (اختياري)
  * @returns الاسم المنسق
  * @example
- * formatDeputyName("أحمد محمد علي حسن") // "النائب/ أحمد محمد"
- * formatDeputyName("فاطمة") // "النائب/ فاطمة"
+ * formatDeputyName("أحمد محمد علي حسن", "أحمد محمد") // "النائب/ أحمد محمد"
+ * formatDeputyName("أحمد محمد علي حسن", null) // "النائب/ أحمد محمد" (تلقائي)
+ * formatDeputyName("أحمد محمد علي حسن", "د. أحمد محمد") // "النائب/ د. أحمد محمد"
  */
-export function formatDeputyName(fullName: string | null | undefined): string {
+export function formatDeputyName(
+  fullName: string | null | undefined,
+  displayName?: string | null
+): string {
+  // إذا كان هناك اسم عرض مخصص، استخدمه
+  if (displayName && displayName.trim()) {
+    return `النائب/ ${displayName.trim()}`;
+  }
+
+  // وإلا استخدم التنسيق التلقائي
   if (!fullName) {
     return "النائب/ غير محدد";
   }
@@ -27,9 +38,18 @@ export function formatDeputyName(fullName: string | null | undefined): string {
 /**
  * الحصول على الاسم المختصر بدون "النائب/"
  * @param fullName - الاسم الكامل (الرباعي)
+ * @param displayName - اسم العرض المخصص (اختياري)
  * @returns الاسم المختصر فقط
  */
-export function getShortDeputyName(fullName: string | null | undefined): string {
+export function getShortDeputyName(
+  fullName: string | null | undefined,
+  displayName?: string | null
+): string {
+  // إذا كان هناك اسم عرض مخصص، استخدمه
+  if (displayName && displayName.trim()) {
+    return displayName.trim();
+  }
+
   if (!fullName) {
     return "غير محدد";
   }

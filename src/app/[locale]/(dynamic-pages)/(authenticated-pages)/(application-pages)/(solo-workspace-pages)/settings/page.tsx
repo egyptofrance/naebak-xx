@@ -1,7 +1,9 @@
 import { PageHeading } from "@/components/PageHeading";
 import { getCompleteUserProfile, getGovernorates, getParties } from "@/data/user/complete-profile";
+import { getCachedDeputyProfile } from "@/rsc-data/user/deputy";
 import { Suspense } from "react";
 import { ProfileUpdateForm } from "./ProfileUpdateForm";
+import { DeputyDisplayNameForm } from "./DeputyDisplayNameForm";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -10,10 +12,11 @@ export const metadata: Metadata = {
 };
 
 export default async function SettingsPage() {
-  const [userProfile, governorates, parties] = await Promise.all([
+  const [userProfile, governorates, parties, deputyProfile] = await Promise.all([
     getCompleteUserProfile(),
     getGovernorates(),
     getParties(),
+    getCachedDeputyProfile(),
   ]);
 
   if (!userProfile) {
@@ -26,13 +29,19 @@ export default async function SettingsPage() {
         title="الإعدادات"
         subTitle="قم بتحديث بياناتك الشخصية والانتخابية"
       />
-      <Suspense fallback={<div>جاري التحميل...</div>}>
+      <Suspense fallback={<div>جاري التحميل...</div>>
+        {deputyProfile && (
+          <DeputyDisplayNameForm
+            currentDisplayName={deputyProfile.display_name}
+            fullName={userProfile.full_name}
+          />
+        )}
         <ProfileUpdateForm
           userProfile={userProfile}
           governorates={governorates}
           parties={parties}
         />
-      </Suspense>
+      </Suspense>>
     </div>
   );
 }

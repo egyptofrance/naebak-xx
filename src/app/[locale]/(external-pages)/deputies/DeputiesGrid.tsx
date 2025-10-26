@@ -450,7 +450,7 @@ export default function DeputiesGrid({
               {/* Name & Status */}
               <div className="text-center space-y-2">
                 <h3 className="text-xl font-bold leading-tight">
-                  {formatDeputyName(deputyData.user?.full_name)}
+                  {formatDeputyName(deputyData.user?.full_name, deputyData.deputy?.display_name)}
                 </h3>
                 <Badge
                   variant={getStatusVariant(deputyData.deputy.deputy_status)}

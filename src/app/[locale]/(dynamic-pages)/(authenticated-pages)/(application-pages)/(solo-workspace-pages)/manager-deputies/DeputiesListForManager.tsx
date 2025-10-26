@@ -55,6 +55,7 @@ interface Deputy {
   events: string | null;
   created_at: string;
   council_id: string | null;
+  display_name: string | null;
   user_profiles: {
     id: string;
     full_name: string | null;
@@ -428,7 +429,7 @@ export default function DeputiesListForManager() {
                   deputies.map((deputy) => (
                     <TableRow key={deputy.id}>
                       <TableCell className="font-medium">
-                        {formatDeputyName(deputy.user_profiles.full_name)}
+                        {formatDeputyName(deputy.user_profiles.full_name, deputy.display_name)}
                       </TableCell>
                       <TableCell>
                         {deputy.user_profiles.governorates?.name_ar || "غير محدد"}
