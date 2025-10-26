@@ -7,8 +7,13 @@ import {
 } from "@/components/ui/sidebar";
 import { Home, Users, MessageSquare, Settings } from "lucide-react";
 import { Link } from "./intl-link";
+import { getCachedDeputyProfile } from "@/rsc-data/user/deputy";
 
-export function SidebarUserNav() {
+export async function SidebarUserNav() {
+  // Check if user is a deputy
+  const deputyProfile = await getCachedDeputyProfile();
+  const isDeputy = !!deputyProfile;
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>القائمة الرئيسية</SidebarGroupLabel>
@@ -29,14 +34,17 @@ export function SidebarUserNav() {
             </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
-        <SidebarMenuItem>
-          <SidebarMenuButton asChild>
-            <Link href="/complaints">
-              <MessageSquare className="h-4 w-4" />
-              <span>شكاويي</span>
-            </Link>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
+        {/* Hide "شكاويي" for deputies */}
+        {!isDeputy && (
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link href="/complaints">
+                <MessageSquare className="h-4 w-4" />
+                <span>شكاويي</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        )}
         <SidebarMenuItem>
           <SidebarMenuButton asChild>
             <Link href="/user/settings">
