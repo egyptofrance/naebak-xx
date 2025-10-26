@@ -17,7 +17,6 @@ export async function getAllDeputies() {
 
   try {
     // Get all deputy profiles with their related data using joins
-    // Filter to only include deputies with electoral_district_id set
     const { data: deputies, error: deputiesError } = await supabase
       .from("deputy_profiles")
       .select(`
@@ -60,7 +59,7 @@ export async function getAllDeputies() {
           district_type,
           governorate_id
         )
-      });
+      `);
 
     if (deputiesError) {
       console.error("[getAllDeputies] Error:", deputiesError);
@@ -147,5 +146,4 @@ export async function getAllDeputies() {
     return [];
   }
 }
-
 
