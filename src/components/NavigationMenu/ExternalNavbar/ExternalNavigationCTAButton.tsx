@@ -1,6 +1,5 @@
 import { Link } from "@/components/intl-link";
 import { Button } from "@/components/ui/button";
-
 export function ExternalNavigationCTAButton({
   isLoggedIn = false,
   isLoading,
@@ -9,12 +8,12 @@ export function ExternalNavigationCTAButton({
   isLoading?: boolean;
 }) {
   const href = isLoggedIn ? "/dashboard" : "/login";
-  const text = isLoggedIn ? "Dashboard" : "Log In";
+  const text = isLoggedIn ? "إدارة حسابي" : "تسجيل الدخول";
   return (
     <Link href={href} className="w-full">
       <Button variant="default" size="default" className="group w-full">
         {isLoading ? (
-          "Please wait..."
+          "يرجى الانتظار..."
         ) : (
           <>
             {text}
