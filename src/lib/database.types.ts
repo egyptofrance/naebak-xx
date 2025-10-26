@@ -1866,6 +1866,7 @@ export type Database = {
           points: number
           candidate_type: string | null
           electoral_district_id: string | null
+          display_name: string | null
         }
         Insert: {
           id?: string
@@ -1894,6 +1895,7 @@ export type Database = {
           points?: number
           candidate_type?: string | null
           electoral_district_id?: string | null
+          display_name?: string | null
         }
         Update: {
           id?: string
@@ -1922,6 +1924,7 @@ export type Database = {
           points?: number
           candidate_type?: string | null
           electoral_district_id?: string | null
+          display_name?: string | null
         }
         Relationships: [
           {
