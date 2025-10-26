@@ -90,7 +90,7 @@ async function verifyItemOwnership(itemId: string, userId: string, tableName: st
     const { data: deputyProfile } = await supabaseAdminClient
       .from("deputy_profiles")
       .select("user_id")
-      .eq("id", item.deputy_id)
+      .eq("id", (item as any).deputy_id)
       .single();
     
     if (!deputyProfile || deputyProfile.user_id !== userId) {
