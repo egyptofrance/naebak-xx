@@ -1,5 +1,5 @@
 "use server";
-import { adminActionClient, managerOrAdminActionClient } from "@/lib/safe-action";
+import { adminActionClient, managerOrAdminActionClient, authActionClient } from "@/lib/safe-action";
 import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClient";
 import { sendEmail } from "@/utils/api-routes/utils";
 import {
@@ -38,7 +38,7 @@ const uploadImageSchema = z.object({
   fileOptions: z.object({}).optional(),
 });
 
-export const uploadImageAction = adminActionClient
+export const uploadImageAction = authActionClient
   .schema(uploadImageSchema)
   .action(async ({ parsedInput: { formData, fileName, fileOptions } }) => {
     const file = formData.file;
