@@ -9,7 +9,7 @@ import {
 import { getCachedDeputyProfile } from "@/rsc-data/user/deputy";
 import { SlimWorkspace } from "@/types";
 import { getWorkspaceSubPath } from "@/utils/workspaces";
-import { Award, Calendar, FileText, Info, MessageSquare, UserCheck } from "lucide-react";
+import { Award, Calendar, FileText, ImageIcon, Info, MessageSquare, UserCheck } from "lucide-react";
 
 const deputyLinks = [
   {
@@ -41,6 +41,11 @@ const deputyLinks = [
     label: "قائمة النواب",
     href: "/deputies",
     icon: <UserCheck className="h-5 w-5" />,
+  },
+  {
+    label: "إدارة البانر",
+    href: "/deputy-banner",
+    icon: <ImageIcon className="h-5 w-5" />,
   },
 ];
 
