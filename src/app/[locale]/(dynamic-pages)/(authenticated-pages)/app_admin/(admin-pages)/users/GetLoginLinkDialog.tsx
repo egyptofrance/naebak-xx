@@ -55,8 +55,8 @@ export const GetLoginLinkDialog = ({ userId }: { userId: string }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" disabled={isPending}>
-          Get login link
+        <Button variant="ghost" size="icon" disabled={isPending} title="Get login link">
+          <Link className="h-4 w-4" />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

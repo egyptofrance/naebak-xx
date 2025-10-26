@@ -39,7 +39,7 @@ import {
   getGovernoratesAction,
   getPartiesAction,
 } from "@/data/admin/user";
-import { Edit, Search, X, Filter, Trash2 } from "lucide-react";
+import { Edit, Search, X, Filter, Trash2, Eye, Link2, Star } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
@@ -480,11 +480,7 @@ export default function DeputiesList() {
                     <TableHead>الحزب</TableHead>
                     <TableHead>المجلس</TableHead>
                     <TableHead>الحالة</TableHead>
-                    <TableHead>الملف العام</TableHead>
-                    <TableHead>Get Link</TableHead>
-                    <TableHead>تقييم مبدئي</TableHead>
-                    <TableHead>تعديل</TableHead>
-                    <TableHead>حذف</TableHead>
+                    <TableHead className="text-center">إجراءات</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -529,59 +525,52 @@ export default function DeputiesList() {
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          {deputy.slug ? (
-                            <Link href={`/deputy/${deputy.slug}`} target="_blank">
-                              <Button variant="outline" size="sm">
-                                عرض
-                              </Button>
-                            </Link>
-                          ) : (
-                            <span className="text-xs text-muted-foreground">لا يوجد</span>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          <GetLoginLinkDialog userId={deputy.user_id} />
-                        </TableCell>
-                        <TableCell>
-                          <SetInitialRatingDialog
-                            deputyId={deputy.id}
-                            deputyName={userProfile?.full_name || "غير محدد"}
-                            currentRating={deputy.initial_rating_average || 0}
-                            currentCount={deputy.initial_rating_count || 0}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <EditDeputyDialog
-                            deputyId={deputy.id}
-                            currentData={{
-                              deputyStatus: deputy.deputy_status,
-                              electoralProgram: deputy.electoral_program,
-                              achievements: deputy.achievements,
-                              events: deputy.events,
-                              councilId: deputy.council_id,
-                              electoralSymbol: deputy.electoral_symbol,
-                              electoralNumber: deputy.electoral_number,
-                              partyId: userProfile?.party_id,
-                              userId: deputy.user_id,
-                              slug: deputy.slug,
-                            }}
-                            councils={councils}
-                            parties={parties}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() =>
-                              handleDeleteDeputy(
-                                deputy.id,
-                                userProfile?.full_name || "غير محدد"
-                              )
-                            }
-                          >
-                            <Trash2 className="h-4 w-4 text-destructive" />
-                          </Button>
+                          <div className="flex items-center justify-center gap-1">
+                            {deputy.slug && (
+                              <Link href={`/deputy/${deputy.slug}`} target="_blank">
+                                <Button variant="ghost" size="icon" title="عرض الملف العام">
+                                  <Eye className="h-4 w-4" />
+                                </Button>
+                              </Link>
+                            )}
+                            <GetLoginLinkDialog userId={deputy.user_id} />
+                            <SetInitialRatingDialog
+                              deputyId={deputy.id}
+                              deputyName={userProfile?.full_name || "غير محدد"}
+                              currentRating={deputy.initial_rating_average || 0}
+                              currentCount={deputy.initial_rating_count || 0}
+                            />
+                            <EditDeputyDialog
+                              deputyId={deputy.id}
+                              currentData={{
+                                deputyStatus: deputy.deputy_status,
+                                electoralProgram: deputy.electoral_program,
+                                achievements: deputy.achievements,
+                                events: deputy.events,
+                                councilId: deputy.council_id,
+                                electoralSymbol: deputy.electoral_symbol,
+                                electoralNumber: deputy.electoral_number,
+                                partyId: userProfile?.party_id,
+                                userId: deputy.user_id,
+                                slug: deputy.slug,
+                              }}
+                              councils={councils}
+                              parties={parties}
+                            />
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              title="حذف"
+                              onClick={() =>
+                                handleDeleteDeputy(
+                                  deputy.id,
+                                  userProfile?.full_name || "غير محدد"
+                                )
+                              }
+                            >
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                            </Button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     );

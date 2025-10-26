@@ -71,9 +71,8 @@ export function SetInitialRatingDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
-          <Star className="h-4 w-4 mr-1" />
-          تقييم
+        <Button variant="ghost" size="icon" title="تعيين تقييم مبدئي" data-deputy-id={deputyId}>
+          <Star className="h-4 w-4" />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
