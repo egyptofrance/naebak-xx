@@ -476,8 +476,6 @@ export default function DeputiesList() {
                       />
                     </TableHead>
                     <TableHead>الاسم</TableHead>
-                    <TableHead>البريد الإلكتروني</TableHead>
-                    <TableHead>الهاتف</TableHead>
                     <TableHead>المحافظة</TableHead>
                     <TableHead>الحزب</TableHead>
                     <TableHead>المجلس</TableHead>
@@ -504,8 +502,6 @@ export default function DeputiesList() {
                         <TableCell className="font-medium">
                           {userProfile?.full_name || "غير محدد"}
                         </TableCell>
-                        <TableCell>{userProfile?.email || "غير محدد"}</TableCell>
-                        <TableCell>{userProfile?.phone || "غير محدد"}</TableCell>
                         <TableCell>
                           {userProfile?.governorates?.name_ar || "غير محدد"}
                         </TableCell>
