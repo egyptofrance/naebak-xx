@@ -21,27 +21,30 @@ interface PasswordLoginFormProps {
   redirectToDashboard: () => void;
   setRedirectInProgress: (value: boolean) => void;
   next?: string;
+  locale?: string;
 }
 
 export function PasswordLoginForm({
   redirectToDashboard,
   setRedirectInProgress,
   next,
+  locale = 'en',
 }: PasswordLoginFormProps) {
+  const isArabic = locale === 'ar';
   const toastRef = useRef<string | number | undefined>(undefined);
 
   const signInWithPasswordMutation = useAction(signInWithPasswordAction, {
     onExecute: () => {
-      toastRef.current = toast.loading("Logging in...");
+      toastRef.current = toast.loading(isArabic ? "جاري تسجيل الدخول..." : "Logging in...");
     },
     onSuccess: () => {
-      toast.success("Logged in!", { id: toastRef.current });
+      toast.success(isArabic ? "تم تسجيل الدخول!" : "Logged in!", { id: toastRef.current });
       toastRef.current = undefined;
       redirectToDashboard();
       setRedirectInProgress(true);
     },
     onError: ({ error }) => {
-      toast.error(getSafeActionErrorMessage(error, "Failed to log in"), {
+      toast.error(getSafeActionErrorMessage(error, isArabic ? "فشل تسجيل الدخول" : "Failed to log in"), {
         id: toastRef.current,
       });
       toastRef.current = undefined;
@@ -74,7 +77,7 @@ export function PasswordLoginForm({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <AuthFormInput
           id="email"
-          placeholder="Email"
+          placeholder={isArabic ? "البريد الإلكتروني" : "Email"}
           type="email"
           control={form.control}
           name="email"
@@ -84,7 +87,7 @@ export function PasswordLoginForm({
         />
         <AuthFormInput
           id="password"
-          placeholder="Password"
+          placeholder={isArabic ? "كلمة المرور" : "Password"}
           type="password"
           control={form.control}
           name="password"
@@ -98,7 +101,7 @@ export function PasswordLoginForm({
           disabled={passwordStatus === "executing"}
           data-testid="password-login-button"
         >
-          {passwordStatus === "executing" ? "Logging in..." : "Log in"}
+          {passwordStatus === "executing" ? (isArabic ? "جاري تسجيل الدخول..." : "Logging in...") : (isArabic ? "تسجيل الدخول" : "Log in")}
         </Button>
       </form>
     </Form>

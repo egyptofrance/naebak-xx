@@ -20,9 +20,11 @@ import { ProviderSignupForm } from "./ProviderSignupForm";
 interface SignUpProps {
   next?: string;
   nextActionType?: string;
+  locale?: string;
 }
 
-export function SignUp({ next, nextActionType }: SignUpProps) {
+export function SignUp({ next, nextActionType, locale = 'en' }: SignUpProps) {
+  const isArabic = locale === 'ar';
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   return (
@@ -33,40 +35,42 @@ export function SignUp({ next, nextActionType }: SignUpProps) {
       {successMessage ? (
         <EmailConfirmationPendingCard
           type="sign-up"
-          heading="Confirmation Link Sent"
+          heading={isArabic ? "تم إرسال رابط التأكيد" : "Confirmation Link Sent"}
           message={successMessage}
           resetSuccessMessage={setSuccessMessage}
         />
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle>Create your حساب نائبك</CardTitle>
+            <CardTitle>{isArabic ? 'إنشاء حساب نائبك' : 'Create your حساب نائبك'}</CardTitle>
             <CardDescription>
-              Choose your preferred signup method
+              {isArabic ? 'اختر طريقة التسجيل المفضلة' : 'Choose your preferred signup method'}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="password">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="password">Password</TabsTrigger>
-                <TabsTrigger value="magic-link">Magic Link</TabsTrigger>
+                <TabsTrigger value="password">{isArabic ? 'كلمة المرور' : 'Password'}</TabsTrigger>
+                <TabsTrigger value="magic-link">{isArabic ? 'رابط سحري' : 'Magic Link'}</TabsTrigger>
               </TabsList>
 
               <TabsContent value="password">
                 <PasswordSignupForm
                   next={next}
                   setSuccessMessage={setSuccessMessage}
+                  locale={locale}
                 />
               </TabsContent>
               <TabsContent value="magic-link">
                 <MagicLinkSignupForm
                   next={next}
                   setSuccessMessage={setSuccessMessage}
+                  locale={locale}
                 />
               </TabsContent>
             </Tabs>
             <Separator className="my-4" />
-            <ProviderSignupForm next={next} />
+            <ProviderSignupForm next={next} locale={locale} />
           </CardContent>
           <CardFooter>
             <div className="w-full text-center">
@@ -75,7 +79,7 @@ export function SignUp({ next, nextActionType }: SignUpProps) {
                   href="/login"
                   className="font-medium text-muted-foreground hover:text-foreground"
                 >
-                  Already have an account? Login
+                  {isArabic ? 'لديك حساب بالفعل؟ تسجيل الدخول' : 'Already have an account? Login'}
                 </Link>
               </div>
             </div>

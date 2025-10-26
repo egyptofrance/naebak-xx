@@ -20,29 +20,33 @@ import {
 interface MagicLinkSignupFormProps {
   next?: string;
   setSuccessMessage: (message: string) => void;
+  locale?: string;
 }
 
 export function MagicLinkSignupForm({
   next,
   setSuccessMessage,
+  locale = 'en',
 }: MagicLinkSignupFormProps) {
+  const isArabic = locale === 'ar';
   const toastRef = useRef<string | number | undefined>(undefined);
 
   const signInWithMagicLinkMutation = useAction(signInWithMagicLinkAction, {
     onExecute: () => {
-      toastRef.current = toast.loading("Sending magic link...");
+      toastRef.current = toast.loading(isArabic ? "جاري إرسال الرابط السحري..." : "Sending magic link...");
     },
     onSuccess: () => {
-      toast.success("A magic link has been sent to your email!", {
+      const successMsg = isArabic ? "تم إرسال رابط سحري إلى بريدك الإلكتروني!" : "A magic link has been sent to your email!";
+      toast.success(successMsg, {
         id: toastRef.current,
       });
       toastRef.current = undefined;
-      setSuccessMessage("A magic link has been sent to your email!");
+      setSuccessMessage(successMsg);
     },
     onError: ({ error }) => {
       const errorMessage = getSafeActionErrorMessage(
         error,
-        "Failed to send magic link",
+        isArabic ? "فشل إرسال الرابط السحري" : "Failed to send magic link",
       );
       toast.error(errorMessage, { id: toastRef.current });
       toastRef.current = undefined;
@@ -81,7 +85,7 @@ export function MagicLinkSignupForm({
       >
         <AuthFormInput
           id="sign-up-email"
-          placeholder="Email"
+          placeholder={isArabic ? "البريد الإلكتروني" : "Email"}
           type="email"
           control={control}
           name="email"
@@ -96,8 +100,8 @@ export function MagicLinkSignupForm({
           disabled={magicLinkStatus === "executing"}
         >
           {magicLinkStatus === "executing"
-            ? "Sending..."
-            : "Sign up with Magic Link"}
+            ? (isArabic ? "جاري الإرسال..." : "Sending...")
+            : (isArabic ? "التسجيل برابط سحري" : "Sign up with Magic Link")}
         </Button>
       </form>
     </Form>

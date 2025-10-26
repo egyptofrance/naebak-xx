@@ -25,10 +25,13 @@ import { PasswordLoginForm } from "./PasswordLoginForm";
 export function Login({
   next,
   nextActionType,
+  locale = 'en',
 }: {
   next?: string;
   nextActionType?: string;
+  locale?: string;
 }) {
+  const isArabic = locale === 'ar';
   const [emailSentSuccessMessage, setEmailSentSuccessMessage] = useState<
     string | null
   >(null);
@@ -48,11 +51,11 @@ export function Login({
     signInWithProviderAction,
     {
       onExecute: () => {
-        toastRef.current = toast.loading("Requesting login...");
+        toastRef.current = toast.loading(isArabic ? "جاري طلب تسجيل الدخول..." : "Requesting login...");
       },
       onSuccess: ({ data }) => {
         if (data) {
-          toast.success("Redirecting...", {
+          toast.success(isArabic ? "جاري التوجيه..." : "Redirecting...", {
             id: toastRef.current,
           });
           toastRef.current = undefined;
@@ -60,7 +63,7 @@ export function Login({
         }
       },
       onError: (error) => {
-        toast.error("Failed to login", {
+        toast.error(isArabic ? "فشل تسجيل الدخول" : "Failed to login", {
           id: toastRef.current,
         });
         toastRef.current = undefined;
@@ -72,7 +75,7 @@ export function Login({
     return (
       <EmailConfirmationPendingCard
         type={"login"}
-        heading={"Confirmation Link Sent"}
+        heading={isArabic ? "تم إرسال رابط التأكيد" : "Confirmation Link Sent"}
         message={emailSentSuccessMessage}
         resetSuccessMessage={setEmailSentSuccessMessage}
       />
@@ -82,8 +85,8 @@ export function Login({
   if (redirectInProgress) {
     return (
       <RedirectingPleaseWaitCard
-        message="Please wait while we redirect you to your dashboard."
-        heading="Redirecting to Dashboard"
+        message={isArabic ? "يرجى الانتظار بينما نوجهك إلى لوحة التحكم." : "Please wait while we redirect you to your dashboard."}
+        heading={isArabic ? "جاري التوجيه إلى لوحة التحكم" : "Redirecting to Dashboard"}
       />
     );
   }
@@ -91,20 +94,21 @@ export function Login({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Login to Your Account</CardTitle>
-        <CardDescription>Choose your preferred login method</CardDescription>
+        <CardTitle>{isArabic ? 'تسجيل الدخول' : 'Login to Your Account'}</CardTitle>
+        <CardDescription>{isArabic ? 'اختر طريقة تسجيل الدخول المفضلة' : 'Choose your preferred login method'}</CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="password">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="password">Password</TabsTrigger>
-            <TabsTrigger value="magic-link">Magic Link</TabsTrigger>
+            <TabsTrigger value="password">{isArabic ? 'كلمة المرور' : 'Password'}</TabsTrigger>
+            <TabsTrigger value="magic-link">{isArabic ? 'رابط سحري' : 'Magic Link'}</TabsTrigger>
           </TabsList>
           <TabsContent value="password">
             <PasswordLoginForm
               next={next}
               redirectToDashboard={redirectToDashboard}
               setRedirectInProgress={setRedirectInProgress}
+              locale={locale}
             />
           </TabsContent>
 
@@ -112,6 +116,7 @@ export function Login({
             <MagicLinkLoginForm
               next={next}
               setEmailSentSuccessMessage={setEmailSentSuccessMessage}
+              locale={locale}
             />
           </TabsContent>
         </Tabs>
@@ -129,10 +134,10 @@ export function Login({
           href="/forgot-password"
           className="text-sm text-blue-600 hover:underline"
         >
-          Forgot password?
+          {isArabic ? 'نسيت كلمة المرور؟' : 'Forgot password?'}
         </Link>
         <Link href="/sign-up" className="text-sm text-blue-600 hover:underline">
-          Sign up instead
+          {isArabic ? 'إنشاء حساب جديد' : 'Sign up instead'}
         </Link>
       </CardFooter>
     </Card>

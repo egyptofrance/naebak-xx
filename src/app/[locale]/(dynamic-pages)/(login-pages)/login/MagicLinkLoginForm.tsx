@@ -20,29 +20,33 @@ import {
 interface MagicLinkLoginFormProps {
   next?: string;
   setEmailSentSuccessMessage: (message: string) => void;
+  locale?: string;
 }
 
 export function MagicLinkLoginForm({
   next,
   setEmailSentSuccessMessage,
+  locale = 'en',
 }: MagicLinkLoginFormProps) {
+  const isArabic = locale === 'ar';
   const toastRef = useRef<string | number | undefined>(undefined);
 
   const signInWithMagicLinkMutation = useAction(signInWithMagicLinkAction, {
     onExecute: () => {
-      toastRef.current = toast.loading("Sending magic link...");
+      toastRef.current = toast.loading(isArabic ? "جاري إرسال الرابط السحري..." : "Sending magic link...");
     },
     onSuccess: () => {
-      toast.success("A magic link has been sent to your email!", {
+      const successMsg = isArabic ? "تم إرسال رابط سحري إلى بريدك الإلكتروني!" : "A magic link has been sent to your email!";
+      toast.success(successMsg, {
         id: toastRef.current,
       });
       toastRef.current = undefined;
-      setEmailSentSuccessMessage("A magic link has been sent to your email!");
+      setEmailSentSuccessMessage(successMsg);
     },
     onError: ({ error }) => {
       const errorMessage = getSafeActionErrorMessage(
         error,
-        "Failed to send magic link",
+        isArabic ? "فشل إرسال الرابط السحري" : "Failed to send magic link",
       );
       toast.error(errorMessage, { id: toastRef.current });
       toastRef.current = undefined;
@@ -83,7 +87,7 @@ export function MagicLinkLoginForm({
           type="email"
           control={form.control}
           name="email"
-          placeholder="Email"
+          placeholder={isArabic ? "البريد الإلكتروني" : "Email"}
           inputProps={{
             disabled: magicLinkStatus === "executing",
             autoComplete: "email",
@@ -94,7 +98,7 @@ export function MagicLinkLoginForm({
           type="submit"
           disabled={magicLinkStatus === "executing"}
         >
-          {magicLinkStatus === "executing" ? "Sending..." : "Send Magic Link"}
+          {magicLinkStatus === "executing" ? (isArabic ? "جاري الإرسال..." : "Sending...") : (isArabic ? "إرسال رابط سحري" : "Send Magic Link")}
         </Button>
       </form>
     </Form>

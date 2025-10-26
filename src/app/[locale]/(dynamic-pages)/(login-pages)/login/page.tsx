@@ -13,9 +13,11 @@ export const metadata: Metadata = {
 };
 
 export default async function LoginPage(props: {
+  params: Promise<{ locale: string }>;
   searchParams: Promise<unknown>;
 }) {
+  const params = await props.params;
   const searchParams = await props.searchParams;
   const { next, nextActionType } = SearchParamsSchema.parse(searchParams);
-  return <Login next={next} nextActionType={nextActionType} />;
+  return <Login next={next} nextActionType={nextActionType} locale={params.locale} />;
 }

@@ -11,19 +11,21 @@ import { getSafeActionErrorMessage } from "@/utils/errorMessage";
 
 interface ProviderSignupFormProps {
   next?: string;
+  locale?: string;
 }
 
-export function ProviderSignupForm({ next }: ProviderSignupFormProps) {
+export function ProviderSignupForm({ next, locale = 'en' }: ProviderSignupFormProps) {
+  const isArabic = locale === 'ar';
   const toastRef = useRef<string | number | undefined>(undefined);
 
   const { execute: executeProvider, status: providerStatus } = useAction(
     signInWithProviderAction,
     {
       onExecute: () => {
-        toastRef.current = toast.loading("Requesting login...");
+        toastRef.current = toast.loading(isArabic ? "جاري طلب تسجيل الدخول..." : "Requesting login...");
       },
       onSuccess: ({ data }) => {
-        toast.success("Redirecting...", { id: toastRef.current });
+        toast.success(isArabic ? "جاري التوجيه..." : "Redirecting...", { id: toastRef.current });
         toastRef.current = undefined;
         if (data?.url) {
           window.location.href = data.url;
@@ -32,7 +34,7 @@ export function ProviderSignupForm({ next }: ProviderSignupFormProps) {
       onError: ({ error }) => {
         const errorMessage = getSafeActionErrorMessage(
           error,
-          "Failed to login",
+          isArabic ? "فشل تسجيل الدخول" : "Failed to login",
         );
         toast.error(errorMessage, { id: toastRef.current });
         toastRef.current = undefined;

@@ -21,27 +21,30 @@ import {
 interface PasswordSignupFormProps {
   next?: string;
   setSuccessMessage: (message: string) => void;
+  locale?: string;
 }
 
 export function PasswordSignupForm({
   next,
   setSuccessMessage,
+  locale = 'en',
 }: PasswordSignupFormProps) {
+  const isArabic = locale === 'ar';
   const toastRef = useRef<string | number | undefined>(undefined);
 
   const signUpWithPasswordMutation = useAction(signUpWithPasswordAction, {
     onExecute: () => {
-      toastRef.current = toast.loading("Creating account...");
+      toastRef.current = toast.loading(isArabic ? "جاري إنشاء الحساب..." : "Creating account...");
     },
     onSuccess: ({ data }) => {
-      toast.success("Account created!", { id: toastRef.current });
+      toast.success(isArabic ? "تم إنشاء الحساب!" : "Account created!", { id: toastRef.current });
       toastRef.current = undefined;
-      setSuccessMessage("A confirmation link has been sent to your email!");
+      setSuccessMessage(isArabic ? "تم إرسال رابط تأكيد إلى بريدك الإلكتروني!" : "A confirmation link has been sent to your email!");
     },
     onError: ({ error }) => {
       const errorMessage = getSafeActionErrorMessage(
         error,
-        "Failed to create account",
+        isArabic ? "فشل إنشاء الحساب" : "Failed to create account",
       );
       toast.error(errorMessage, { id: toastRef.current });
       toastRef.current = undefined;
@@ -76,7 +79,7 @@ export function PasswordSignupForm({
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <AuthFormInput
           id="email"
-          placeholder="Email"
+          placeholder={isArabic ? "البريد الإلكتروني" : "Email"}
           type="email"
           control={control}
           name="email"
@@ -86,7 +89,7 @@ export function PasswordSignupForm({
         />
         <AuthFormInput
           id="password"
-          placeholder="Password"
+          placeholder={isArabic ? "كلمة المرور" : "Password"}
           type="password"
           control={control}
           name="password"
@@ -99,7 +102,7 @@ export function PasswordSignupForm({
           type="submit"
           disabled={signUpStatus === "executing"}
         >
-          {signUpStatus === "executing" ? "Signing up..." : "Sign up"}
+          {signUpStatus === "executing" ? (isArabic ? "جاري التسجيل..." : "Signing up...") : (isArabic ? "إنشاء حساب" : "Sign up")}
         </Button>
         <div className="w-full text-center">
           <div className="text-sm">
@@ -107,7 +110,7 @@ export function PasswordSignupForm({
               href="/login"
               className="font-medium text-muted-foreground hover:text-foreground"
             >
-              Already have an account? Log in
+              {isArabic ? 'لديك حساب بالفعل؟ تسجيل الدخول' : 'Already have an account? Log in'}
             </Link>
           </div>
         </div>
