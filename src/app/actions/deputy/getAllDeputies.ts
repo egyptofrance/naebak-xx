@@ -16,63 +16,89 @@ export async function getAllDeputies() {
   );
 
   try {
-    // Get all deputy profiles with their related data using joins
-    const { data: deputies, error: deputiesError } = await supabase
-      .from("deputy_profiles")
-      .select(`
-        id,
-        user_id,
-        slug,
-        deputy_status,
-        council_id,
-        electoral_district_id,
-        candidate_type,
-        rating_average,
-        rating_count,
-        gender,
-        display_name,
-        user_profiles (
+    // Fetch ALL deputies using pagination to bypass Supabase's 1000 row limit
+    let allDeputies: any[] = [];
+    let page = 0;
+    const pageSize = 1000; // Supabase's default max
+    let hasMore = true;
+
+    while (hasMore) {
+      const start = page * pageSize;
+      const end = start + pageSize - 1;
+
+      const { data: deputiesPage, error: deputiesError } = await supabase
+        .from("deputy_profiles")
+        .select(`
           id,
-          full_name,
-          avatar_url,
-          governorate_id,
-          party_id,
-          governorates (
+          user_id,
+          slug,
+          deputy_status,
+          council_id,
+          electoral_district_id,
+          candidate_type,
+          rating_average,
+          rating_count,
+          gender,
+          display_name,
+          user_profiles (
+            id,
+            full_name,
+            avatar_url,
+            governorate_id,
+            party_id,
+            governorates (
+              id,
+              name_ar,
+              name_en
+            ),
+            parties (
+              id,
+              name_ar,
+              name_en
+            )
+          ),
+          councils (
             id,
             name_ar,
             name_en
           ),
-          parties (
+          electoral_districts (
             id,
-            name_ar,
-            name_en
+            name,
+            district_type,
+            governorate_id
           )
-        ),
-        councils (
-          id,
-          name_ar,
-          name_en
-        ),
-        electoral_districts (
-          id,
-          name,
-          district_type,
-          governorate_id
-        )
-      `)
-      .limit(100000);
+        `)
+        .range(start, end);
 
-    if (deputiesError) {
-      console.error("[getAllDeputies] Error:", deputiesError);
-      return [];
+      if (deputiesError) {
+        console.error(`[getAllDeputies] Error on page ${page}:`, deputiesError);
+        break;
+      }
+
+      if (!deputiesPage || deputiesPage.length === 0) {
+        hasMore = false;
+        break;
+      }
+
+      allDeputies = [...allDeputies, ...deputiesPage];
+
+      // If we got less than pageSize, we've reached the end
+      if (deputiesPage.length < pageSize) {
+        hasMore = false;
+      } else {
+        page++;
+      }
     }
 
-    if (!deputies || deputies.length === 0) {
+    console.log(`[getAllDeputies] Fetched ${allDeputies.length} deputies in ${page + 1} page(s)`);
+
+    if (allDeputies.length === 0) {
       return [];
     }
 
     // Transform the data to match the expected structure
-    const transformedDeputies = deputies.map((deputy: any) => {
+    const transformedDeputies = allDeputies.map((deputy: any) => {
       const userProfile = Array.isArray(deputy.user_profiles) 
         ? deputy.user_profiles[0] 
         : deputy.user_profiles;
@@ -147,3 +173,4 @@ export async function getAllDeputies() {
     return [];
   }
 }
+
