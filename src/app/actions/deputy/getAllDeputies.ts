@@ -56,7 +56,8 @@ export async function getAllDeputies() {
         electoral_districts (
           id,
           name,
-          district_type
+          district_type,
+          governorate_id
         )
       `)
       .not('electoral_district_id', 'is', null)
