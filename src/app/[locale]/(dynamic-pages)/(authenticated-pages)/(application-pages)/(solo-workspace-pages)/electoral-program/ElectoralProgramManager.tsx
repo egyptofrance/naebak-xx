@@ -24,8 +24,10 @@ export function ElectoralProgramManager({ deputyId }: ElectoralProgramManagerPro
 
   // Debug: Log deputyId
   useEffect(() => {
+    alert(`ElectoralProgramManager loaded! deputyId: ${deputyId}`);
     console.error("[ElectoralProgramManager] deputyId:", deputyId);
     if (!deputyId) {
+      alert("ERROR: deputyId is undefined!");
       console.error("[ElectoralProgramManager] ERROR: deputyId is undefined!");
     }
   }, [deputyId]);
