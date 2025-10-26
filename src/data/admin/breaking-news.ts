@@ -1,14 +1,14 @@
 "use server";
 
-import { adminAction } from "@/data/safe-action";
+import { adminActionClient } from "@/lib/safe-action";
 import { supabaseAdminClient } from "@/supabase-clients/admin/supabaseAdminClient";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 // Get all breaking news (admin)
-export const getBreakingNewsAdminAction = adminAction
-  .createServerAction()
-  .handler(async () => {
+export const getBreakingNewsAdminAction = adminActionClient
+  .schema(z.object({}))
+  .action(async () => {
     const supabase = await supabaseAdminClient();
 
     const { data, error } = await supabase
@@ -24,16 +24,15 @@ export const getBreakingNewsAdminAction = adminAction
   });
 
 // Create breaking news
-export const createBreakingNewsAction = adminAction
-  .createServerAction()
-  .input(
+export const createBreakingNewsAction = adminActionClient
+  .schema(
     z.object({
       content: z.string().min(1, "المحتوى مطلوب"),
       displayOrder: z.number().int().min(0),
       isActive: z.boolean().default(true),
     })
   )
-  .handler(async ({ input, ctx }) => {
+  .action(async ({ parsedInput: input, ctx }) => {
     const supabase = await supabaseAdminClient();
 
     const { error } = await supabase.from("breaking_news").insert({
@@ -54,9 +53,8 @@ export const createBreakingNewsAction = adminAction
   });
 
 // Update breaking news
-export const updateBreakingNewsAction = adminAction
-  .createServerAction()
-  .input(
+export const updateBreakingNewsAction = adminActionClient
+  .schema(
     z.object({
       id: z.string().uuid(),
       content: z.string().min(1, "المحتوى مطلوب").optional(),
@@ -64,7 +62,7 @@ export const updateBreakingNewsAction = adminAction
       isActive: z.boolean().optional(),
     })
   )
-  .handler(async ({ input }) => {
+  .action(async ({ parsedInput: input }) => {
     const supabase = await supabaseAdminClient();
 
     const updateData: any = {};
@@ -89,14 +87,13 @@ export const updateBreakingNewsAction = adminAction
   });
 
 // Delete breaking news
-export const deleteBreakingNewsAction = adminAction
-  .createServerAction()
-  .input(
+export const deleteBreakingNewsAction = adminActionClient
+  .schema(
     z.object({
       id: z.string().uuid(),
     })
   )
-  .handler(async ({ input }) => {
+  .action(async ({ parsedInput: input }) => {
     const supabase = await supabaseAdminClient();
 
     const { error } = await supabase

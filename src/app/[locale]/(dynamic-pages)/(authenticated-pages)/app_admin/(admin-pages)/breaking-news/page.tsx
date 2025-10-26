@@ -2,7 +2,7 @@ import { getBreakingNewsAdminAction } from "@/data/admin/breaking-news";
 import { BreakingNewsList } from "./BreakingNewsList";
 
 export default async function BreakingNewsPage() {
-  const [newsData] = await getBreakingNewsAdminAction();
+  const newsData = await getBreakingNewsAdminAction({});
   const news = newsData?.data || [];
 
   return (
