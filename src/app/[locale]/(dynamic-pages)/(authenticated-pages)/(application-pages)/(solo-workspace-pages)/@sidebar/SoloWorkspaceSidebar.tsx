@@ -4,7 +4,6 @@ import { SidebarAdminPanelNav } from "@/components/sidebar-admin-panel-nav";
 import { SidebarDeputyNav } from "@/components/sidebar-deputy-nav";
 import { SidebarManagerNav } from "@/components/sidebar-manager-nav";
 import { SidebarUserNav } from "@/components/sidebar-user-nav";
-import { SwitcherAndToggle } from "@/components/sidebar-components/switcher-and-toggle";
 import { SidebarFooterUserNav } from "@/components/sidebar-footer-user-nav";
 
 import { SidebarWorkspaceNav } from "@/components/sidebar-workspace-nav";
@@ -18,7 +17,6 @@ import {
 import { SubscriptionData } from "@/payments/AbstractPaymentGateway";
 import { StripePaymentGateway } from "@/payments/StripePaymentGateway";
 import {
-  getCachedSlimWorkspaces,
   getCachedSoloWorkspace,
 } from "@/rsc-data/user/workspaces";
 import { toLower } from "lodash";
@@ -40,16 +38,7 @@ export async function SoloWorkspaceSidebar() {
       throw new Error("No workspace found");
     }
 
-    // Step 2: Get slim workspaces (non-critical, can fail silently)
-    let slimWorkspaces: Awaited<ReturnType<typeof getCachedSlimWorkspaces>> = [];
-    try {
-      slimWorkspaces = await getCachedSlimWorkspaces();
-    } catch (e) {
-      console.error("Failed to load slim workspaces:", e);
-      slimWorkspaces = []; // Fallback to empty array
-    }
-
-    // Step 3: Get subscriptions (non-critical, can fail silently)
+    // Step 2: Get subscriptions (non-critical, can fail silently)
     let subscriptions: SubscriptionData[] = [];
     try {
       const paymentGateway = new StripePaymentGateway();
@@ -66,10 +55,7 @@ export async function SoloWorkspaceSidebar() {
     return (
       <Sidebar variant="inset" collapsible="icon">
         <SidebarHeader>
-          <SwitcherAndToggle
-            workspaceId={workspace.id}
-            slimWorkspaces={slimWorkspaces}
-          />
+          {/* Workspace switcher removed */}
         </SidebarHeader>
         <SidebarContent>
           <SidebarUserNav />

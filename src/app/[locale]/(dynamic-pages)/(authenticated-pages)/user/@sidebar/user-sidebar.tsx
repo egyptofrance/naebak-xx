@@ -2,7 +2,6 @@
 
 import { SidebarAdminPanelNav } from "@/components/sidebar-admin-panel-nav";
 import { SidebarUserNav } from "@/components/sidebar-user-nav";
-import { SwitcherAndToggle } from "@/components/sidebar-components/switcher-and-toggle";
 import { SidebarFooterUserNav } from "@/components/sidebar-footer-user-nav";
 
 import {
@@ -12,16 +11,14 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { getCachedSlimWorkspaces } from "@/rsc-data/user/workspaces";
 import { unstable_rethrow } from "next/navigation";
 
 export async function UserSidebar() {
   try {
-    const slimWorkspaces = await getCachedSlimWorkspaces();
     return (
       <Sidebar variant="inset" collapsible="icon">
         <SidebarHeader>
-          <SwitcherAndToggle slimWorkspaces={slimWorkspaces} />
+          {/* Workspace switcher removed */}
         </SidebarHeader>
         <SidebarContent>
           <SidebarUserNav />
