@@ -60,8 +60,7 @@ export async function getAllDeputies() {
           district_type,
           governorate_id
         )
-      `)
-      .limit(5000);
+      });
 
     if (deputiesError) {
       console.error("[getAllDeputies] Error:", deputiesError);
