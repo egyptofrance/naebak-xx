@@ -526,13 +526,16 @@ export default function DeputiesList() {
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center justify-center gap-1">
-                            {deputy.slug && (
-                              <Link href={`/deputy/${deputy.slug}`} target="_blank">
-                                <Button variant="ghost" size="icon" title="عرض الملف العام">
-                                  <Eye className="h-4 w-4" />
-                                </Button>
-                              </Link>
-                            )}
+                            <Link href={deputy.slug ? `/deputy/${deputy.slug}` : '#'} target="_blank">
+                              <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                title="معاينة صفحة النائب"
+                                disabled={!deputy.slug}
+                              >
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                            </Link>
                             <GetLoginLinkDialog userId={deputy.user_id} />
                             <SetInitialRatingDialog
                               deputyId={deputy.id}
