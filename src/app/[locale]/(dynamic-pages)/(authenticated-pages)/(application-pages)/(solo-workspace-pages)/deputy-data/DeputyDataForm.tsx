@@ -36,7 +36,6 @@ export function DeputyDataForm({ deputyProfile }: DeputyDataFormProps) {
       // TODO: Implement server action to update deputy data
       toast.info("لم يتم تفعيل الحفظ بعد");
     } catch (error) {
-      console.error("Error saving:", error);
       toast.error("فشل حفظ التغييرات");
     } finally {
       setIsSaving(false);

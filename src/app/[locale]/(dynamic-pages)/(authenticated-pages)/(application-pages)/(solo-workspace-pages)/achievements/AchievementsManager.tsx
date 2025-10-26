@@ -96,7 +96,6 @@ export function AchievementsManager({ deputyId }: AchievementsManagerProps) {
         setOriginalItems(loadedItems);
       }
     } catch (error) {
-      console.error("Error saving:", error);
       toast.error("فشل حفظ التغييرات");
     } finally {
       setIsSaving(false);

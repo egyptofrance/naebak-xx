@@ -8,7 +8,6 @@ import {
   getElectoralProgramsAction,
   updateElectoralProgramAction,
 } from "@/data/admin/deputy-content";
-import { useAction } from "next-safe-action/hooks";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -22,24 +21,12 @@ export function ElectoralProgramManager({ deputyId }: ElectoralProgramManagerPro
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
-  // Debug: Log deputyId
-  useEffect(() => {
-    alert(`ElectoralProgramManager loaded! deputyId: ${deputyId}`);
-    console.error("[ElectoralProgramManager] deputyId:", deputyId);
-    if (!deputyId) {
-      alert("ERROR: deputyId is undefined!");
-      console.error("[ElectoralProgramManager] ERROR: deputyId is undefined!");
-    }
-  }, [deputyId]);
-
   // Load existing items
   useEffect(() => {
     async function loadItems() {
       setIsLoading(true);
-      console.error("[ElectoralProgramManager] Loading items for deputyId:", deputyId);
       
       const result = await getElectoralProgramsAction({ deputyId });
-      console.error("[ElectoralProgramManager] Load result:", result);
       
       if (result?.data?.success && result.data.data) {
         const loadedItems: ContentItem[] = result.data.data.map((item: any) => ({
@@ -51,12 +38,9 @@ export function ElectoralProgramManager({ deputyId }: ElectoralProgramManagerPro
         }));
         setItems(loadedItems);
         setOriginalItems(loadedItems);
-        console.error("[ElectoralProgramManager] Loaded items:", loadedItems.length);
       } else if (result?.serverError) {
-        console.error("[ElectoralProgramManager] Server error:", result.serverError);
         toast.error(`خطأ في تحميل البيانات: ${result.serverError}`);
       } else if (result?.validationErrors) {
-        console.error("[ElectoralProgramManager] Validation errors:", result.validationErrors);
         toast.error("خطأ في البيانات المُرسلة");
       }
       setIsLoading(false);
@@ -65,7 +49,6 @@ export function ElectoralProgramManager({ deputyId }: ElectoralProgramManagerPro
   }, [deputyId]);
 
   const handleSave = async () => {
-    console.log("[ElectoralProgramManager] Saving...", { deputyId, itemsCount: items.length });
     setIsSaving(true);
 
     try {
@@ -78,7 +61,6 @@ export function ElectoralProgramManager({ deputyId }: ElectoralProgramManagerPro
       for (const item of itemsToDelete) {
         if (item.id) {
           const deleteResult = await deleteElectoralProgramAction({ id: item.id });
-          console.log("[ElectoralProgramManager] Delete result:", deleteResult);
           if (deleteResult?.serverError) {
             throw new Error(deleteResult.serverError);
           }
@@ -96,7 +78,6 @@ export function ElectoralProgramManager({ deputyId }: ElectoralProgramManagerPro
             imageUrl: item.imageUrl,
             displayOrder: item.displayOrder || 0,
           });
-          console.log("[ElectoralProgramManager] Update result:", updateResult);
           if (updateResult?.serverError) {
             throw new Error(updateResult.serverError);
           }
@@ -109,7 +90,6 @@ export function ElectoralProgramManager({ deputyId }: ElectoralProgramManagerPro
             imageUrl: item.imageUrl,
             displayOrder: item.displayOrder || 0,
           });
-          console.log("[ElectoralProgramManager] Create result:", createResult);
           if (createResult?.serverError) {
             throw new Error(createResult.serverError);
           }
@@ -132,7 +112,6 @@ export function ElectoralProgramManager({ deputyId }: ElectoralProgramManagerPro
         setOriginalItems(loadedItems);
       }
     } catch (error) {
-      console.error("Error saving:", error);
       toast.error("فشل حفظ التغييرات");
     } finally {
       setIsSaving(false);
