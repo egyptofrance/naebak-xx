@@ -61,7 +61,6 @@ export async function getAllDeputies() {
           governorate_id
         )
       `)
-      .not('electoral_district_id', 'is', null)
       .limit(5000);
 
     if (deputiesError) {
