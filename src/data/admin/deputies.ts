@@ -67,7 +67,7 @@ export const searchUsersForDeputyAction = actionClient
     const { data: allProfiles, error: profilesError } = await supabase
       .from("user_profiles")
       .select("*")
-      .limit(1000);
+      .limit(10000);
 
     if (profilesError) {
       console.error('[searchUsersForDeputy] Error:', profilesError);
@@ -78,7 +78,7 @@ export const searchUsersForDeputyAction = actionClient
     const { data: allSettings, error: settingsError } = await supabase
       .from("user_application_settings")
       .select("id, email_readonly")
-      .limit(1000);
+      .limit(10000);
 
     if (settingsError) {
       console.error('[searchUsersForDeputy] Error:', settingsError);
