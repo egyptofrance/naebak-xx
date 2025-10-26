@@ -3,6 +3,7 @@ export type UserRoles = {
   ADMIN: "admin";
   USER: "user";
   MANAGER: "manager";
+  DEPUTY: "deputy";
 };
 
 export type UserRole = UserRoles[keyof UserRoles];

@@ -5,4 +5,5 @@ export const userRoles: UserRoles = {
   ADMIN: "admin",
   USER: "user",
   MANAGER: "manager",
+  DEPUTY: "deputy",
 };
