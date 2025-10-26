@@ -4,15 +4,12 @@ import { serverGetLoggedInUserVerified } from "@/utils/server/serverGetLoggedInU
 import {
   BadgeCheck,
   ChevronsUpDown,
-  Code,
-  FileQuestion,
-  History,
   LogOut,
   Shield,
 } from "lucide-react";
 import { Suspense } from "react";
 import { Link } from "./intl-link";
-import { NotificationsDropdownMenuTrigger } from "./notifications-dropdown-menu-trigger";
+
 import { ThemeToggle } from "./theme-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
@@ -26,7 +23,7 @@ import {
 } from "./ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "./ui/sidebar";
 import { Skeleton } from "./ui/skeleton";
-import { UnseenNotificationCounterBadge } from "./unseen-notification-counter-badge";
+
 async function SidebarFooterUserMenu() {
   const [data, user] = await Promise.all([
     getCachedUserProfile(),
@@ -59,7 +56,6 @@ async function SidebarFooterUserMenu() {
                 </span>
                 <span className="truncate text-xs">{user.email}</span>
               </div>
-              <UnseenNotificationCounterBadge />
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
@@ -88,41 +84,16 @@ async function SidebarFooterUserMenu() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <NotificationsDropdownMenuTrigger />
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
               <DropdownMenuItem asChild>
                 <Link href="/user/settings">
                   <BadgeCheck />
-                  Account Settings
+                  الإعدادات
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href="/user/settings/security">
                   <Shield />
-                  Security Settings
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/user/settings/developer">
-                  <Code />
-                  Developer Settings
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem asChild>
-                <Link href="/feedback">
-                  <FileQuestion />
-                  Feedback
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/changelog">
-                  <History />
-                  Changelog
+                  الأمان
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -132,7 +103,7 @@ async function SidebarFooterUserMenu() {
             <DropdownMenuItem asChild>
               <Link href="/logout">
                 <LogOut />
-                Log out
+                تسجيل الخروج
               </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
