@@ -46,6 +46,7 @@ import { toast } from "sonner";
 import { EditDeputyDialog } from "./EditDeputyDialog";
 import { GetLoginLinkDialog } from "../users/GetLoginLinkDialog";
 import { SetInitialRatingDialog } from "./SetInitialRatingDialog";
+import { formatDeputyName } from "@/utils/formatDeputyName";
 
 interface Deputy {
   id: string;
@@ -496,7 +497,7 @@ export default function DeputiesList() {
                           />
                         </TableCell>
                         <TableCell className="font-medium">
-                          {userProfile?.full_name || "غير محدد"}
+                          {formatDeputyName(userProfile?.full_name)}
                         </TableCell>
                         <TableCell>
                           {userProfile?.governorates?.name_ar || "غير محدد"}
@@ -538,7 +539,7 @@ export default function DeputiesList() {
                             <GetLoginLinkDialog userId={deputy.user_id} />
                             <SetInitialRatingDialog
                               deputyId={deputy.id}
-                              deputyName={userProfile?.full_name || "غير محدد"}
+                              deputyName={formatDeputyName(userProfile?.full_name)}
                               currentRating={deputy.initial_rating_average || 0}
                               currentCount={deputy.initial_rating_count || 0}
                             />

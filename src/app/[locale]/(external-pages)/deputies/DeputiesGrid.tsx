@@ -32,6 +32,7 @@ import { getAllGovernorates } from "@/app/actions/governorate/getAllGovernorates
 import { getAllParties } from "@/app/actions/party/getAllParties";
 import { getAllElectoralDistricts } from "@/app/actions/electoral-district/getAllElectoralDistricts";
 import { getAllCouncils } from "@/app/actions/council/getAllCouncils";
+import { formatDeputyName } from "@/utils/formatDeputyName";
 
 type DeputiesData = Awaited<ReturnType<typeof getAllDeputies>>;
 type DeputyData = DeputiesData[number];
@@ -449,7 +450,7 @@ export default function DeputiesGrid({
               {/* Name & Status */}
               <div className="text-center space-y-2">
                 <h3 className="text-xl font-bold leading-tight">
-                  {deputyData.user?.full_name || "غير محدد"}
+                  {formatDeputyName(deputyData.user?.full_name)}
                 </h3>
                 <Badge
                   variant={getStatusVariant(deputyData.deputy.deputy_status)}

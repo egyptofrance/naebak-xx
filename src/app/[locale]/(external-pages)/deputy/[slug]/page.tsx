@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { BannerImage } from "./BannerImage";
 import { DeputyRating } from "./DeputyRating";
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
+import { formatDeputyName } from "@/utils/formatDeputyName";
 
 interface PageProps {
   params: Promise<{
@@ -97,7 +98,7 @@ export default async function DeputyPage({ params }: PageProps) {
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
                   <h1 className="text-4xl font-bold">
-                    {user.full_name || noData}
+                    {formatDeputyName(user.full_name)}
                   </h1>
                   <Badge variant={getStatusVariant(deputy.deputy_status)}>
                     {getStatusLabel(deputy.deputy_status)}

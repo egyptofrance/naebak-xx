@@ -38,6 +38,7 @@ import {
 } from "@/data/admin/user";
 import { Edit, Search, X, Filter } from "lucide-react";
 import { useState, useEffect } from "react";
+import { formatDeputyName } from "@/utils/formatDeputyName";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 import { EditDeputyDialog } from "@/app/[locale]/(dynamic-pages)/(authenticated-pages)/app_admin/(admin-pages)/deputies/EditDeputyDialog";
@@ -427,7 +428,7 @@ export default function DeputiesListForManager() {
                   deputies.map((deputy) => (
                     <TableRow key={deputy.id}>
                       <TableCell className="font-medium">
-                        {deputy.user_profiles.full_name || "غير محدد"}
+                        {formatDeputyName(deputy.user_profiles.full_name)}
                       </TableCell>
                       <TableCell>
                         {deputy.user_profiles.governorates?.name_ar || "غير محدد"}
