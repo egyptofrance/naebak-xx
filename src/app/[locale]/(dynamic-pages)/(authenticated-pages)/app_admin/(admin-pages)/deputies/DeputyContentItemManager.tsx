@@ -4,7 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Trash2, Image as ImageIcon } from "lucide-react";
+import { uploadImageAction } from "@/data/admin/user";
+import { compressImage, validateImageFile, formatFileSize } from "@/utils/imageCompression";
+import { Plus, Trash2, Image as ImageIcon, Upload, Loader2, X } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
+import { useRef, useState } from "react";
+import { toast } from "sonner";
 
 export type ContentItem = {
   id?: string;
@@ -31,6 +36,39 @@ export function DeputyContentItemManager({
   onChange,
   placeholder = {},
 }: DeputyContentItemManagerProps) {
+  const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [compressing, setCompressing] = useState(false);
+  const fileInputRefs = useRef<{ [key: number]: HTMLInputElement | null }>({});
+
+  const { execute: uploadImage } = useAction(uploadImageAction, {
+    onSuccess: ({ data }) => {
+      if (data?.status === "success" && data.data && uploadingIndex !== null) {
+        const updatedItems = [...items];
+        updatedItems[uploadingIndex] = {
+          ...updatedItems[uploadingIndex],
+          imageUrl: data.data,
+        };
+        onChange(updatedItems);
+        toast.success("تم رفع الصورة بنجاح!");
+        setUploadingIndex(null);
+        setUploadProgress(0);
+        setCompressing(false);
+      } else {
+        toast.error(data?.message || "فشل رفع الصورة");
+        setUploadingIndex(null);
+        setUploadProgress(0);
+        setCompressing(false);
+      }
+    },
+    onError: ({ error }) => {
+      toast.error(error.serverError || "فشل رفع الصورة");
+      setUploadingIndex(null);
+      setUploadProgress(0);
+      setCompressing(false);
+    },
+  });
+
   const addNewItem = () => {
     const newItem: ContentItem = {
       title: "",
@@ -52,12 +90,89 @@ export function DeputyContentItemManager({
 
   const removeItem = (index: number) => {
     const updatedItems = items.filter((_, i) => i !== index);
-    // Update display order
     const reorderedItems = updatedItems.map((item, i) => ({
       ...item,
       displayOrder: i,
     }));
     onChange(reorderedItems);
+  };
+
+  const removeImage = (index: number) => {
+    updateItem(index, "imageUrl", "");
+  };
+
+  const handleFileSelect = async (index: number, file: File) => {
+    if (!file) return;
+
+    // Validate file
+    const validation = validateImageFile(file, 5);
+    if (!validation.valid) {
+      toast.error(validation.error);
+      return;
+    }
+
+    setUploadingIndex(index);
+    setUploadProgress(0);
+
+    try {
+      // Show compression status
+      setCompressing(true);
+      setUploadProgress(10);
+      
+      const originalSize = formatFileSize(file.size);
+      
+      // Compress image if larger than 1MB
+      let fileToUpload = file;
+      if (file.size > 1024 * 1024) {
+        toast.info(`جاري ضغط الصورة (${originalSize})...`);
+        fileToUpload = await compressImage(file, 1, 1920);
+        const compressedSize = formatFileSize(fileToUpload.size);
+        toast.success(`تم ضغط الصورة من ${originalSize} إلى ${compressedSize}`);
+      }
+      
+      setCompressing(false);
+      setUploadProgress(30);
+
+      // Simulate progress for better UX
+      const progressInterval = setInterval(() => {
+        setUploadProgress((prev) => {
+          if (prev >= 90) {
+            clearInterval(progressInterval);
+            return 90;
+          }
+          return prev + 10;
+        });
+      }, 200);
+
+      const formData = new FormData();
+      formData.append("file", fileToUpload);
+
+      const item = items[index];
+      const fileName = item.title
+        ? `${item.title}-${Date.now()}`
+        : `image-${Date.now()}`;
+
+      uploadImage({
+        formData: formData as any,
+        fileName,
+        fileOptions: {
+          cacheControl: "3600",
+          upsert: false,
+        },
+      });
+
+      clearInterval(progressInterval);
+      setUploadProgress(100);
+    } catch (error) {
+      toast.error("فشل معالجة الصورة");
+      setUploadingIndex(null);
+      setUploadProgress(0);
+      setCompressing(false);
+    }
+  };
+
+  const triggerFileInput = (index: number) => {
+    fileInputRefs.current[index]?.click();
   };
 
   return (
@@ -133,44 +248,99 @@ export function DeputyContentItemManager({
                 />
               </div>
 
-              {/* Image URL Input */}
-              <div className="space-y-1.5">
-                <Label htmlFor={`item-${index}-image`} className="text-sm">
-                  رابط الصورة
-                </Label>
+              {/* Image Upload */}
+              <div className="space-y-2">
+                <Label className="text-sm">الصورة</Label>
                 
-                <div className="flex gap-2">
-                  <div className="flex-1">
+                {/* Hidden file input */}
+                <input
+                  type="file"
+                  ref={(el) => (fileInputRefs.current[index] = el)}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      handleFileSelect(index, file);
+                    }
+                  }}
+                  accept="image/*"
+                  className="hidden"
+                />
+
+                {/* Image preview or upload button */}
+                {item.imageUrl ? (
+                  <div className="relative inline-block">
+                    <img
+                      src={item.imageUrl}
+                      alt="Preview"
+                      className="w-full max-w-xs h-48 object-cover rounded-lg border"
+                      onError={(e) => {
+                        e.currentTarget.src = "";
+                        e.currentTarget.style.display = "none";
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-2 right-2 h-8 w-8"
+                      onClick={() => removeImage(index)}
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => triggerFileInput(index)}
+                      disabled={uploadingIndex === index}
+                      className="w-full max-w-xs"
+                    >
+                      {uploadingIndex === index ? (
+                        <>
+                          <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                          {compressing ? "جاري الضغط..." : `جاري الرفع... ${uploadProgress}%`}
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-4 h-4 ml-2" />
+                          رفع صورة من جهازك
+                        </>
+                      )}
+                    </Button>
+
+                    {/* Progress bar */}
+                    {uploadingIndex === index && (
+                      <div className="w-full max-w-xs bg-muted rounded-full h-2">
+                        <div
+                          className="bg-primary h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${uploadProgress}%` }}
+                        />
+                      </div>
+                    )}
+
+                    {/* Or divider */}
+                    <div className="flex items-center gap-2 max-w-xs">
+                      <div className="flex-1 border-t" />
+                      <span className="text-xs text-muted-foreground">أو</span>
+                      <div className="flex-1 border-t" />
+                    </div>
+
+                    {/* Manual URL input */}
                     <Input
-                      id={`item-${index}-image`}
+                      id={`item-${index}-image-url`}
                       value={item.imageUrl}
                       onChange={(e) => updateItem(index, "imageUrl", e.target.value)}
-                      placeholder={placeholder.image || "أدخل رابط الصورة..."}
+                      placeholder="أدخل رابط الصورة..."
                       dir="ltr"
+                      className="max-w-xs"
                     />
                   </div>
-
-                  {/* Image preview */}
-                  {item.imageUrl ? (
-                    <div className="w-16 h-16 border rounded overflow-hidden flex-shrink-0">
-                      <img
-                        src={item.imageUrl}
-                        alt="Preview"
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.currentTarget.style.display = "none";
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="w-16 h-16 border rounded flex items-center justify-center bg-muted flex-shrink-0">
-                      <ImageIcon className="w-6 h-6 text-muted-foreground" />
-                    </div>
-                  )}
-                </div>
+                )}
 
                 <p className="text-xs text-muted-foreground">
-                  أدخل رابط الصورة (URL) من الإنترنت
+                  يمكنك رفع صورة من جهازك (حد أقصى 5 ميجابايت، سيتم ضغطها تلقائياً) أو إدخال رابط صورة
                 </p>
               </div>
             </div>
