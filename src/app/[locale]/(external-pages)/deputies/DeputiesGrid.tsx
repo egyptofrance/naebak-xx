@@ -105,6 +105,29 @@ export default function DeputiesGrid({
 
   // Filter deputies
   const filteredDeputies = useMemo(() => {
+    // 🔍 DEBUG: Log all deputies with "حنان" in their name
+    const hananDeputies = deputies.filter(d => d.user?.full_name?.includes("حنان"));
+    console.log("🔍 [DEBUG] Total deputies:", deputies.length);
+    console.log("🔍 [DEBUG] Deputies with 'حنان':", hananDeputies.length);
+    console.log("🔍 [DEBUG] Hanan deputies:", hananDeputies.map(d => ({
+      name: d.user?.full_name,
+      status: d.deputy.deputy_status,
+      governorate: d.user?.governorate_id,
+      party: d.party?.id,
+      district: d.electoral_district?.id,
+      council: d.council?.id,
+      gender: d.deputy.gender
+    })));
+    console.log("🔍 [DEBUG] Current filters:", {
+      searchName,
+      governorateFilter,
+      partyFilter,
+      electoralDistrictFilter,
+      councilFilter,
+      statusFilters,
+      genderFilter
+    });
+    
     return deputies.filter((deputyData: DeputyData) => {
       // Name search filter
       if (searchName.trim() !== "") {
@@ -160,6 +183,12 @@ export default function DeputiesGrid({
       return true;
     });
   }, [deputies, searchName, governorateFilter, partyFilter, electoralDistrictFilter, councilFilter, statusFilters, genderFilter]);
+
+  // 🔍 DEBUG: Log filtered results
+  console.log("🔍 [DEBUG] Filtered deputies count:", filteredDeputies.length);
+  if (searchName.includes("حنان")) {
+    console.log("🔍 [DEBUG] Filtered Hanan deputies:", filteredDeputies.filter(d => d.user?.full_name?.includes("حنان")).map(d => d.user?.full_name));
+  }
 
   // Pagination
   const totalPages = Math.ceil(filteredDeputies.length / ITEMS_PER_PAGE);
