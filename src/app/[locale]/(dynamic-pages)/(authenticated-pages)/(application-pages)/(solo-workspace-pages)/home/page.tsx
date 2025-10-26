@@ -49,24 +49,10 @@ export default async function CitizenHomePage() {
     }
     // Fallback to governorate if electoral district is not set
     if (profile?.governorate_id) {
-      const match = deputy.electoral_district?.governorate_id === profile.governorate_id;
-      // Debug logging
-      if (deputies.indexOf(deputy) < 3) {
-        console.log(`Deputy ${deputies.indexOf(deputy)}:`, {
-          name: deputy.user?.full_name,
-          electoral_district_governorate: deputy.electoral_district?.governorate_id,
-          user_governorate: profile.governorate_id,
-          match
-        });
-      }
-      return match;
+      return deputy.electoral_district?.governorate_id === profile.governorate_id;
     }
     return false;
   });
-
-  console.log('Profile:', { governorate_id: profile?.governorate_id, electoral_district: profile?.electoral_district });
-  console.log('Total deputies:', deputies.length);
-  console.log('Filtered deputies:', myDeputies.length);
 
   // Get user's governorate and electoral district names
   const userGovernorate = governorates.find(g => g.id === profile?.governorate_id);
@@ -81,50 +67,46 @@ export default async function CitizenHomePage() {
             <h1 className="text-3xl font-bold mb-2">
               مرحباً، {profile?.full_name || "مواطن"}
             </h1>
-            <p className="text-muted-foreground">
-              {userElectoralDistrict ? (
-                <>
-                  نواب دائرتك الانتخابية: <span className="font-semibold text-foreground">{userElectoralDistrict.name}</span>
-                  {userGovernorate && (
-                    <> - <span className="font-semibold text-foreground">{userGovernorate.name_ar}</span></>
-                  )}
-                </>
-              ) : userGovernorate ? (
-                <>
-                  نواب محافظتك: <span className="font-semibold text-foreground">{userGovernorate.name_ar}</span>
-                </>
-              ) : (
-                "يرجى تحديث بياناتك في الإعدادات لعرض نواب دائرتك"
-              )}
-            </p>
+            <div className="space-y-2">
+              <p className="text-muted-foreground">
+                <span className="font-medium">المحافظة:</span>{" "}
+                <span className="font-semibold text-foreground">
+                  {userGovernorate ? userGovernorate.name_ar : "غير محددة"}
+                </span>
+              </p>
+              <p className="text-muted-foreground">
+                <span className="font-medium">الدائرة الانتخابية:</span>{" "}
+                <span className="font-semibold text-foreground">
+                  {userElectoralDistrict ? userElectoralDistrict.name : "غير محددة"}
+                </span>
+              </p>
+            </div>
           </div>
 
-          {/* Deputies Count */}
+          {/* Statistics Card */}
           {myDeputies.length > 0 && (
-            <div className="mb-6">
-              <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-lg">
-                <span className="text-2xl font-bold">{myDeputies.length}</span>
-                <span className="text-sm">
-                  {myDeputies.length === 1 ? "نائب" : myDeputies.length === 2 ? "نائبان" : "نواب"}
-                </span>
+            <div className="mb-6 bg-card border border-border rounded-lg p-6">
+              <h2 className="text-xl font-bold mb-4">إحصائيات النواب</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-primary/10 rounded-lg p-4 text-center">
+                  <div className="text-3xl font-bold text-primary mb-1">{myDeputies.length}</div>
+                  <div className="text-sm text-muted-foreground">
+                    {myDeputies.length === 1 ? "نائب" : myDeputies.length === 2 ? "نائبان" : "نواب"}
+                  </div>
+                </div>
+                <div className="bg-muted rounded-lg p-4 text-center">
+                  <div className="text-3xl font-bold mb-1">{userGovernorate?.name_ar || "-"}</div>
+                  <div className="text-sm text-muted-foreground">المحافظة</div>
+                </div>
+                <div className="bg-muted rounded-lg p-4 text-center">
+                  <div className="text-lg font-bold mb-1">
+                    {userElectoralDistrict ? userElectoralDistrict.name : "جميع الدوائر"}
+                  </div>
+                  <div className="text-sm text-muted-foreground">الدائرة الانتخابية</div>
+                </div>
               </div>
             </div>
           )}
-
-          {/* Debug Info */}
-          <div className="bg-yellow-100 border border-yellow-400 rounded-lg p-4 mb-6">
-            <h3 className="font-bold mb-2">Debug Info:</h3>
-            <pre className="text-xs text-left">
-              {JSON.stringify({
-                profile_governorate_id: profile?.governorate_id,
-                profile_electoral_district: profile?.electoral_district,
-                total_deputies: deputies.length,
-                filtered_deputies: myDeputies.length,
-                first_deputy_district_gov: deputies[0]?.electoral_district?.governorate_id,
-                first_deputy_name: deputies[0]?.user?.full_name
-              }, null, 2)}
-            </pre>
-          </div>
 
           {/* No Deputies Message */}
           {myDeputies.length === 0 && (
