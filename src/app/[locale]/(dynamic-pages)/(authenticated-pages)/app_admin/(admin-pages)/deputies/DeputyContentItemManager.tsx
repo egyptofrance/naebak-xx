@@ -5,10 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { uploadDeputyContentImageAction } from "@/data/deputy/content-upload";
-import { Plus, Trash2, Upload, Loader2, X } from "lucide-react";
+import { Plus, Trash2, Upload, Loader2, X, Image as ImageIcon } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
+import Image from "next/image";
 
 export type ContentItem = {
   id?: string;
@@ -36,6 +37,7 @@ export function DeputyContentItemManager({
   placeholder = {},
 }: DeputyContentItemManagerProps) {
   const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
+  const [previewUrls, setPreviewUrls] = useState<{ [key: number]: string }>({});
   const fileInputRefs = useRef<{ [key: number]: HTMLInputElement | null }>({});
 
   const { execute: uploadImage, isExecuting } = useAction(uploadDeputyContentImageAction, {
@@ -48,6 +50,13 @@ export function DeputyContentItemManager({
         };
         onChange(updatedItems);
         toast.success("تم رفع الصورة بنجاح");
+        
+        // Clear preview
+        setPreviewUrls(prev => {
+          const newPreviews = { ...prev };
+          delete newPreviews[uploadingIndex];
+          return newPreviews;
+        });
         setUploadingIndex(null);
       }
     },
@@ -57,7 +66,7 @@ export function DeputyContentItemManager({
     },
   });
 
-  const handleFileSelect = async (index: number, file: File) => {
+  const handleFileSelect = (index: number, file: File) => {
     // Validate file
     if (!file.type.startsWith('image/')) {
       toast.error("الرجاء اختيار ملف صورة");
@@ -69,29 +78,39 @@ export function DeputyContentItemManager({
       return;
     }
 
+    // Create preview
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64Data = reader.result as string;
+      setPreviewUrls(prev => ({ ...prev, [index]: base64Data }));
+    };
+    reader.onerror = () => {
+      toast.error("فشل قراءة الملف");
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleUpload = (index: number) => {
+    const file = fileInputRefs.current[index]?.files?.[0];
+    if (!file || !previewUrls[index]) return;
+
     setUploadingIndex(index);
 
-    try {
-      // Convert file to base64
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64Data = reader.result as string;
-        
-        // Upload to server
-        uploadImage({
-          fileData: base64Data,
-          fileName: file.name,
-          fileType: file.type,
-        });
-      };
-      reader.onerror = () => {
-        toast.error("فشل قراءة الملف");
-        setUploadingIndex(null);
-      };
-      reader.readAsDataURL(file);
-    } catch (error) {
-      toast.error("فشل معالجة الصورة");
-      setUploadingIndex(null);
+    uploadImage({
+      fileData: previewUrls[index],
+      fileName: file.name,
+      fileType: file.type,
+    });
+  };
+
+  const cancelPreview = (index: number) => {
+    setPreviewUrls(prev => {
+      const newPreviews = { ...prev };
+      delete newPreviews[index];
+      return newPreviews;
+    });
+    if (fileInputRefs.current[index]) {
+      fileInputRefs.current[index]!.value = '';
     }
   };
 
@@ -113,6 +132,13 @@ export function DeputyContentItemManager({
   const removeItem = (index: number) => {
     const updatedItems = items.filter((_, i) => i !== index);
     onChange(updatedItems);
+    
+    // Clean up preview
+    setPreviewUrls(prev => {
+      const newPreviews = { ...prev };
+      delete newPreviews[index];
+      return newPreviews;
+    });
   };
 
   const updateItem = (index: number, field: keyof ContentItem, value: string) => {
@@ -154,20 +180,27 @@ export function DeputyContentItemManager({
         {items.map((item, index) => (
           <div
             key={index}
-            className="p-4 border rounded-lg space-y-4 relative bg-card"
+            className="p-6 border rounded-lg space-y-4 bg-card"
           >
-            {/* Delete Button */}
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={() => removeItem(index)}
-              className="absolute top-2 left-2 h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
+            {/* Header with delete button */}
+            <div className="flex items-center justify-between pb-2 border-b">
+              <h3 className="text-sm font-medium text-muted-foreground">
+                العنصر {index + 1}
+              </h3>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => removeItem(index)}
+                className="h-8 gap-2 text-destructive hover:text-destructive hover:bg-destructive/10"
+              >
+                <Trash2 className="h-4 w-4" />
+                حذف
+              </Button>
+            </div>
 
-            <div className="space-y-1">
+            {/* Title */}
+            <div className="space-y-2">
               <Label className="text-sm">العنوان *</Label>
               <Input
                 placeholder={placeholder.title || "مثال: تحسين التعليم"}
@@ -177,7 +210,8 @@ export function DeputyContentItemManager({
               />
             </div>
 
-            <div className="space-y-1">
+            {/* Description */}
+            <div className="space-y-2">
               <Label className="text-sm">الوصف</Label>
               <Textarea
                 placeholder={
@@ -191,8 +225,8 @@ export function DeputyContentItemManager({
               />
             </div>
 
-            {/* Image Upload */}
-            <div className="space-y-2">
+            {/* Image Upload Section */}
+            <div className="space-y-3">
               <Label className="text-sm">الصورة</Label>
               
               {/* Hidden file input */}
@@ -211,63 +245,123 @@ export function DeputyContentItemManager({
                 className="hidden"
               />
 
-              {/* Image preview or upload button */}
-              {item.imageUrl ? (
-                <div className="relative inline-block">
-                  <img
-                    src={item.imageUrl}
-                    alt="معاينة"
-                    className="w-full max-w-md h-48 object-cover rounded-lg border"
-                  />
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="icon"
-                    onClick={() => removeImage(index)}
-                    className="absolute top-2 right-2 h-8 w-8"
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              ) : (
+              {/* Current uploaded image */}
+              {item.imageUrl && !previewUrls[index] && (
                 <div className="space-y-2">
-                  <Button
-                    type="button"
-                    variant="outline"
+                  <div className="relative w-full h-48 rounded-lg overflow-hidden border">
+                    <Image
+                      src={item.imageUrl}
+                      alt="الصورة الحالية"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => triggerFileInput(index)}
+                      className="flex-1 gap-2"
+                    >
+                      <Upload className="h-4 w-4" />
+                      تغيير الصورة
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeImage(index)}
+                      className="gap-2 text-destructive hover:text-destructive"
+                    >
+                      <X className="h-4 w-4" />
+                      حذف الصورة
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Preview before upload */}
+              {previewUrls[index] && (
+                <div className="space-y-3">
+                  <div className="relative w-full h-48 rounded-lg overflow-hidden border">
+                    <Image
+                      src={previewUrls[index]}
+                      alt="معاينة الصورة"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      onClick={() => handleUpload(index)}
+                      disabled={uploadingIndex === index && isExecuting}
+                      className="flex-1 gap-2"
+                    >
+                      {uploadingIndex === index && isExecuting ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          جاري الرفع...
+                        </>
+                      ) : (
+                        <>
+                          <ImageIcon className="h-4 w-4" />
+                          رفع الصورة
+                        </>
+                      )}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => cancelPreview(index)}
+                      disabled={uploadingIndex === index && isExecuting}
+                    >
+                      إلغاء
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Upload area (when no image) */}
+              {!item.imageUrl && !previewUrls[index] && (
+                <div className="space-y-3">
+                  <div
                     onClick={() => triggerFileInput(index)}
-                    disabled={uploadingIndex === index && isExecuting}
-                    className="w-full gap-2"
+                    className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors hover:border-primary hover:bg-primary/5"
                   >
-                    {uploadingIndex === index && isExecuting ? (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        جاري الرفع...
-                      </>
-                    ) : (
-                      <>
-                        <Upload className="h-4 w-4" />
-                        رفع صورة من جهازك
-                      </>
-                    )}
-                  </Button>
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="p-3 rounded-full bg-muted">
+                        <Upload className="h-6 w-6 text-muted-foreground" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">
+                          اسحب وأفلت الصورة هنا
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          أو اضغط للاختيار من جهازك
+                        </p>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        الحد الأقصى: 5 ميجابايت | JPG, PNG, WebP
+                      </p>
+                    </div>
+                  </div>
 
                   <div className="relative flex items-center">
                     <div className="flex-grow border-t border-muted"></div>
-                    <span className="flex-shrink mx-4 text-muted-foreground text-sm">
-                      أو
+                    <span className="flex-shrink mx-4 text-muted-foreground text-xs">
+                      أو أدخل رابط الصورة
                     </span>
                     <div className="flex-grow border-t border-muted"></div>
                   </div>
 
                   <Input
-                    placeholder={placeholder.image || "أدخل رابط الصورة..."}
+                    placeholder={placeholder.image || "https://example.com/image.jpg"}
                     value={item.imageUrl}
                     onChange={(e) => updateItem(index, "imageUrl", e.target.value)}
                     className="text-right"
                   />
-                  <p className="text-xs text-muted-foreground">
-                    يمكنك رفع صورة من جهازك (حد أقصى 5 ميجابايت) أو إدخال رابط صورة
-                  </p>
                 </div>
               )}
             </div>
