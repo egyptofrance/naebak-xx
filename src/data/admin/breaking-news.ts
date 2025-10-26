@@ -57,7 +57,7 @@ export const createBreakingNewsAction = adminActionClient
       content: input.content,
       display_order: input.displayOrder,
       is_active: input.isActive,
-      created_by: ctx.user.id,
+      created_by: ctx.userId,
     });
 
     if (error) {
