@@ -25,7 +25,7 @@ import { Suspense } from "react";
 
 const adminSections = [
   {
-    title: "إدارة النظام",
+    title: "القائمة الرئيسية",
     links: [
       {
         label: "لوحة التحكم",
@@ -33,13 +33,23 @@ const adminSections = [
         icon: <FileLineChart className="h-5 w-5" />,
       },
       {
-        label: "بيانات النواب",
-        href: `/app_admin/deputies`,
+        label: "قائمة النواب (عامة)",
+        href: `/deputies`,
         icon: <UserCheck className="h-5 w-5" />,
       },
       {
-        label: "قائمة النواب (عامة)",
-        href: `/deputies`,
+        label: "إدارة الشكاوى",
+        href: `/manager-complaints`,
+        icon: <MessageSquareWarning className="h-5 w-5" />,
+      },
+    ],
+  },
+  {
+    title: "إدارة النظام",
+    links: [
+      {
+        label: "بيانات النواب",
+        href: `/app_admin/deputies`,
         icon: <UserCheck className="h-5 w-5" />,
       },
       {
@@ -57,11 +67,6 @@ const adminSections = [
   {
     title: "إدارة المحتوى",
     links: [
-      {
-        label: "إدارة الشكاوى",
-        href: `/manager-complaints`,
-        icon: <MessageSquareWarning className="h-5 w-5" />,
-      },
       {
         label: "إدارة الأحزاب",
         href: `/app_admin/parties`,
