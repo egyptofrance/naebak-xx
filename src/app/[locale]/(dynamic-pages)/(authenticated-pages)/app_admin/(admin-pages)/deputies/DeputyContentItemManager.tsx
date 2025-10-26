@@ -250,18 +250,19 @@ export function DeputyContentItemManager({
                 />
 
                 <div className="flex gap-2">
-                  {/* Upload button */}
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      console.error("[DEBUG] Button clicked! Index:", index);
-                      alert(`Button clicked! Index: ${index}`);
-                      triggerFileInput(index);
+                  {/* Upload button - using label for direct file input access */}
+                  <label
+                    htmlFor={`file-input-${index}`}
+                    className={`inline-flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium transition-colors border rounded-md cursor-pointer ${
+                      uploadingIndex === index
+                        ? "opacity-50 cursor-not-allowed bg-muted"
+                        : "hover:bg-accent hover:text-accent-foreground"
+                    }`}
+                    onClick={(e) => {
+                      if (uploadingIndex === index) {
+                        e.preventDefault();
+                      }
                     }}
-                    disabled={uploadingIndex === index}
-                    className="gap-2"
                   >
                     {uploadingIndex === index ? (
                       <>
@@ -274,7 +275,7 @@ export function DeputyContentItemManager({
                         رفع صورة
                       </>
                     )}
-                  </Button>
+                  </label>
 
                   {/* Image preview */}
                   {item.imageUrl && (
