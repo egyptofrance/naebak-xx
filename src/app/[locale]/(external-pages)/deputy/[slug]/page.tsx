@@ -85,9 +85,10 @@ export default async function DeputyPage({ params }: PageProps) {
   };
 
   const noData = "لا توجد بيانات متوفرة";
+  const isRTL = locale === "ar";
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" dir={isRTL ? "rtl" : "ltr"}>
       {/* Banner Image */}
       <BannerImage src={displayBanner} alt="Banner" />
 
@@ -318,32 +319,35 @@ export default async function DeputyPage({ params }: PageProps) {
           {/* Electoral Program Card */}
           {((electoralPrograms && electoralPrograms.length > 0) || deputy.electoral_program) && (
             <div className="bg-card p-6 rounded-lg shadow-sm border">
-              <div className="flex items-center gap-2 mb-4">
+              <div className="flex items-center gap-2 mb-6">
                 <Target className="h-5 w-5 text-primary" />
-                <h2 className="text-xl font-bold">البرنامج الانتخابي</h2>
+                <h2 className="text-2xl font-bold">البرنامج الانتخابي</h2>
               </div>
               {electoralPrograms && electoralPrograms.length > 0 ? (
-                <div className="space-y-6">
-                  {electoralPrograms.map((item: any) => (
-                    <div key={item.id} className="border-b pb-6 last:border-b-0 last:pb-0">
-                      <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+                <div className="space-y-8">
+                  {electoralPrograms.map((item: any, index: number) => (
+                    <div key={item.id} className="border-b pb-8 last:border-b-0 last:pb-0">
+                      <h3 className="text-xl font-bold mb-3 text-primary">{item.title}</h3>
                       {item.description && (
-                        <p className="text-muted-foreground mb-3 whitespace-pre-wrap">
+                        <p className="text-base leading-relaxed whitespace-pre-wrap mb-4">
                           {item.description}
                         </p>
                       )}
                       {item.image_url && (
-                        <img
-                          src={item.image_url}
-                          alt={item.title}
-                          className="w-full max-w-2xl rounded-lg object-cover"
-                        />
+                        <div className="mt-4">
+                          <img
+                            src={item.image_url}
+                            alt={item.title}
+                            className="w-full rounded-lg object-cover shadow-md"
+                            style={{ maxHeight: '500px' }}
+                          />
+                        </div>
                       )}
                     </div>
                   ))}
                 </div>
               ) : deputy.electoral_program ? (
-                <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                <div className="text-base leading-relaxed whitespace-pre-wrap">
                   {deputy.electoral_program}
                 </div>
               ) : null}
@@ -353,32 +357,35 @@ export default async function DeputyPage({ params }: PageProps) {
           {/* Achievements Card */}
           {((achievements && achievements.length > 0) || deputy.achievements) && (
             <div className="bg-card p-6 rounded-lg shadow-sm border">
-              <div className="flex items-center gap-2 mb-4">
+              <div className="flex items-center gap-2 mb-6">
                 <Trophy className="h-5 w-5 text-primary" />
-                <h2 className="text-xl font-bold">الإنجازات</h2>
+                <h2 className="text-2xl font-bold">الإنجازات</h2>
               </div>
               {achievements && achievements.length > 0 ? (
-                <div className="space-y-6">
+                <div className="space-y-8">
                   {achievements.map((item: any) => (
-                    <div key={item.id} className="border-b pb-6 last:border-b-0 last:pb-0">
-                      <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+                    <div key={item.id} className="border-b pb-8 last:border-b-0 last:pb-0">
+                      <h3 className="text-xl font-bold mb-3 text-primary">{item.title}</h3>
                       {item.description && (
-                        <p className="text-muted-foreground mb-3 whitespace-pre-wrap">
+                        <p className="text-base leading-relaxed whitespace-pre-wrap mb-4">
                           {item.description}
                         </p>
                       )}
                       {item.image_url && (
-                        <img
-                          src={item.image_url}
-                          alt={item.title}
-                          className="w-full max-w-2xl rounded-lg object-cover"
-                        />
+                        <div className="mt-4">
+                          <img
+                            src={item.image_url}
+                            alt={item.title}
+                            className="w-full rounded-lg object-cover shadow-md"
+                            style={{ maxHeight: '500px' }}
+                          />
+                        </div>
                       )}
                     </div>
                   ))}
                 </div>
               ) : deputy.achievements ? (
-                <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                <div className="text-base leading-relaxed whitespace-pre-wrap">
                   {deputy.achievements}
                 </div>
               ) : null}
@@ -388,37 +395,44 @@ export default async function DeputyPage({ params }: PageProps) {
           {/* Events Card */}
           {((events && events.length > 0) || deputy.events) && (
             <div className="bg-card p-6 rounded-lg shadow-sm border">
-              <div className="flex items-center gap-2 mb-4">
+              <div className="flex items-center gap-2 mb-6">
                 <Calendar className="h-5 w-5 text-primary" />
-                <h2 className="text-xl font-bold">الفعاليات والمناسبات</h2>
+                <h2 className="text-2xl font-bold">الفعاليات والمناسبات</h2>
               </div>
               {events && events.length > 0 ? (
-                <div className="space-y-6">
+                <div className="space-y-8">
                   {events.map((item: any) => (
-                    <div key={item.id} className="border-b pb-6 last:border-b-0 last:pb-0">
-                      <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+                    <div key={item.id} className="border-b pb-8 last:border-b-0 last:pb-0">
+                      <h3 className="text-xl font-bold mb-2 text-primary">{item.title}</h3>
                       {item.event_date && (
-                        <p className="text-sm text-muted-foreground mb-2">
-                          التاريخ: {new Date(item.event_date).toLocaleDateString('ar-EG')}
+                        <p className="text-sm font-medium text-muted-foreground mb-3">
+                          📅 التاريخ: {new Date(item.event_date).toLocaleDateString('ar-EG', { 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                          })}
                         </p>
                       )}
                       {item.description && (
-                        <p className="text-muted-foreground mb-3 whitespace-pre-wrap">
+                        <p className="text-base leading-relaxed whitespace-pre-wrap mb-4">
                           {item.description}
                         </p>
                       )}
                       {item.image_url && (
-                        <img
-                          src={item.image_url}
-                          alt={item.title}
-                          className="w-full max-w-2xl rounded-lg object-cover"
-                        />
+                        <div className="mt-4">
+                          <img
+                            src={item.image_url}
+                            alt={item.title}
+                            className="w-full rounded-lg object-cover shadow-md"
+                            style={{ maxHeight: '500px' }}
+                          />
+                        </div>
                       )}
                     </div>
                   ))}
                 </div>
               ) : deputy.events ? (
-                <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                <div className="text-base leading-relaxed whitespace-pre-wrap">
                   {deputy.events}
                 </div>
               ) : null}
