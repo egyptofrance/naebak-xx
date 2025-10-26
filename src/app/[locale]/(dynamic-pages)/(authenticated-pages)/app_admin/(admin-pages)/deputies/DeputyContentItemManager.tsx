@@ -91,7 +91,11 @@ export function DeputyContentItemManager({
   };
 
   const handleFileSelect = async (index: number, file: File) => {
-    if (!file) return;
+    console.error("[DeputyContentItemManager] handleFileSelect called with file:", file.name, file.size);
+    if (!file) {
+      console.error("[DeputyContentItemManager] ERROR: No file provided!");
+      return;
+    }
 
     // Validate file type
     if (!file.type.startsWith("image/")) {
@@ -127,7 +131,15 @@ export function DeputyContentItemManager({
   };
 
   const triggerFileInput = (index: number) => {
-    fileInputRefs.current[index]?.click();
+    console.error("[DeputyContentItemManager] triggerFileInput called for index:", index);
+    const inputElement = fileInputRefs.current[index];
+    console.error("[DeputyContentItemManager] Input element:", inputElement);
+    if (inputElement) {
+      inputElement.click();
+      console.error("[DeputyContentItemManager] File input clicked");
+    } else {
+      console.error("[DeputyContentItemManager] ERROR: Input element not found!");
+    }
   };
 
   return (
