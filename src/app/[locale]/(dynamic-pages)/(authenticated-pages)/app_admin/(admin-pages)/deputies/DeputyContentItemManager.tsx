@@ -131,14 +131,30 @@ export function DeputyContentItemManager({
   };
 
   const triggerFileInput = (index: number) => {
-    console.error("[DeputyContentItemManager] triggerFileInput called for index:", index);
+    alert(`triggerFileInput called! Index: ${index}`);
+    console.error("[DEBUG] triggerFileInput called for index:", index);
+    console.error("[DEBUG] Looking for element with id:", `file-input-${index}`);
+    
     const inputElement = document.getElementById(`file-input-${index}`) as HTMLInputElement;
-    console.error("[DeputyContentItemManager] Input element:", inputElement);
+    console.error("[DEBUG] Input element found:", inputElement);
+    console.error("[DEBUG] Input element type:", inputElement?.type);
+    console.error("[DEBUG] Input element tagName:", inputElement?.tagName);
+    
     if (inputElement) {
-      inputElement.click();
-      console.error("[DeputyContentItemManager] File input clicked");
+      alert("Input element found! Clicking now...");
+      try {
+        inputElement.click();
+        console.error("[DEBUG] File input clicked successfully");
+        alert("Click executed!");
+      } catch (error) {
+        console.error("[DEBUG] ERROR clicking:", error);
+        alert(`Error clicking: ${error}`);
+      }
     } else {
-      console.error("[DeputyContentItemManager] ERROR: Input element not found!");
+      alert("ERROR: Input element not found!");
+      console.error("[DEBUG] ERROR: Input element not found!");
+      console.error("[DEBUG] All elements with file-input prefix:", 
+        Array.from(document.querySelectorAll('[id^="file-input-"]')).map(el => el.id));
     }
   };
 
@@ -239,7 +255,11 @@ export function DeputyContentItemManager({
                     type="button"
                     variant="outline"
                     size="sm"
-                    onClick={() => triggerFileInput(index)}
+                    onClick={() => {
+                      console.error("[DEBUG] Button clicked! Index:", index);
+                      alert(`Button clicked! Index: ${index}`);
+                      triggerFileInput(index);
+                    }}
                     disabled={uploadingIndex === index}
                     className="gap-2"
                   >
