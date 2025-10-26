@@ -49,11 +49,6 @@ const adminSections = [
         href: `/app_admin/breaking-news`,
         icon: <Newspaper className="h-5 w-5" />,
       },
-      {
-        label: "إدارة البانر",
-        href: `/app_admin/banner`,
-        icon: <ImageIcon className="h-5 w-5" />,
-      },
     ],
   },
   {
@@ -88,6 +83,11 @@ const adminSections = [
         label: "إدارة المجالس",
         href: `/app_admin/councils`,
         icon: <Building2 className="h-5 w-5" />,
+      },
+      {
+        label: "إدارة البانر",
+        href: `/app_admin/banner`,
+        icon: <ImageIcon className="h-5 w-5" />,
       },
     ],
   },
