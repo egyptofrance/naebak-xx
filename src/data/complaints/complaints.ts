@@ -51,198 +51,195 @@ const createComplaintSchema = z.object({
  */
 export const createComplaintAction = authActionClient
   .schema(createComplaintSchema)
-  .action(async ({ parsedInput, ctx: { userId } }) => {
-    const supabaseClient = await supabaseClientBasedOnUserRole();
+  .action(async ({ parsedInput: input, ctx }) => {
+    const supabase = await createSupabaseUserServerComponentClient();
+    const userId = ctx.userId;
 
-    const { data, error } = await supabaseClient
+    const { data, error } = await supabase
       .from("complaints")
       .insert({
-        citizen_id: userId,
-        title: parsedInput.title,
-        description: parsedInput.description,
-        category: parsedInput.category,
-        status: "new",
-        priority: "medium",
-        governorate: parsedInput.governorate,
-        district: parsedInput.district,
-        address: parsedInput.address,
-        location_lat: parsedInput.location_lat,
-        location_lng: parsedInput.location_lng,
-        citizen_phone: parsedInput.citizen_phone,
-        citizen_email: parsedInput.citizen_email,
-        is_public: parsedInput.is_public || false,
+        user_id: userId,
+        title: input.title,
+        description: input.description,
+        category: input.category,
+        governorate: input.governorate,
+        district: input.district,
+        address: input.address,
+        location_lat: input.location_lat,
+        location_lng: input.location_lng,
+        citizen_phone: input.citizen_phone,
+        citizen_email: input.citizen_email,
+        is_public: input.is_public || false,
+        status: "pending",
       })
-      .select("*")
+      .select()
       .single();
 
     if (error) {
-      return {
-        status: "error",
-        message: error.message,
-      };
+      throw new Error(`Failed to create complaint: ${error.message}`);
     }
 
     revalidatePath("/complaints");
-    revalidatePath("/app_admin/complaints");
-    revalidatePath("/manager-complaints");
-
-    return {
-      status: "success",
-      data,
-    };
+    return { success: true, complaint: data };
   });
 
-
-
 /**
- * Get complaints for the current user
+ * Get all complaints for the current user
  */
-export async function getMyComplaints() {
-  const supabaseClient = await supabaseClientBasedOnUserRole();
-  const userType = await serverGetUserType();
-  const { data: userData } = await supabaseClient.auth.getUser();
-  const userId = userData.user?.id;
-
-  if (!userId) {
-    return { data: [], error: "User not authenticated" };
-  }
-
-  let query = supabaseClient
-    .from("complaints")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  // Filter based on user type
-  if (userType === userRoles.USER) {
-    // Citizens see only their own complaints
-    query = query.eq("citizen_id", userId);
-  }
-  // Managers and Admins see all complaints (no filter needed)
-
-  const { data, error } = await query;
-
-  return { data: data || [], error: error?.message };
-}
-
-
-
-/**
- * Get complaints assigned to deputy
- */
-export async function getDeputyComplaints() {
-  const supabaseClient = await supabaseClientBasedOnUserRole();
-  const { data: userData } = await supabaseClient.auth.getUser();
-  const userId = userData.user?.id;
-
-  if (!userId) {
-    return { data: [], error: "User not authenticated" };
-  }
-
-  // First, get the deputy_profile_id for this user
-  const { data: deputyProfile } = await supabaseClient
-    .from("deputy_profiles")
-    .select("id")
-    .eq("user_id", userId)
-    .single();
-
-  if (!deputyProfile) {
-    return { data: [], error: "Deputy profile not found" };
-  }
-
-  // Then get complaints assigned to this deputy_profile_id
-  const { data, error } = await supabaseClient
-    .from("complaints")
-    .select("*")
-    .eq("assigned_deputy_id", deputyProfile.id)
-    .order("created_at", { ascending: false });
-
-  return { data: data || [], error: error?.message };
-}
-
-
-
-/**
- * Get all complaints for managers and admins
- */
-export async function getAllComplaints() {
+export async function getUserComplaints(userId: string) {
   const supabase = await createSupabaseUserServerComponentClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  
-  if (!user) {
-    return { data: [], error: "User not authenticated" };
-  }
-
-  // Check if user is admin or manager
-  const isAdmin = isSupabaseUserAppAdmin(user);
-  const userType = await serverGetUserType();
-  const isManager = userType === userRoles.MANAGER;
-
-  // Only managers and admins can access all complaints
-  if (!isAdmin && !isManager) {
-    return { data: [], error: "Unauthorized access" };
-  }
 
   const { data, error } = await supabase
     .from("complaints")
-    .select("*")
+    .select(`
+      *,
+      complaint_assignments(
+        deputy_id,
+        assigned_at,
+        deputy_profiles(
+          id,
+          user_profiles(
+            full_name
+          )
+        )
+      )
+    `)
+    .eq("user_id", userId)
     .order("created_at", { ascending: false });
 
-  return { data: data || [], error: error?.message };
+  if (error) {
+    return { data: [], error: error.message };
+  }
+
+  return { data, error: null };
 }
 
+/**
+ * Get all complaints (Admin/Manager only)
+ */
+export async function getAllComplaints(filters?: {
+  status?: string;
+  category?: string;
+  governorate?: string;
+  priority?: string;
+}) {
+  const supabase = await createSupabaseUserServerComponentClient();
 
+  let query = supabase
+    .from("complaints")
+    .select(`
+      *,
+      user_profiles(
+        full_name,
+        email_readonly
+      ),
+      complaint_assignments(
+        deputy_id,
+        assigned_at,
+        deputy_profiles(
+          id,
+          user_profiles(
+            full_name
+          )
+        )
+      )
+    `);
+
+  if (filters?.status && filters.status !== "all") {
+    query = query.eq("status", filters.status);
+  }
+  if (filters?.category && filters.category !== "all") {
+    query = query.eq("category", filters.category);
+  }
+  if (filters?.governorate && filters.governorate !== "all") {
+    query = query.eq("governorate", filters.governorate);
+  }
+  if (filters?.priority && filters.priority !== "all") {
+    query = query.eq("priority", filters.priority);
+  }
+
+  const { data, error } = await query.order("created_at", { ascending: false });
+
+  if (error) {
+    return { data: [], error: error.message };
+  }
+
+  return { data, error: null };
+}
 
 /**
- * Assign a complaint to one or more deputies
+ * Get complaints assigned to a deputy
  */
-export async function assignComplaintToDeputy(
-  complaintId: string,
-  deputyIds: string | string[], // Support single or multiple deputies
-  assignedBy: string
-) {
-  // Use admin client for privileged operations
-  
-  // Convert to array if single ID
-  const deputyIdsArray = Array.isArray(deputyIds) ? deputyIds : [deputyIds];
-  
-  // For backward compatibility, set the first deputy as the primary assigned deputy
-  const primaryDeputyId = deputyIdsArray[0];
+export async function getDeputyComplaints(deputyId: string) {
+  const supabase = await createSupabaseUserServerComponentClient();
 
-  // Update complaint with primary deputy
-  const { error: updateError } = await supabaseAdminClient
+  const { data, error } = await supabase
+    .from("complaint_assignments")
+    .select(`
+      *,
+      complaints(
+        *,
+        user_profiles(
+          full_name,
+          email_readonly
+        )
+      )
+    `)
+    .eq("deputy_id", deputyId)
+    .order("assigned_at", { ascending: false });
+
+  if (error) {
+    return { data: [], error: error.message };
+  }
+
+  return { data, error: null };
+}
+
+/**
+ * Get a single complaint by ID
+ */
+export async function getComplaintById(complaintId: string) {
+  const supabase = await createSupabaseUserServerComponentClient();
+
+  const { data, error } = await supabase
     .from("complaints")
-    .update({
-      assigned_deputy_id: primaryDeputyId,
-      assigned_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", complaintId);
+    .select(`
+      *,
+      user_profiles(
+        full_name,
+        email_readonly
+      ),
+      complaint_assignments(
+        deputy_id,
+        assigned_at,
+        deputy_profiles(
+          id,
+          user_profiles(
+            full_name
+          )
+        )
+      ),
+      complaint_comments(
+        *,
+        user_profiles(
+          full_name
+        )
+      ),
+      complaint_history(
+        *,
+        user_profiles(
+          full_name
+        )
+      )
+    `)
+    .eq("id", complaintId)
+    .single();
 
-  if (updateError) {
-    return { success: false, error: updateError.message };
+  if (error) {
+    return { data: null, error: error.message };
   }
 
-  // Log action for each deputy
-  const actionInserts = deputyIdsArray.map((deputyId) => ({
-    complaint_id: complaintId,
-    action_type: "assignment" as const,
-    performed_by: assignedBy,
-    new_value: deputyId,
-    comment: deputyIdsArray.length > 1 ? `تم إسناد الشكوى لـ ${deputyIdsArray.length} نواب` : null,
-  }));
-
-  const { error: actionError } = await supabaseAdminClient
-    .from("complaint_actions")
-    .insert(actionInserts);
-
-  if (actionError) {
-    console.error("Failed to log action:", actionError);
-  }
-
-  revalidatePath("/manager-complaints");
-  revalidatePath("/deputy-complaints");
-
-  return { success: true, assignedCount: deputyIdsArray.length };
+  return { data, error: null };
 }
 
 /**
@@ -250,74 +247,36 @@ export async function assignComplaintToDeputy(
  */
 export async function updateComplaintStatus(
   complaintId: string,
-  newStatus: string,
-  userId: string,
-  comment?: string
+  status: string,
+  userId: string
 ) {
-  // Use admin client for privileged operations
+  const supabase = await createSupabaseUserServerComponentClient();
 
-  const updateData: any = {
-    status: newStatus,
-    updated_at: new Date().toISOString(),
-  };
-
-  // Set timestamp based on status
-  if (newStatus === "accepted") {
-    updateData.accepted_at = new Date().toISOString();
-  } else if (newStatus === "rejected") {
-    updateData.rejected_at = new Date().toISOString();
-  } else if (newStatus === "resolved") {
-    updateData.resolved_at = new Date().toISOString();
-  } else if (newStatus === "closed") {
-    updateData.closed_at = new Date().toISOString();
-  }
-
-  // Update complaint
-  const { error: updateError } = await supabaseAdminClient
+  // Update complaint status
+  const { error: updateError } = await supabase
     .from("complaints")
-    .update(updateData)
+    .update({ status, updated_at: new Date().toISOString() })
     .eq("id", complaintId);
 
   if (updateError) {
     return { success: false, error: updateError.message };
   }
 
-  // Log action
-  const { error: actionError } = await supabaseAdminClient
-    .from("complaint_actions")
+  // Add to history
+  const { error: historyError } = await supabase
+    .from("complaint_history")
     .insert({
       complaint_id: complaintId,
-      action_type: "status_change",
-      performed_by: userId,
-      new_value: newStatus,
-      comment: comment || null,
+      user_id: userId,
+      action: "status_changed",
+      details: `Status changed to ${status}`,
     });
 
-  if (actionError) {
-    console.error("Failed to log action:", actionError);
+  if (historyError) {
+    return { success: false, error: historyError.message };
   }
 
-  // Grant points to deputy if complaint is resolved
-  if (newStatus === "resolved") {
-    // Get complaint to find assigned deputy
-    const { data: complaint } = await supabaseAdminClient
-      .from("complaints")
-      .select("assigned_deputy_id")
-      .eq("id", complaintId)
-      .single();
-
-    if (complaint?.assigned_deputy_id) {
-      const pointsResult = await grantPointsToDeputy(complaint.assigned_deputy_id, 10);
-      if (!pointsResult.success) {
-        console.error("Failed to grant points:", pointsResult.error);
-      }
-    }
-  }
-
-  revalidatePath("/manager-complaints");
-  revalidatePath("/deputy-complaints");
-  revalidatePath("/complaints");
-
+  revalidatePath(`/complaints/${complaintId}`);
   return { success: true };
 }
 
@@ -326,16 +285,144 @@ export async function updateComplaintStatus(
  */
 export async function updateComplaintPriority(
   complaintId: string,
-  newPriority: string,
+  priority: string,
   userId: string
 ) {
-  // Use admin client for privileged operations
+  const supabase = await createSupabaseUserServerComponentClient();
+
+  // Update complaint priority
+  const { error: updateError } = await supabase
+    .from("complaints")
+    .update({ priority, updated_at: new Date().toISOString() })
+    .eq("id", complaintId);
+
+  if (updateError) {
+    return { success: false, error: updateError.message };
+  }
+
+  // Add to history
+  const { error: historyError } = await supabase
+    .from("complaint_history")
+    .insert({
+      complaint_id: complaintId,
+      user_id: userId,
+      action: "priority_changed",
+      details: `Priority changed to ${priority}`,
+    });
+
+  if (historyError) {
+    return { success: false, error: historyError.message };
+  }
+
+  revalidatePath(`/complaints/${complaintId}`);
+  return { success: true };
+}
+
+/**
+ * Assign complaint to deputy/deputies
+ */
+export async function assignComplaintToDeputy(
+  complaintId: string,
+  deputyIds: string[],
+  userId: string
+) {
+  const supabase = await createSupabaseUserServerComponentClient();
+
+  // Remove existing assignments
+  const { error: deleteError } = await supabase
+    .from("complaint_assignments")
+    .delete()
+    .eq("complaint_id", complaintId);
+
+  if (deleteError) {
+    return { success: false, error: deleteError.message };
+  }
+
+  // Add new assignments
+  const assignments = deputyIds.map((deputyId) => ({
+    complaint_id: complaintId,
+    deputy_id: deputyId,
+  }));
+
+  const { error: insertError } = await supabase
+    .from("complaint_assignments")
+    .insert(assignments);
+
+  if (insertError) {
+    return { success: false, error: insertError.message };
+  }
+
+  // Update complaint status to 'assigned'
+  const { error: updateError } = await supabase
+    .from("complaints")
+    .update({ status: "assigned", updated_at: new Date().toISOString() })
+    .eq("id", complaintId);
+
+  if (updateError) {
+    return { success: false, error: updateError.message };
+  }
+
+  // Add to history
+  const { error: historyError } = await supabase
+    .from("complaint_history")
+    .insert({
+      complaint_id: complaintId,
+      user_id: userId,
+      action: "assigned",
+      details: `Assigned to ${deputyIds.length} deputy/deputies`,
+    });
+
+  if (historyError) {
+    return { success: false, error: historyError.message };
+  }
+
+  revalidatePath(`/complaints/${complaintId}`);
+  return { success: true };
+}
+
+/**
+ * Add comment to complaint
+ */
+export async function addComplaintComment(
+  complaintId: string,
+  comment: string,
+  userId: string
+) {
+  const supabase = await createSupabaseUserServerComponentClient();
+
+  const { error } = await supabase
+    .from("complaint_comments")
+    .insert({
+      complaint_id: complaintId,
+      user_id: userId,
+      comment,
+    });
+
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  revalidatePath(`/complaints/${complaintId}`);
+  return { success: true };
+}
+
+/**
+ * Close complaint
+ */
+export async function closeComplaint(
+  complaintId: string,
+  resolution: string,
+  userId: string
+) {
+  const supabase = await createSupabaseUserServerComponentClient();
 
   // Update complaint
-  const { error: updateError } = await supabaseAdminClient
+  const { error: updateError } = await supabase
     .from("complaints")
     .update({
-      priority: newPriority as "low" | "medium" | "high" | "urgent",
+      status: "resolved",
+      resolution,
+      resolved_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     })
     .eq("id", complaintId);
@@ -344,106 +431,39 @@ export async function updateComplaintPriority(
     return { success: false, error: updateError.message };
   }
 
-  // Log action
-  const { error: actionError } = await supabaseAdminClient
-    .from("complaint_actions")
+  // Add to history
+  const { error: historyError } = await supabase
+    .from("complaint_history")
     .insert({
       complaint_id: complaintId,
-      action_type: "priority_change",
-      performed_by: userId,
-      new_value: newPriority,
+      user_id: userId,
+      action: "resolved",
+      details: resolution,
     });
 
-  if (actionError) {
-    console.error("Failed to log action:", actionError);
+  if (historyError) {
+    return { success: false, error: historyError.message };
   }
 
-  revalidatePath("/manager-complaints");
-  revalidatePath("/deputy-complaints");
+  // Grant points to assigned deputies
+  const { data: assignments } = await supabase
+    .from("complaint_assignments")
+    .select("deputy_id")
+    .eq("complaint_id", complaintId);
 
-  return { success: true };
-}
-
-
-
-
-/**
- * Add a comment to a complaint
- */
-export async function addComplaintComment(
-  complaintId: string,
-  userId: string,
-  comment: string
-) {
-  // Log action with comment
-  const { error: actionError } = await supabaseAdminClient
-    .from("complaint_actions")
-    .insert({
-      complaint_id: complaintId,
-      action_type: "comment",
-      performed_by: userId,
-      comment: comment,
-    });
-
-  if (actionError) {
-    return { success: false, error: actionError.message };
+  if (assignments && assignments.length > 0) {
+    for (const assignment of assignments) {
+      await grantPointsToDeputy(assignment.deputy_id, 10);
+    }
   }
 
-  // Update complaint timestamp
-  const { error: updateError } = await supabaseAdminClient
-    .from("complaints")
-    .update({
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", complaintId);
-
-  if (updateError) {
-    console.error("Failed to update complaint timestamp:", updateError);
-  }
-
-  revalidatePath("/manager-complaints");
-  revalidatePath("/deputy-complaints");
-  revalidatePath("/complaints");
-
+  revalidatePath(`/complaints/${complaintId}`);
   return { success: true };
 }
 
 /**
- * Get complaint details with action history
- */
-export async function getComplaintDetails(complaintId: string) {
-  const supabaseClient = await supabaseClientBasedOnUserRole();
-
-  // Get complaint
-  const { data: complaint, error: complaintError } = await supabaseClient
-    .from("complaints")
-    .select("*")
-    .eq("id", complaintId)
-    .single();
-
-  if (complaintError) {
-    return { data: null, error: complaintError.message };
-  }
-
-  // Get action history
-  const { data: actions, error: actionsError } = await supabaseClient
-    .from("complaint_actions")
-    .select("*")
-    .eq("complaint_id", complaintId)
-    .order("created_at", { ascending: false });
-
-  if (actionsError) {
-    return { 
-      data: { complaint, actions: [] }, 
-      error: "Failed to load action history" 
-    };
-  }
-
-  return { data: { complaint, actions: actions || [] }, error: null };
-}
-
-/**
- * Get list of available deputies for assignment with filters
+ * Get available deputies for assignment with filters
+ * ✅ FIXED: Now uses pagination to fetch ALL deputies (not just 1000)
  */
 export async function getAvailableDeputies(filters?: {
   searchName?: string;
@@ -454,45 +474,71 @@ export async function getAvailableDeputies(filters?: {
 }) {
   const supabaseClient = await supabaseClientBasedOnUserRole();
 
-  let query = supabaseClient
-    .from("deputy_profiles")
-    .select(`
-      id,
-      governorate,
-      council_type,
-      deputy_status,
-      gender,
-      points,
-      user_profiles(
-        full_name
-      )
-    `);
+  // ✅ Fetch ALL deputies using pagination to bypass Supabase's 1000 row limit
+  let allDeputies: any[] = [];
+  let page = 0;
+  const pageSize = 1000; // Supabase's default max
+  let hasMore = true;
 
-  // Apply filters only if provided and not 'all'
-  // This ensures deputies with NULL values are still returned when no filter is applied
-  if (filters?.councilType && filters.councilType !== "all") {
-    query = query.eq("council_type", filters.councilType);
-  }
-  if (filters?.deputyStatus && filters.deputyStatus !== "all") {
-    query = query.eq("deputy_status", filters.deputyStatus);
-  }
-  if (filters?.gender && filters.gender !== "all") {
-    query = query.eq("gender", filters.gender);
-  }
-  if (filters?.governorate && filters.governorate !== "all") {
-    query = query.eq("governorate", filters.governorate);
+  while (hasMore) {
+    const start = page * pageSize;
+    const end = start + pageSize - 1;
+
+    let query = supabaseClient
+      .from("deputy_profiles")
+      .select(`
+        id,
+        governorate,
+        council_type,
+        deputy_status,
+        gender,
+        points,
+        user_profiles(
+          full_name
+        )
+      `)
+      .range(start, end);
+
+    // Apply filters only if provided and not 'all'
+    if (filters?.councilType && filters.councilType !== "all") {
+      query = query.eq("council_type", filters.councilType);
+    }
+    if (filters?.deputyStatus && filters.deputyStatus !== "all") {
+      query = query.eq("deputy_status", filters.deputyStatus);
+    }
+    if (filters?.gender && filters.gender !== "all") {
+      query = query.eq("gender", filters.gender);
+    }
+    if (filters?.governorate && filters.governorate !== "all") {
+      query = query.eq("governorate", filters.governorate);
+    }
+
+    const { data: deputiesPage, error } = await query;
+
+    if (error) {
+      console.error(`[getAvailableDeputies] Error on page ${page}:`, error);
+      break;
+    }
+
+    if (!deputiesPage || deputiesPage.length === 0) {
+      hasMore = false;
+      break;
+    }
+
+    allDeputies = [...allDeputies, ...deputiesPage];
+
+    // If we got less than pageSize, we've reached the end
+    if (deputiesPage.length < pageSize) {
+      hasMore = false;
+    } else {
+      page++;
+    }
   }
 
-  // Remove ordering from query as it causes issues with foreign key relationships
-  // We'll sort on the client side after transforming the data
-  const { data, error } = await query;
-
-  if (error) {
-    return { data: [], error: error.message };
-  }
+  console.log(`✅ [getAvailableDeputies] Fetched ${allDeputies.length} deputies in ${page + 1} page(s)`);
 
   // Transform data to flatten user_profiles
-  let transformedData = data?.map((deputy: any) => ({
+  let transformedData = allDeputies.map((deputy: any) => ({
     id: deputy.id,
     full_name: deputy.user_profiles?.full_name || "غير محدد",
     governorate: deputy.governorate || "غير محدد",
@@ -500,7 +546,7 @@ export async function getAvailableDeputies(filters?: {
     deputy_status: deputy.deputy_status || "current",
     gender: deputy.gender || "male",
     points: deputy.points || 0,
-  })) || [];
+  }));
 
   // Apply name search filter (client-side for Arabic support)
   if (filters?.searchName) {
@@ -547,143 +593,8 @@ export async function grantPointsToDeputy(deputyId: string, points: number = 10)
   return { success: true, newPoints };
 }
 
-
-
 /**
- * Approve complaint for public display (Admin only)
- */
-export const approveComplaintForPublic = adminActionClient
-  .schema(z.object({
-    complaintId: z.string().uuid(),
-    approved: z.boolean(),
-  }))
-  .action(async ({ parsedInput: { complaintId, approved } }) => {
-    const { error } = await supabaseAdminClient
-      .from("complaints")
-      .update({ admin_approved_public: approved })
-      .eq("id", complaintId);
-
-    if (error) {
-      return { success: false, error: error.message };
-    }
-
-    revalidatePath("/manager-complaints");
-    revalidatePath(`/manager-complaints/${complaintId}`);
-    
-    return { success: true };
-  });
-
-
-
-/**
- * Archive complaint (Admin only)
- */
-export const archiveComplaint = adminActionClient
-  .schema(z.object({
-    complaintId: z.string().uuid(),
-  }))
-  .action(async ({ parsedInput: { complaintId } }) => {
-    const { error } = await supabaseAdminClient
-      .from("complaints")
-      .update({ 
-        is_archived: true,
-        archived_at: new Date().toISOString()
-      })
-      .eq("id", complaintId);
-
-    if (error) {
-      return { success: false, error: error.message };
-    }
-
-    revalidatePath("/manager-complaints");
-    
-    return { success: true };
-  });
-
-/**
- * Delete complaint permanently (Admin only)
- */
-export const deleteComplaint = adminActionClient
-  .schema(z.object({
-    complaintId: z.string().uuid(),
-  }))
-  .action(async ({ parsedInput: { complaintId } }) => {
-    const { error } = await supabaseAdminClient
-      .from("complaints")
-      .delete()
-      .eq("id", complaintId);
-
-    if (error) {
-      return { success: false, error: error.message };
-    }
-
-    revalidatePath("/manager-complaints");
-    
-    return { success: true };
-  });
-
-
-
-/**
- * Get archived complaints (Admin/Manager only)
- */
-export async function getArchivedComplaints() {
-  const supabase = await createSupabaseUserServerComponentClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  
-  if (!user) {
-    return { data: [], error: "User not authenticated" };
-  }
-
-  // Check if user is admin or manager
-  const isAdmin = isSupabaseUserAppAdmin(user);
-  const userType = await serverGetUserType();
-  const isManager = userType === userRoles.MANAGER;
-
-  // Only managers and admins can access archived complaints
-  if (!isAdmin && !isManager) {
-    return { data: [], error: "Unauthorized access" };
-  }
-
-  const { data, error } = await supabase
-    .from("complaints")
-    .select("*")
-    .eq("is_archived", true)
-    .order("archived_at", { ascending: false });
-
-  return { data: data || [], error: error?.message };
-}
-
-/**
- * Unarchive complaint (Admin only)
- */
-export const unarchiveComplaint = adminActionClient
-  .schema(z.object({
-    complaintId: z.string().uuid(),
-  }))
-  .action(async ({ parsedInput: { complaintId } }) => {
-    const { error } = await supabaseAdminClient
-      .from("complaints")
-      .update({ 
-        is_archived: false,
-        archived_at: null
-      })
-      .eq("id", complaintId);
-
-    if (error) {
-      return { success: false, error: error.message };
-    }
-
-    revalidatePath("/manager-complaints");
-    revalidatePath("/manager-complaints/archived");
-    
-    return { success: true };
-  });
-
-
-
-/**
- * Get public complaints (accessible to everyone, no authentication required)
+ * Get public complaints (approved and visible to everyone)
  */
 export async function getPublicComplaints() {
   const supabase = await createSupabaseUserServerComponentClient();
@@ -691,100 +602,64 @@ export async function getPublicComplaints() {
   const { data, error } = await supabase
     .from("complaints")
     .select(`
-      id,
-      title,
-      description,
-      category,
-      status,
-      governorate,
-      district,
-      created_at,
-      resolved_at
+      *,
+      user_profiles(
+        full_name
+      ),
+      complaint_assignments(
+        deputy_id,
+        deputy_profiles(
+          id,
+          user_profiles(
+            full_name
+          )
+        )
+      )
     `)
     .eq("is_public", true)
-    .eq("admin_approved_public", true)
-    .eq("is_archived", false)
+    .eq("is_approved", true)
     .order("created_at", { ascending: false });
 
-  return { data: data || [], error: error?.message };
+  if (error) {
+    return { data: [], error: error.message };
+  }
+
+  return { data, error: null };
 }
 
-
-
 /**
- * Close complaint and award points to deputy (Admin only)
- * This should only be called for complaints in "resolved" status
+ * Approve public complaint (Admin/Manager only)
  */
-export const closeComplaint = adminActionClient
-  .schema(z.object({
-    complaintId: z.string().uuid(),
-  }))
-  .action(async ({ parsedInput: { complaintId } }) => {
-    // Get complaint details to find assigned deputy
-    const { data: complaint, error: fetchError } = await supabaseAdminClient
-      .from("complaints")
-      .select("assigned_deputy_id, status")
-      .eq("id", complaintId)
-      .single();
+export async function approvePublicComplaint(
+  complaintId: string,
+  userId: string
+) {
+  const supabase = await createSupabaseUserServerComponentClient();
 
-    if (fetchError || !complaint) {
-      return { success: false, error: "Complaint not found" };
-    }
+  const { error: updateError } = await supabase
+    .from("complaints")
+    .update({ is_approved: true, updated_at: new Date().toISOString() })
+    .eq("id", complaintId);
 
-    // Check if complaint is in resolved status
-    if (complaint.status !== "resolved") {
-      return { success: false, error: "Complaint must be in resolved status to close" };
-    }
+  if (updateError) {
+    return { success: false, error: updateError.message };
+  }
 
-    // Check if deputy is assigned
-    if (!complaint.assigned_deputy_id) {
-      return { success: false, error: "No deputy assigned to this complaint" };
-    }
+  // Add to history
+  const { error: historyError } = await supabase
+    .from("complaint_history")
+    .insert({
+      complaint_id: complaintId,
+      user_id: userId,
+      action: "approved",
+      details: "Complaint approved for public viewing",
+    });
 
-    // Update complaint status to closed
-    const { error: updateError } = await supabaseAdminClient
-      .from("complaints")
-      .update({ 
-        status: "closed",
-        resolved_at: new Date().toISOString()
-      })
-      .eq("id", complaintId);
+  if (historyError) {
+    return { success: false, error: historyError.message };
+  }
 
-    if (updateError) {
-      return { success: false, error: updateError.message };
-    }
-
-    // Get current points
-    const { data: deputyData, error: deputyError } = await supabaseAdminClient
-      .from("deputy_profiles")
-      .select("points")
-      .eq("id", complaint.assigned_deputy_id)
-      .single();
-
-    if (deputyError) {
-      return { 
-        success: true, 
-        warning: "Complaint closed but failed to fetch deputy points: " + deputyError.message 
-      };
-    }
-
-    // Award 10 points to the deputy
-    const currentPoints = deputyData?.points || 0;
-    const { error: pointsError } = await supabaseAdminClient
-      .from("deputy_profiles")
-      .update({ points: currentPoints + 10 })
-      .eq("id", complaint.assigned_deputy_id);
-
-    if (pointsError) {
-      return { 
-        success: true, 
-        warning: "Complaint closed but failed to award points: " + pointsError.message 
-      };
-    }
-
-    revalidatePath("/manager-complaints");
-    revalidatePath(`/manager-complaints/${complaintId}`);
-    
-    return { success: true, message: "Complaint closed and 10 points awarded to deputy" };
-  });
+  revalidatePath("/public-complaints");
+  return { success: true };
+}
 
