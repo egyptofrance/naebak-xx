@@ -6,6 +6,23 @@ import { BannerImage } from "./BannerImage";
 import { DeputyRating } from "./DeputyRating";
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 import { formatDeputyName } from "@/utils/formatDeputyName";
+import { 
+  MapPin, 
+  Users, 
+  Building2, 
+  Vote, 
+  FileText, 
+  Target, 
+  Trophy, 
+  Calendar,
+  Phone,
+  Clock,
+  Facebook,
+  Twitter,
+  Instagram,
+  Youtube,
+  Globe
+} from "lucide-react";
 
 interface PageProps {
   params: Promise<{
@@ -75,7 +92,7 @@ export default async function DeputyPage({ params }: PageProps) {
       <BannerImage src={displayBanner} alt="Banner" />
 
       <div className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto space-y-6">
+        <div className="max-w-5xl mx-auto space-y-6">
           {/* Header Card */}
           <div className="bg-card p-8 rounded-lg shadow-sm border">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
@@ -84,11 +101,11 @@ export default async function DeputyPage({ params }: PageProps) {
                 <img
                   src={user.avatar_url}
                   alt={user.full_name || "النائب"}
-                  className="w-32 h-32 rounded-full object-cover"
+                  className="w-32 h-32 rounded-full object-cover border-4 border-primary/10"
                 />
               ) : (
-                <div className="w-32 h-32 rounded-full bg-muted flex items-center justify-center">
-                  <span className="text-4xl text-muted-foreground">
+                <div className="w-32 h-32 rounded-full bg-primary/10 flex items-center justify-center border-4 border-primary/20">
+                  <span className="text-4xl font-bold text-primary">
                     {user.full_name?.charAt(0) || "؟"}
                   </span>
                 </div>
@@ -96,11 +113,11 @@ export default async function DeputyPage({ params }: PageProps) {
 
               {/* Info */}
               <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
-                  <h1 className="text-4xl font-bold">
+                <div className="flex items-center gap-3 mb-2 flex-wrap">
+                  <h1 className="text-3xl md:text-4xl font-bold">
                     {formatDeputyName(user.full_name, deputy.display_name)}
                   </h1>
-                  <Badge variant={getStatusVariant(deputy.deputy_status)}>
+                  <Badge variant={getStatusVariant(deputy.deputy_status)} className="text-sm">
                     {getStatusLabel(deputy.deputy_status)}
                   </Badge>
                 </div>
@@ -120,173 +137,293 @@ export default async function DeputyPage({ params }: PageProps) {
             </div>
           </div>
 
-          {/* Contact Info Card */}
-          <div className="bg-card p-6 rounded-lg shadow-sm border">
-            <h2 className="text-2xl font-bold mb-4">البيانات الأساسية</h2>
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <span className="font-semibold text-muted-foreground">المحافظة:</span>
-                {governorate 
-                  ? (locale === "ar" ? governorate.name_ar : governorate.name_en)
-                  : <span className="text-sm italic text-muted-foreground">{noData}</span>
-                }
+          {/* Basic Info Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Basic Data Card */}
+            <div className="bg-card p-6 rounded-lg shadow-sm border">
+              <div className="flex items-center gap-2 mb-4">
+                <FileText className="h-5 w-5 text-primary" />
+                <h2 className="text-xl font-bold">البيانات الأساسية</h2>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="font-semibold text-muted-foreground">الحزب:</span>
-                {party 
-                  ? (locale === "ar" ? party.name_ar : party.name_en)
-                  : <span className="text-sm italic text-muted-foreground">{noData}</span>
-                }
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-semibold text-muted-foreground">المجلس:</span>
-                {council 
-                  ? (locale === "ar" ? council.name_ar : council.name_en)
-                  : <span className="text-sm italic text-muted-foreground">{noData}</span>
-                }
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="font-semibold text-muted-foreground">الدائرة الانتخابية:</span>
-                {electoral_district 
-                  ? electoral_district.name
-                  : <span className="text-sm italic text-muted-foreground">{noData}</span>
-                }
-              </div>
-              {deputy.candidate_type && (
-                <div className="flex items-center gap-2">
-                  <span className="font-semibold text-muted-foreground">نوع الترشح:</span>
-                  <span>
-                    {deputy.candidate_type === "individual" ? "فردي" : 
-                     deputy.candidate_type === "list" ? "قائمة" : "كلاهما"}
-                  </span>
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <MapPin className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                  <div>
+                    <span className="text-sm font-medium text-muted-foreground block">المحافظة</span>
+                    <span className="font-medium">
+                      {governorate 
+                        ? (locale === "ar" ? governorate.name_ar : governorate.name_en)
+                        : <span className="text-sm italic text-muted-foreground">{noData}</span>
+                      }
+                    </span>
+                  </div>
                 </div>
-              )}
+                
+                <div className="flex items-start gap-3">
+                  <Users className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                  <div>
+                    <span className="text-sm font-medium text-muted-foreground block">الحزب</span>
+                    <span className="font-medium">
+                      {party 
+                        ? (locale === "ar" ? party.name_ar : party.name_en)
+                        : <span className="text-sm italic text-muted-foreground">{noData}</span>
+                      }
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <Building2 className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                  <div>
+                    <span className="text-sm font-medium text-muted-foreground block">المجلس</span>
+                    <span className="font-medium">
+                      {council 
+                        ? (locale === "ar" ? council.name_ar : council.name_en)
+                        : <span className="text-sm italic text-muted-foreground">{noData}</span>
+                      }
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <Vote className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                  <div>
+                    <span className="text-sm font-medium text-muted-foreground block">الدائرة الانتخابية</span>
+                    <span className="font-medium">
+                      {electoral_district 
+                        ? electoral_district.name
+                        : <span className="text-sm italic text-muted-foreground">{noData}</span>
+                      }
+                    </span>
+                  </div>
+                </div>
 
+                {deputy.electoral_symbol && (
+                  <div className="flex items-start gap-3">
+                    <Target className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                    <div>
+                      <span className="text-sm font-medium text-muted-foreground block">الرمز الانتخابي</span>
+                      <span className="font-medium">{deputy.electoral_symbol}</span>
+                    </div>
+                  </div>
+                )}
+
+                {deputy.electoral_number && (
+                  <div className="flex items-start gap-3">
+                    <Vote className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                    <div>
+                      <span className="text-sm font-medium text-muted-foreground block">الرقم الانتخابي</span>
+                      <span className="font-medium">{deputy.electoral_number}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Contact Info Card */}
+            <div className="bg-card p-6 rounded-lg shadow-sm border">
+              <div className="flex items-center gap-2 mb-4">
+                <Phone className="h-5 w-5 text-primary" />
+                <h2 className="text-xl font-bold">معلومات الاتصال</h2>
+              </div>
+              <div className="space-y-3">
+                {deputy.office_address && (
+                  <div className="flex items-start gap-3">
+                    <MapPin className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                    <div>
+                      <span className="text-sm font-medium text-muted-foreground block">عنوان المكتب</span>
+                      <span className="font-medium">{deputy.office_address}</span>
+                    </div>
+                  </div>
+                )}
+
+                {deputy.office_phone && (
+                  <div className="flex items-start gap-3">
+                    <Phone className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                    <div>
+                      <span className="text-sm font-medium text-muted-foreground block">هاتف المكتب</span>
+                      <a href={`tel:${deputy.office_phone}`} className="font-medium hover:text-primary transition-colors" dir="ltr">
+                        {deputy.office_phone}
+                      </a>
+                    </div>
+                  </div>
+                )}
+
+                {deputy.office_hours && (
+                  <div className="flex items-start gap-3">
+                    <Clock className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                    <div>
+                      <span className="text-sm font-medium text-muted-foreground block">ساعات العمل</span>
+                      <span className="font-medium">{deputy.office_hours}</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Social Media Links */}
+                {(deputy.social_media_facebook || deputy.social_media_twitter || deputy.social_media_instagram || deputy.social_media_youtube || deputy.website) && (
+                  <div className="pt-3 border-t">
+                    <span className="text-sm font-medium text-muted-foreground block mb-3">وسائل التواصل</span>
+                    <div className="flex flex-wrap gap-2">
+                      {deputy.social_media_facebook && (
+                        <a href={deputy.social_media_facebook} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg hover:bg-primary/10 transition-colors">
+                          <Facebook className="h-5 w-5 text-blue-600" />
+                        </a>
+                      )}
+                      {deputy.social_media_twitter && (
+                        <a href={deputy.social_media_twitter} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg hover:bg-primary/10 transition-colors">
+                          <Twitter className="h-5 w-5 text-sky-500" />
+                        </a>
+                      )}
+                      {deputy.social_media_instagram && (
+                        <a href={deputy.social_media_instagram} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg hover:bg-primary/10 transition-colors">
+                          <Instagram className="h-5 w-5 text-pink-600" />
+                        </a>
+                      )}
+                      {deputy.social_media_youtube && (
+                        <a href={deputy.social_media_youtube} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg hover:bg-primary/10 transition-colors">
+                          <Youtube className="h-5 w-5 text-red-600" />
+                        </a>
+                      )}
+                      {deputy.website && (
+                        <a href={deputy.website} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg hover:bg-primary/10 transition-colors">
+                          <Globe className="h-5 w-5 text-primary" />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {!deputy.office_address && !deputy.office_phone && !deputy.office_hours && !deputy.social_media_facebook && !deputy.social_media_twitter && !deputy.social_media_instagram && !deputy.social_media_youtube && !deputy.website && (
+                  <p className="text-sm italic text-muted-foreground text-center py-4">
+                    {noData}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
 
           {/* Bio Card */}
-          <div className="bg-card p-6 rounded-lg shadow-sm border">
-            <h2 className="text-2xl font-bold mb-4">السيرة الذاتية</h2>
-            {deputy.bio ? (
+          {deputy.bio && (
+            <div className="bg-card p-6 rounded-lg shadow-sm border">
+              <div className="flex items-center gap-2 mb-4">
+                <FileText className="h-5 w-5 text-primary" />
+                <h2 className="text-xl font-bold">السيرة الذاتية</h2>
+              </div>
               <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
                 {deputy.bio}
               </p>
-            ) : (
-              <p className="text-sm italic text-muted-foreground text-center py-4">
-                {noData}
-              </p>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Electoral Program Card */}
-          <div className="bg-card p-6 rounded-lg shadow-sm border">
-            <h2 className="text-2xl font-bold mb-4">البرنامج الانتخابي</h2>
-            {electoralPrograms && electoralPrograms.length > 0 ? (
-              <div className="space-y-6">
-                {electoralPrograms.map((item: any) => (
-                  <div key={item.id} className="border-b pb-6 last:border-b-0 last:pb-0">
-                    <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                    {item.description && (
-                      <p className="text-muted-foreground mb-3 whitespace-pre-wrap">
-                        {item.description}
-                      </p>
-                    )}
-                    {item.image_url && (
-                      <img
-                        src={item.image_url}
-                        alt={item.title}
-                        className="w-full max-w-2xl rounded-lg object-cover"
-                      />
-                    )}
-                  </div>
-                ))}
+          {((electoralPrograms && electoralPrograms.length > 0) || deputy.electoral_program) && (
+            <div className="bg-card p-6 rounded-lg shadow-sm border">
+              <div className="flex items-center gap-2 mb-4">
+                <Target className="h-5 w-5 text-primary" />
+                <h2 className="text-xl font-bold">البرنامج الانتخابي</h2>
               </div>
-            ) : deputy.electoral_program ? (
-              <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                {deputy.electoral_program}
-              </div>
-            ) : (
-              <p className="text-sm italic text-muted-foreground text-center py-4">
-                {noData}
-              </p>
-            )}
-          </div>
+              {electoralPrograms && electoralPrograms.length > 0 ? (
+                <div className="space-y-6">
+                  {electoralPrograms.map((item: any) => (
+                    <div key={item.id} className="border-b pb-6 last:border-b-0 last:pb-0">
+                      <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+                      {item.description && (
+                        <p className="text-muted-foreground mb-3 whitespace-pre-wrap">
+                          {item.description}
+                        </p>
+                      )}
+                      {item.image_url && (
+                        <img
+                          src={item.image_url}
+                          alt={item.title}
+                          className="w-full max-w-2xl rounded-lg object-cover"
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : deputy.electoral_program ? (
+                <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                  {deputy.electoral_program}
+                </div>
+              ) : null}
+            </div>
+          )}
 
           {/* Achievements Card */}
-          <div className="bg-card p-6 rounded-lg shadow-sm border">
-            <h2 className="text-2xl font-bold mb-4">الإنجازات</h2>
-            {achievements && achievements.length > 0 ? (
-              <div className="space-y-6">
-                {achievements.map((item: any) => (
-                  <div key={item.id} className="border-b pb-6 last:border-b-0 last:pb-0">
-                    <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                    {item.description && (
-                      <p className="text-muted-foreground mb-3 whitespace-pre-wrap">
-                        {item.description}
-                      </p>
-                    )}
-                    {item.image_url && (
-                      <img
-                        src={item.image_url}
-                        alt={item.title}
-                        className="w-full max-w-2xl rounded-lg object-cover"
-                      />
-                    )}
-                  </div>
-                ))}
+          {((achievements && achievements.length > 0) || deputy.achievements) && (
+            <div className="bg-card p-6 rounded-lg shadow-sm border">
+              <div className="flex items-center gap-2 mb-4">
+                <Trophy className="h-5 w-5 text-primary" />
+                <h2 className="text-xl font-bold">الإنجازات</h2>
               </div>
-            ) : deputy.achievements ? (
-              <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                {deputy.achievements}
-              </div>
-            ) : (
-              <p className="text-sm italic text-muted-foreground text-center py-4">
-                {noData}
-              </p>
-            )}
-          </div>
+              {achievements && achievements.length > 0 ? (
+                <div className="space-y-6">
+                  {achievements.map((item: any) => (
+                    <div key={item.id} className="border-b pb-6 last:border-b-0 last:pb-0">
+                      <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+                      {item.description && (
+                        <p className="text-muted-foreground mb-3 whitespace-pre-wrap">
+                          {item.description}
+                        </p>
+                      )}
+                      {item.image_url && (
+                        <img
+                          src={item.image_url}
+                          alt={item.title}
+                          className="w-full max-w-2xl rounded-lg object-cover"
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : deputy.achievements ? (
+                <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                  {deputy.achievements}
+                </div>
+              ) : null}
+            </div>
+          )}
 
           {/* Events Card */}
-          <div className="bg-card p-6 rounded-lg shadow-sm border">
-            <h2 className="text-2xl font-bold mb-4">الفعاليات والمناسبات</h2>
-            {events && events.length > 0 ? (
-              <div className="space-y-6">
-                {events.map((item: any) => (
-                  <div key={item.id} className="border-b pb-6 last:border-b-0 last:pb-0">
-                    <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                    {item.event_date && (
-                      <p className="text-sm text-muted-foreground mb-2">
-                        التاريخ: {new Date(item.event_date).toLocaleDateString('ar-EG')}
-                      </p>
-                    )}
-                    {item.description && (
-                      <p className="text-muted-foreground mb-3 whitespace-pre-wrap">
-                        {item.description}
-                      </p>
-                    )}
-                    {item.image_url && (
-                      <img
-                        src={item.image_url}
-                        alt={item.title}
-                        className="w-full max-w-2xl rounded-lg object-cover"
-                      />
-                    )}
-                  </div>
-                ))}
+          {((events && events.length > 0) || deputy.events) && (
+            <div className="bg-card p-6 rounded-lg shadow-sm border">
+              <div className="flex items-center gap-2 mb-4">
+                <Calendar className="h-5 w-5 text-primary" />
+                <h2 className="text-xl font-bold">الفعاليات والمناسبات</h2>
               </div>
-            ) : deputy.events ? (
-              <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                {deputy.events}
-              </div>
-            ) : (
-              <p className="text-sm italic text-muted-foreground text-center py-4">
-                {noData}
-              </p>
-            )}
-          </div>
-
-
+              {events && events.length > 0 ? (
+                <div className="space-y-6">
+                  {events.map((item: any) => (
+                    <div key={item.id} className="border-b pb-6 last:border-b-0 last:pb-0">
+                      <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+                      {item.event_date && (
+                        <p className="text-sm text-muted-foreground mb-2">
+                          التاريخ: {new Date(item.event_date).toLocaleDateString('ar-EG')}
+                        </p>
+                      )}
+                      {item.description && (
+                        <p className="text-muted-foreground mb-3 whitespace-pre-wrap">
+                          {item.description}
+                        </p>
+                      )}
+                      {item.image_url && (
+                        <img
+                          src={item.image_url}
+                          alt={item.title}
+                          className="w-full max-w-2xl rounded-lg object-cover"
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : deputy.events ? (
+                <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                  {deputy.events}
+                </div>
+              ) : null}
+            </div>
+          )}
         </div>
       </div>
     </div>
