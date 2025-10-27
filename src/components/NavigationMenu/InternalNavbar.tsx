@@ -3,6 +3,8 @@ import { Suspense, type ReactNode } from "react";
 import { SidebarTrigger } from "../ui/sidebar";
 import { PendingInvitationCounter } from "./PendingInvitationCounter";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import Link from "next/link";
+import Image from "next/image";
 
 export async function InternalNavbar({ children }: { children: ReactNode }) {
   return (
@@ -13,6 +15,27 @@ export async function InternalNavbar({ children }: { children: ReactNode }) {
         )}
       >
         <SidebarTrigger />
+        
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <Image
+            src="/images/logo-naebak-green.png"
+            alt="نائبك"
+            width={120}
+            height={40}
+            className="h-8 w-auto dark:hidden"
+            priority
+          />
+          <Image
+            src="/images/logo-naebak-white.png"
+            alt="نائبك"
+            width={120}
+            height={40}
+            className="h-8 w-auto hidden dark:block"
+            priority
+          />
+        </Link>
+        
         <Suspense>{children}</Suspense>
         <div className="relative w-max flex items-center gap-2">
           <div className="hidden lg:flex items-center gap-2">
