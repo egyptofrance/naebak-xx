@@ -12,11 +12,11 @@ export function MobileMenu() {
   return (
     <>
       {mobileMenuOpen && (
-        <ul className="md:hidden w-full shadow-2xl py-2 flex flex-col items-start font-medium pb-2">
+        <ul className="md:hidden w-full shadow-2xl py-2 flex flex-col items-end font-medium pb-2" dir="rtl">
           {navbarLinks.map(({ key, href }) => (
             <li
               key={key}
-              className="px-4 py-2 rounded-lg text-gray-900 dark:text-gray-300"
+              className="px-4 py-2 rounded-lg text-white hover:text-white/80 w-full text-right"
             >
               <Link href={href} onClick={() => setMobileMenuOpen(false)}>
                 {t(key)}
