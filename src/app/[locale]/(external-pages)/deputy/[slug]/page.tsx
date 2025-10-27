@@ -337,148 +337,160 @@ export default async function DeputyPage({ params }: PageProps) {
           )}
 
           {/* Electoral Program Card */}
-          {((electoralPrograms && electoralPrograms.length > 0) || deputy.electoral_program) && (
-            <div className="bg-card p-6 rounded-lg shadow-sm border">
-              <div className="flex items-center gap-2 mb-6">
-                <Target className="h-5 w-5 text-primary" />
-                <h2 className="text-2xl font-bold">البرنامج الانتخابي</h2>
-              </div>
-              {electoralPrograms && electoralPrograms.length > 0 ? (
-                <div className="space-y-8">
-                  {electoralPrograms.map((item: any, index: number) => (
-                    <div key={item.id} className="border-b pb-8 last:border-b-0 last:pb-0">
-                      <div className="flex flex-col md:flex-row gap-6">
-                        {/* Image - Default or Custom */}
-                        <div className="flex-shrink-0">
-                          <div className="relative group">
-                            <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                            <img
-                              src={item.image_url || DEFAULT_IMAGES.electoral_program}
-                              alt={item.title}
-                              className="relative w-full md:w-48 h-48 rounded-2xl object-cover border-4 border-primary/10 shadow-lg group-hover:border-primary/30 group-hover:shadow-2xl group-hover:scale-105 transition-all duration-300"
-                            />
-                          </div>
-                        </div>
-                        
-                        {/* Content */}
-                        <div className="flex-1">
-                          <h3 className="text-xl font-bold mb-3 text-primary">{item.title}</h3>
-                          {item.description && (
-                            <p className="text-base leading-relaxed whitespace-pre-wrap">
-                              {item.description}
-                            </p>
-                          )}
+          <div className="bg-card p-6 rounded-lg shadow-sm border">
+            <div className="flex items-center gap-2 mb-6">
+              <Target className="h-5 w-5 text-primary" />
+              <h2 className="text-2xl font-bold">البرنامج الانتخابي</h2>
+            </div>
+            {electoralPrograms && electoralPrograms.length > 0 ? (
+              <div className="space-y-8">
+                {electoralPrograms.map((item: any, index: number) => (
+                  <div key={item.id} className="border-b pb-8 last:border-b-0 last:pb-0">
+                    <div className="flex flex-col md:flex-row gap-6">
+                      {/* Image - Default or Custom */}
+                      <div className="flex-shrink-0">
+                        <div className="relative group">
+                          <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+                          <img
+                            src={item.image_url || DEFAULT_IMAGES.electoral_program}
+                            alt={item.title}
+                            className="relative w-full md:w-48 h-48 rounded-2xl object-cover border-4 border-primary/10 shadow-lg group-hover:border-primary/30 group-hover:shadow-2xl group-hover:scale-105 transition-all duration-300"
+                          />
                         </div>
                       </div>
+                      
+                      {/* Content */}
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold mb-3 text-primary">{item.title}</h3>
+                        {item.description && (
+                          <p className="text-base leading-relaxed whitespace-pre-wrap">
+                            {item.description}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  ))}
-                </div>
-              ) : deputy.electoral_program ? (
-                <div className="text-base leading-relaxed whitespace-pre-wrap">
-                  {deputy.electoral_program}
-                </div>
-              ) : null}
-            </div>
-          )}
+                  </div>
+                ))}
+              </div>
+            ) : deputy.electoral_program ? (
+              <div className="text-base leading-relaxed whitespace-pre-wrap">
+                {deputy.electoral_program}
+              </div>
+            ) : (
+              <div className="text-muted-foreground italic bg-muted/30 p-6 rounded-lg border-2 border-dashed">
+                <p className="leading-relaxed">
+                  إدارة نائبك تحاول التواصل مع {user.gender === 'female' ? 'السيدة' : 'السيد'} {deputy.deputy_status === 'candidate' ? (user.gender === 'female' ? 'المرشحة' : 'المرشح') : (user.gender === 'female' ? 'النائبة' : 'النائب')} {formatDeputyName(user.full_name, deputy.display_name)} لمعرفة برنامجه الانتخابي...
+                </p>
+              </div>
+            )}
+          </div>
 
           {/* Achievements Card */}
-          {((achievements && achievements.length > 0) || deputy.achievements) && (
-            <div className="bg-card p-6 rounded-lg shadow-sm border">
-              <div className="flex items-center gap-2 mb-6">
-                <Trophy className="h-5 w-5 text-primary" />
-                <h2 className="text-2xl font-bold">الإنجازات</h2>
-              </div>
-              {achievements && achievements.length > 0 ? (
-                <div className="space-y-8">
-                  {achievements.map((item: any) => (
-                    <div key={item.id} className="border-b pb-8 last:border-b-0 last:pb-0">
-                      <div className="flex flex-col md:flex-row gap-6">
-                        {/* Image - Default or Custom */}
-                        <div className="flex-shrink-0">
-                          <div className="relative group">
-                            <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                            <img
-                              src={item.image_url || DEFAULT_IMAGES.achievement}
-                              alt={item.title}
-                              className="relative w-full md:w-48 h-48 rounded-2xl object-cover border-4 border-primary/10 shadow-lg group-hover:border-primary/30 group-hover:shadow-2xl group-hover:scale-105 transition-all duration-300"
-                            />
-                          </div>
-                        </div>
-                        
-                        {/* Content */}
-                        <div className="flex-1">
-                          <h3 className="text-xl font-bold mb-3 text-primary">{item.title}</h3>
-                          {item.description && (
-                            <p className="text-base leading-relaxed whitespace-pre-wrap">
-                              {item.description}
-                            </p>
-                          )}
+          <div className="bg-card p-6 rounded-lg shadow-sm border">
+            <div className="flex items-center gap-2 mb-6">
+              <Trophy className="h-5 w-5 text-primary" />
+              <h2 className="text-2xl font-bold">الإنجازات</h2>
+            </div>
+            {achievements && achievements.length > 0 ? (
+              <div className="space-y-8">
+                {achievements.map((item: any) => (
+                  <div key={item.id} className="border-b pb-8 last:border-b-0 last:pb-0">
+                    <div className="flex flex-col md:flex-row gap-6">
+                      {/* Image - Default or Custom */}
+                      <div className="flex-shrink-0">
+                        <div className="relative group">
+                          <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+                          <img
+                            src={item.image_url || DEFAULT_IMAGES.achievement}
+                            alt={item.title}
+                            className="relative w-full md:w-48 h-48 rounded-2xl object-cover border-4 border-primary/10 shadow-lg group-hover:border-primary/30 group-hover:shadow-2xl group-hover:scale-105 transition-all duration-300"
+                          />
                         </div>
                       </div>
+                      
+                      {/* Content */}
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold mb-3 text-primary">{item.title}</h3>
+                        {item.description && (
+                          <p className="text-base leading-relaxed whitespace-pre-wrap">
+                            {item.description}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  ))}
-                </div>
-              ) : deputy.achievements ? (
-                <div className="text-base leading-relaxed whitespace-pre-wrap">
-                  {deputy.achievements}
-                </div>
-              ) : null}
-            </div>
-          )}
+                  </div>
+                ))}
+              </div>
+            ) : deputy.achievements ? (
+              <div className="text-base leading-relaxed whitespace-pre-wrap">
+                {deputy.achievements}
+              </div>
+            ) : (
+              <div className="text-muted-foreground italic bg-muted/30 p-6 rounded-lg border-2 border-dashed">
+                <p className="leading-relaxed">
+                  إدارة نائبك تحاول التواصل مع {user.gender === 'female' ? 'السيدة' : 'السيد'} {deputy.deputy_status === 'candidate' ? (user.gender === 'female' ? 'المرشحة' : 'المرشح') : (user.gender === 'female' ? 'النائبة' : 'النائب')} {formatDeputyName(user.full_name, deputy.display_name)} لمعرفة إنجازاته إن وجدت...
+                </p>
+              </div>
+            )}
+          </div>
 
           {/* Events Card */}
-          {((events && events.length > 0) || deputy.events) && (
-            <div className="bg-card p-6 rounded-lg shadow-sm border">
-              <div className="flex items-center gap-2 mb-6">
-                <Calendar className="h-5 w-5 text-primary" />
-                <h2 className="text-2xl font-bold">الفعاليات والمناسبات</h2>
-              </div>
-              {events && events.length > 0 ? (
-                <div className="space-y-8">
-                  {events.map((item: any) => (
-                    <div key={item.id} className="border-b pb-8 last:border-b-0 last:pb-0">
-                      <div className="flex flex-col md:flex-row gap-6">
-                        {/* Image - Default or Custom */}
-                        <div className="flex-shrink-0">
-                          <div className="relative group">
-                            <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                            <img
-                              src={item.image_url || DEFAULT_IMAGES.event}
-                              alt={item.title}
-                              className="relative w-full md:w-48 h-48 rounded-2xl object-cover border-4 border-primary/10 shadow-lg group-hover:border-primary/30 group-hover:shadow-2xl group-hover:scale-105 transition-all duration-300"
-                            />
-                          </div>
-                        </div>
-                        
-                        {/* Content */}
-                        <div className="flex-1">
-                          <h3 className="text-xl font-bold mb-2 text-primary">{item.title}</h3>
-                          {item.event_date && (
-                            <p className="text-sm font-medium text-muted-foreground mb-3">
-                              📅 التاريخ: {new Date(item.event_date).toLocaleDateString('ar-EG', { 
-                                year: 'numeric', 
-                                month: 'long', 
-                                day: 'numeric' 
-                              })}
-                            </p>
-                          )}
-                          {item.description && (
-                            <p className="text-base leading-relaxed whitespace-pre-wrap">
-                              {item.description}
-                            </p>
-                          )}
+          <div className="bg-card p-6 rounded-lg shadow-sm border">
+            <div className="flex items-center gap-2 mb-6">
+              <Calendar className="h-5 w-5 text-primary" />
+              <h2 className="text-2xl font-bold">الفعاليات والمناسبات</h2>
+            </div>
+            {events && events.length > 0 ? (
+              <div className="space-y-8">
+                {events.map((item: any) => (
+                  <div key={item.id} className="border-b pb-8 last:border-b-0 last:pb-0">
+                    <div className="flex flex-col md:flex-row gap-6">
+                      {/* Image - Default or Custom */}
+                      <div className="flex-shrink-0">
+                        <div className="relative group">
+                          <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+                          <img
+                            src={item.image_url || DEFAULT_IMAGES.event}
+                            alt={item.title}
+                            className="relative w-full md:w-48 h-48 rounded-2xl object-cover border-4 border-primary/10 shadow-lg group-hover:border-primary/30 group-hover:shadow-2xl group-hover:scale-105 transition-all duration-300"
+                          />
                         </div>
                       </div>
+                      
+                      {/* Content */}
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold mb-2 text-primary">{item.title}</h3>
+                        {item.event_date && (
+                          <p className="text-sm font-medium text-muted-foreground mb-3">
+                            📅 التاريخ: {new Date(item.event_date).toLocaleDateString('ar-EG', { 
+                              year: 'numeric', 
+                              month: 'long', 
+                              day: 'numeric' 
+                            })}
+                          </p>
+                        )}
+                        {item.description && (
+                          <p className="text-base leading-relaxed whitespace-pre-wrap">
+                            {item.description}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  ))}
-                </div>
-              ) : deputy.events ? (
-                <div className="text-base leading-relaxed whitespace-pre-wrap">
-                  {deputy.events}
-                </div>
-              ) : null}
-            </div>
-          )}
+                  </div>
+                ))}
+              </div>
+            ) : deputy.events ? (
+              <div className="text-base leading-relaxed whitespace-pre-wrap">
+                {deputy.events}
+              </div>
+            ) : (
+              <div className="text-muted-foreground italic bg-muted/30 p-6 rounded-lg border-2 border-dashed">
+                <p className="leading-relaxed">
+                  إدارة نائبك تحاول التواصل مع {user.gender === 'female' ? 'السيدة' : 'السيد'} {deputy.deputy_status === 'candidate' ? (user.gender === 'female' ? 'المرشحة' : 'المرشح') : (user.gender === 'female' ? 'النائبة' : 'النائب')} {formatDeputyName(user.full_name, deputy.display_name)} لمعرفة المناسبات التي حضرها في دائرته وشارك فيها المواطنين...
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
