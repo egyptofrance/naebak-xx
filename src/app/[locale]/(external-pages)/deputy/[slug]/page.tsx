@@ -141,6 +141,19 @@ export default async function DeputyPage({ params }: PageProps) {
                     compact={true}
                   />
                 </div>
+
+                {/* Points Display */}
+                {deputy.points !== undefined && deputy.points !== null && (
+                  <div className="mt-3 flex items-center gap-2">
+                    <Trophy className="h-5 w-5 text-yellow-500" />
+                    <span className="text-lg font-semibold text-foreground">
+                      {deputy.points} نقطة
+                    </span>
+                    <span className="text-sm text-muted-foreground">
+                      من حل الشكاوى
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
