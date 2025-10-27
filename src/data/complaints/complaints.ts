@@ -807,6 +807,20 @@ export const closeComplaint = adminActionClient
       };
     }
 
+    // Update deputy_scores total_points
+    const { data: scoreData } = await supabaseAdminClient
+      .from("deputy_scores")
+      .select("total_points")
+      .eq("deputy_profile_id", complaint.assigned_deputy_id)
+      .maybeSingle();
+
+    if (scoreData) {
+      await supabaseAdminClient
+        .from("deputy_scores")
+        .update({ total_points: (scoreData.total_points || 0) + 10 })
+        .eq("deputy_profile_id", complaint.assigned_deputy_id);
+    }
+
     revalidatePath("/manager-complaints");
     revalidatePath(`/manager-complaints/${complaintId}`);
     
