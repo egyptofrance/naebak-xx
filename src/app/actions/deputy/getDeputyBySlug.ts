@@ -1,13 +1,23 @@
 "use server";
 
-import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
+import { createClient } from "@supabase/supabase-js";
 
 export async function getDeputyBySlug(slug: string) {
   console.log('========================================');
   console.log('[getDeputyBySlug] START - slug:', slug);
   console.log('========================================');
   
-  const supabase = await createSupabaseUserServerComponentClient();
+  // Use Service Role Key to bypass RLS for public deputy pages
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    }
+  );
 
   try {
     // Check if slug is a UUID (id) or actual slug
