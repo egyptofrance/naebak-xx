@@ -46,9 +46,9 @@ export function ProviderSignupForm({ next, locale = 'en' }: ProviderSignupFormPr
     <RenderProviders
       providers={["google"]}
       isLoading={providerStatus === "executing"}
-      onProviderLoginRequested={(
-        provider: Extract<AuthProvider, "google">,
-      ) => executeProvider({ provider, next })}
+      onProviderLoginRequested={(provider) =>
+        executeProvider({ provider, next })
+      }
     />
   );
 }
