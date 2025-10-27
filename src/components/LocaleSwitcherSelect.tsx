@@ -1,15 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Locale, usePathname, useRouter } from "@/i18n/routing";
-import { Check, ChevronDown } from "lucide-react";
-import { useParams } from "next/navigation";
 import { useTransition } from "react";
 
 interface LocaleSwitcherSelectProps {
@@ -24,7 +16,6 @@ export function LocaleSwitcherSelect({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const pathname = usePathname();
-  const params = useParams();
 
   function onLocaleSelect(nextLocale: Locale) {
     startTransition(() => {
@@ -32,34 +23,22 @@ export function LocaleSwitcherSelect({
     });
   }
 
-  const currentLocaleLabel = options.find(
-    (locale) => locale.value === defaultLocale,
-  )?.label;
+  // Show opposite language flag
+  const targetLocale = defaultLocale === "ar" ? "en" : "ar";
+  const flagEmoji = targetLocale === "en" ? "🇺🇸" : "🇪🇬";
+  const ariaLabel = targetLocale === "en" ? "Switch to English" : "التحويل للعربية";
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="w-[180px] justify-between"
-        >
-          {currentLocaleLabel}
-          <ChevronDown className="h-4 w-4 opacity-50" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[180px]">
-        {options.map((locale) => (
-          <DropdownMenuItem
-            key={locale.value}
-            onClick={() => onLocaleSelect(locale.value)}
-            className="justify-between"
-          >
-            {locale.label}
-            {locale.value === defaultLocale && <Check className="h-4 w-4" />}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={() => onLocaleSelect(targetLocale)}
+      aria-label={ariaLabel}
+      disabled={isPending}
+      className="text-2xl hover:bg-accent"
+    >
+      {flagEmoji}
+    </Button>
   );
 }
+
