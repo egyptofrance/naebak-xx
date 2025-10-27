@@ -29,20 +29,25 @@ export function PublicComplaintCard({ complaint }: PublicComplaintCardProps) {
     other: "أخرى",
   };
 
+  // استخدام صيغ المواطن
   const statusLabels: Record<string, string> = {
-    new: "جديدة",
-    under_review: "قيد المراجعة",
-    in_progress: "قيد المعالجة",
-    resolved: "محلولة",
-    closed: "مغلقة",
+    new: "تم استلام شكواك",
+    accepted: "تم قبول شكواك",
+    pending_review: "شكواك قيد الدراسة",
+    rejected: "تم رفض شكواك",
+    in_progress: "يتم العمل على حل شكواك",
+    resolved: "تم حل شكواك",
+    unable_to_resolve: "لم يتمكن النائب من حل شكواك",
   };
 
   const statusColors: Record<string, string> = {
     new: "bg-blue-100 text-blue-800",
-    under_review: "bg-yellow-100 text-yellow-800",
+    accepted: "bg-green-100 text-green-800",
+    pending_review: "bg-yellow-100 text-yellow-800",
+    rejected: "bg-red-100 text-red-800",
     in_progress: "bg-orange-100 text-orange-800",
-    resolved: "bg-green-100 text-green-800",
-    closed: "bg-gray-100 text-gray-800",
+    resolved: "bg-emerald-100 text-emerald-800",
+    unable_to_resolve: "bg-gray-100 text-gray-800",
   };
 
   return (
