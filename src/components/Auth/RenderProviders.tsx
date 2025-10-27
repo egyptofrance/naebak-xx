@@ -18,7 +18,7 @@ export const RenderProviders = ({
   isLoading: boolean;
 }) => {
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-center w-full">
       {providers.map((provider) => {
         const AuthIcon = SocialIcons[provider];
 
@@ -29,7 +29,7 @@ export const RenderProviders = ({
               size="default"
               disabled={isLoading}
               onClick={() => onProviderLoginRequested(provider)}
-              className="bg-background text-foreground border h-10 border-input rounded-lg"
+              className="bg-background text-foreground border h-10 border-input rounded-lg w-full"
             >
               <div className="mr-2">
                 <AuthIcon />
