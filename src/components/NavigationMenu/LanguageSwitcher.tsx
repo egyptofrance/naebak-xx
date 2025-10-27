@@ -1,21 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { LOCALES } from "@/constants";
 import { usePathname, useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
-import { Globe } from "lucide-react";
-
-const LOCALE_NAMES: Record<string, string> = {
-  en: "English",
-  ar: "العربية",
-};
 
 export function LanguageSwitcher() {
   const currentLocale = useLocale();
@@ -35,25 +22,21 @@ export function LanguageSwitcher() {
     router.refresh();
   };
 
+  // Show opposite language flag
+  const targetLocale = currentLocale === "ar" ? "en" : "ar";
+  const flagEmoji = targetLocale === "en" ? "🇺🇸" : "🇪🇬";
+  const ariaLabel = targetLocale === "en" ? "Switch to English" : "التحويل للعربية";
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
-          <Globe className="h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        {LOCALES.map((locale) => (
-          <DropdownMenuItem
-            key={locale}
-            onClick={() => switchLocale(locale)}
-            className={currentLocale === locale ? "bg-accent" : ""}
-          >
-            {LOCALE_NAMES[locale] || locale}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={() => switchLocale(targetLocale)}
+      aria-label={ariaLabel}
+      className="text-2xl hover:bg-accent"
+    >
+      {flagEmoji}
+    </Button>
   );
 }
 
