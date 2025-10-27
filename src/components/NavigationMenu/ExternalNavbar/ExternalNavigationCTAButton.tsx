@@ -11,7 +11,7 @@ export function ExternalNavigationCTAButton({
   const text = isLoggedIn ? "إدارة حسابي" : "تسجيل الدخول";
   return (
     <Link href={href} className="w-full">
-      <Button variant="default" size="default" className="group w-full">
+      <Button variant="default" size="default" className="group w-full bg-[#FF9D00] hover:bg-[#E68D00] text-white">
         {isLoading ? (
           "يرجى الانتظار..."
         ) : (

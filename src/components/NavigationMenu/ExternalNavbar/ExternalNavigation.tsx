@@ -7,6 +7,7 @@ import { MobileMenu } from "./MobileMenu";
 import { MobileMenuProvider } from "./MobileMenuContext";
 import { MobileMenuOpen } from "./MobileMenuOpen";
 import { VisitorCounter } from "@/components/VisitorCounter";
+import { NavbarLogo } from "./NavbarLogo";
 
 export function ExternalNavigation() {
   return (
@@ -16,9 +17,15 @@ export function ExternalNavigation() {
           className="flex items-center w-full h-[54px] md:container md:mx-auto justify-between px-6 md:px-8"
           aria-label="Global"
         >
-          <LeftNav />
-          <VisitorCounter />
-          <div className="flex gap-5">
+          {/* Left: Visitor Counter */}
+          <div className="flex items-center gap-4">
+            <VisitorCounter />
+            <NavbarLogo />
+          </div>
+          
+          {/* Right: Menu + Actions */}
+          <div className="flex items-center gap-5">
+            <LeftNav />
             <Suspense
               fallback={
                 <div className="flex space-x-10 items-center lg:-mr-2"></div>
@@ -40,3 +47,4 @@ export function ExternalNavigation() {
     </MobileMenuProvider>
   );
 }
+

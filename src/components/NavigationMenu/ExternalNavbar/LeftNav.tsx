@@ -1,8 +1,6 @@
 "use client";
 
 import { Link } from "@/components/intl-link";
-import { cn } from "@/utils/cn";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import { DocsMobileNavigation } from "./DocsMobileNavigation";
@@ -18,20 +16,6 @@ export function LeftNav() {
   return (
     <div className="flex items-center gap-8">
       <DocsMobileNavigation />
-      <div className="flex space-x-8">
-        <Link href="/" className={cn("font-bold text-xl ")}>
-          <div className="relative flex h-16 md:w-fit items-center justify-center dark:-ml-4 -ml-2">
-            {/* Logo أبيض دائماً (بسبب Header أخضر غامق) */}
-            <Image
-              src="/images/logo-naebak-white.png"
-              width={64}
-              height={64}
-              alt="نائبك"
-              className="object-contain"
-            />
-          </div>
-        </Link>
-      </div>
       <ul className="hidden lg:flex gap-8 font-medium items-center">
         {navbarLinks.map(({ key, href }) => (
           <li
@@ -45,3 +29,4 @@ export function LeftNav() {
     </div>
   );
 }
+
