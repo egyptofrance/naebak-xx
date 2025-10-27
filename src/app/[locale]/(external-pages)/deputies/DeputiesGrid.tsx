@@ -236,29 +236,122 @@ export default function DeputiesGrid({
       {/* Filters */}
       {!hideFilters && (
       <div className="bg-card p-6 rounded-lg shadow-sm border">
-        <h2 className="text-xl font-bold mb-6">تصفية النتائج</h2>
-        
-        {/* Search by Name */}
-        <div className="mb-6">
-          <label className="text-sm font-medium mb-2 block">البحث بالاسم</label>
-          <Input
-            type="text"
-            placeholder="ابحث عن نائب بالاسم... (مثال: احمد، محمد، فاطمة)"
-            value={searchName}
-            onChange={(e) => setSearchName(e.target.value)}
-            className="w-full"
-          />
-          {searchName && (
-            <p className="text-xs text-muted-foreground mt-1">
-              البحث عن: <span className="font-semibold">{searchName}</span>
-            </p>
-          )}
-        </div>
-        
-        {/* Main Filters Grid */}
         <div className="space-y-6">
-          {/* Row 1: Location Filters */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Header with Title and Sorting Info */}
+          <div className="space-y-3">
+            <h2 className="text-xl font-bold">تصفية النتائج</h2>
+            
+            {/* Sorting Information */}
+            <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <span className="text-2xl">ℹ️</span>
+                <div className="flex-1 space-y-2 text-sm">
+                  <p className="font-semibold text-blue-900 dark:text-blue-100">
+                    معلومات الترتيب:
+                  </p>
+                  <ul className="space-y-1 text-blue-800 dark:text-blue-200">
+                    <li className="flex items-start gap-2">
+                      <span className="text-amber-600 dark:text-amber-500">🏆</span>
+                      <span><strong>أولاً:</strong> يتم الترتيب حسب النقاط المكتسبة من حل شكاوى المواطنين والاستجابة لها</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span>⭐</span>
+                      <span><strong>ثانياً:</strong> في حالة تساوي النقاط، يتم الترتيب حسب التقييم بالنجوم من المواطنين</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-600 dark:text-green-500">✅</span>
+                      <span><strong>كل شكوى محلولة = +10 نقاط</strong></span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Row 1: Search, Status, Gender - Desktop: Same Row */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            {/* Search by Name */}
+            <div className="lg:col-span-5">
+              <label className="text-sm font-medium mb-2 block">البحث بالاسم</label>
+              <Input
+                type="text"
+                placeholder="ابحث عن نائب بالاسم..."
+                value={searchName}
+                onChange={(e) => setSearchName(e.target.value)}
+                className="w-full"
+              />
+              {searchName && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  البحث عن: <span className="font-semibold">{searchName}</span>
+                </p>
+              )}
+            </div>
+
+            {/* Status Filter */}
+            <div className="lg:col-span-4">
+              <label className="text-sm font-medium mb-2 block">حالة العضوية</label>
+              <div className="flex flex-wrap gap-3 pt-2">
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="status-current"
+                    checked={statusFilters.includes("current")}
+                    onCheckedChange={(checked) => handleStatusChange("current", checked as boolean)}
+                  />
+                  <Label htmlFor="status-current" className="cursor-pointer font-normal text-sm">
+                    نائب حالي
+                  </Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="status-former"
+                    checked={statusFilters.includes("former")}
+                    onCheckedChange={(checked) => handleStatusChange("former", checked as boolean)}
+                  />
+                  <Label htmlFor="status-former" className="cursor-pointer font-normal text-sm">
+                    نائب سابق
+                  </Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="status-candidate"
+                    checked={statusFilters.includes("candidate")}
+                    onCheckedChange={(checked) => handleStatusChange("candidate", checked as boolean)}
+                  />
+                  <Label htmlFor="status-candidate" className="cursor-pointer font-normal text-sm">
+                    مرشح
+                  </Label>
+                </div>
+              </div>
+            </div>
+
+            {/* Gender Filter */}
+            <div className="lg:col-span-3">
+              <label className="text-sm font-medium mb-2 block">الجنس</label>
+              <RadioGroup value={genderFilter} onValueChange={setGenderFilter} className="flex flex-wrap gap-3 pt-2">
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="all" id="gender-all" />
+                  <Label htmlFor="gender-all" className="cursor-pointer font-normal text-sm">
+                    الكل
+                  </Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="male" id="gender-male" />
+                  <Label htmlFor="gender-male" className="cursor-pointer font-normal text-sm">
+                    ذكر
+                  </Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="female" id="gender-female" />
+                  <Label htmlFor="gender-female" className="cursor-pointer font-normal text-sm">
+                    أنثى
+                  </Label>
+                </div>
+              </RadioGroup>
+            </div>
+          </div>
+
+          {/* Row 2: 4 Dropdowns - Desktop: Same Row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="text-sm font-medium mb-2 block">المحافظة</label>
               <Select
@@ -302,10 +395,8 @@ export default function DeputiesGrid({
                 </SelectContent>
               </Select>
             </div>
-          </div>
 
-          {/* Row 2: Party and Council Filters */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Party */}
             <div>
               <label className="text-sm font-medium mb-2 block">الحزب أو التحالف</label>
               <Select value={partyFilter} onValueChange={setPartyFilter}>
@@ -338,71 +429,6 @@ export default function DeputiesGrid({
                   ))}
                 </SelectContent>
               </Select>
-            </div>
-          </div>
-
-          {/* Row 3: Status and Gender Filters */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t">
-            {/* Status Filter (Checkboxes) */}
-            <div>
-              <label className="text-sm font-medium mb-3 block">حالة العضوية</label>
-              <div className="flex flex-wrap gap-4">
-                <div className="flex items-center gap-3">
-                  <Checkbox
-                    id="status-current"
-                    checked={statusFilters.includes("current")}
-                    onCheckedChange={(checked) => handleStatusChange("current", checked as boolean)}
-                  />
-                  <Label htmlFor="status-current" className="cursor-pointer font-normal">
-                    نائب حالي
-                  </Label>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Checkbox
-                    id="status-former"
-                    checked={statusFilters.includes("former")}
-                    onCheckedChange={(checked) => handleStatusChange("former", checked as boolean)}
-                  />
-                  <Label htmlFor="status-former" className="cursor-pointer font-normal">
-                    نائب سابق
-                  </Label>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Checkbox
-                    id="status-candidate"
-                    checked={statusFilters.includes("candidate")}
-                    onCheckedChange={(checked) => handleStatusChange("candidate", checked as boolean)}
-                  />
-                  <Label htmlFor="status-candidate" className="cursor-pointer font-normal">
-                    مرشح
-                  </Label>
-                </div>
-              </div>
-            </div>
-
-            {/* Gender Filter (Radio Buttons) */}
-            <div>
-              <label className="text-sm font-medium mb-3 block">الجنس</label>
-              <RadioGroup value={genderFilter} onValueChange={setGenderFilter} className="flex flex-wrap gap-4">
-                <div className="flex items-center gap-3">
-                  <RadioGroupItem value="all" id="gender-all" />
-                  <Label htmlFor="gender-all" className="cursor-pointer font-normal">
-                    الكل
-                  </Label>
-                </div>
-                <div className="flex items-center gap-3">
-                  <RadioGroupItem value="male" id="gender-male" />
-                  <Label htmlFor="gender-male" className="cursor-pointer font-normal">
-                    ذكر
-                  </Label>
-                </div>
-                <div className="flex items-center gap-3">
-                  <RadioGroupItem value="female" id="gender-female" />
-                  <Label htmlFor="gender-female" className="cursor-pointer font-normal">
-                    أنثى
-                  </Label>
-                </div>
-              </RadioGroup>
             </div>
           </div>
         </div>
