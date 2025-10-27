@@ -38,9 +38,8 @@ export function LanguageSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
+        <Button variant="outline" size="icon">
           <Globe className="h-4 w-4" />
-          <span className="hidden sm:inline">تغيير اللغة</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
