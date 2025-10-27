@@ -62,7 +62,8 @@ export async function getDeputyBySlug(slug: string) {
         avatar_url,
         phone,
         governorate_id,
-        party_id
+        party_id,
+        gender
       `)
       .eq("id", deputy.user_id)
       .single();
