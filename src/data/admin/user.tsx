@@ -306,6 +306,7 @@ export const getPaginatedUserListAction = managerOrAdminActionClient
           *, 
           user_application_settings(*), 
           user_roles(*),
+          deputy_profiles(id),
           governorates (
             id,
             name_ar,
@@ -358,11 +359,14 @@ export const getPaginatedUserListAction = managerOrAdminActionClient
 
     console.log(`[getPaginatedUserListAction] Fetched ${allUsers.length} users in ${pageNum + 1} page(s)`);
     
-    // Filter out users who have the "deputy" or "manager" role
+    // Filter out users who are deputies (have a record in deputy_profiles)
+    // Deputies are identified by having a deputy_profiles record, not by user_roles
     let filteredData = allUsers.filter(user => {
-      const hasDeputyRole = user.user_roles?.some((role: any) => role.role === "deputy");
+      // Check if user has a deputy_profiles record
+      const hasDeputyProfile = user.deputy_profiles && (Array.isArray(user.deputy_profiles) ? user.deputy_profiles.length > 0 : true);
+      // Also filter out managers from user_roles
       const hasManagerRole = user.user_roles?.some((role: any) => role.role === "manager");
-      return !hasDeputyRole && !hasManagerRole;
+      return !hasDeputyProfile && !hasManagerRole;
     });
     
     console.log(`[getPaginatedUserListAction] After filtering deputies/managers: ${filteredData.length} citizens`);
@@ -426,7 +430,7 @@ export const getUsersTotalPagesAction = managerOrAdminActionClient
 
       let supabaseQuery = supabaseAdminClient
         .from("user_profiles")
-        .select("*, user_application_settings(*), user_roles(*)")
+        .select("*, user_application_settings(*), user_roles(*), deputy_profiles(id)")
         .range(start, end);
       
       // Apply filters
@@ -465,11 +469,14 @@ export const getUsersTotalPagesAction = managerOrAdminActionClient
 
     console.log(`[getUsersTotalPagesAction] Fetched ${allUsers.length} users in ${pageNum + 1} page(s)`);
     
-    // Filter out users who have the "deputy" or "manager" role
+    // Filter out users who are deputies (have a record in deputy_profiles)
+    // Deputies are identified by having a deputy_profiles record, not by user_roles
     let filteredData = allUsers.filter(user => {
-      const hasDeputyRole = user.user_roles?.some((role: any) => role.role === "deputy");
+      // Check if user has a deputy_profiles record
+      const hasDeputyProfile = user.deputy_profiles && (Array.isArray(user.deputy_profiles) ? user.deputy_profiles.length > 0 : true);
+      // Also filter out managers from user_roles
       const hasManagerRole = user.user_roles?.some((role: any) => role.role === "manager");
-      return !hasDeputyRole && !hasManagerRole;
+      return !hasDeputyProfile && !hasManagerRole;
     });
     
     console.log(`[getUsersTotalPagesAction] After filtering deputies/managers: ${filteredData.length} citizens`);
