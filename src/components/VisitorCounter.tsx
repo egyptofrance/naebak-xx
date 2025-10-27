@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Users } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface VisitorCounterSettings {
   min: number;
@@ -46,11 +47,14 @@ export function VisitorCounter() {
   if (count === 0) return null;
 
   return (
-    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+    <Badge 
+      variant="secondary" 
+      className="flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-sm transition-colors"
+    >
       <Users className="h-4 w-4" />
-      <span className="hidden sm:inline">عدد الزائرين المتواجدون الآن:</span>
-      <span className="font-semibold text-foreground">{count.toLocaleString('ar-EG')}</span>
-    </div>
+      <span className="hidden sm:inline text-xs">متصل الآن:</span>
+      <span className="font-bold text-sm">{count.toLocaleString('ar-EG')}</span>
+    </Badge>
   );
 }
 

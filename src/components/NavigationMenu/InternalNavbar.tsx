@@ -9,10 +9,10 @@ import { VisitorCounter } from "@/components/VisitorCounter";
 
 export async function InternalNavbar({ children }: { children: ReactNode }) {
   return (
-    <header className="sticky top-0 w-full z-10 backdrop-blur-sm bg-background ">
+    <header className="sticky top-0 w-full z-10 bg-green-900 text-white shadow-lg">
       <div
         className={cn(
-          "h-full  text-sm font-medium flex gap-2 mx-auto pl-6 pr-6 border-b dark:border-gray-700/50 py-3 w-full justify-between items-center",
+          "h-full  text-sm font-medium flex gap-2 mx-auto pl-6 pr-6 border-b border-white/10 py-3 w-full justify-between items-center",
         )}
       >
         <SidebarTrigger />
@@ -20,19 +20,11 @@ export async function InternalNavbar({ children }: { children: ReactNode }) {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <Image
-            src="/images/logo-naebak-green.png"
-            alt="نائبك"
-            width={120}
-            height={40}
-            className="h-8 w-auto dark:hidden"
-            priority
-          />
-          <Image
             src="/images/logo-naebak-white.png"
             alt="نائبك"
             width={120}
             height={40}
-            className="h-8 w-auto hidden dark:block"
+            className="h-8 w-auto"
             priority
           />
         </Link>

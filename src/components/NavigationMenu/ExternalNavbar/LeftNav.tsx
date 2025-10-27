@@ -21,21 +21,13 @@ export function LeftNav() {
       <div className="flex space-x-8">
         <Link href="/" className={cn("font-bold text-xl ")}>
           <div className="relative flex h-16 md:w-fit items-center justify-center dark:-ml-4 -ml-2">
-            {/* Light Mode: لوجو أخضر */}
-            <Image
-              src="/images/logo-naebak-green.png"
-              width={64}
-              height={64}
-              alt="نائبك"
-              className="object-contain dark:hidden"
-            />
-            {/* Dark Mode: لوجو أبيض */}
+            {/* Logo أبيض دائماً (بسبب Header أخضر غامق) */}
             <Image
               src="/images/logo-naebak-white.png"
               width={64}
               height={64}
               alt="نائبك"
-              className="object-contain hidden dark:block"
+              className="object-contain"
             />
           </div>
         </Link>
@@ -44,7 +36,7 @@ export function LeftNav() {
         {navbarLinks.map(({ key, href }) => (
           <li
             key={key}
-            className="text-muted-foreground font-regular text-sm hover:text-foreground"
+            className="text-white/80 font-regular text-sm hover:text-white"
           >
             <Link href={href}>{t(key)}</Link>
           </li>

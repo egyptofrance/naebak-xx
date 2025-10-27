@@ -11,7 +11,7 @@ import { VisitorCounter } from "@/components/VisitorCounter";
 export function ExternalNavigation() {
   return (
     <MobileMenuProvider>
-      <header className="sticky inset-x-0 w-full top-0 z-50 border-b backdrop-blur-3xl">
+      <header className="sticky inset-x-0 w-full top-0 z-50 border-b bg-green-900 text-white shadow-lg">
         <nav
           className="flex items-center w-full h-[54px] md:container md:mx-auto justify-between px-6 md:px-8"
           aria-label="Global"
