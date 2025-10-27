@@ -6,6 +6,7 @@ import { LoginCTAButton } from "./LoginCTAButton";
 import { MobileMenu } from "./MobileMenu";
 import { MobileMenuProvider } from "./MobileMenuContext";
 import { MobileMenuOpen } from "./MobileMenuOpen";
+import { VisitorCounter } from "@/components/VisitorCounter";
 
 export function ExternalNavigation() {
   return (
@@ -16,6 +17,7 @@ export function ExternalNavigation() {
           aria-label="Global"
         >
           <LeftNav />
+          <VisitorCounter />
           <div className="flex gap-5">
             <Suspense
               fallback={

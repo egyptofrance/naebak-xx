@@ -22,6 +22,7 @@ import {
   UserCheck,
   UserPen,
   Users,
+  Settings,
 } from "lucide-react";
 import { Suspense } from "react";
 
@@ -108,6 +109,16 @@ const adminSections = [
         label: "أخبار ومقالات",
         href: `/app_admin/marketing/blog`,
         icon: <PenTool className="h-5 w-5" />,
+      },
+    ],
+  },
+  {
+    title: "الإعدادات",
+    links: [
+      {
+        label: "إعدادات عداد الزوار",
+        href: `/app_admin/visitor-settings`,
+        icon: <Settings className="h-5 w-5" />,
       },
     ],
   },
