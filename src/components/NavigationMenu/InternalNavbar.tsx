@@ -3,6 +3,7 @@ import { Suspense, type ReactNode } from "react";
 import { SidebarTrigger } from "../ui/sidebar";
 import { PendingInvitationCounter } from "./PendingInvitationCounter";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { DeputiesHeaderLink } from "./DeputiesHeaderLink";
 
 export async function InternalNavbar({ children }: { children: ReactNode }) {
   return (
@@ -15,6 +16,7 @@ export async function InternalNavbar({ children }: { children: ReactNode }) {
         <SidebarTrigger />
         <Suspense>{children}</Suspense>
         <div className="relative w-max flex items-center gap-2">
+          <DeputiesHeaderLink />
           <div className="hidden lg:flex items-center gap-2">
             <div className="flex items-center gap-2">
               <LanguageSwitcher />

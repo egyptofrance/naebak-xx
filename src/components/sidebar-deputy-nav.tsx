@@ -9,7 +9,7 @@ import {
 import { getCachedDeputyProfile } from "@/rsc-data/user/deputy";
 import { SlimWorkspace } from "@/types";
 import { getWorkspaceSubPath } from "@/utils/workspaces";
-import { Award, Calendar, FileText, ImageIcon, Info, MessageSquare, UserCheck } from "lucide-react";
+import { Award, Calendar, FileText, ImageIcon, Info, MessageSquare } from "lucide-react";
 
 const deputyLinks = [
   {
@@ -37,11 +37,7 @@ const deputyLinks = [
     href: "/events",
     icon: <Calendar className="h-5 w-5" />,
   },
-  {
-    label: "قائمة النواب",
-    href: "/deputies",
-    icon: <UserCheck className="h-5 w-5" />,
-  },
+
   {
     label: "إدارة البانر",
     href: "/deputy-banner",
@@ -64,7 +60,7 @@ export async function SidebarDeputyNav({ workspace }: { workspace: SlimWorkspace
         {deputyLinks.map((link) => (
           <SidebarMenuItem key={link.href}>
             <SidebarMenuButton asChild>
-              <Link href={link.href === "/deputies" ? link.href : getWorkspaceSubPath(workspace, link.href)}>
+              <Link href={getWorkspaceSubPath(workspace, link.href)}>
                 {link.icon}
                 {link.label}
               </Link>

@@ -34,11 +34,7 @@ const adminSections = [
         href: `/app_admin`,
         icon: <FileLineChart className="h-5 w-5" />,
       },
-      {
-        label: "قائمة النواب",
-        href: `/deputies`,
-        icon: <UserCheck className="h-5 w-5" />,
-      },
+
       {
         label: "إدارة الشكاوى",
         href: `/manager-complaints`,
