@@ -33,10 +33,10 @@ export default async function DeputiesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" dir="rtl">
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-4xl font-bold mb-8 text-center">قائمة النواب</h1>
+          <h1 className="text-4xl font-bold mb-8 text-right">قائمة النواب</h1>
           
           <DeputiesGrid 
             deputies={deputies} 
