@@ -244,23 +244,23 @@ export default function DeputiesGrid({
             {/* Sorting Information */}
             <div className="bg-muted/50 border rounded-lg p-4">
               <div className="flex items-start gap-3">
-                <span className="text-2xl">ℹ️</span>
-                <div className="flex-1 space-y-2 text-sm">
+                <span className="text-2xl flex-shrink-0">ℹ️</span>
+                <div className="flex-1 space-y-2 text-sm min-w-0">
                   <p className="font-semibold text-foreground">
                     معلومات الترتيب:
                   </p>
-                  <ul className="space-y-1 text-muted-foreground">
+                  <ul className="space-y-1 text-muted-foreground break-words">
                     <li className="flex items-start gap-2">
-                      <span className="text-amber-600 dark:text-amber-500">🏆</span>
-                      <span><strong className="text-foreground">أولاً:</strong> يتم الترتيب حسب النقاط المكتسبة من حل شكاوى المواطنين والاستجابة لها</span>
+                      <span className="text-amber-600 dark:text-amber-500 flex-shrink-0">🏆</span>
+                      <span className="break-words min-w-0"><strong className="text-foreground">أولاً:</strong> يتم الترتيب حسب النقاط المكتسبة من حل شكاوى المواطنين والاستجابة لها</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span>⭐</span>
-                      <span><strong className="text-foreground">ثانياً:</strong> في حالة تساوي النقاط، يتم الترتيب حسب التقييم بالنجوم من المواطنين</span>
+                      <span className="flex-shrink-0">⭐</span>
+                      <span className="break-words min-w-0"><strong className="text-foreground">ثانياً:</strong> في حالة تساوي النقاط، يتم الترتيب حسب التقييم بالنجوم من المواطنين</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-green-600 dark:text-green-500">✅</span>
-                      <span><strong className="text-foreground">كل شكوى محلولة = +10 نقاط</strong></span>
+                      <span className="text-green-600 dark:text-green-500 flex-shrink-0">✅</span>
+                      <span className="break-words min-w-0"><strong className="text-foreground">كل شكوى محلولة = +10 نقاط</strong></span>
                     </li>
                   </ul>
                 </div>
