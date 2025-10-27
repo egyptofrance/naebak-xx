@@ -40,14 +40,23 @@ const DEFAULT_IMAGES = {
 
 export default async function DeputyPage({ params }: PageProps) {
   const { slug, locale } = await params;
+  
+  console.log('========================================');
+  console.log('[DeputyPage] START - slug:', slug, 'locale:', locale);
+  console.log('========================================');
 
   // Fetch deputy data
   const data = await getDeputyBySlug(slug);
+  
+  console.log('[DeputyPage] Data received:', data ? 'YES' : 'NO');
 
   // If deputy not found, show 404
   if (!data) {
+    console.error('[DeputyPage] ❌ NO DATA - Calling notFound()');
     notFound();
   }
+  
+  console.log('[DeputyPage] ✅ DATA FOUND - Rendering page...');
 
   // Get user's rating for this deputy
   const userRating = await getUserRating(data.deputy.id);
