@@ -35,6 +35,7 @@ async function Title({
   );
 }
 
+// Main navigation menu for authenticated users
 export async function WorkspaceNavbar() {
   return (
     <nav className="flex items-center gap-6" dir="rtl">
