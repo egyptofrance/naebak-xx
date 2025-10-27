@@ -3,11 +3,17 @@
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 
 export async function getDeputyBySlug(slug: string) {
+  console.log('========================================');
+  console.log('[getDeputyBySlug] START - slug:', slug);
+  console.log('========================================');
+  
   const supabase = await createSupabaseUserServerComponentClient();
 
   try {
     // Check if slug is a UUID (id) or actual slug
     const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug);
+    console.log('[getDeputyBySlug] isUUID:', isUUID);
+    console.log('[getDeputyBySlug] Query field:', isUUID ? 'id' : 'slug');
     
     // Get deputy profile by slug or id
     const { data: deputy, error: deputyError } = (await supabase
@@ -32,14 +38,22 @@ export async function getDeputyBySlug(slug: string) {
       .eq(isUUID ? "id" : "slug", slug)
       .maybeSingle()) as any;
 
+    console.log('[getDeputyBySlug] Query executed');
+    console.log('[getDeputyBySlug] Deputy result:', deputy ? 'FOUND' : 'NULL');
+    console.log('[getDeputyBySlug] Deputy error:', deputyError);
+    
     if (deputyError) {
-      console.error("[getDeputyBySlug] Error:", deputyError);
+      console.error("[getDeputyBySlug] ERROR DETAILS:", JSON.stringify(deputyError, null, 2));
       return null;
     }
 
     if (!deputy) {
+      console.error('[getDeputyBySlug] ❌ NO DEPUTY FOUND FOR SLUG:', slug);
+      console.error('[getDeputyBySlug] This means the query returned NULL');
       return null;
     }
+    
+    console.log('[getDeputyBySlug] ✅ DEPUTY FOUND:', deputy.id, deputy.display_name);
 
     // Get user profile
     const { data: user, error: userError } = await supabase
