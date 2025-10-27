@@ -122,6 +122,20 @@ export function DeputyDataForm({ deputyProfile }: DeputyDataFormProps) {
                 placeholder="مثال: 123"
               />
             </div>
+
+            {/* Council Type - Read Only */}
+            <div className="space-y-2">
+              <Label htmlFor="council_type">نوع المجلس</Label>
+              <Input
+                id="council_type"
+                value={deputyProfile.councils?.name_ar || "غير محدد"}
+                disabled
+                className="bg-muted"
+              />
+              <p className="text-xs text-muted-foreground">
+                يتم تحديد نوع المجلس من قبل الإدارة
+              </p>
+            </div>
           </div>
         </CardContent>
       </Card>

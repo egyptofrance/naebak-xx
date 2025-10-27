@@ -19,7 +19,14 @@ export async function getDeputyProfile() {
 
   const { data: deputyProfile, error } = await supabase
     .from("deputy_profiles")
-    .select("*")
+    .select(`
+      *,
+      councils (
+        id,
+        name_ar,
+        name_en
+      )
+    `)
     .eq("user_id", user.id)
     .maybeSingle();
 
