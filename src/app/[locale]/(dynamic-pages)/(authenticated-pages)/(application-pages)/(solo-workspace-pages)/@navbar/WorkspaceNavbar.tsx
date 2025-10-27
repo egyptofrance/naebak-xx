@@ -36,27 +36,20 @@ async function Title({
 }
 
 export async function WorkspaceNavbar() {
-  try {
-    const workspace = await getCachedSoloWorkspace();
-    return (
-      <div className="flex items-center">
-        <Link href={getWorkspaceSubPath(workspace, "/home")}>
-          <span className="flex items-center space-x-2">
-            <Suspense fallback={<Skeleton className="w-16 h-6" />}>
-              <Title workspace={workspace} />
-            </Suspense>
-          </span>
-        </Link>
-      </div>
-    );
-  } catch (error) {
-    // Fallback UI instead of notFound()
-    return (
-      <div className="flex items-center">
-        <span className="flex items-center space-x-2">
-          <T.P>Personal Workspace</T.P>
-        </span>
-      </div>
-    );
-  }
+  return (
+    <nav className="flex items-center gap-6" dir="rtl">
+      <Link href="/deputies" className="text-sm font-medium hover:text-primary transition-colors">
+        النواب
+      </Link>
+      <Link href="/about" className="text-sm font-medium hover:text-primary transition-colors">
+        من نحن
+      </Link>
+      <Link href="/contact" className="text-sm font-medium hover:text-primary transition-colors">
+        اتصل بنا
+      </Link>
+      <Link href="/public-complaints" className="text-sm font-medium hover:text-primary transition-colors">
+        الشكاوى العامة
+      </Link>
+    </nav>
+  );
 }
