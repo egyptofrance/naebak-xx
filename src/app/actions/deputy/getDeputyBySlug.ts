@@ -20,6 +20,7 @@ export async function getDeputyBySlug(slug: string) {
       .from("deputy_profiles")
       .select(`
         id,
+        slug,
         user_id,
         deputy_status,
         council_id,
