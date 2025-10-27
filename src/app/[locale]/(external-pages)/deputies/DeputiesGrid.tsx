@@ -502,13 +502,27 @@ export default function DeputiesGrid({
                 </div>
               </div>
 
-              {/* Rating */}
-              <DeputyCardRating
-                deputyId={deputyData.deputy.id}
-                rating={deputyData.deputy.rating_average || 0}
-                ratingCount={deputyData.deputy.rating_count || 0}
-                isAuthenticated={isAuthenticated}
-              />
+              {/* Points & Rating */}
+              <div className="space-y-3">
+                {/* Points */}
+                <div className="flex items-center justify-center gap-2 p-2 bg-amber-50 dark:bg-amber-950/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                  <span className="text-2xl">🏆</span>
+                  <div className="text-center">
+                    <div className="text-xs text-muted-foreground font-medium">النقاط</div>
+                    <div className="text-lg font-bold text-amber-600 dark:text-amber-500">
+                      {deputyData.deputy.points || 0}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Rating */}
+                <DeputyCardRating
+                  deputyId={deputyData.deputy.id}
+                  rating={deputyData.deputy.rating_average || 0}
+                  ratingCount={deputyData.deputy.rating_count || 0}
+                  isAuthenticated={isAuthenticated}
+                />
+              </div>
 
               {/* Visit Button */}
               {deputyData.slug ? (

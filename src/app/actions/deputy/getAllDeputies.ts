@@ -40,6 +40,7 @@ export async function getAllDeputies() {
           rating_count,
           gender,
           display_name,
+          points,
           user_profiles (
             id,
             full_name,
@@ -131,6 +132,7 @@ export async function getAllDeputies() {
           rating_count: deputy.rating_count,
           gender: deputy.gender,
           display_name: deputy.display_name,
+          points: deputy.points || 0,
         },
         user: userProfile ? {
           id: userProfile.id,
