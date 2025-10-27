@@ -19,8 +19,8 @@ export default async function Layout({
             Admin panel
           </div>
         </InternalNavbar>
-        <div className="relative flex-1 h-auto mt-8 w-full">
-          <div className="pl-6 pr-12 space-y-6 pb-10">
+        <div className="relative flex-1 h-auto mt-8 w-full" dir="rtl">
+          <div className="pl-6 pr-12 space-y-6 pb-10 text-right">
             {children}
           </div>
         </div>

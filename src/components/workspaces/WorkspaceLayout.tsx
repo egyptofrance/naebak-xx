@@ -56,8 +56,8 @@ export async function WorkspaceLayout({
             {navbar}
           </div>
         </InternalNavbar>
-        <div className="relative flex-1 h-auto w-full overflow-auto">
-          <div className="px-6 space-y-6 pb-8">{children}</div>
+        <div className="relative flex-1 h-auto w-full overflow-auto" dir="rtl">
+          <div className="px-6 space-y-6 pb-8 text-right">{children}</div>
         </div>
       </div>
     </ApplicationLayoutShell>
