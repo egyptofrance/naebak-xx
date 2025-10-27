@@ -122,7 +122,7 @@ export function Login({
         </Tabs>
         <Separator className="my-4" />
         <RenderProviders
-          providers={["google", "github", "twitter"]}
+          providers={["google"]}
           isLoading={providerStatus === "executing"}
           onProviderLoginRequested={(provider) =>
             executeProvider({ provider, next })

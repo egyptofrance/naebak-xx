@@ -44,10 +44,10 @@ export function ProviderSignupForm({ next, locale = 'en' }: ProviderSignupFormPr
 
   return (
     <RenderProviders
-      providers={["google", "github", "twitter"]}
+      providers={["google"]}
       isLoading={providerStatus === "executing"}
       onProviderLoginRequested={(
-        provider: Extract<AuthProvider, "google" | "github" | "twitter">,
+        provider: Extract<AuthProvider, "google">,
       ) => executeProvider({ provider, next })}
     />
   );
