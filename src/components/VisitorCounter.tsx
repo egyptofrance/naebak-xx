@@ -49,11 +49,11 @@ export function VisitorCounter() {
   return (
     <Badge 
       variant="secondary" 
-      className="flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-sm transition-colors"
+      className="flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-sm transition-colors flex-shrink-0"
     >
-      <Users className="h-4 w-4" />
-      <span className="hidden sm:inline text-xs">متصل الآن:</span>
-      <span className="font-bold text-sm">{count.toLocaleString('ar-EG')}</span>
+      <Users className="h-3.5 w-3.5 md:h-4 md:w-4 flex-shrink-0" />
+      <span className="hidden sm:inline text-xs whitespace-nowrap">متصل الآن:</span>
+      <span className="font-bold text-xs md:text-sm whitespace-nowrap">{count.toLocaleString('ar-EG')}</span>
     </Badge>
   );
 }
