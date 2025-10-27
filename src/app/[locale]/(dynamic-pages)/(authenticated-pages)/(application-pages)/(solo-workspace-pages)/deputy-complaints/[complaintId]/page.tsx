@@ -3,6 +3,7 @@ import Link from "next/link";
 import { UpdateStatusForm } from "@/components/complaints/UpdateStatusForm";
 import { AddCommentForm } from "@/components/complaints/AddCommentForm";
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
+import { getStatusLabel, getPriorityLabel, getPriorityColor } from "@/utils/complaint-labels";
 
 export default async function DeputyComplaintDetailsPage({
   params,
@@ -17,7 +18,7 @@ export default async function DeputyComplaintDetailsPage({
 
   if (!user) {
     return (
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto p-6" dir="rtl">
         <div className="bg-destructive/10 text-destructive p-4 rounded-md">
           يجب تسجيل الدخول لعرض هذه الصفحة
         </div>
@@ -29,7 +30,7 @@ export default async function DeputyComplaintDetailsPage({
 
   if (error || !data) {
     return (
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto p-6" dir="rtl">
         <div className="bg-destructive/10 text-destructive p-4 rounded-md">
           {error || "فشل تحميل بيانات الشكوى"}
         </div>
@@ -40,7 +41,7 @@ export default async function DeputyComplaintDetailsPage({
   const { complaint, actions } = data;
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-6" dir="rtl">
       <div className="mb-6">
         <Link href="/deputy-complaints" className="text-sm text-primary hover:underline">
           ← العودة إلى قائمة الشكاوى
@@ -61,15 +62,10 @@ export default async function DeputyComplaintDetailsPage({
               </div>
               <div className="flex gap-2">
                 <span className="text-xs px-3 py-1 rounded-full bg-secondary">
-                  {complaint.status}
+                  {getStatusLabel(complaint.status)}
                 </span>
-                <span className={`text-xs px-3 py-1 rounded-full ${
-                  complaint.priority === 'urgent' ? 'bg-red-100 text-red-800' :
-                  complaint.priority === 'high' ? 'bg-orange-100 text-orange-800' :
-                  complaint.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                  'bg-green-100 text-green-800'
-                }`}>
-                  {complaint.priority}
+                <span className={`text-xs px-3 py-1 rounded-full ${getPriorityColor(complaint.priority)}`}>
+                  {getPriorityLabel(complaint.priority)}
                 </span>
               </div>
             </div>
@@ -117,7 +113,7 @@ export default async function DeputyComplaintDetailsPage({
                 {actions && actions.map((action: any) => (
                   <div
                     key={action.id}
-                    className="border-l-2 border-primary/20 pl-4 py-2"
+                    className="border-r-2 border-primary/20 pr-4 py-2"
                   >
                     <div className="flex justify-between items-start mb-1">
                       <span className="text-sm font-medium">{action.action_type}</span>

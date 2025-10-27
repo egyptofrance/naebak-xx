@@ -1,11 +1,12 @@
 import { getDeputyComplaints } from "@/data/complaints/complaints";
 import Link from "next/link";
+import { getStatusLabel, getPriorityLabel, getPriorityColor } from "@/utils/complaint-labels";
 
 export default async function DeputyComplaintsPage() {
   const { data: complaints, error } = await getDeputyComplaints();
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-6" dir="rtl">
       <h1 className="text-2xl font-bold mb-6">الشكاوى المسندة لي</h1>
 
       {error && (
@@ -31,15 +32,10 @@ export default async function DeputyComplaintsPage() {
               <h3 className="font-semibold text-lg">{complaint.title}</h3>
               <div className="flex gap-2">
                 <span className="text-xs px-2 py-1 rounded-full bg-secondary">
-                  {complaint.status}
+                  {getStatusLabel(complaint.status)}
                 </span>
-                <span className={`text-xs px-2 py-1 rounded-full ${
-                  complaint.priority === 'urgent' ? 'bg-red-100 text-red-800' :
-                  complaint.priority === 'high' ? 'bg-orange-100 text-orange-800' :
-                  complaint.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                  'bg-green-100 text-green-800'
-                }`}>
-                  {complaint.priority}
+                <span className={`text-xs px-2 py-1 rounded-full ${getPriorityColor(complaint.priority)}`}>
+                  {getPriorityLabel(complaint.priority)}
                 </span>
               </div>
             </div>
