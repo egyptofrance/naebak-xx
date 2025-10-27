@@ -288,78 +288,115 @@ const getPaginatedUserListSchema = z.object({
 export const getPaginatedUserListAction = managerOrAdminActionClient
   .schema(getPaginatedUserListSchema)
   .action(async ({ parsedInput: { query = "", page = 1, limit = 10, governorateId, partyId, role, gender } }) => {
-    console.log("query", query);
+    console.log("[getPaginatedUserListAction] Starting with filters:", { query, page, limit, governorateId, partyId, role, gender });
     
-    // First, get ALL users with their roles (we'll filter and paginate in memory)
-    let supabaseQuery = supabaseAdminClient
-      .from("user_profiles")
-      .select(`
-        *, 
-        user_application_settings(*), 
-        user_roles(*),
-        governorates (
-          id,
-          name_ar,
-          name_en,
-          code
-        ),
-        parties (
-          id,
-          name_ar,
-          name_en,
-          abbreviation
-        )
-      `);
-    
-    console.log(query);
-    
-    // Text search across multiple fields
-    if (query) {
-      supabaseQuery = supabaseQuery.or(
-        `full_name.ilike.%${query}%,email.ilike.%${query}%,phone.ilike.%${query}%,city.ilike.%${query}%,district.ilike.%${query}%,electoral_district.ilike.%${query}%`
-      );
-    }
-    
-    // Filter by governorate
-    if (governorateId) {
-      supabaseQuery = supabaseQuery.eq("governorate_id", governorateId);
-    }
-    
-    // Filter by party
-    if (partyId) {
-      supabaseQuery = supabaseQuery.eq("party_id", partyId);
-    }
-    
-    // Filter by role
-    if (role) {
-      supabaseQuery = supabaseQuery.eq("role", role);
-    }
-    
-    // Filter by gender
-    if (gender) {
-      supabaseQuery = supabaseQuery.eq("gender", gender);
-    }
-    
-    // Fetch all matching users
-    const { data, error } = await supabaseQuery;
+    // Fetch ALL users using pagination to bypass Supabase's 1000 row limit
+    let allUsers: any[] = [];
+    let pageNum = 0;
+    const pageSize = 1000; // Supabase's default max
+    let hasMore = true;
 
-    if (error) {
-      throw error;
+    while (hasMore) {
+      const start = pageNum * pageSize;
+      const end = start + pageSize - 1;
+
+      let supabaseQuery = supabaseAdminClient
+        .from("user_profiles")
+        .select(`
+          *, 
+          user_application_settings(*), 
+          user_roles(*),
+          governorates (
+            id,
+            name_ar,
+            name_en,
+            code
+          ),
+          parties (
+            id,
+            name_ar,
+            name_en,
+            abbreviation
+          )
+        `)
+        .range(start, end);
+      
+      // Apply filters to reduce data fetched
+      if (governorateId) {
+        supabaseQuery = supabaseQuery.eq("governorate_id", governorateId);
+      }
+      
+      if (partyId) {
+        supabaseQuery = supabaseQuery.eq("party_id", partyId);
+      }
+      
+      if (gender) {
+        supabaseQuery = supabaseQuery.eq("gender", gender);
+      }
+
+      const { data: usersPage, error: usersError } = await supabaseQuery;
+
+      if (usersError) {
+        console.error(`[getPaginatedUserListAction] Error on page ${pageNum}:`, usersError);
+        throw usersError;
+      }
+
+      if (!usersPage || usersPage.length === 0) {
+        hasMore = false;
+        break;
+      }
+
+      allUsers = [...allUsers, ...usersPage];
+
+      // If we got less than pageSize, we've reached the end
+      if (usersPage.length < pageSize) {
+        hasMore = false;
+      } else {
+        pageNum++;
+      }
     }
+
+    console.log(`[getPaginatedUserListAction] Fetched ${allUsers.length} users in ${pageNum + 1} page(s)`);
     
     // Filter out users who have the "deputy" or "manager" role
-    const filteredData = data?.filter(user => {
+    let filteredData = allUsers.filter(user => {
       const hasDeputyRole = user.user_roles?.some((role: any) => role.role === "deputy");
       const hasManagerRole = user.user_roles?.some((role: any) => role.role === "manager");
       return !hasDeputyRole && !hasManagerRole;
-    }) || [];
+    });
+    
+    console.log(`[getPaginatedUserListAction] After filtering deputies/managers: ${filteredData.length} citizens`);
+    
+    // Apply text search filter (client-side since we need to search across all users)
+    if (query) {
+      const lowerQuery = query.toLowerCase();
+      filteredData = filteredData.filter(user => {
+        const fullName = user.full_name?.toLowerCase() || "";
+        const email = user.email?.toLowerCase() || "";
+        const phone = user.phone?.toLowerCase() || "";
+        const city = user.city?.toLowerCase() || "";
+        const district = user.district?.toLowerCase() || "";
+        const electoralDistrict = user.electoral_district?.toLowerCase() || "";
+        
+        return (
+          fullName.includes(lowerQuery) ||
+          email.includes(lowerQuery) ||
+          phone.includes(lowerQuery) ||
+          city.includes(lowerQuery) ||
+          district.includes(lowerQuery) ||
+          electoralDistrict.includes(lowerQuery)
+        );
+      });
+      
+      console.log(`[getPaginatedUserListAction] After text search: ${filteredData.length} citizens`);
+    }
     
     // Now apply pagination on the filtered citizens only
     const startIndex = (page - 1) * limit;
     const endIndex = startIndex + limit;
     const paginatedData = filteredData.slice(startIndex, endIndex);
     
-    console.log("Total citizens:", filteredData.length, "Page:", page, "Showing:", paginatedData.length);
+    console.log(`[getPaginatedUserListAction] Total citizens: ${filteredData.length}, Page: ${page}, Showing: ${paginatedData.length}`);
     return paginatedData;
   });
 
@@ -375,59 +412,96 @@ const getUsersTotalPagesSchema = z.object({
 export const getUsersTotalPagesAction = managerOrAdminActionClient
   .schema(getUsersTotalPagesSchema)
   .action(async ({ parsedInput: { query = "", limit = 10, governorateId, partyId, role, gender } }) => {
-    console.log("query", query);
+    console.log("[getUsersTotalPagesAction] Starting with filters:", { query, limit, governorateId, partyId, role, gender });
     
-    // Get all users with their roles to filter out deputies
-    let supabaseQuery = supabaseAdminClient
-      .from("user_profiles")
-      .select("*, user_application_settings(*), user_roles(*)");
-    
-    // Text search across multiple fields
-    if (query) {
-      supabaseQuery = supabaseQuery.or(
-        `full_name.ilike.%${query}%,email.ilike.%${query}%,phone.ilike.%${query}%,city.ilike.%${query}%,district.ilike.%${query}%,electoral_district.ilike.%${query}%`
-      );
-    }
-    
-    // Filter by governorate
-    if (governorateId) {
-      supabaseQuery = supabaseQuery.eq("governorate_id", governorateId);
-    }
-    
-    // Filter by party
-    if (partyId) {
-      supabaseQuery = supabaseQuery.eq("party_id", partyId);
-    }
-    
-    // Filter by role
-    if (role) {
-      supabaseQuery = supabaseQuery.eq("role", role);
-    }
-    
-    // Filter by gender
-    if (gender) {
-      supabaseQuery = supabaseQuery.eq("gender", gender);
-    }
-    
-    const { data, error } = await supabaseQuery;
+    // Fetch ALL users using pagination to bypass Supabase's 1000 row limit
+    let allUsers: any[] = [];
+    let pageNum = 0;
+    const pageSize = 1000;
+    let hasMore = true;
 
-    if (error) {
-      console.log("supabase***************");
-      console.error(error);
-      throw error;
+    while (hasMore) {
+      const start = pageNum * pageSize;
+      const end = start + pageSize - 1;
+
+      let supabaseQuery = supabaseAdminClient
+        .from("user_profiles")
+        .select("*, user_application_settings(*), user_roles(*)")
+        .range(start, end);
+      
+      // Apply filters
+      if (governorateId) {
+        supabaseQuery = supabaseQuery.eq("governorate_id", governorateId);
+      }
+      
+      if (partyId) {
+        supabaseQuery = supabaseQuery.eq("party_id", partyId);
+      }
+      
+      if (gender) {
+        supabaseQuery = supabaseQuery.eq("gender", gender);
+      }
+
+      const { data: usersPage, error: usersError } = await supabaseQuery;
+
+      if (usersError) {
+        console.error(`[getUsersTotalPagesAction] Error on page ${pageNum}:`, usersError);
+        throw usersError;
+      }
+
+      if (!usersPage || usersPage.length === 0) {
+        hasMore = false;
+        break;
+      }
+
+      allUsers = [...allUsers, ...usersPage];
+
+      if (usersPage.length < pageSize) {
+        hasMore = false;
+      } else {
+        pageNum++;
+      }
     }
+
+    console.log(`[getUsersTotalPagesAction] Fetched ${allUsers.length} users in ${pageNum + 1} page(s)`);
     
     // Filter out users who have the "deputy" or "manager" role
-    const filteredData = data?.filter(user => {
+    let filteredData = allUsers.filter(user => {
       const hasDeputyRole = user.user_roles?.some((role: any) => role.role === "deputy");
       const hasManagerRole = user.user_roles?.some((role: any) => role.role === "manager");
       return !hasDeputyRole && !hasManagerRole;
-    }) || [];
+    });
     
-    const count = filteredData.length;
-    console.log("Total users (excluding deputies and managers):", count);
+    console.log(`[getUsersTotalPagesAction] After filtering deputies/managers: ${filteredData.length} citizens`);
     
-    return Math.ceil(count / limit);
+    // Apply text search filter
+    if (query) {
+      const lowerQuery = query.toLowerCase();
+      filteredData = filteredData.filter(user => {
+        const fullName = user.full_name?.toLowerCase() || "";
+        const email = user.email?.toLowerCase() || "";
+        const phone = user.phone?.toLowerCase() || "";
+        const city = user.city?.toLowerCase() || "";
+        const district = user.district?.toLowerCase() || "";
+        const electoralDistrict = user.electoral_district?.toLowerCase() || "";
+        
+        return (
+          fullName.includes(lowerQuery) ||
+          email.includes(lowerQuery) ||
+          phone.includes(lowerQuery) ||
+          city.includes(lowerQuery) ||
+          district.includes(lowerQuery) ||
+          electoralDistrict.includes(lowerQuery)
+        );
+      });
+      
+      console.log(`[getUsersTotalPagesAction] After text search: ${filteredData.length} citizens`);
+    }
+    
+    const totalPages = Math.ceil(filteredData.length / limit);
+    
+    console.log(`[getUsersTotalPagesAction] Total citizens: ${filteredData.length}, Total pages: ${totalPages}`);
+    return totalPages;
   });
 
 const uploadBlogImageSchema = z.object({
