@@ -82,7 +82,8 @@ export function AppProviders({
     <PHProvider>
       <RootProvider
         theme={{
-          enabled: true,
+          enabled: false,
+          defaultTheme: "light",
         }}
         search={{
           enabled: true,

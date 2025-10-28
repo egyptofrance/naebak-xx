@@ -10,7 +10,7 @@ import {
 import { Suspense } from "react";
 import { Link } from "./intl-link";
 
-import { ThemeToggle } from "./theme-toggle";
+
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
   DropdownMenu,
@@ -97,8 +97,6 @@ async function SidebarFooterUserMenu() {
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <ThemeToggle />
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link href="/logout">

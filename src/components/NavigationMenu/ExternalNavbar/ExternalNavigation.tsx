@@ -1,5 +1,5 @@
 import LocaleSwitcher from "@/components/LocaleSwitcher";
-import { ThemeSwitch } from "@/components/theme-switch";
+
 import { Suspense } from "react";
 import { LeftNav } from "./LeftNav";
 import { LoginCTAButton } from "./LoginCTAButton";
@@ -33,7 +33,6 @@ export function ExternalNavigation() {
             >
               <div className="flex space-x-3 items-center lg:-mr-2">
                 <LocaleSwitcher />
-                <ThemeSwitch />
                 <div className="ml-6 hidden lg:block" suppressHydrationWarning>
                   <LoginCTAButton />
                 </div>
