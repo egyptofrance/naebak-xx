@@ -588,10 +588,11 @@ export default function DeputiesList() {
                   <div className="text-sm text-muted-foreground">
                     عرض {((currentPage - 1) * 20) + 1} - {Math.min(currentPage * 20, total)} من {total} نائب
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 md:gap-2 flex-wrap justify-center">
                     <Button
                       variant="outline"
                       size="sm"
+                      className="hidden sm:inline-flex"
                       onClick={() => setCurrentPage(1)}
                       disabled={currentPage === 1 || isSearching}
                     >
@@ -607,7 +608,7 @@ export default function DeputiesList() {
                     </Button>
                     
                     {/* Page Numbers */}
-                    <div className="flex items-center gap-1">
+                    <div className="hidden sm:flex items-center gap-1">
                       {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                         let pageNum;
                         if (totalPages <= 5) {
@@ -648,11 +649,17 @@ export default function DeputiesList() {
                     <Button
                       variant="outline"
                       size="sm"
+                      className="hidden sm:inline-flex"
                       onClick={() => setCurrentPage(totalPages)}
                       disabled={currentPage === totalPages || isSearching}
                     >
                       الأخيرة
                     </Button>
+                    
+                    {/* Mobile: Show current page info */}
+                    <div className="sm:hidden text-sm text-muted-foreground px-2">
+                      {currentPage} / {totalPages}
+                    </div>
                   </div>
                 </div>
               )}
