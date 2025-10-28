@@ -87,9 +87,9 @@ export function PublicComplaintsClient({ complaints }: PublicComplaintsClientPro
   const hasActiveFilters = selectedStatus !== "all" || selectedCategory !== "all" || selectedGovernorate !== "all";
 
   return (
-    <div dir="rtl">
+    <>
       {/* Filters */}
-      <div className="bg-card border rounded-lg p-6 mb-6">
+      <div className="bg-card border rounded-lg p-6 mb-6" dir="rtl">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">تصفية النتائج</h2>
           {hasActiveFilters && (
@@ -161,7 +161,7 @@ export function PublicComplaintsClient({ complaints }: PublicComplaintsClientPro
       </div>
 
       {/* Statistics */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8" dir="rtl">
         <div className="bg-card border rounded-lg p-4">
           <p className="text-sm text-muted-foreground">إجمالي النتائج</p>
           <p className="text-2xl font-bold">{filteredComplaints.length}</p>
@@ -186,7 +186,7 @@ export function PublicComplaintsClient({ complaints }: PublicComplaintsClientPro
 
       {/* Complaints List */}
       {filteredComplaints.length === 0 && (
-        <div className="text-center py-16 text-muted-foreground">
+        <div className="text-center py-16 text-muted-foreground" dir="rtl">
           <p className="text-lg">لا توجد شكاوى تطابق الفلاتر المحددة</p>
           {hasActiveFilters && (
             <button
@@ -199,12 +199,11 @@ export function PublicComplaintsClient({ complaints }: PublicComplaintsClientPro
         </div>
       )}
 
-      <div className="grid gap-4">
+      <div className="grid gap-4" dir="rtl">
         {filteredComplaints.map((complaint) => (
           <PublicComplaintCard key={complaint.id} complaint={complaint} />
-        )}
+        ))}
       </div>
-    </div>
+    </>
   );
 }
-
