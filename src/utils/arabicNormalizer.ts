@@ -53,7 +53,7 @@ export function areTextsEqual(text1: string, text2: string): boolean {
 /**
  * حساب نسبة التشابه بين نصين
  * Calculates similarity percentage between two texts
- * Uses Dice's Coefficient algorithm
+ * Uses Levenshtein Distance (with order sensitivity)
  */
 export function calculateSimilarity(str1: string, str2: string): number {
   if (!str1 || !str2) return 0;
@@ -65,35 +65,55 @@ export function calculateSimilarity(str1: string, str2: string): number {
 
   if (normalized1 === normalized2) return 1;
 
-  // Create bigrams
-  const bigrams1 = getBigrams(normalized1);
-  const bigrams2 = getBigrams(normalized2);
-
-  if (bigrams1.size === 0 || bigrams2.size === 0) return 0;
-
-  // Count intersections
-  let intersection = 0;
-  for (const bigram of bigrams1) {
-    if (bigrams2.has(bigram)) {
-      intersection++;
-    }
-  }
-
-  // Dice's Coefficient: (2 * intersection) / (size1 + size2)
-  return (2.0 * intersection) / (bigrams1.size + bigrams2.size);
+  // Calculate Levenshtein Distance
+  const distance = levenshteinDistance(normalized1, normalized2);
+  const maxLength = Math.max(normalized1.length, normalized2.length);
+  
+  if (maxLength === 0) return 1;
+  
+  // Convert distance to similarity (1 - normalized distance)
+  return 1 - (distance / maxLength);
 }
 
 /**
- * إنشاء bigrams من نص
- * Creates bigrams from a text string
+ * حساب Levenshtein Distance بين نصين
+ * Calculates the minimum number of single-character edits needed
+ * to change one string into another (preserves order)
  */
-function getBigrams(str: string): Set<string> {
-  const bigrams = new Set<string>();
-  for (let i = 0; i < str.length - 1; i++) {
-    bigrams.add(str.substring(i, i + 2));
+function levenshteinDistance(str1: string, str2: string): number {
+  const len1 = str1.length;
+  const len2 = str2.length;
+  
+  // Create a 2D array for dynamic programming
+  const matrix: number[][] = [];
+  
+  // Initialize first column
+  for (let i = 0; i <= len1; i++) {
+    matrix[i] = [i];
   }
-  return bigrams;
+  
+  // Initialize first row
+  for (let j = 0; j <= len2; j++) {
+    matrix[0][j] = j;
+  }
+  
+  // Fill the matrix
+  for (let i = 1; i <= len1; i++) {
+    for (let j = 1; j <= len2; j++) {
+      const cost = str1[i - 1] === str2[j - 1] ? 0 : 1;
+      
+      matrix[i][j] = Math.min(
+        matrix[i - 1][j] + 1,      // deletion
+        matrix[i][j - 1] + 1,      // insertion
+        matrix[i - 1][j - 1] + cost // substitution
+      );
+    }
+  }
+  
+  return matrix[len1][len2];
 }
+
+
 
 /**
  * البحث عن التكرارات في قائمة من النصوص
