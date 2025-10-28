@@ -2,6 +2,7 @@
 
 import { createSupabaseUserServerActionClient } from '@/supabase-clients/user/createSupabaseUserServerActionClient';
 import { findDuplicates, type DuplicateGroup } from '@/utils/arabicNormalizer';
+import { getIsAppAdmin } from '@/data/user/user';
 
 export interface DeputyDuplicate {
   id: string;
@@ -34,27 +35,13 @@ export async function findDuplicateDeputies(
   error?: string;
 }> {
   try {
-    const supabase = await createSupabaseUserServerActionClient();
-
     // التحقق من صلاحيات المستخدم
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return { success: false, error: 'غير مصرح' };
-    }
-
-    // التحقق من أن المستخدم admin
-    const { data: userRole } = await supabase
-      .from('user_roles')
-      .select('role')
-      .eq('user_id', user.id)
-      .single();
-
-    if (userRole?.role !== 'application_admin') {
+    const isAdmin = await getIsAppAdmin();
+    if (!isAdmin) {
       return { success: false, error: 'غير مصرح - يتطلب صلاحيات admin' };
     }
+
+    const supabase = await createSupabaseUserServerActionClient();
 
     // جلب جميع النواب مع معلوماتهم
     const { data: deputies, error: fetchError } = await supabase
@@ -168,27 +155,13 @@ export async function deleteDeputy(
   deputyId: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const supabase = await createSupabaseUserServerActionClient();
-
     // التحقق من صلاحيات المستخدم
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return { success: false, error: 'غير مصرح' };
-    }
-
-    // التحقق من أن المستخدم admin
-    const { data: userRole } = await supabase
-      .from('user_roles')
-      .select('role')
-      .eq('user_id', user.id)
-      .single();
-
-    if (userRole?.role !== 'application_admin') {
+    const isAdmin = await getIsAppAdmin();
+    if (!isAdmin) {
       return { success: false, error: 'غير مصرح - يتطلب صلاحيات admin' };
     }
+
+    const supabase = await createSupabaseUserServerActionClient();
 
     // جلب user_id من deputy_profile
     const { data: deputy, error: fetchError } = await supabase
