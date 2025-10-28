@@ -206,5 +206,5 @@ export function PublicComplaintsClient({ complaints }: PublicComplaintsClientPro
       </div>
     </div>
   );
-}}
+}
 
