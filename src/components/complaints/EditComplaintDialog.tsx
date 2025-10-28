@@ -64,7 +64,7 @@ export function EditComplaintDialog({
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState(currentTitle);
   const [description, setDescription] = useState(currentDescription);
-  const [category, setCategory] = useState(currentCategory);
+  const [category, setCategory] = useState<string>(currentCategory);
   const [governorate, setGovernorate] = useState(currentGovernorate || "");
   const [district, setDistrict] = useState(currentDistrict || "");
   const [createdAt, setCreatedAt] = useState(
@@ -84,7 +84,7 @@ export function EditComplaintDialog({
         complaintId,
         title: title.trim(),
         description: description.trim(),
-        category,
+        category: category as "infrastructure" | "education" | "health" | "security" | "environment" | "transportation" | "utilities" | "housing" | "employment" | "social_services" | "legal" | "corruption" | "other",
         governorate: governorate || null,
         district: district || null,
         createdAt: new Date(createdAt).toISOString(),
