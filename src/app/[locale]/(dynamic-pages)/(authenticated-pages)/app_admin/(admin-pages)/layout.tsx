@@ -16,7 +16,6 @@ export default async function Layout({
             data-testid="admin-panel-title"
             className="flex items-center justify-start w-full"
           >
-            Admin panel
           </div>
         </InternalNavbar>
         <div className="relative flex-1 h-auto mt-8 w-full" dir="rtl">

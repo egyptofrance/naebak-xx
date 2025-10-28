@@ -117,18 +117,12 @@ export function WorkspaceSwitcher({
                 size="lg"
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Home className="size-4" />
+                <div className="flex items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground p-2">
+                  <Home className="size-5" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">
                     {currentWorkspace?.name ?? "Select Workspace"}
-                  </span>
-                  <span className="truncate text-xs">
-                    {currentWorkspace?.membershipType === "solo"
-                      ? "Personal"
-                      : "Team"}{" "}
-                    Workspace
                   </span>
                 </div>
                 <ChevronsUpDown className="ml-auto" />
