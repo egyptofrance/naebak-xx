@@ -5,7 +5,7 @@ import { PendingInvitationCounter } from "./PendingInvitationCounter";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import Link from "next/link";
 import Image from "next/image";
-import { VisitorCounter } from "@/components/VisitorCounter";
+
 
 export async function InternalNavbar({ children }: { children: ReactNode }) {
   return (
@@ -30,7 +30,6 @@ export async function InternalNavbar({ children }: { children: ReactNode }) {
         </Link>
         
         <Suspense>{children}</Suspense>
-        <VisitorCounter />
         <div className="relative w-max flex items-center gap-2">
           <div className="hidden lg:flex items-center gap-2">
             <div className="flex items-center gap-2">
