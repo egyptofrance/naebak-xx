@@ -22,9 +22,9 @@ export async function InternalNavbar({ children }: { children: ReactNode }) {
           <Image
             src="/images/logo-naebak-white.png"
             alt="نائبك"
-            width={120}
-            height={40}
-            className="h-8 w-auto"
+            width={150}
+            height={50}
+            className="h-10 w-auto object-contain"
             priority
           />
         </Link>
