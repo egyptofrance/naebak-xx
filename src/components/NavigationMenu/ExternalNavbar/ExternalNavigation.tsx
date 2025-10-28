@@ -6,7 +6,7 @@ import { LoginCTAButton } from "./LoginCTAButton";
 import { MobileMenu } from "./MobileMenu";
 import { MobileMenuProvider } from "./MobileMenuContext";
 import { MobileMenuOpen } from "./MobileMenuOpen";
-import { VisitorCounter } from "@/components/VisitorCounter";
+
 import { NavbarLogo } from "./NavbarLogo";
 
 export function ExternalNavigation() {
@@ -18,9 +18,8 @@ export function ExternalNavigation() {
             className="flex items-center w-full min-w-max h-[54px] md:container md:mx-auto justify-between px-4 md:px-8"
             aria-label="Global"
           >
-          {/* Left: Visitor Counter */}
+          {/* Left: Logo */}
           <div className="flex items-center gap-2 md:gap-4 min-w-0 flex-shrink">
-            <VisitorCounter />
             <NavbarLogo />
           </div>
           
