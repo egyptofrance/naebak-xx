@@ -385,10 +385,38 @@ export const searchDeputiesAction = actionClient
       }
     );
 
-    // Get all deputy profiles with optional filters
+    // ✅ OPTIMIZED: Use JOIN in a single query instead of multiple queries
     let deputyQuery = supabase
       .from("deputy_profiles")
-      .select("*", { count: "exact" });
+      .select(`
+        *,
+        user_profiles!inner(
+          id,
+          full_name,
+          email,
+          phone,
+          gender,
+          electoral_district,
+          governorate_id,
+          party_id,
+          governorates(
+            id,
+            name_ar,
+            name_en
+          ),
+          parties(
+            id,
+            name_ar,
+            name_en
+          )
+        ),
+        councils(
+          id,
+          name_ar,
+          name_en,
+          code
+        )
+      `, { count: "exact" });
 
     // Filter by deputy status
     if (deputyStatus) {
@@ -400,108 +428,47 @@ export const searchDeputiesAction = actionClient
       deputyQuery = deputyQuery.eq("council_id", councilId);
     }
 
-    // Text search in deputy fields
+    // Filter by governorate (in user_profiles)
+    if (governorateId) {
+      deputyQuery = deputyQuery.eq("user_profiles.governorate_id", governorateId);
+    }
+
+    // Filter by party (in user_profiles)
+    if (partyId) {
+      deputyQuery = deputyQuery.eq("user_profiles.party_id", partyId);
+    }
+
+    // Filter by gender (in user_profiles)
+    if (gender) {
+      deputyQuery = deputyQuery.eq("user_profiles.gender", gender);
+    }
+
+    // Filter by electoral district (in user_profiles)
+    if (electoralDistrict) {
+      deputyQuery = deputyQuery.ilike("user_profiles.electoral_district", `%${electoralDistrict}%`);
+    }
+
+    // Text search in deputy fields and user fields
     if (query) {
       deputyQuery = deputyQuery.or(
-        `electoral_symbol.ilike.*${query}*,electoral_number.ilike.*${query}*`
+        `electoral_symbol.ilike.*${query}*,electoral_number.ilike.*${query}*,user_profiles.full_name.ilike.*${query}*,user_profiles.phone.ilike.*${query}*,user_profiles.email.ilike.*${query}*`
       );
     }
 
+    // ✅ Single query instead of 81 queries!
     const { data: deputies, error: deputyError, count } = await deputyQuery
       .range((page - 1) * limit, page * limit - 1)
       .order("created_at", { ascending: false });
 
     if (deputyError) {
+      console.error("Search deputies error:", deputyError);
       throw new Error(`Failed to search deputies: ${deputyError.message}`);
     }
-
-    if (!deputies || deputies.length === 0) {
-      return { deputies: [], total: 0, page, limit };
-    }
-
-    // Get user profiles for these deputies
-    const userIds = deputies.map(d => d.user_id);
-    let userQuery = supabase
-      .from("user_profiles")
-      .select("*")
-      .in("id", userIds);
-
-    // Filter by governorate
-    if (governorateId) {
-      userQuery = userQuery.eq("governorate_id", governorateId);
-    }
-
-    // Filter by party
-    if (partyId) {
-      userQuery = userQuery.eq("party_id", partyId);
-    }
-
-    // Filter by gender
-    if (gender) {
-      userQuery = userQuery.eq("gender", gender);
-    }
-
-    // Filter by electoral district
-    if (electoralDistrict) {
-      userQuery = userQuery.ilike("electoral_district", `%${electoralDistrict}%`);
-    }
-
-    // Text search in user fields
-    if (query) {
-      userQuery = userQuery.or(
-        `full_name.ilike.*${query}*,phone.ilike.*${query}*,email.ilike.*${query}*`
-      );
-    }
-
-    const { data: users, error: userError } = await userQuery;
-
-    if (userError) {
-      throw new Error(`Failed to fetch user profiles: ${userError.message}`);
-    }
-
-    // Get related data
-    const governorateIds = [...new Set(users?.map(u => u.governorate_id).filter(Boolean) || [])] as string[];
-    const partyIds = [...new Set(users?.map(u => u.party_id).filter(Boolean) || [])] as string[];
-    const councilIds = [...new Set(deputies.map(d => d.council_id).filter(Boolean))] as string[];
-
-    const [
-      { data: governorates },
-      { data: parties },
-      { data: councils }
-    ] = await Promise.all([
-      supabase.from("governorates").select("*").in("id", governorateIds),
-      supabase.from("parties").select("*").in("id", partyIds),
-      supabase.from("councils").select("*").in("id", councilIds),
-    ]);
-
-    // Create lookup maps
-    const userMap = new Map(users?.map(u => [u.id, u]) || []);
-    const governorateMap = new Map(governorates?.map(g => [g.id, g]) || []);
-    const partyMap = new Map(parties?.map(p => [p.id, p]) || []);
-    const councilMap = new Map(councils?.map(c => [c.id, c]) || []);
-
-    // Merge all data
-    const deputiesWithDetails = deputies
-      .map((deputy) => {
-        const user = userMap.get(deputy.user_id);
-        if (!user) return null; // Skip if user not found (filtered out)
-        
-        return {
-          ...deputy,
-          user_profiles: {
-            ...user,
-            governorates: user.governorate_id ? governorateMap.get(user.governorate_id) : null,
-            parties: user.party_id ? partyMap.get(user.party_id) : null,
-          },
-          councils: deputy.council_id ? councilMap.get(deputy.council_id) : null,
-        };
-      })
-      .filter(Boolean); // Remove nulls
 
     const totalPages = Math.ceil((count || 0) / limit);
 
     return { 
-      deputies: deputiesWithDetails, 
+      deputies: deputies || [], 
       total: count || 0, 
       totalPages,
       currentPage: page,
