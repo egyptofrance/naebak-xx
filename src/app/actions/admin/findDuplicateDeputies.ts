@@ -80,29 +80,24 @@ export async function findDuplicateDeputies(
               .single()
           : { data: null };
 
-        // جلب بيانات الدائرة الانتخابية والمحافظة
-        let governorateName = null;
-        let districtName = null;
+        // جلب بيانات الدائرة الانتخابية
+        let governorateName: string | null = null;
+        let districtName: string | null = null;
         
         if (deputy.electoral_district_id) {
           const { data: district } = await supabase
             .from('electoral_districts')
-            .select('name, governorate_id')
+            .select('name')
             .eq('id', deputy.electoral_district_id)
             .single();
           
           if (district) {
             districtName = district.name;
-            
-            // جلب اسم المحافظة
-            const { data: governorate } = await supabase
-              .from('governorates')
-              .select('name')
-              .eq('id', district.governorate_id)
-              .single();
-            
-            if (governorate) {
-              governorateName = governorate.name;
+            // استخراج اسم المحافظة من اسم الدائرة (إذا كان موجوداً)
+            // مثال: "الدائرة الأولى - القاهرة"
+            const parts = district.name.split('-');
+            if (parts.length > 1) {
+              governorateName = parts[parts.length - 1].trim();
             }
           }
         }
