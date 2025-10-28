@@ -3,6 +3,7 @@ import { Suspense, type ReactNode } from "react";
 import { SidebarTrigger } from "../ui/sidebar";
 import { PendingInvitationCounter } from "./PendingInvitationCounter";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { RefreshButton } from "./RefreshButton";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -33,6 +34,7 @@ export async function InternalNavbar({ children }: { children: ReactNode }) {
         <div className="relative w-max flex items-center gap-2">
           <div className="hidden lg:flex items-center gap-2">
             <div className="flex items-center gap-2">
+              <RefreshButton />
               <LanguageSwitcher />
               <PendingInvitationCounter />
             </div>
