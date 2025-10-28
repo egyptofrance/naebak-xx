@@ -4,8 +4,7 @@ import { UpdateStatusForm } from "@/components/complaints/UpdateStatusForm";
 import { UpdatePriorityForm } from "@/components/complaints/UpdatePriorityForm";
 import { AddCommentForm } from "@/components/complaints/AddCommentForm";
 import { ComplaintActionsHistory } from "@/components/complaints/ComplaintActionsHistory";
-import { ApprovePublicButton } from "@/components/complaints/ApprovePublicButton";
-import { ForcePublicButton } from "@/components/complaints/ForcePublicButton";
+import { PublicDisplayManager } from "@/components/complaints/PublicDisplayManager";
 import { CloseComplaintButton } from "@/components/complaints/CloseComplaintButton";
 import { EditComplaintDialog } from "@/components/complaints/EditComplaintDialog";
 import Link from "next/link";
@@ -173,21 +172,11 @@ export default async function ManagerComplaintDetailPage({ params }: Props) {
             />
           </div>
 
-          {/* Approve for Public Display */}
-          <div className="bg-card border rounded-lg p-4">
-            <ApprovePublicButton
-              complaintId={complaint.id}
-              isPublic={complaint.is_public || false}
-              adminApprovedPublic={complaint.admin_approved_public || false}
-            />
-          </div>
-
-          {/* Force Public (Admin Override) */}
-          <ForcePublicButton
+          {/* Public Display Management */}
+          <PublicDisplayManager
             complaintId={complaint.id}
             isPublic={complaint.is_public || false}
             adminApprovedPublic={complaint.admin_approved_public || false}
-            citizenRequestedPublic={complaint.is_public || false}
           />
         </div>
       </div>

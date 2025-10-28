@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { archiveComplaint, deleteComplaint } from "@/data/complaints/complaints";
+import { archiveComplaint, deleteComplaint, forceComplaintPublic } from "@/data/complaints/complaints";
 import { toast } from "sonner";
-import { Archive, Trash2 } from "lucide-react";
+import { Archive, Trash2, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { statusLabels, priorityLabels, categoryLabels } from "@/lib/translations";
 
@@ -16,6 +16,7 @@ interface ComplaintCardProps {
 export function ComplaintCard({ complaint, userRole }: ComplaintCardProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [publicLoading, setPublicLoading] = useState(false);
 
   const handleArchive = async (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent card click
@@ -36,6 +37,28 @@ export function ComplaintCard({ complaint, userRole }: ComplaintCardProps) {
       toast.error("حدث خطأ أثناء الأرشفة");
     } finally {
       setLoading(false);
+    }
+  };  const handleTogglePublic = async (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click
+    
+    const makePublic = !(complaint.is_public && complaint.admin_approved_public);
+    setPublicLoading(true);
+    try {
+      const result = await forceComplaintPublic({ 
+        complaintId: complaint.id, 
+        makePublic 
+      });
+      
+      if (result?.data?.success) {
+        toast.success(makePublic ? "تم نشر الشكوى للعامة" : "تم إلغاء النشر العام");
+        router.refresh();
+      } else {
+        toast.error(result?.data?.error || "فشل تحديث حالة النشر");
+      }
+    } catch (error) {
+      toast.error("حدث خطأ أثناء تحديث حالة النشر");
+    } finally {
+      setPublicLoading(false);
     }
   };
 
@@ -115,6 +138,29 @@ export function ComplaintCard({ complaint, userRole }: ComplaintCardProps) {
 
         {/* Action buttons - on the right side, stacked vertically */}
         <div className="flex flex-col gap-2 justify-center">
+          <Button
+            variant="default"
+            size="sm"
+            onClick={handleTogglePublic}
+            disabled={publicLoading}
+            className={`min-w-[100px] ${
+              complaint.is_public && complaint.admin_approved_public
+                ? "bg-green-600 hover:bg-green-700"
+                : "bg-amber-600 hover:bg-amber-700"
+            }`}
+          >
+            {complaint.is_public && complaint.admin_approved_public ? (
+              <>
+                <EyeOff className="h-4 w-4 mr-2" />
+                إلغاء النشر
+              </>
+            ) : (
+              <>
+                <Eye className="h-4 w-4 mr-2" />
+                نشر عام
+              </>
+            )}
+          </Button>
           <Button
             variant="default"
             size="sm"
