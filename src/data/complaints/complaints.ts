@@ -61,7 +61,7 @@ export const createComplaintAction = authActionClient
         citizen_id: userId,
         title: parsedInput.title,
         description: parsedInput.description,
-        category: parsedInput.category,
+        category: parsedInput.category as any,
         status: "new",
         priority: "medium",
         governorate: parsedInput.governorate,
@@ -914,7 +914,7 @@ export const updateComplaintDetails = adminActionClient
       .update({
         title,
         description,
-        category,
+        category: category as any,
         governorate,
         district,
         created_at: createdAt,
