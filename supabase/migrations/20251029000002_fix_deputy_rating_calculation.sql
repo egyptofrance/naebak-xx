@@ -9,7 +9,11 @@
 
 -- 1. دالة لحساب التقييم النهائي لنائب معين
 -- =====================================================
-CREATE OR REPLACE FUNCTION calculate_deputy_rating(deputy_id_param UUID)
+-- حذف Function القديمة إن وجدت
+DROP FUNCTION IF EXISTS calculate_deputy_rating(UUID);
+
+-- إنشاء Function جديدة
+CREATE FUNCTION calculate_deputy_rating(deputy_id_param UUID)
 RETURNS void
 LANGUAGE plpgsql
 AS $$
