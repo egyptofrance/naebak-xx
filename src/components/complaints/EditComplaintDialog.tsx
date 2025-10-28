@@ -182,7 +182,8 @@ export function EditComplaintDialog({
                   onChange={(e) => setCategory(e.target.value)}
                   required
                   disabled={isLoading}
-                  className="w-full pl-8 pr-3 py-2 border rounded-md bg-background text-right"
+                  className="w-full pr-10 pl-3 py-2 border rounded-md bg-background text-right appearance-none"
+                  style={{ backgroundImage: "url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')", backgroundPosition: "left 0.5rem center", backgroundRepeat: "no-repeat", backgroundSize: "1.5em 1.5em" }}
                 >
                   {Object.entries(categoryLabels).map(([value, label]) => (
                     <option key={value} value={value}>
@@ -199,7 +200,8 @@ export function EditComplaintDialog({
                   value={governorate}
                   onChange={(e) => setGovernorate(e.target.value)}
                   disabled={isLoading}
-                  className="w-full pl-8 pr-3 py-2 border rounded-md bg-background text-right"
+                  className="w-full pr-10 pl-3 py-2 border rounded-md bg-background text-right appearance-none"
+                  style={{ backgroundImage: "url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')", backgroundPosition: "left 0.5rem center", backgroundRepeat: "no-repeat", backgroundSize: "1.5em 1.5em" }}
                 >
                   <option value="">غير محدد</option>
                   {governorates.map((gov) => (
