@@ -12,11 +12,12 @@ import { NavbarLogo } from "./NavbarLogo";
 export function ExternalNavigation() {
   return (
     <MobileMenuProvider>
-      <header className="sticky inset-x-0 w-full top-0 z-50 border-b bg-green-900 text-white shadow-lg overflow-x-hidden">
-        <nav
-          className="flex items-center w-full max-w-full h-[54px] md:container md:mx-auto justify-between px-4 md:px-8"
-          aria-label="Global"
-        >
+      <header className="sticky inset-x-0 w-full top-0 z-50 border-b bg-green-900 text-white shadow-lg">
+        <div className="overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent hover:scrollbar-thumb-white/30">
+          <nav
+            className="flex items-center w-full min-w-max h-[54px] md:container md:mx-auto justify-between px-4 md:px-8"
+            aria-label="Global"
+          >
           {/* Left: Visitor Counter */}
           <div className="flex items-center gap-2 md:gap-4 min-w-0 flex-shrink">
             <VisitorCounter />
@@ -41,7 +42,8 @@ export function ExternalNavigation() {
             </Suspense>
             <MobileMenuOpen />
           </div>
-        </nav>
+          </nav>
+        </div>
         <MobileMenu />
       </header>
     </MobileMenuProvider>
