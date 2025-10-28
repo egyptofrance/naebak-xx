@@ -4,13 +4,13 @@ import Image from "next/image";
 export function NavbarLogo() {
   return (
     <Link href="/" className="flex items-center flex-shrink-0">
-      <div className="relative flex h-12 md:h-16 items-center justify-center">
+      <div className="relative flex items-center justify-center">
         <Image
           src="/images/logo-naebak-white.png"
-          width={48}
-          height={48}
+          width={200}
+          height={67}
           alt="نائبك"
-          className="object-contain w-12 h-12 md:w-16 md:h-16"
+          className="object-contain h-12 md:h-14 w-auto"
         />
       </div>
     </Link>
