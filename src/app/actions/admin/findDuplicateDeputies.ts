@@ -102,11 +102,12 @@ export async function findDuplicateDeputies(
           }
         }
 
-        const fullName = deputy.display_name || user?.full_name || 'غير محدد';
+        // استخدام الاسم الرباعي الكامل للمقارنة
+        const fullName = user?.full_name || deputy.display_name || 'غير محدد';
 
         return {
           id: deputy.id,
-          text: fullName,
+          text: fullName, // الاسم الرباعي للمقارنة
           display_name: deputy.display_name,
           full_name: user?.full_name || '',
           deputy_status: deputy.deputy_status,
