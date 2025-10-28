@@ -3,7 +3,7 @@
 import { createComplaintAction } from "@/data/complaints/complaints";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createSupabaseBrowserClient } from "@/supabase-clients/user/createSupabaseBrowserClient";
+import { supabaseUserClientComponent } from "@/supabase-clients/user/supabaseUserClientComponent";
 import { Upload, X, FileIcon } from "lucide-react";
 
 type ComplaintCategory =
@@ -76,7 +76,7 @@ export default function NewComplaintPage() {
   };
 
   async function uploadAttachments(complaintId: string, userId: string) {
-    const supabase = createSupabaseBrowserClient();
+    const supabase = supabaseUserClientComponent;
     const uploadedFiles: any[] = [];
 
     for (let i = 0; i < attachments.length; i++) {
@@ -162,7 +162,7 @@ export default function NewComplaintPage() {
 
       // Upload attachments if any
       if (attachments.length > 0 && result?.data?.id) {
-        const supabase = createSupabaseBrowserClient();
+        const supabase = supabaseUserClientComponent;
         const { data: { user } } = await supabase.auth.getUser();
         
         if (user) {
