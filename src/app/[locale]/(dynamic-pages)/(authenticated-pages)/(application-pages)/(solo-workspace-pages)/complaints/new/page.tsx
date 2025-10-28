@@ -1,10 +1,13 @@
 "use client";
 
 import { createComplaintAction } from "@/data/complaints/complaints";
+import { uploadComplaintAttachmentAction } from "@/data/complaints/uploadComplaintAttachment";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseUserClientComponent } from "@/supabase-clients/user/supabaseUserClientComponent";
-import { Upload, X, FileIcon } from "lucide-react";
+import { useAction } from "next-safe-action/hooks";
+import { Upload, X, FileIcon, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 type ComplaintCategory =
   | "infrastructure"
@@ -24,6 +27,7 @@ type ComplaintCategory =
 interface AttachmentFile {
   file: File;
   preview?: string;
+  base64?: string;
 }
 
 export default function NewComplaintPage() {
@@ -39,7 +43,7 @@ export default function NewComplaintPage() {
     // Check file size (max 10MB per file)
     const validFiles = files.filter(file => {
       if (file.size > 10 * 1024 * 1024) {
-        setError(`الملف ${file.name} أكبر من 10 ميجابايت`);
+        toast.error(`الملف ${file.name} أكبر من 10 ميجابايت`);
         return false;
       }
       return true;
@@ -47,89 +51,36 @@ export default function NewComplaintPage() {
 
     // Check total number of files
     if (attachments.length + validFiles.length > 5) {
-      setError("يمكنك رفع 5 ملفات كحد أقصى");
+      toast.error("يمكنك رفع 5 ملفات كحد أقصى");
       return;
     }
 
-    const newAttachments: AttachmentFile[] = validFiles.map(file => {
-      const attachment: AttachmentFile = { file };
-      
-      // Create preview for images
-      if (file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          attachment.preview = reader.result as string;
-          setAttachments(prev => [...prev]);
+    // Convert files to base64
+    validFiles.forEach(file => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        const attachment: AttachmentFile = { 
+          file,
+          base64
         };
-        reader.readAsDataURL(file);
-      }
-      
-      return attachment;
+        
+        // Create preview for images
+        if (file.type.startsWith('image/')) {
+          attachment.preview = base64;
+        }
+        
+        setAttachments(prev => [...prev, attachment]);
+      };
+      reader.readAsDataURL(file);
     });
 
-    setAttachments(prev => [...prev, ...newAttachments]);
     setError("");
   };
 
   const removeAttachment = (index: number) => {
     setAttachments(prev => prev.filter((_, i) => i !== index));
   };
-
-  async function uploadAttachments(complaintId: string, userId: string) {
-    const supabase = supabaseUserClientComponent;
-    const uploadedFiles: any[] = [];
-
-    for (let i = 0; i < attachments.length; i++) {
-      const attachment = attachments[i];
-      const file = attachment.file;
-      
-      // Generate unique filename
-      const timestamp = Date.now();
-      const randomString = Math.random().toString(36).substring(7);
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${timestamp}_${randomString}.${fileExt}`;
-      const filePath = `${userId}/${complaintId}/${fileName}`;
-
-      // Upload to storage
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('complaint_attachments')
-        .upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
-
-      if (uploadError) {
-        console.error('Upload error:', uploadError);
-        throw new Error(`فشل رفع الملف: ${file.name}`);
-      }
-
-      // Save metadata to database
-      const { error: dbError } = await (supabase as any)
-        .from('complaint_attachments')
-        .insert({
-          complaint_id: complaintId,
-          file_name: file.name,
-          file_path: filePath,
-          file_size: file.size,
-          file_type: file.type,
-          uploaded_by: userId
-        });
-
-      if (dbError) {
-        console.error('Database error:', dbError);
-        // Try to delete the uploaded file
-        await supabase.storage
-          .from('complaint_attachments')
-          .remove([filePath]);
-        throw new Error(`فشل حفظ بيانات الملف: ${file.name}`);
-      }
-
-      uploadedFiles.push({ fileName: file.name, filePath });
-      setUploadProgress(((i + 1) / attachments.length) * 100);
-    }
-
-    return uploadedFiles;
-  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -139,15 +90,16 @@ export default function NewComplaintPage() {
 
     try {
       const formData = new FormData(e.currentTarget);
+
       const data = {
         title: formData.get("title") as string,
         description: formData.get("description") as string,
         category: formData.get("category") as ComplaintCategory,
-        governorate: formData.get("governorate") as string || undefined,
-        district: formData.get("district") as string || undefined,
-        address: formData.get("address") as string || undefined,
-        citizen_phone: formData.get("citizen_phone") as string || undefined,
-        citizen_email: formData.get("citizen_email") as string || undefined,
+        governorate: formData.get("governorate") as string,
+        district: formData.get("district") as string,
+        address: formData.get("address") as string,
+        citizen_phone: formData.get("citizen_phone") as string,
+        citizen_email: formData.get("citizen_email") as string,
         is_public: formData.get("is_public") === "on",
       };
 
@@ -162,16 +114,43 @@ export default function NewComplaintPage() {
 
       // Check if complaint was created successfully
       if (result?.data?.status === "success" && result.data.data) {
+        const complaintId = result.data.data.id;
+        
         // Upload attachments if any
         if (attachments.length > 0) {
-          const supabase = supabaseUserClientComponent;
-          const { data: { user } } = await supabase.auth.getUser();
+          toast.info(`جاري رفع ${attachments.length} ملف...`);
           
-          if (user) {
-            await uploadAttachments(result.data.data.id, user.id);
+          for (let i = 0; i < attachments.length; i++) {
+            const attachment = attachments[i];
+            
+            if (!attachment.base64) {
+              toast.error(`فشل رفع ${attachment.file.name}: لم يتم تحويل الملف`);
+              continue;
+            }
+
+            try {
+              const uploadResult = await uploadComplaintAttachmentAction({
+                complaintId,
+                fileData: attachment.base64,
+                fileName: attachment.file.name,
+                fileType: attachment.file.type,
+                fileSize: attachment.file.size,
+              });
+
+              if (uploadResult?.serverError) {
+                toast.error(`فشل رفع ${attachment.file.name}: ${uploadResult.serverError}`);
+              } else {
+                setUploadProgress(Math.round(((i + 1) / attachments.length) * 100));
+              }
+            } catch (err: any) {
+              toast.error(`فشل رفع ${attachment.file.name}: ${err.message}`);
+            }
           }
+          
+          toast.success("تم رفع جميع المرفقات بنجاح");
         }
 
+        toast.success("تم إنشاء الشكوى بنجاح");
         router.push("/complaints");
       } else {
         setError(result?.data?.message || "حدث خطأ أثناء إنشاء الشكوى");
@@ -186,65 +165,50 @@ export default function NewComplaintPage() {
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ['Bytes', 'KB', 'MB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-2xl">
-      <h1 className="text-2xl font-bold mb-6">إضافة شكوى جديدة</h1>
+    <div className="container mx-auto py-8 px-4" dir="rtl">
+      <h1 className="text-3xl font-bold mb-6">إضافة شكوى جديدة</h1>
 
       {error && (
-        <div className="bg-destructive/10 text-destructive p-4 rounded-md mb-4">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
           {error}
         </div>
       )}
 
-      {uploadProgress > 0 && uploadProgress < 100 && (
-        <div className="mb-4">
-          <div className="flex justify-between text-sm mb-1">
-            <span>جاري رفع المرفقات...</span>
-            <span>{Math.round(uploadProgress)}%</span>
-          </div>
-          <div className="w-full bg-secondary rounded-full h-2">
-            <div 
-              className="bg-primary h-2 rounded-full transition-all duration-300"
-              style={{ width: `${uploadProgress}%` }}
-            />
-          </div>
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow">
+        {/* Title */}
         <div>
-          <label htmlFor="title" className="block text-sm font-medium mb-1">
-            عنوان الشكوى *
+          <label className="block text-sm font-medium mb-2">
+            عنوان الشكوى <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
-            id="title"
             name="title"
             required
             minLength={5}
             maxLength={255}
             className="w-full px-3 py-2 border rounded-md"
-            placeholder="مثال: مشكلة في الإنارة العامة"
+            placeholder="مثال: مشكلة في قانون الضرائب"
           />
         </div>
 
+        {/* Category */}
         <div>
-          <label htmlFor="category" className="block text-sm font-medium mb-1">
-            الفئة *
+          <label className="block text-sm font-medium mb-2">
+            الفئة <span className="text-red-500">*</span>
           </label>
           <select
-            id="category"
             name="category"
             required
             dir="rtl"
             className="w-full px-3 py-2 pr-10 border rounded-md appearance-none bg-white"
             style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+              backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
               backgroundPosition: 'left 0.5rem center',
               backgroundRepeat: 'no-repeat',
               backgroundSize: '1.5em 1.5em'
@@ -261,18 +225,18 @@ export default function NewComplaintPage() {
             <option value="housing">الإسكان</option>
             <option value="employment">التوظيف</option>
             <option value="social_services">الخدمات الاجتماعية</option>
-            <option value="legal">قانونية</option>
-            <option value="corruption">فساد</option>
+            <option value="legal">القانونية</option>
+            <option value="corruption">الفساد</option>
             <option value="other">أخرى</option>
           </select>
         </div>
 
+        {/* Description */}
         <div>
-          <label htmlFor="description" className="block text-sm font-medium mb-1">
-            وصف الشكوى *
+          <label className="block text-sm font-medium mb-2">
+            وصف الشكوى <span className="text-red-500">*</span>
           </label>
           <textarea
-            id="description"
             name="description"
             required
             minLength={20}
@@ -283,128 +247,100 @@ export default function NewComplaintPage() {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="governorate" className="block text-sm font-medium mb-1">
-              المحافظة
-            </label>
-            <select
-              id="governorate"
-              name="governorate"
-              dir="rtl"
-              className="w-full px-3 py-2 pr-10 border rounded-md appearance-none bg-white"
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-                backgroundPosition: 'left 0.5rem center',
-                backgroundRepeat: 'no-repeat',
-                backgroundSize: '1.5em 1.5em'
-              }}
-            >
-              <option value="">اختر المحافظة</option>
-              <option value="القاهرة">القاهرة</option>
-              <option value="الجيزة">الجيزة</option>
-              <option value="الإسكندرية">الإسكندرية</option>
-              <option value="الدقهلية">الدقهلية</option>
-              <option value="البحيرة">البحيرة</option>
-              <option value="الفيوم">الفيوم</option>
-              <option value="الغربية">الغربية</option>
-              <option value="الإسماعيلية">الإسماعيلية</option>
-              <option value="المنوفية">المنوفية</option>
-              <option value="المنيا">المنيا</option>
-              <option value="القليوبية">القليوبية</option>
-              <option value="الوادي الجديد">الوادي الجديد</option>
-              <option value="الشرقية">الشرقية</option>
-              <option value="سوهاج">سوهاج</option>
-              <option value="أسوان">أسوان</option>
-              <option value="أسيوط">أسيوط</option>
-              <option value="بني سويف">بني سويف</option>
-              <option value="بورسعيد">بورسعيد</option>
-              <option value="دمياط">دمياط</option>
-              <option value="السويس">السويس</option>
-              <option value="الأقصر">الأقصر</option>
-              <option value="قنا">قنا</option>
-              <option value="البحر الأحمر">البحر الأحمر</option>
-              <option value="شمال سيناء">شمال سيناء</option>
-              <option value="جنوب سيناء">جنوب سيناء</option>
-              <option value="كفر الشيخ">كفر الشيخ</option>
-              <option value="مطروح">مطروح</option>
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="district" className="block text-sm font-medium mb-1">
-              المنطقة
-            </label>
-            <input
-              type="text"
-              id="district"
-              name="district"
-              className="w-full px-3 py-2 border rounded-md"
-            />
-          </div>
+        {/* Governorate */}
+        <div>
+          <label className="block text-sm font-medium mb-2">المحافظة</label>
+          <select
+            name="governorate"
+            dir="rtl"
+            className="w-full px-3 py-2 pr-10 border rounded-md appearance-none bg-white"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
+              backgroundPosition: 'left 0.5rem center',
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: '1.5em 1.5em'
+            }}
+          >
+            <option value="">اختر المحافظة</option>
+            <option value="القاهرة">القاهرة</option>
+            <option value="الجيزة">الجيزة</option>
+            <option value="الإسكندرية">الإسكندرية</option>
+          </select>
         </div>
 
+        {/* District */}
         <div>
-          <label htmlFor="address" className="block text-sm font-medium mb-1">
-            العنوان التفصيلي
-          </label>
+          <label className="block text-sm font-medium mb-2">المنطقة</label>
           <input
             type="text"
-            id="address"
-            name="address"
+            name="district"
             className="w-full px-3 py-2 border rounded-md"
+            placeholder="مثال: مدينة نصر"
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="citizen_phone" className="block text-sm font-medium mb-1">
-              رقم الهاتف
-            </label>
-            <input
-              type="tel"
-              id="citizen_phone"
-              name="citizen_phone"
-              className="w-full px-3 py-2 border rounded-md"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="citizen_email" className="block text-sm font-medium mb-1">
-              البريد الإلكتروني
-            </label>
-            <input
-              type="email"
-              id="citizen_email"
-              name="citizen_email"
-              className="w-full px-3 py-2 border rounded-md"
-            />
-          </div>
+        {/* Address */}
+        <div>
+          <label className="block text-sm font-medium mb-2">العنوان التفصيلي</label>
+          <input
+            type="text"
+            name="address"
+            className="w-full px-3 py-2 border rounded-md"
+            placeholder="مثال: شارع مصطفى النحاس"
+          />
         </div>
 
-        {/* Attachments Section */}
-        <div className="border-t pt-4 mt-4">
+        {/* Phone */}
+        <div>
+          <label className="block text-sm font-medium mb-2">رقم الهاتف</label>
+          <input
+            type="tel"
+            name="citizen_phone"
+            className="w-full px-3 py-2 border rounded-md"
+            placeholder="مثال: 01234567890"
+          />
+        </div>
+
+        {/* Email */}
+        <div>
+          <label className="block text-sm font-medium mb-2">البريد الإلكتروني</label>
+          <input
+            type="email"
+            name="citizen_email"
+            className="w-full px-3 py-2 border rounded-md"
+            placeholder="مثال: example@email.com"
+          />
+        </div>
+
+        {/* Attachments */}
+        <div>
           <label className="block text-sm font-medium mb-2">
             المرفقات (اختياري)
           </label>
-          <p className="text-xs text-muted-foreground mb-3">
-            يمكنك إرفاق صور أو مستندات توضح المشكلة (حد أقصى 5 ملفات، 10 ميجابايت لكل ملف)
-          </p>
-
           <div className="space-y-3">
-            {/* Upload Button */}
-            <label className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed rounded-md cursor-pointer hover:bg-secondary/50 transition-colors">
-              <Upload className="h-5 w-5" />
-              <span>اختر ملفات للرفع</span>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
               <input
                 type="file"
                 multiple
-                accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,video/*,audio/*"
+                accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx,.txt,video/*,audio/*"
                 onChange={handleFileChange}
                 className="hidden"
-                disabled={loading || attachments.length >= 5}
+                id="file-upload"
+                disabled={loading}
               />
-            </label>
+              <label
+                htmlFor="file-upload"
+                className="cursor-pointer flex flex-col items-center gap-2"
+              >
+                <Upload className="h-8 w-8 text-gray-400" />
+                <span className="text-sm text-gray-600">
+                  اضغط لاختيار الملفات أو اسحبها هنا
+                </span>
+                <span className="text-xs text-gray-500">
+                  الحد الأقصى: 5 ملفات، 10MB لكل ملف
+                </span>
+              </label>
+            </div>
 
             {/* Attachments List */}
             {attachments.length > 0 && (
@@ -412,79 +348,95 @@ export default function NewComplaintPage() {
                 {attachments.map((attachment, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-3 p-3 border rounded-md bg-secondary/20"
+                    className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
                   >
                     {attachment.preview ? (
                       <img
                         src={attachment.preview}
                         alt={attachment.file.name}
-                        className="h-12 w-12 object-cover rounded"
+                        className="w-12 h-12 object-cover rounded"
                       />
                     ) : (
-                      <div className="h-12 w-12 flex items-center justify-center bg-secondary rounded">
-                        <FileIcon className="h-6 w-6" />
+                      <div className="w-12 h-12 flex items-center justify-center bg-gray-200 rounded">
+                        <FileIcon className="h-6 w-6 text-gray-500" />
                       </div>
                     )}
-                    
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">
                         {attachment.file.name}
                       </p>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-gray-500">
                         {formatFileSize(attachment.file.size)}
                       </p>
                     </div>
-
                     <button
                       type="button"
                       onClick={() => removeAttachment(index)}
-                      className="p-1 hover:bg-destructive/10 rounded"
+                      className="text-red-500 hover:text-red-700"
                       disabled={loading}
                     >
-                      <X className="h-4 w-4 text-destructive" />
+                      <X className="h-5 w-5" />
                     </button>
                   </div>
                 ))}
               </div>
             )}
+
+            {/* Upload Progress */}
+            {loading && uploadProgress > 0 && (
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span>جاري رفع المرفقات...</span>
+                  <span>{uploadProgress}%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className="bg-blue-600 h-2 rounded-full transition-all"
+                    style={{ width: `${uploadProgress}%` }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="border-t pt-4 mt-4">
-          <div className="flex items-start gap-3 p-4 bg-secondary/30 rounded-md">
-            <input
-              type="checkbox"
-              id="is_public"
-              name="is_public"
-              className="mt-1 h-4 w-4"
-            />
-            <div>
-              <label htmlFor="is_public" className="block text-sm font-medium cursor-pointer">
-                السماح بعرض هذه الشكوى للجمهور
-              </label>
-              <p className="text-xs text-muted-foreground mt-1">
-                إذا وافقت، سيتم عرض شكواك في صفحة الشكاوى العامة ليراها الجميع. هذا يساعد في زيادة الشفافية والضغط لحل المشكلة.
-              </p>
-            </div>
-          </div>
+        {/* Public Checkbox */}
+        <div className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            name="is_public"
+            id="is_public"
+            className="rounded"
+          />
+          <label htmlFor="is_public" className="text-sm">
+            السماح بعرض هذه الشكوى للجمهور
+          </label>
         </div>
 
-        <div className="flex gap-4 pt-4">
-          <button
+        {/* Submit Button */}
+        <div className="flex gap-3">
+          <Button
             type="submit"
             disabled={loading}
-            className="px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50"
+            className="flex-1"
           >
-            {loading ? "جاري الإرسال..." : "إرسال الشكوى"}
-          </button>
-          <button
+            {loading ? (
+              <>
+                <Loader2 className="h-4 w-4 ml-2 animate-spin" />
+                جاري الإرسال...
+              </>
+            ) : (
+              "إرسال الشكوى"
+            )}
+          </Button>
+          <Button
             type="button"
+            variant="outline"
             onClick={() => router.back()}
             disabled={loading}
-            className="px-6 py-2 border rounded-md hover:bg-secondary disabled:opacity-50"
           >
             إلغاء
-          </button>
+          </Button>
         </div>
       </form>
     </div>
