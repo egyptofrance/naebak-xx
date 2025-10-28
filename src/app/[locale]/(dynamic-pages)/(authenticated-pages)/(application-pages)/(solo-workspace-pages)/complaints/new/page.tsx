@@ -160,17 +160,23 @@ export default function NewComplaintPage() {
         return;
       }
 
-      // Upload attachments if any
-      if (attachments.length > 0 && result?.data?.id) {
-        const supabase = supabaseUserClientComponent;
-        const { data: { user } } = await supabase.auth.getUser();
-        
-        if (user) {
-          await uploadAttachments(result.data.id, user.id);
+      // Check if complaint was created successfully
+      if (result?.data?.status === "success" && result.data.data) {
+        // Upload attachments if any
+        if (attachments.length > 0) {
+          const supabase = supabaseUserClientComponent;
+          const { data: { user } } = await supabase.auth.getUser();
+          
+          if (user) {
+            await uploadAttachments(result.data.data.id, user.id);
+          }
         }
-      }
 
-      router.push("/complaints");
+        router.push("/complaints");
+      } else {
+        setError(result?.data?.message || "حدث خطأ أثناء إنشاء الشكوى");
+        setLoading(false);
+      }
     } catch (err: any) {
       setError(err.message || "حدث خطأ أثناء إنشاء الشكوى");
       setLoading(false);
