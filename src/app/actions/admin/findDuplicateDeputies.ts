@@ -1,6 +1,6 @@
 'use server';
 
-import { createClient } from '@/utils/supabase/server';
+import { createSupabaseUserServerActionClient } from '@/supabase-clients/user/createSupabaseUserServerActionClient';
 import { findDuplicates, type DuplicateGroup } from '@/utils/arabicNormalizer';
 
 export interface DeputyDuplicate {
@@ -34,7 +34,7 @@ export async function findDuplicateDeputies(
   error?: string;
 }> {
   try {
-    const supabase = await createClient();
+    const supabase = await createSupabaseUserServerActionClient();
 
     // التحقق من صلاحيات المستخدم
     const {
@@ -168,7 +168,7 @@ export async function deleteDeputy(
   deputyId: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const supabase = await createClient();
+    const supabase = await createSupabaseUserServerActionClient();
 
     // التحقق من صلاحيات المستخدم
     const {
