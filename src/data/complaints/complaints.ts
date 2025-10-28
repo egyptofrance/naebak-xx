@@ -850,21 +850,43 @@ export async function getPublicComplaintById(complaintId: string) {
 
 
 /**
- * Update complaint title and description (Admin/Manager only)
+ * Update complaint details (Admin/Manager only)
  */
 export const updateComplaintDetails = adminActionClient
   .schema(z.object({
     complaintId: z.string().uuid(),
     title: z.string().min(5).max(255),
     description: z.string().min(20).max(5000),
+    category: z.enum([
+      "infrastructure",
+      "education",
+      "health",
+      "security",
+      "environment",
+      "transportation",
+      "utilities",
+      "housing",
+      "employment",
+      "social_services",
+      "legal",
+      "corruption",
+      "other",
+    ]),
+    governorate: z.string().nullable(),
+    district: z.string().nullable(),
+    createdAt: z.string(),
   }))
-  .action(async ({ parsedInput: { complaintId, title, description } }) => {
+  .action(async ({ parsedInput: { complaintId, title, description, category, governorate, district, createdAt } }) => {
     // Update complaint
     const { error } = await supabaseAdminClient
       .from("complaints")
       .update({
         title,
         description,
+        category,
+        governorate,
+        district,
+        created_at: createdAt,
         updated_at: new Date().toISOString(),
       })
       .eq("id", complaintId);

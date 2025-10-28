@@ -72,6 +72,10 @@ export default async function ManagerComplaintDetailPage({ params }: Props) {
                   complaintId={complaint.id}
                   currentTitle={complaint.title}
                   currentDescription={complaint.description}
+                  currentCategory={complaint.category}
+                  currentGovernorate={complaint.governorate}
+                  currentDistrict={complaint.district}
+                  currentCreatedAt={complaint.created_at}
                 />
                 <div className="flex gap-2">
                   <span className="text-xs px-3 py-1 rounded-full bg-secondary">

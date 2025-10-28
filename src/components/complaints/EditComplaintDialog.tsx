@@ -22,16 +22,54 @@ interface EditComplaintDialogProps {
   complaintId: string;
   currentTitle: string;
   currentDescription: string;
+  currentCategory: string;
+  currentGovernorate: string | null;
+  currentDistrict: string | null;
+  currentCreatedAt: string;
 }
+
+const categoryLabels: Record<string, string> = {
+  infrastructure: "البنية التحتية",
+  education: "التعليم",
+  health: "الصحة",
+  security: "الأمن",
+  environment: "البيئة",
+  transportation: "النقل",
+  utilities: "المرافق",
+  housing: "الإسكان",
+  employment: "التوظيف",
+  social_services: "الخدمات الاجتماعية",
+  legal: "قانونية",
+  corruption: "فساد",
+  other: "أخرى",
+};
+
+const governorates = [
+  "القاهرة", "الجيزة", "الإسكندرية", "الدقهلية", "البحيرة", "الفيوم",
+  "الغربية", "الإسماعيلية", "المنوفية", "المنيا", "القليوبية", "الوادي الجديد",
+  "الشرقية", "سوهاج", "أسوان", "أسيوط", "بني سويف", "بورسعيد",
+  "دمياط", "السويس", "الأقصر", "قنا", "البحر الأحمر", "شمال سيناء",
+  "جنوب سيناء", "كفر الشيخ", "مطروح"
+];
 
 export function EditComplaintDialog({
   complaintId,
   currentTitle,
   currentDescription,
+  currentCategory,
+  currentGovernorate,
+  currentDistrict,
+  currentCreatedAt,
 }: EditComplaintDialogProps) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState(currentTitle);
   const [description, setDescription] = useState(currentDescription);
+  const [category, setCategory] = useState(currentCategory);
+  const [governorate, setGovernorate] = useState(currentGovernorate || "");
+  const [district, setDistrict] = useState(currentDistrict || "");
+  const [createdAt, setCreatedAt] = useState(
+    new Date(currentCreatedAt).toISOString().slice(0, 16)
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -46,6 +84,10 @@ export function EditComplaintDialog({
         complaintId,
         title: title.trim(),
         description: description.trim(),
+        category,
+        governorate: governorate || null,
+        district: district || null,
+        createdAt: new Date(createdAt).toISOString(),
       });
 
       if (result?.data?.success) {
@@ -68,6 +110,10 @@ export function EditComplaintDialog({
         // Reset form when closing
         setTitle(currentTitle);
         setDescription(currentDescription);
+        setCategory(currentCategory);
+        setGovernorate(currentGovernorate || "");
+        setDistrict(currentDistrict || "");
+        setCreatedAt(new Date(currentCreatedAt).toISOString().slice(0, 16));
         setError(null);
       }
     }
@@ -81,12 +127,12 @@ export function EditComplaintDialog({
           تعديل الشكوى
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]" dir="rtl">
+      <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto" dir="rtl">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>تعديل تفاصيل الشكوى</DialogTitle>
             <DialogDescription>
-              يمكنك تعديل عنوان ووصف الشكوى من هنا
+              يمكنك تعديل جميع تفاصيل الشكوى من هنا
             </DialogDescription>
           </DialogHeader>
 
@@ -119,12 +165,77 @@ export function EditComplaintDialog({
                 placeholder="أدخل وصف الشكوى"
                 required
                 disabled={isLoading}
-                rows={10}
+                rows={8}
                 className="text-right resize-none"
               />
               <p className="text-xs text-muted-foreground">
                 عدد الأحرف: {description.length}
               </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="category">الفئة</Label>
+                <select
+                  id="category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  required
+                  disabled={isLoading}
+                  className="w-full px-3 py-2 border rounded-md bg-background text-right"
+                >
+                  {Object.entries(categoryLabels).map(([value, label]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="governorate">المحافظة</Label>
+                <select
+                  id="governorate"
+                  value={governorate}
+                  onChange={(e) => setGovernorate(e.target.value)}
+                  disabled={isLoading}
+                  className="w-full px-3 py-2 border rounded-md bg-background text-right"
+                >
+                  <option value="">غير محدد</option>
+                  {governorates.map((gov) => (
+                    <option key={gov} value={gov}>
+                      {gov}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="district">المنطقة/الدائرة</Label>
+                <Input
+                  id="district"
+                  value={district}
+                  onChange={(e) => setDistrict(e.target.value)}
+                  placeholder="أدخل المنطقة أو الدائرة"
+                  disabled={isLoading}
+                  className="text-right"
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="createdAt">تاريخ الإنشاء</Label>
+                <Input
+                  id="createdAt"
+                  type="datetime-local"
+                  value={createdAt}
+                  onChange={(e) => setCreatedAt(e.target.value)}
+                  required
+                  disabled={isLoading}
+                  className="text-right"
+                />
+              </div>
             </div>
           </div>
 
