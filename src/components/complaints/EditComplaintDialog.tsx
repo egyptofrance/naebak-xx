@@ -182,7 +182,7 @@ export function EditComplaintDialog({
                   onChange={(e) => setCategory(e.target.value)}
                   required
                   disabled={isLoading}
-                  className="w-full px-3 py-2 border rounded-md bg-background text-right"
+                  className="w-full pl-8 pr-3 py-2 border rounded-md bg-background text-right"
                 >
                   {Object.entries(categoryLabels).map(([value, label]) => (
                     <option key={value} value={value}>
@@ -199,7 +199,7 @@ export function EditComplaintDialog({
                   value={governorate}
                   onChange={(e) => setGovernorate(e.target.value)}
                   disabled={isLoading}
-                  className="w-full px-3 py-2 border rounded-md bg-background text-right"
+                  className="w-full pl-8 pr-3 py-2 border rounded-md bg-background text-right"
                 >
                   <option value="">غير محدد</option>
                   {governorates.map((gov) => (
