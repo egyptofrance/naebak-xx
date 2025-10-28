@@ -342,6 +342,13 @@ export const updateDeputyAction = actionClient
       }
     }
 
+    // Revalidate deputy pages
+    if (deputy.slug) {
+      revalidatePath(`/deputy/${deputy.slug}`);
+    }
+    revalidatePath('/app_admin/deputies');
+    revalidatePath('/deputies');
+
     return { deputy, message: "تم تحديث بيانات النائب بنجاح" };
   });
 
