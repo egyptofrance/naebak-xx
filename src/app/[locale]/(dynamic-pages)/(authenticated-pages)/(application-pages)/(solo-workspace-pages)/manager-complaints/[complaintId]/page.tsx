@@ -6,6 +6,7 @@ import { AddCommentForm } from "@/components/complaints/AddCommentForm";
 import { ComplaintActionsHistory } from "@/components/complaints/ComplaintActionsHistory";
 import { ApprovePublicButton } from "@/components/complaints/ApprovePublicButton";
 import { CloseComplaintButton } from "@/components/complaints/CloseComplaintButton";
+import { EditComplaintDialog } from "@/components/complaints/EditComplaintDialog";
 import Link from "next/link";
 import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
 
@@ -60,24 +61,31 @@ export default async function ManagerComplaintDetailPage({ params }: Props) {
           {/* Complaint Details */}
           <div className="bg-card border rounded-lg p-6">
             <div className="flex justify-between items-start mb-4">
-              <div>
+              <div className="flex-1">
                 <h1 className="text-2xl font-bold mb-2">{complaint.title}</h1>
                 <p className="text-sm text-muted-foreground">
                   رقم الشكوى: {complaint.id.slice(0, 8)}
                 </p>
               </div>
-              <div className="flex gap-2">
-                <span className="text-xs px-3 py-1 rounded-full bg-secondary">
+              <div className="flex flex-col gap-2">
+                <EditComplaintDialog
+                  complaintId={complaint.id}
+                  currentTitle={complaint.title}
+                  currentDescription={complaint.description}
+                />
+                <div className="flex gap-2">
+                  <span className="text-xs px-3 py-1 rounded-full bg-secondary">
                   {complaint.status}
                 </span>
-                <span className={`text-xs px-3 py-1 rounded-full ${
-                  complaint.priority === 'urgent' ? 'bg-red-100 text-red-800' :
-                  complaint.priority === 'high' ? 'bg-orange-100 text-orange-800' :
-                  complaint.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                  'bg-green-100 text-green-800'
-                }`}>
-                  {complaint.priority}
-                </span>
+                  <span className={`text-xs px-3 py-1 rounded-full ${
+                    complaint.priority === 'urgent' ? 'bg-red-100 text-red-800' :
+                    complaint.priority === 'high' ? 'bg-orange-100 text-orange-800' :
+                    complaint.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-green-100 text-green-800'
+                  }`}>
+                    {complaint.priority}
+                  </span>
+                </div>
               </div>
             </div>
 

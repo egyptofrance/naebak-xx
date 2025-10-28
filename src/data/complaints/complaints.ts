@@ -847,3 +847,39 @@ export async function getPublicComplaintById(complaintId: string) {
 
   return { data, error: null };
 }
+
+
+/**
+ * Update complaint title and description (Admin/Manager only)
+ */
+export const updateComplaintDetails = adminActionClient
+  .schema(z.object({
+    complaintId: z.string().uuid(),
+    title: z.string().min(5).max(255),
+    description: z.string().min(20).max(5000),
+  }))
+  .action(async ({ parsedInput: { complaintId, title, description } }) => {
+    // Update complaint
+    const { error } = await supabaseAdminClient
+      .from("complaints")
+      .update({
+        title,
+        description,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", complaintId);
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    // Revalidate paths
+    revalidatePath("/manager-complaints");
+    revalidatePath(`/manager-complaints/${complaintId}`);
+    revalidatePath("/deputy-complaints");
+    revalidatePath(`/deputy-complaints/${complaintId}`);
+    revalidatePath("/public-complaints");
+    revalidatePath(`/public-complaints/${complaintId}`);
+
+    return { success: true };
+  });
