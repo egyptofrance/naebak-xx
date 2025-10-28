@@ -1,5 +1,6 @@
 import { getMyComplaints } from "@/data/complaints/complaints";
 import Link from "next/link";
+import { statusLabels, priorityLabels, categoryLabels } from "@/lib/translations";
 
 export default async function ComplaintsPage() {
   const { data: complaints, error } = await getMyComplaints();
@@ -38,15 +39,15 @@ export default async function ComplaintsPage() {
             <div className="flex justify-between items-start mb-2">
               <h3 className="font-semibold text-lg">{complaint.title}</h3>
               <span className="text-xs px-2 py-1 rounded-full bg-secondary">
-                {complaint.status}
+                {statusLabels[complaint.status] || complaint.status}
               </span>
             </div>
             <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
               {complaint.description}
             </p>
             <div className="flex justify-between items-center text-xs text-muted-foreground">
-              <span>الفئة: {complaint.category}</span>
-              <span>الأولوية: {complaint.priority}</span>
+              <span>الفئة: {categoryLabels[complaint.category] || complaint.category}</span>
+              <span>الأولوية: {priorityLabels[complaint.priority] || complaint.priority}</span>
               <span>{new Date(complaint.created_at).toLocaleDateString("ar-EG")}</span>
             </div>
           </div>

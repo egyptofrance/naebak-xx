@@ -598,6 +598,35 @@ export const approveComplaintForPublic = adminActionClient
     return { success: true };
   });
 
+/**
+ * Force complaint to be public (Admin only)
+ * This allows admin to make complaint public even if citizen didn't request it
+ */
+export const forceComplaintPublic = adminActionClient
+  .schema(z.object({
+    complaintId: z.string().uuid(),
+    makePublic: z.boolean(),
+  }))
+  .action(async ({ parsedInput: { complaintId, makePublic } }) => {
+    const { error } = await supabaseAdminClient
+      .from("complaints")
+      .update({ 
+        is_public: makePublic,
+        admin_approved_public: makePublic 
+      })
+      .eq("id", complaintId);
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    revalidatePath("/manager-complaints");
+    revalidatePath(`/manager-complaints/${complaintId}`);
+    revalidatePath("/public-complaints");
+    
+    return { success: true };
+  });
+
 
 
 /**

@@ -5,10 +5,12 @@ import { UpdatePriorityForm } from "@/components/complaints/UpdatePriorityForm";
 import { AddCommentForm } from "@/components/complaints/AddCommentForm";
 import { ComplaintActionsHistory } from "@/components/complaints/ComplaintActionsHistory";
 import { ApprovePublicButton } from "@/components/complaints/ApprovePublicButton";
+import { ForcePublicButton } from "@/components/complaints/ForcePublicButton";
 import { CloseComplaintButton } from "@/components/complaints/CloseComplaintButton";
 import { EditComplaintDialog } from "@/components/complaints/EditComplaintDialog";
 import Link from "next/link";
 import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
+import { statusLabels, priorityLabels, categoryLabels } from "@/lib/translations";
 
 interface Props {
   params: Promise<{ complaintId: string }>;
@@ -79,7 +81,7 @@ export default async function ManagerComplaintDetailPage({ params }: Props) {
                 />
                 <div className="flex gap-2">
                   <span className="text-xs px-3 py-1 rounded-full bg-secondary">
-                  {complaint.status}
+                  {statusLabels[complaint.status] || complaint.status}
                 </span>
                   <span className={`text-xs px-3 py-1 rounded-full ${
                     complaint.priority === 'urgent' ? 'bg-red-100 text-red-800' :
@@ -87,7 +89,7 @@ export default async function ManagerComplaintDetailPage({ params }: Props) {
                     complaint.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
                     'bg-green-100 text-green-800'
                   }`}>
-                    {complaint.priority}
+                    {priorityLabels[complaint.priority] || complaint.priority}
                   </span>
                 </div>
               </div>
@@ -179,6 +181,14 @@ export default async function ManagerComplaintDetailPage({ params }: Props) {
               adminApprovedPublic={complaint.admin_approved_public || false}
             />
           </div>
+
+          {/* Force Public (Admin Override) */}
+          <ForcePublicButton
+            complaintId={complaint.id}
+            isPublic={complaint.is_public || false}
+            adminApprovedPublic={complaint.admin_approved_public || false}
+            citizenRequestedPublic={complaint.is_public || false}
+          />
         </div>
       </div>
     </div>

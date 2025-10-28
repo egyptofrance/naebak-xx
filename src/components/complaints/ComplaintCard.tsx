@@ -6,6 +6,7 @@ import { archiveComplaint, deleteComplaint } from "@/data/complaints/complaints"
 import { toast } from "sonner";
 import { Archive, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { statusLabels, priorityLabels, categoryLabels } from "@/lib/translations";
 
 interface ComplaintCardProps {
   complaint: any;
@@ -78,10 +79,15 @@ export function ComplaintCard({ complaint, userRole }: ComplaintCardProps) {
               <p className="text-xs text-muted-foreground mt-1">
                 رقم الشكوى: {complaint.id.slice(0, 8)}
               </p>
+              {complaint.user_profiles && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  مقدم الشكوى: {complaint.user_profiles.full_name || complaint.user_profiles.email}
+                </p>
+              )}
             </div>
             <div className="flex gap-2">
               <span className="text-xs px-2 py-1 rounded-full bg-secondary">
-                {complaint.status}
+                {statusLabels[complaint.status] || complaint.status}
               </span>
               <span className={`text-xs px-2 py-1 rounded-full ${
                 complaint.priority === 'urgent' ? 'bg-red-100 text-red-800' :
@@ -89,7 +95,7 @@ export function ComplaintCard({ complaint, userRole }: ComplaintCardProps) {
                 complaint.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
                 'bg-green-100 text-green-800'
               }`}>
-                {complaint.priority}
+                {priorityLabels[complaint.priority] || complaint.priority}
               </span>
             </div>
           </div>
@@ -99,7 +105,7 @@ export function ComplaintCard({ complaint, userRole }: ComplaintCardProps) {
           </p>
           
           <div className="flex justify-between items-center text-xs text-muted-foreground">
-            <span>الفئة: {complaint.category}</span>
+            <span>الفئة: {categoryLabels[complaint.category] || complaint.category}</span>
             <span>
               {complaint.assigned_deputy_id ? '✓ مسندة' : '⚠ غير مسندة'}
             </span>
