@@ -14,8 +14,8 @@ export function BreakingNewsTicker({ newsItems }: BreakingNewsTickerProps) {
   // Create a continuous string of news items separated by bullets
   const newsText = newsItems.map(item => item.content).join(" • ");
   
-  // Duplicate multiple times for seamless infinite loop
-  const fullNewsText = `${newsText} • ${newsText} • ${newsText}`;
+  // Duplicate many times for truly seamless infinite loop
+  const repeatedText = Array(10).fill(newsText).join(" • ");
 
   return (
     <div className="breaking-news-container w-full">
@@ -50,7 +50,7 @@ export function BreakingNewsTicker({ newsItems }: BreakingNewsTickerProps) {
                 className="inline-block text-white text-xs lg:text-base whitespace-nowrap"
                 style={{ fontFamily: 'Tajawal, sans-serif' }}
               >
-                {fullNewsText}
+                {repeatedText}
               </span>
             </div>
           </div>
@@ -66,14 +66,14 @@ export function BreakingNewsTicker({ newsItems }: BreakingNewsTickerProps) {
       <style jsx>{`
         .breaking-news-scroll {
           display: inline-block;
-          animation: scroll-left-to-right 90s linear infinite;
+          animation: scroll-left-to-right 120s linear infinite;
           padding-left: 100%;
         }
 
         /* TRUE RTL animation: text moves from LEFT to RIGHT seamlessly */
         @keyframes scroll-left-to-right {
           0% {
-            transform: translateX(-33.33%);
+            transform: translateX(0%);
           }
           100% {
             transform: translateX(100%);
