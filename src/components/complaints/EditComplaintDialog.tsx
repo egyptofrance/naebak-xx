@@ -48,11 +48,11 @@ export function EditComplaintDialog({
         description: description.trim(),
       });
 
-      if (result.success) {
+      if (result?.data?.success) {
         setOpen(false);
         router.refresh();
       } else {
-        setError(result.error || "فشل تحديث الشكوى");
+        setError(result?.data?.error || "فشل تحديث الشكوى");
       }
     } catch (err) {
       setError("حدث خطأ أثناء تحديث الشكوى");
