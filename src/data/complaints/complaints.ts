@@ -813,3 +813,37 @@ export const closeComplaint = adminActionClient
     return { success: true, message: "Complaint closed and 10 points awarded to deputy" };
   });
 
+
+
+/**
+ * Get single public complaint details (accessible to everyone, no authentication required)
+ */
+export async function getPublicComplaintById(complaintId: string) {
+  const supabase = await createSupabaseUserServerComponentClient();
+
+  const { data, error } = await supabase
+    .from("complaints")
+    .select(`
+      id,
+      title,
+      description,
+      category,
+      status,
+      governorate,
+      district,
+      created_at,
+      resolved_at,
+      priority
+    `)
+    .eq("id", complaintId)
+    .eq("is_public", true)
+    .eq("admin_approved_public", true)
+    .eq("is_archived", false)
+    .single();
+
+  if (error) {
+    return { data: null, error: error.message };
+  }
+
+  return { data, error: null };
+}

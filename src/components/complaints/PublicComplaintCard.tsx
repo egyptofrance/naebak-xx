@@ -1,3 +1,7 @@
+import { Link } from "@/components/intl-link";
+import { Button } from "@/components/ui/button";
+import { Eye } from "lucide-react";
+
 interface PublicComplaintCardProps {
   complaint: {
     id: string;
@@ -46,7 +50,7 @@ export function PublicComplaintCard({ complaint }: PublicComplaintCardProps) {
   };
 
   return (
-    <div className="border rounded-lg p-6 hover:shadow-md transition-shadow bg-card">
+    <div className="border rounded-lg p-6 hover:shadow-md transition-shadow bg-card" dir="rtl">
       <div className="flex justify-between items-start mb-3">
         <h3 className="font-semibold text-lg flex-1">{complaint.title}</h3>
         <span className={`text-xs px-3 py-1 rounded-full ${statusColors[complaint.status] || 'bg-gray-100 text-gray-800'}`}>
@@ -89,6 +93,15 @@ export function PublicComplaintCard({ complaint }: PublicComplaintCardProps) {
             <span>{new Date(complaint.resolved_at).toLocaleDateString("ar-EG")}</span>
           </div>
         )}
+      </div>
+      
+      <div className="mt-4 pt-4 border-t flex justify-end">
+        <Link href={`/public-complaints/${complaint.id}`}>
+          <Button variant="outline" size="sm" className="gap-2">
+            <Eye className="h-4 w-4" />
+            عرض التفاصيل
+          </Button>
+        </Link>
       </div>
     </div>
   );

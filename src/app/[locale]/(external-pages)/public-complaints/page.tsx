@@ -9,7 +9,7 @@ export default async function PublicComplaintsPage() {
   const { data: complaints, error } = await getPublicComplaints();
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl">
+    <div className="container mx-auto p-6 max-w-6xl" dir="rtl">
       <div className="mb-8 flex justify-between items-start">
         <div>
           <h1 className="text-3xl font-bold mb-2">الشكاوى العامة</h1>

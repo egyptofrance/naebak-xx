@@ -87,7 +87,7 @@ export function PublicComplaintsClient({ complaints }: PublicComplaintsClientPro
   const hasActiveFilters = selectedStatus !== "all" || selectedCategory !== "all" || selectedGovernorate !== "all";
 
   return (
-    <>
+    <div dir="rtl">
       {/* Filters */}
       <div className="bg-card border rounded-lg p-6 mb-6">
         <div className="flex justify-between items-center mb-4">
@@ -202,9 +202,9 @@ export function PublicComplaintsClient({ complaints }: PublicComplaintsClientPro
       <div className="grid gap-4">
         {filteredComplaints.map((complaint) => (
           <PublicComplaintCard key={complaint.id} complaint={complaint} />
-        ))}
+        )}
       </div>
-    </>
+    </div>
   );
-}
+}}
 
