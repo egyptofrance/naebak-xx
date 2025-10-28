@@ -95,11 +95,11 @@ export default function NewComplaintPage() {
         title: formData.get("title") as string,
         description: formData.get("description") as string,
         category: formData.get("category") as ComplaintCategory,
-        governorate: formData.get("governorate") as string,
-        district: formData.get("district") as string,
-        address: formData.get("address") as string,
-        citizen_phone: formData.get("citizen_phone") as string,
-        citizen_email: formData.get("citizen_email") as string,
+        governorate: (formData.get("governorate") as string) || undefined,
+        district: (formData.get("district") as string) || undefined,
+        address: (formData.get("address") as string) || undefined,
+        citizen_phone: (formData.get("citizen_phone") as string) || undefined,
+        citizen_email: (formData.get("citizen_email") as string) || undefined,
         is_public: formData.get("is_public") === "on",
       };
 
@@ -265,6 +265,30 @@ export default function NewComplaintPage() {
             <option value="القاهرة">القاهرة</option>
             <option value="الجيزة">الجيزة</option>
             <option value="الإسكندرية">الإسكندرية</option>
+            <option value="الدقهلية">الدقهلية</option>
+            <option value="البحيرة">البحيرة</option>
+            <option value="الفيوم">الفيوم</option>
+            <option value="الغربية">الغربية</option>
+            <option value="الإسماعيلية">الإسماعيلية</option>
+            <option value="المنوفية">المنوفية</option>
+            <option value="المنيا">المنيا</option>
+            <option value="القليوبية">القليوبية</option>
+            <option value="الوادي الجديد">الوادي الجديد</option>
+            <option value="الشرقية">الشرقية</option>
+            <option value="سوهاج">سوهاج</option>
+            <option value="أسوان">أسوان</option>
+            <option value="أسيوط">أسيوط</option>
+            <option value="بني سويف">بني سويف</option>
+            <option value="بورسعيد">بورسعيد</option>
+            <option value="دمياط">دمياط</option>
+            <option value="السويس">السويس</option>
+            <option value="الأقصر">الأقصر</option>
+            <option value="قنا">قنا</option>
+            <option value="البحر الأحمر">البحر الأحمر</option>
+            <option value="شمال سيناء">شمال سيناء</option>
+            <option value="جنوب سيناء">جنوب سيناء</option>
+            <option value="كفر الشيخ">كفر الشيخ</option>
+            <option value="مطروح">مطروح</option>
           </select>
         </div>
 
