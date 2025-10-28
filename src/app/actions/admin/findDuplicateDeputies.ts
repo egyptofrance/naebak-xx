@@ -43,26 +43,11 @@ export async function findDuplicateDeputies(
 
     const supabase = await createSupabaseUserServerActionClient();
 
-    // جلب جميع النواب مع معلوماتهم
+    // جلب جميع النواب
     const { data: deputies, error: fetchError } = await supabase
       .from('deputy_profiles')
-      .select(
-        `
-        id,
-        display_name,
-        deputy_status,
-        user_profiles!inner (
-          first_name,
-          father_name,
-          grandfather_name,
-          family_name
-        ),
-        councils (
-          name
-        )
-      `
-      )
-      .order('user_profiles(first_name)', { ascending: true });
+      .select('id, user_id, display_name, deputy_status, council_id')
+      .order('created_at', { ascending: true });
 
     if (fetchError) {
       console.error('Error fetching deputies:', fetchError);
@@ -77,24 +62,42 @@ export async function findDuplicateDeputies(
       };
     }
 
-    // تحويل البيانات للبحث عن التكرارات
-    const deputiesWithNames = deputies.map((deputy: any) => {
-      const userProfile = deputy.user_profiles;
-      const fullName = deputy.display_name || 
-        `${userProfile.first_name || ''} ${userProfile.father_name || ''} ${userProfile.grandfather_name || ''} ${userProfile.family_name || ''}`.trim();
+    // جلب بيانات المستخدمين والمجالس
+    const deputiesWithNames = await Promise.all(
+      deputies.map(async (deputy: any) => {
+        // جلب بيانات المستخدم
+        const { data: user } = await supabase
+          .from('user_profiles')
+          .select('first_name, father_name, grandfather_name, family_name')
+          .eq('id', deputy.user_id)
+          .single();
 
-      return {
-        id: deputy.id,
-        text: fullName,
-        display_name: deputy.display_name,
-        first_name: userProfile.first_name,
-        father_name: userProfile.father_name,
-        grandfather_name: userProfile.grandfather_name,
-        family_name: userProfile.family_name,
-        deputy_status: deputy.deputy_status,
-        council_name: deputy.councils?.name || null,
-      };
-    });
+        // جلب بيانات المجلس
+        const { data: council } = deputy.council_id
+          ? await supabase
+              .from('councils')
+              .select('name_ar')
+              .eq('id', deputy.council_id)
+              .single()
+          : { data: null };
+
+        const fullName =
+          deputy.display_name ||
+          `${user?.first_name || ''} ${user?.father_name || ''} ${user?.grandfather_name || ''} ${user?.family_name || ''}`.trim();
+
+        return {
+          id: deputy.id,
+          text: fullName,
+          display_name: deputy.display_name,
+          first_name: user?.first_name || '',
+          father_name: user?.father_name || '',
+          grandfather_name: user?.grandfather_name || '',
+          family_name: user?.family_name || '',
+          deputy_status: deputy.deputy_status,
+          council_name: council?.name_ar || null,
+        };
+      })
+    );
 
     // البحث عن التكرارات
     const duplicateGroups = findDuplicates(
