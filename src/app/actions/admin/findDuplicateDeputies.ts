@@ -10,6 +10,8 @@ export interface DeputyDuplicate {
   full_name: string;
   deputy_status: string;
   council_name: string | null;
+  governorate_name: string | null;
+  district_name: string | null;
   similarity: number;
 }
 
@@ -43,7 +45,7 @@ export async function findDuplicateDeputies(
     // جلب جميع النواب
     const { data: deputies, error: fetchError } = await supabase
       .from('deputy_profiles')
-      .select('id, user_id, display_name, deputy_status, council_id')
+      .select('id, user_id, display_name, deputy_status, council_id, electoral_district_id')
       .order('created_at', { ascending: true });
 
     if (fetchError) {
@@ -59,7 +61,7 @@ export async function findDuplicateDeputies(
       };
     }
 
-    // جلب بيانات المستخدمين والمجالس
+    // جلب بيانات المستخدمين والمجالس والدوائر
     const deputiesWithNames = await Promise.all(
       deputies.map(async (deputy: any) => {
         // جلب بيانات المستخدم
@@ -78,6 +80,33 @@ export async function findDuplicateDeputies(
               .single()
           : { data: null };
 
+        // جلب بيانات الدائرة الانتخابية والمحافظة
+        let governorateName = null;
+        let districtName = null;
+        
+        if (deputy.electoral_district_id) {
+          const { data: district } = await supabase
+            .from('electoral_districts')
+            .select('name, governorate_id')
+            .eq('id', deputy.electoral_district_id)
+            .single();
+          
+          if (district) {
+            districtName = district.name;
+            
+            // جلب اسم المحافظة
+            const { data: governorate } = await supabase
+              .from('governorates')
+              .select('name')
+              .eq('id', district.governorate_id)
+              .single();
+            
+            if (governorate) {
+              governorateName = governorate.name;
+            }
+          }
+        }
+
         const fullName = deputy.display_name || user?.full_name || 'غير محدد';
 
         return {
@@ -87,13 +116,20 @@ export async function findDuplicateDeputies(
           full_name: user?.full_name || '',
           deputy_status: deputy.deputy_status,
           council_name: council?.name_ar || null,
+          governorate_name: governorateName,
+          district_name: districtName,
         };
       })
     );
 
-    // البحث عن التكرارات
+    // البحث عن التكرارات مع مراعاة المحافظة والدائرة
     const duplicateGroups = findDuplicates(
-      deputiesWithNames.map((d: any) => ({ id: d.id, text: d.text })),
+      deputiesWithNames.map((d: any) => ({
+        id: d.id,
+        text: d.text,
+        governorate: d.governorate_name,
+        district: d.district_name,
+      })),
       similarityThreshold
     );
 
@@ -108,6 +144,8 @@ export async function findDuplicateDeputies(
             full_name: deputy.full_name,
             deputy_status: deputy.deputy_status,
             council_name: deputy.council_name,
+            governorate_name: deputy.governorate_name,
+            district_name: deputy.district_name,
             similarity: item.similarity,
           };
         });

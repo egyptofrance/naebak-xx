@@ -76,6 +76,47 @@ export function calculateSimilarity(str1: string, str2: string): number {
 }
 
 /**
+ * حساب التشابه الشامل مع مراعاة الاسم والمحافظة والدائرة
+ * Calculates comprehensive similarity including name, governorate, and district
+ */
+export function calculateComprehensiveSimilarity(
+  item1: { text: string; governorate?: string | null; district?: string | null },
+  item2: { text: string; governorate?: string | null; district?: string | null }
+): number {
+  // حساب تشابه الاسم (الأساس)
+  const nameSimilarity = calculateSimilarity(item1.text, item2.text);
+  
+  // إذا كان تشابه الاسم منخفض جداً، لا داعي للمتابعة
+  if (nameSimilarity < 0.5) return nameSimilarity;
+  
+  // تحقق من المحافظة
+  const sameGovernorate = 
+    item1.governorate && 
+    item2.governorate && 
+    normalizeArabicText(item1.governorate) === normalizeArabicText(item2.governorate);
+  
+  // تحقق من الدائرة
+  const sameDistrict = 
+    item1.district && 
+    item2.district && 
+    normalizeArabicText(item1.district) === normalizeArabicText(item2.district);
+  
+  // حساب النسبة النهائية
+  if (sameGovernorate && sameDistrict) {
+    // نفس الاسم + نفس المحافظة + نفس الدائرة = تشابه كامل
+    return nameSimilarity; // يعتمد على تشابه الاسم فقط
+  } else if (sameGovernorate && !sameDistrict) {
+    // نفس الاسم + نفس المحافظة + دائرة مختلفة = تشابه 50%
+    return Math.min(nameSimilarity, 0.5);
+  } else if (!sameGovernorate) {
+    // محافظة مختلفة = تشابه منخفض جداً (حتى لو الاسم متطابق)
+    return Math.min(nameSimilarity, 0.3);
+  }
+  
+  return nameSimilarity;
+}
+
+/**
  * حساب Levenshtein Distance بين نصين
  * Calculates the minimum number of single-character edits needed
  * to change one string into another (preserves order)
@@ -129,7 +170,7 @@ export interface DuplicateGroup {
 }
 
 export function findDuplicates(
-  items: Array<{ id: string; text: string }>,
+  items: Array<{ id: string; text: string; governorate?: string | null; district?: string | null }>,
   similarityThreshold: number = 0.85
 ): DuplicateGroup[] {
   const groups = new Map<string, DuplicateGroup>();
@@ -152,7 +193,7 @@ export function findDuplicates(
     });
   }
 
-  // Find similar groups (fuzzy matches)
+  // Find similar groups (fuzzy matches) with comprehensive similarity
   const allGroups = Array.from(groups.values());
   const mergedGroups: DuplicateGroup[] = [];
   const processed = new Set<string>();
@@ -167,10 +208,12 @@ export function findDuplicates(
     for (let j = i + 1; j < allGroups.length; j++) {
       if (processed.has(allGroups[j].normalized)) continue;
 
-      const similarity = calculateSimilarity(
-        currentGroup.normalized,
-        allGroups[j].normalized
-      );
+      // استخدام التشابه الشامل (مع المحافظة والدائرة)
+      // Get representative items from each group
+      const item1 = items.find(item => item.id === currentGroup.items[0].id)!;
+      const item2 = items.find(item => item.id === allGroups[j].items[0].id)!;
+      
+      const similarity = calculateComprehensiveSimilarity(item1, item2);
 
       if (similarity >= similarityThreshold) {
         // Merge groups

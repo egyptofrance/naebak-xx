@@ -343,11 +343,23 @@ export default function DuplicatesManager() {
                                       {(deputy.similarity * 100).toFixed(0)}%
                                     </span>
                                   </div>
-                                  {deputy.council_name && (
-                                    <div className="text-sm text-muted-foreground">
-                                      <strong>المجلس:</strong> {deputy.council_name}
-                                    </div>
-                                  )}
+                                  <div className="text-sm text-muted-foreground space-y-1">
+                                    {deputy.council_name && (
+                                      <div>
+                                        <strong>المجلس:</strong> {deputy.council_name}
+                                      </div>
+                                    )}
+                                    {deputy.governorate_name && (
+                                      <div>
+                                        <strong>المحافظة:</strong> {deputy.governorate_name}
+                                      </div>
+                                    )}
+                                    {deputy.district_name && (
+                                      <div>
+                                        <strong>الدائرة الانتخابية:</strong> {deputy.district_name}
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
 
                                 <div className="flex items-center gap-2">
