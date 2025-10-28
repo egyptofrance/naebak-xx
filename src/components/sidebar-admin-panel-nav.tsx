@@ -41,16 +41,6 @@ const adminSections = [
         href: `/deputies`,
         icon: <UserCheck className="h-5 w-5" />,
       },
-      {
-        label: "إدارة الشكاوى",
-        href: `/manager-complaints`,
-        icon: <MessageSquareWarning className="h-5 w-5" />,
-      },
-      {
-        label: "الأخبار العاجلة",
-        href: `/app_admin/breaking-news`,
-        icon: <Newspaper className="h-5 w-5" />,
-      },
     ],
   },
   {
@@ -71,11 +61,6 @@ const adminSections = [
         href: `/app_admin/managers`,
         icon: <Users className="h-5 w-5" />,
       },
-      {
-        label: "إدارة التكرارات",
-        href: `/app_admin/duplicates`,
-        icon: <Copy className="h-5 w-5" />,
-      },
     ],
   },
   {
@@ -95,6 +80,21 @@ const adminSections = [
         label: "إدارة البانر",
         href: `/app_admin/banner`,
         icon: <ImageIcon className="h-5 w-5" />,
+      },
+      {
+        label: "الأخبار العاجلة",
+        href: `/app_admin/breaking-news`,
+        icon: <Newspaper className="h-5 w-5" />,
+      },
+      {
+        label: "إدارة الشكاوى",
+        href: `/manager-complaints`,
+        icon: <MessageSquareWarning className="h-5 w-5" />,
+      },
+      {
+        label: "إدارة التكرارات",
+        href: `/app_admin/duplicates`,
+        icon: <Copy className="h-5 w-5" />,
       },
     ],
   },
