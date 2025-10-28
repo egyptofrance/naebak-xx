@@ -7,10 +7,7 @@ import { getIsAppAdmin } from '@/data/user/user';
 export interface DeputyDuplicate {
   id: string;
   display_name: string;
-  first_name: string;
-  father_name: string;
-  grandfather_name: string;
-  family_name: string;
+  full_name: string;
   deputy_status: string;
   council_name: string | null;
   similarity: number;
@@ -68,7 +65,7 @@ export async function findDuplicateDeputies(
         // جلب بيانات المستخدم
         const { data: user } = await supabase
           .from('user_profiles')
-          .select('first_name, father_name, grandfather_name, family_name')
+          .select('full_name')
           .eq('id', deputy.user_id)
           .single();
 
@@ -81,18 +78,13 @@ export async function findDuplicateDeputies(
               .single()
           : { data: null };
 
-        const fullName =
-          deputy.display_name ||
-          `${user?.first_name || ''} ${user?.father_name || ''} ${user?.grandfather_name || ''} ${user?.family_name || ''}`.trim();
+        const fullName = deputy.display_name || user?.full_name || 'غير محدد';
 
         return {
           id: deputy.id,
           text: fullName,
           display_name: deputy.display_name,
-          first_name: user?.first_name || '',
-          father_name: user?.father_name || '',
-          grandfather_name: user?.grandfather_name || '',
-          family_name: user?.family_name || '',
+          full_name: user?.full_name || '',
           deputy_status: deputy.deputy_status,
           council_name: council?.name_ar || null,
         };
@@ -113,10 +105,7 @@ export async function findDuplicateDeputies(
           return {
             id: item.id,
             display_name: deputy.display_name,
-            first_name: deputy.first_name,
-            father_name: deputy.father_name,
-            grandfather_name: deputy.grandfather_name,
-            family_name: deputy.family_name,
+            full_name: deputy.full_name,
             deputy_status: deputy.deputy_status,
             council_name: deputy.council_name,
             similarity: item.similarity,

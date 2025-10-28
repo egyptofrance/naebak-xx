@@ -216,8 +216,7 @@ export default function DuplicatesManager() {
             <CardContent className="pt-6">
               <div className="space-y-3">
                 {group.deputies.map((deputy, deputyIndex) => {
-                  const fullName = deputy.display_name || 
-                    `${deputy.first_name} ${deputy.father_name} ${deputy.grandfather_name} ${deputy.family_name}`.trim();
+                  const fullName = deputy.display_name || deputy.full_name || 'غير محدد';
 
                   return (
                     <div
@@ -234,20 +233,6 @@ export default function DuplicatesManager() {
                         </div>
                         
                         <div className="text-sm text-muted-foreground space-y-1">
-                          <div className="flex gap-4 flex-wrap">
-                            <span>
-                              <strong>الاسم الأول:</strong> {deputy.first_name || '-'}
-                            </span>
-                            <span>
-                              <strong>اسم الأب:</strong> {deputy.father_name || '-'}
-                            </span>
-                            <span>
-                              <strong>اسم الجد:</strong> {deputy.grandfather_name || '-'}
-                            </span>
-                            <span>
-                              <strong>اسم العائلة:</strong> {deputy.family_name || '-'}
-                            </span>
-                          </div>
                           {deputy.council_name && (
                             <div>
                               <strong>المجلس:</strong> {deputy.council_name}
