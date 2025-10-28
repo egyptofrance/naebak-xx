@@ -104,7 +104,7 @@ export default function NewComplaintPage() {
       }
 
       // Save metadata to database
-      const { error: dbError } = await supabase
+      const { error: dbError } = await (supabase as any)
         .from('complaint_attachments')
         .insert({
           complaint_id: complaintId,
