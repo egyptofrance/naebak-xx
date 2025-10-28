@@ -23,6 +23,7 @@ import {
   UserPen,
   Users,
   Settings,
+  Copy,
 } from "lucide-react";
 import { Suspense } from "react";
 
@@ -69,6 +70,11 @@ const adminSections = [
         label: "بيانات المديرين",
         href: `/app_admin/managers`,
         icon: <Users className="h-5 w-5" />,
+      },
+      {
+        label: "إدارة التكرارات",
+        href: `/app_admin/duplicates`,
+        icon: <Copy className="h-5 w-5" />,
       },
     ],
   },

@@ -228,6 +228,7 @@
     "sharp": "^0.33.5",
     "slugify": "^1.6.6",
     "sonner": "^1.7.4",
+    "string-similarity": "^4.0.4",
     "strip-ansi": "^7.1.0",
     "stripe": "^17.7.0",
     "supabase": "^2.22.4",
