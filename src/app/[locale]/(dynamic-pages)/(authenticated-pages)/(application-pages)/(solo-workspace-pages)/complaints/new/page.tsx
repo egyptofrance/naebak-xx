@@ -22,6 +22,7 @@ type ComplaintCategory =
   | "social_services"
   | "legal"
   | "corruption"
+  | "investment"
   | "other";
 
 interface AttachmentFile {
@@ -227,6 +228,7 @@ export default function NewComplaintPage() {
             <option value="social_services">الخدمات الاجتماعية</option>
             <option value="legal">القانونية</option>
             <option value="corruption">الفساد</option>
+            <option value="investment">الاستثمار</option>
             <option value="other">أخرى</option>
           </select>
         </div>

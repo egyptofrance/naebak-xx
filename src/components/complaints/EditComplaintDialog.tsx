@@ -41,6 +41,7 @@ const categoryLabels: Record<string, string> = {
   social_services: "الخدمات الاجتماعية",
   legal: "قانونية",
   corruption: "فساد",
+  investment: "الاستثمار",
   other: "أخرى",
 };
 
