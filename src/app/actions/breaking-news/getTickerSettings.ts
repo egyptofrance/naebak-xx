@@ -14,7 +14,7 @@ export async function getTickerSettings(): Promise<TickerSettings | null> {
   try {
     const supabase = supabaseAnonClient;
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("ticker_settings")
       .select("*")
       .limit(1)

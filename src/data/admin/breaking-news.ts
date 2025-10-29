@@ -133,7 +133,7 @@ export const updateTickerSettingsAction = adminActionClient
     );
 
     // Get the first (and only) settings row
-    const { data: settings } = await supabase
+    const { data: settings } = await (supabase as any)
       .from("ticker_settings")
       .select("id")
       .limit(1)
@@ -141,7 +141,7 @@ export const updateTickerSettingsAction = adminActionClient
 
     if (settings) {
       // Update existing settings
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("ticker_settings")
         .update({
           scroll_speed: input.scrollSpeed,
@@ -154,7 +154,7 @@ export const updateTickerSettingsAction = adminActionClient
       }
     } else {
       // Insert new settings if none exist
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("ticker_settings")
         .insert({
           scroll_speed: input.scrollSpeed
