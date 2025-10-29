@@ -24,10 +24,10 @@ CREATE TABLE IF NOT EXISTS public.job_applications (
   cv_url TEXT,
   cover_letter TEXT,
   portfolio_url TEXT,
-  additional_documents TEXT[], -- روابط لمستندات إضافية
+  additional_documents TEXT[],
   
   -- حالة الطلب
-  status VARCHAR(50) DEFAULT 'pending', -- 'pending', 'reviewing', 'shortlisted', 'rejected', 'accepted'
+  status VARCHAR(50) DEFAULT 'pending',
   admin_notes TEXT,
   reviewed_by UUID REFERENCES auth.users(id),
   reviewed_at TIMESTAMP WITH TIME ZONE,
@@ -38,13 +38,18 @@ CREATE TABLE IF NOT EXISTS public.job_applications (
 );
 
 -- فهارس للأداء
-CREATE INDEX idx_applications_job_id ON public.job_applications(job_id);
-CREATE INDEX idx_applications_status ON public.job_applications(status);
-CREATE INDEX idx_applications_email ON public.job_applications(email);
-CREATE INDEX idx_applications_created_at ON public.job_applications(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_applications_job_id ON public.job_applications(job_id);
+CREATE INDEX IF NOT EXISTS idx_applications_status ON public.job_applications(status);
+CREATE INDEX IF NOT EXISTS idx_applications_email ON public.job_applications(email);
+CREATE INDEX IF NOT EXISTS idx_applications_created_at ON public.job_applications(created_at DESC);
 
 -- تفعيل RLS
 ALTER TABLE public.job_applications ENABLE ROW LEVEL SECURITY;
+
+-- حذف السياسات القديمة إن وجدت
+DROP POLICY IF EXISTS "Anyone can submit application" ON public.job_applications;
+DROP POLICY IF EXISTS "Only admins can view applications" ON public.job_applications;
+DROP POLICY IF EXISTS "Only admins can update applications" ON public.job_applications;
 
 -- سياسة الإنشاء: الجميع يمكنهم التقديم
 CREATE POLICY "Anyone can submit application"
@@ -52,28 +57,17 @@ CREATE POLICY "Anyone can submit application"
   FOR INSERT
   WITH CHECK (true);
 
--- سياسة القراءة والإدارة: فقط الأدمن
+-- سياسة القراءة: فقط الأدمن
 CREATE POLICY "Only admins can view applications"
   ON public.job_applications
   FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.user
-      WHERE user.id = auth.uid()
-      AND user.role = 'admin'
-    )
-  );
+  USING (public.is_application_admin(auth.uid()));
 
+-- سياسة التحديث: فقط الأدمن
 CREATE POLICY "Only admins can update applications"
   ON public.job_applications
   FOR UPDATE
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.user
-      WHERE user.id = auth.uid()
-      AND user.role = 'admin'
-    )
-  );
+  USING (public.is_application_admin(auth.uid()));
 
 -- محفز لتحديث updated_at
 CREATE OR REPLACE FUNCTION update_job_applications_updated_at()
@@ -83,6 +77,8 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trigger_update_job_applications_updated_at ON public.job_applications;
 
 CREATE TRIGGER trigger_update_job_applications_updated_at
   BEFORE UPDATE ON public.job_applications
