@@ -2307,6 +2307,233 @@ export type Database = {
         }
         Relationships: []
       }
+      jobs: {
+        Row: {
+          id: string
+          title: string
+          description: string
+          salary_min: number | null
+          salary_max: number | null
+          salary_currency: string
+          work_location: string
+          office_address: string | null
+          work_hours: string | null
+          employment_type: string
+          category: string
+          governorate: string | null
+          requirements: string[] | null
+          responsibilities: string[] | null
+          benefits: string[] | null
+          image_url: string | null
+          status: string
+          positions_available: number
+          created_at: string
+          updated_at: string
+          created_by: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          id?: string
+          title: string
+          description: string
+          salary_min?: number | null
+          salary_max?: number | null
+          salary_currency?: string
+          work_location: string
+          office_address?: string | null
+          work_hours?: string | null
+          employment_type: string
+          category: string
+          governorate?: string | null
+          requirements?: string[] | null
+          responsibilities?: string[] | null
+          benefits?: string[] | null
+          image_url?: string | null
+          status?: string
+          positions_available?: number
+          created_at?: string
+          updated_at?: string
+          created_by?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          id?: string
+          title?: string
+          description?: string
+          salary_min?: number | null
+          salary_max?: number | null
+          salary_currency?: string
+          work_location?: string
+          office_address?: string | null
+          work_hours?: string | null
+          employment_type?: string
+          category?: string
+          governorate?: string | null
+          requirements?: string[] | null
+          responsibilities?: string[] | null
+          benefits?: string[] | null
+          image_url?: string | null
+          status?: string
+          positions_available?: number
+          created_at?: string
+          updated_at?: string
+          created_by?: string | null
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jobs_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jobs_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      job_applications: {
+        Row: {
+          id: string
+          job_id: string
+          full_name: string
+          email: string
+          phone: string
+          national_id: string | null
+          date_of_birth: string | null
+          governorate: string | null
+          city: string | null
+          address: string | null
+          education_level: string | null
+          education_details: string | null
+          years_of_experience: number | null
+          previous_experience: string | null
+          skills: string[] | null
+          cv_url: string | null
+          cover_letter: string | null
+          portfolio_url: string | null
+          additional_documents: string[] | null
+          status: string
+          admin_notes: string | null
+          reviewed_by: string | null
+          reviewed_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          job_id: string
+          full_name: string
+          email: string
+          phone: string
+          national_id?: string | null
+          date_of_birth?: string | null
+          governorate?: string | null
+          city?: string | null
+          address?: string | null
+          education_level?: string | null
+          education_details?: string | null
+          years_of_experience?: number | null
+          previous_experience?: string | null
+          skills?: string[] | null
+          cv_url?: string | null
+          cover_letter?: string | null
+          portfolio_url?: string | null
+          additional_documents?: string[] | null
+          status?: string
+          admin_notes?: string | null
+          reviewed_by?: string | null
+          reviewed_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          job_id?: string
+          full_name?: string
+          email?: string
+          phone?: string
+          national_id?: string | null
+          date_of_birth?: string | null
+          governorate?: string | null
+          city?: string | null
+          address?: string | null
+          education_level?: string | null
+          education_details?: string | null
+          years_of_experience?: number | null
+          previous_experience?: string | null
+          skills?: string[] | null
+          cv_url?: string | null
+          cover_letter?: string | null
+          portfolio_url?: string | null
+          additional_documents?: string[] | null
+          status?: string
+          admin_notes?: string | null
+          reviewed_by?: string | null
+          reviewed_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_applications_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_applications_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      job_statistics: {
+        Row: {
+          id: string
+          job_id: string
+          views_count: number
+          applications_count: number
+          last_viewed_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          job_id: string
+          views_count?: number
+          applications_count?: number
+          last_viewed_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          job_id?: string
+          views_count?: number
+          applications_count?: number
+          last_viewed_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_statistics_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: true
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
 
     }
     Views: {
