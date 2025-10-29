@@ -63,7 +63,7 @@ export async function getActiveJobs(
     // تحويل البيانات إلى النوع الصحيح
     const jobs: JobWithStatistics[] = (data || []).map((job: any) => ({
       ...job,
-      statistics: job.statistics?.[0] || null,
+      statistics: Array.isArray(job.statistics) ? job.statistics[0] : job.statistics,
     })) as JobWithStatistics[];
 
     return {
@@ -104,7 +104,7 @@ export async function getJobById(id: string): Promise<JobWithStatistics | null> 
 
     return {
       ...data,
-      statistics: data.statistics?.[0] || null,
+      statistics: Array.isArray(data.statistics) ? data.statistics[0] : data.statistics,
     } as JobWithStatistics;
   } catch (error) {
     console.error('[getJobById] Exception:', error);
@@ -164,7 +164,7 @@ export async function getAllJobs(
 
     const jobs: JobWithStatistics[] = (data || []).map((job: any) => ({
       ...job,
-      statistics: job.statistics?.[0] || null,
+      statistics: Array.isArray(job.statistics) ? job.statistics[0] : job.statistics,
     })) as JobWithStatistics[];
 
     return {
@@ -231,7 +231,7 @@ export async function getJobApplications(
 
     const applications: JobApplicationWithJob[] = (data || []).map((app: any) => ({
       ...app,
-      job: app.job || null,
+      job: Array.isArray(app.job) ? app.job[0] : app.job,
     })) as JobApplicationWithJob[];
 
     return {
@@ -270,7 +270,7 @@ export async function getJobApplicationById(
 
     return {
       ...data,
-      job: data.job || null,
+      job: Array.isArray(data.job) ? data.job[0] : data.job,
     } as JobApplicationWithJob;
   } catch (error) {
     console.error('[getJobApplicationById] Exception:', error);
