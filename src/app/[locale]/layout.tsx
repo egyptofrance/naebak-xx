@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     description: "المنصة الأولى التي تربط النواب بأبناء دوائرهم، توثق إنجازاتهم، وتبني سيرتهم الذاتية الحقيقية أمام الشعب",
     images: [
       {
-        url: "/og-image.png",
+        url: "https://naebak.com/og-image.png",
         width: 1200,
         height: 630,
         alt: "نائبك - المنصة الأولى للنواب في مصر",
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "نائبك - المنصة الأولى للنواب في مصر",
     description: "المنصة الأولى التي تربط النواب بأبناء دوائرهم، توثق إنجازاتهم، وتبني سيرتهم الذاتية الحقيقية أمام الشعب",
-    images: ["/og-image.png"],
+    images: ["https://naebak.com/og-image.png"],
   },
   robots: {
     index: true,
