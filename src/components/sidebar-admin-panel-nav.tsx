@@ -82,6 +82,11 @@ const adminSections = [
         icon: <ImageIcon className="h-5 w-5" />,
       },
       {
+        label: "صورة المشاركة",
+        href: `/app_admin/og-image`,
+        icon: <ImageIcon className="h-5 w-5" />,
+      },
+      {
         label: "الأخبار العاجلة",
         href: `/app_admin/breaking-news`,
         icon: <Newspaper className="h-5 w-5" />,
