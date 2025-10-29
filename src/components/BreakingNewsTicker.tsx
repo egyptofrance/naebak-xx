@@ -39,7 +39,7 @@ export function BreakingNewsTicker({ newsItems }: BreakingNewsTickerProps) {
             <Marquee
               speed={50}
               gradient={false}
-              direction="left"
+              direction="right"
               pauseOnHover={true}
             >
               <span 
