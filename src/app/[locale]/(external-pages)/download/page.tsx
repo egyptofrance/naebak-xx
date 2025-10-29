@@ -1,5 +1,4 @@
 import { Smartphone, Download, Check, Zap, Bell, Wifi } from "lucide-react";
-import Image from "next/image";
 
 export const metadata = {
   title: "تحميل تطبيق نائبك",
@@ -13,13 +12,11 @@ export default function DownloadPage() {
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto text-center">
           <div className="mb-8 flex justify-center">
-            <div className="w-24 h-24 bg-green-600 rounded-3xl flex items-center justify-center shadow-xl">
-              <Image
+            <div className="w-24 h-24 bg-green-600 rounded-3xl flex items-center justify-center shadow-xl p-4">
+              <img
                 src="/logo-green.png"
                 alt="نائبك"
-                width={80}
-                height={80}
-                className="brightness-0 invert"
+                className="w-full h-full object-contain brightness-0 invert"
               />
             </div>
           </div>
