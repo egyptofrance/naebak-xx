@@ -45,7 +45,7 @@ export function BreakingNewsTicker({ newsItems }: BreakingNewsTickerProps) {
 
           {/* Scrolling news text - TRUE RTL: moving from LEFT to RIGHT */}
           <div className="flex-1 overflow-hidden pr-20 lg:pr-40">
-            <div className="breaking-news-scroll">
+            <div className="animate-scroll-rtl inline-block pl-[100%]">
               <span 
                 className="inline-block text-white text-xs lg:text-base whitespace-nowrap"
                 style={{ fontFamily: 'Tajawal, sans-serif' }}
@@ -63,27 +63,7 @@ export function BreakingNewsTicker({ newsItems }: BreakingNewsTickerProps) {
       {/* Bottom dark gray line */}
       <div className="h-[1px] bg-gray-900" />
 
-      <style jsx>{`
-        .breaking-news-scroll {
-          display: inline-block;
-          animation: scroll-left-to-right 120s linear infinite;
-          padding-left: 100%;
-        }
 
-        /* TRUE RTL animation: text moves from LEFT to RIGHT seamlessly */
-        @keyframes scroll-left-to-right {
-          0% {
-            transform: translateX(0%);
-          }
-          100% {
-            transform: translateX(100%);
-          }
-        }
-
-        .breaking-news-scroll:hover {
-          animation-play-state: paused;
-        }
-      `}</style>
     </div>
   );
 }

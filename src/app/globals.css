@@ -1,0 +1,18 @@
+
+/* Breaking News Ticker Animation */
+@keyframes scroll-rtl {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-scroll-rtl {
+  animation: scroll-rtl 120s linear infinite;
+}
+
+.animate-scroll-rtl:hover {
+  animation-play-state: paused;
+}
