@@ -29,12 +29,12 @@ export async function getBreakingNews(): Promise<BreakingNewsItem[]> {
     }
 
     // Ensure scroll_speed has a default value
-    const newsWithSpeed = (data || []).map(item => ({
+    const newsWithSpeed = (data || []).map((item: any) => ({
       ...item,
       scroll_speed: item.scroll_speed || 50
     }));
 
-    return newsWithSpeed;
+    return newsWithSpeed as BreakingNewsItem[];
   } catch (error) {
     console.error("[getBreakingNews] Exception:", error);
     return [];
