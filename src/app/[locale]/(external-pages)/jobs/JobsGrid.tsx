@@ -16,9 +16,9 @@ interface JobsGridProps {
   total: number;
   currentPage: number;
   limit: number;
-  categories: Array<{ value: string; label: string; labelEn: string }>;
-  workLocations: Array<{ value: string; label: string; labelEn: string }>;
-  employmentTypes: Array<{ value: string; label: string; labelEn: string }>;
+  categories: Array<{ value: string; label: string; labelAr: string }>;
+  workLocations: Array<{ value: string; label: string; labelAr: string }>;
+  employmentTypes: Array<{ value: string; label: string; labelAr: string }>;
   governorates: Array<{ value: string; label: string }>;
 }
 
