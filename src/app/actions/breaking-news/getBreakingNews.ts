@@ -7,7 +7,7 @@ export interface BreakingNewsItem {
   content: string;
   is_active: boolean;
   display_order: number;
-  scroll_speed: number;
+  scroll_speed?: number;
   created_at: string;
   updated_at: string;
   created_by: string | null;
@@ -28,7 +28,13 @@ export async function getBreakingNews(): Promise<BreakingNewsItem[]> {
       return [];
     }
 
-    return data || [];
+    // Ensure scroll_speed has a default value
+    const newsWithSpeed = (data || []).map(item => ({
+      ...item,
+      scroll_speed: item.scroll_speed || 50
+    }));
+
+    return newsWithSpeed;
   } catch (error) {
     console.error("[getBreakingNews] Exception:", error);
     return [];

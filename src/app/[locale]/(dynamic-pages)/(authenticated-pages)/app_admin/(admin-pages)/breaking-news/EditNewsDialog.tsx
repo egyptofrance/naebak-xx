@@ -24,7 +24,7 @@ interface EditNewsDialogProps {
     id: string;
     content: string;
     display_order: number;
-    scroll_speed: number;
+    scroll_speed?: number;
   };
 }
 
