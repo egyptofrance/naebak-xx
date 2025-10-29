@@ -64,7 +64,7 @@ export async function getActiveJobs(
     const jobs: JobWithStatistics[] = (data || []).map((job: any) => ({
       ...job,
       statistics: job.statistics?.[0] || null,
-    }));
+    })) as JobWithStatistics[];
 
     return {
       jobs,
@@ -105,7 +105,7 @@ export async function getJobById(id: string): Promise<JobWithStatistics | null> 
     return {
       ...data,
       statistics: data.statistics?.[0] || null,
-    };
+    } as JobWithStatistics;
   } catch (error) {
     console.error('[getJobById] Exception:', error);
     return null;
@@ -165,7 +165,7 @@ export async function getAllJobs(
     const jobs: JobWithStatistics[] = (data || []).map((job: any) => ({
       ...job,
       statistics: job.statistics?.[0] || null,
-    }));
+    })) as JobWithStatistics[];
 
     return {
       jobs,
@@ -232,7 +232,7 @@ export async function getJobApplications(
     const applications: JobApplicationWithJob[] = (data || []).map((app: any) => ({
       ...app,
       job: app.job || null,
-    }));
+    })) as JobApplicationWithJob[];
 
     return {
       applications,
@@ -271,7 +271,7 @@ export async function getJobApplicationById(
     return {
       ...data,
       job: data.job || null,
-    };
+    } as JobApplicationWithJob;
   } catch (error) {
     console.error('[getJobApplicationById] Exception:', error);
     return null;
