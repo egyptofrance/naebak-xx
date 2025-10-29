@@ -13,9 +13,9 @@ export function ExternalNavigation() {
   return (
     <MobileMenuProvider>
       <header className="sticky inset-x-0 w-full top-0 z-50 border-b bg-green-900 text-white shadow-lg">
-        <div className="overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent hover:scrollbar-thumb-white/30">
+        <div className="w-full">
           <nav
-            className="flex items-center w-full min-w-max h-[54px] md:container md:mx-auto justify-between px-4 md:px-8"
+            className="flex items-center w-full h-[54px] md:container md:mx-auto justify-between px-4 md:px-8"
             aria-label="Global"
           >
           {/* Left: Logo */}
