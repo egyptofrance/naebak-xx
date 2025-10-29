@@ -593,6 +593,9 @@ importers:
       react-email:
         specifier: ^3.0.7
         version: 3.0.7(@opentelemetry/api@1.9.0)(@playwright/test@1.52.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react-fast-marquee:
+        specifier: ^1.6.5
+        version: 1.6.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react-ga4:
         specifier: ^2.1.0
         version: 2.1.0
@@ -9446,6 +9449,12 @@ packages:
     resolution: {integrity: sha512-lX9dFCPtTG+79aP9uTdx763byshptPYbOi0KXwxn6nPJoDP/Ty/G1W5fx1lbrmec+pk38MTDZPrzJ/UYIxgP/Q==}
     engines: {node: '>=18.0.0'}
     hasBin: true
+
+  react-fast-marquee@1.6.5:
+    resolution: {integrity: sha512-swDnPqrT2XISAih0o74zQVE2wQJFMvkx+9VZXYYNSLb/CUcAzU9pNj637Ar2+hyRw6b4tP6xh4GQZip2ZCpQpg==}
+    peerDependencies:
+      react: '>= 16.8.0 || ^18.0.0'
+      react-dom: '>= 16.8.0 || ^18.0.0'
 
   react-ga4@2.1.0:
     resolution: {integrity: sha512-ZKS7PGNFqqMd3PJ6+C2Jtz/o1iU9ggiy8Y8nUeksgVuvNISbmrQtJiZNvC/TjDsqD0QlU5Wkgs7i+w9+OjHhhQ==}
@@ -21757,6 +21766,11 @@ snapshots:
       - sass
       - supports-color
       - utf-8-validate
+
+  react-fast-marquee@1.6.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
 
   react-ga4@2.1.0: {}
 

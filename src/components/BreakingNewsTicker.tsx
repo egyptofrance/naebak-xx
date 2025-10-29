@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import Marquee from "react-fast-marquee";
 import type { BreakingNewsItem } from "@/app/actions/breaking-news/getBreakingNews";
 
 interface BreakingNewsTickerProps {
@@ -7,46 +7,12 @@ interface BreakingNewsTickerProps {
 }
 
 export function BreakingNewsTicker({ newsItems }: BreakingNewsTickerProps) {
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const scrollElement = scrollRef.current;
-    if (!scrollElement) return;
-
-    let animationFrame: number;
-    let position = 0;
-    const speed = 0.5; // pixels per frame
-
-    const animate = () => {
-      position += speed;
-      
-      // Reset position when fully scrolled
-      if (position >= scrollElement.scrollWidth / 2) {
-        position = 0;
-      }
-      
-      scrollElement.style.transform = `translateX(${position}px)`;
-      animationFrame = requestAnimationFrame(animate);
-    };
-
-    animationFrame = requestAnimationFrame(animate);
-
-    return () => {
-      if (animationFrame) {
-        cancelAnimationFrame(animationFrame);
-      }
-    };
-  }, [newsItems]);
-
   if (!newsItems || newsItems.length === 0) {
     return null;
   }
 
   // Create a continuous string of news items separated by bullets
   const newsText = newsItems.map(item => item.content).join(" • ");
-  
-  // Duplicate for seamless loop
-  const repeatedText = Array(20).fill(newsText).join(" • ");
 
   return (
     <div className="breaking-news-container w-full">
@@ -68,20 +34,21 @@ export function BreakingNewsTicker({ newsItems }: BreakingNewsTickerProps) {
             </div>
           </div>
 
-          {/* Scrolling news text */}
-          <div className="flex-1 overflow-hidden pr-20 lg:pr-40">
-            <div 
-              ref={scrollRef}
-              className="inline-block pl-[100%]"
-              style={{ willChange: 'transform' }}
+          {/* Scrolling news text using react-fast-marquee */}
+          <div className="flex-1 pr-20 lg:pr-40">
+            <Marquee
+              speed={50}
+              gradient={false}
+              direction="left"
+              pauseOnHover={true}
             >
               <span 
-                className="inline-block text-white text-xs lg:text-base whitespace-nowrap"
+                className="text-white text-xs lg:text-base whitespace-nowrap"
                 style={{ fontFamily: 'Tajawal, sans-serif' }}
               >
-                {repeatedText}
+                {newsText} &nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;
               </span>
-            </div>
+            </Marquee>
           </div>
         </div>
       </div>
