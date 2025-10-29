@@ -13,18 +13,19 @@ export const metadata = {
 export default async function JobsPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const page = Number(searchParams.page) || 1;
+  const params = await searchParams;
+  const page = Number(params.page) || 1;
   const limit = 12;
 
   // استخراج الفلاتر من searchParams
   const filters = {
-    category: searchParams.category as string | undefined,
-    work_location: searchParams.work_location as string | undefined,
-    employment_type: searchParams.employment_type as string | undefined,
-    governorate: searchParams.governorate as string | undefined,
-    search: searchParams.search as string | undefined,
+    category: params.category as string | undefined,
+    work_location: params.work_location as string | undefined,
+    employment_type: params.employment_type as string | undefined,
+    governorate: params.governorate as string | undefined,
+    search: params.search as string | undefined,
   };
 
   const { jobs, total } = await getActiveJobs(filters, page, limit);
