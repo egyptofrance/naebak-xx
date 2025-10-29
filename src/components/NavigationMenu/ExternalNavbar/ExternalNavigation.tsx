@@ -8,6 +8,7 @@ import { MobileMenuProvider } from "./MobileMenuContext";
 import { MobileMenuOpen } from "./MobileMenuOpen";
 
 import { NavbarLogo } from "./NavbarLogo";
+import { PWAInstallButton } from "@/components/PWA/PWAInstallButton";
 
 export function ExternalNavigation() {
   return (
@@ -32,6 +33,7 @@ export function ExternalNavigation() {
               }
             >
               <div className="flex space-x-3 items-center lg:-mr-2">
+                <PWAInstallButton />
                 <LocaleSwitcher />
                 <div className="ml-6 hidden lg:block" suppressHydrationWarning>
                   <LoginCTAButton />

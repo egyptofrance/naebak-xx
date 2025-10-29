@@ -1,5 +1,6 @@
 import { ExternalNavigation } from "@/components/NavigationMenu/ExternalNavbar/ExternalNavigation";
 import { Footer } from "@/components/LandingPage/Footer";
+import { PWAInstallBanner } from "@/components/PWA/PWAInstallBanner";
 import { routing } from "@/i18n/routing";
 import { unstable_setRequestLocale } from "next-intl/server";
 import "./layout.css";
@@ -28,6 +29,7 @@ export default async function Layout(props: {
         {children}
       </main>
       <Footer />
+      <PWAInstallBanner />
     </div>
   );
 }
