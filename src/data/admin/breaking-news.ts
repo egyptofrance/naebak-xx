@@ -38,6 +38,7 @@ export const createBreakingNewsAction = adminActionClient
     z.object({
       content: z.string().min(1, "المحتوى مطلوب"),
       displayOrder: z.number().int().min(0),
+      scrollSpeed: z.number().int().min(10).max(200).default(50),
       isActive: z.boolean().default(true),
     })
   )
@@ -56,6 +57,7 @@ export const createBreakingNewsAction = adminActionClient
     const { error } = await supabase.from("breaking_news").insert({
       content: input.content,
       display_order: input.displayOrder,
+      scroll_speed: input.scrollSpeed,
       is_active: input.isActive,
       created_by: ctx.userId,
     });
@@ -77,6 +79,7 @@ export const updateBreakingNewsAction = adminActionClient
       id: z.string().uuid(),
       content: z.string().min(1, "المحتوى مطلوب").optional(),
       displayOrder: z.number().int().min(0).optional(),
+      scrollSpeed: z.number().int().min(10).max(200).optional(),
       isActive: z.boolean().optional(),
     })
   )
@@ -95,6 +98,7 @@ export const updateBreakingNewsAction = adminActionClient
     const updateData: any = {};
     if (input.content !== undefined) updateData.content = input.content;
     if (input.displayOrder !== undefined) updateData.display_order = input.displayOrder;
+    if (input.scrollSpeed !== undefined) updateData.scroll_speed = input.scrollSpeed;
     if (input.isActive !== undefined) updateData.is_active = input.isActive;
     updateData.updated_at = new Date().toISOString();
 

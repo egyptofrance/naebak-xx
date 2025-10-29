@@ -11,6 +11,10 @@ export function BreakingNewsTicker({ newsItems }: BreakingNewsTickerProps) {
     return null;
   }
 
+  // Get scroll speed from first news item (all items should have same speed)
+  // Default to 50 if not set
+  const scrollSpeed = newsItems[0]?.scroll_speed || 50;
+
   // Create a continuous string of news items separated by bullets
   const newsText = newsItems.map(item => item.content).join(" • ");
 
@@ -37,7 +41,7 @@ export function BreakingNewsTicker({ newsItems }: BreakingNewsTickerProps) {
           {/* Scrolling news text using react-fast-marquee */}
           <div className="flex-1 pr-20 lg:pr-40">
             <Marquee
-              speed={50}
+              speed={scrollSpeed}
               gradient={false}
               direction="right"
               pauseOnHover={true}

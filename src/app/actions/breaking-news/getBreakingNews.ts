@@ -7,6 +7,7 @@ export interface BreakingNewsItem {
   content: string;
   is_active: boolean;
   display_order: number;
+  scroll_speed: number;
   created_at: string;
   updated_at: string;
   created_by: string | null;
