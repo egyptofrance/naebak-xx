@@ -11,6 +11,9 @@
 
 .animate-scroll-rtl {
   animation: scroll-rtl 120s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .animate-scroll-rtl:hover {
