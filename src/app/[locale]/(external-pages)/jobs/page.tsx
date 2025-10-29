@@ -1,5 +1,14 @@
 import { getActiveJobs } from '@/data/jobs/queries';
-import { JOB_CATEGORIES, WORK_LOCATIONS, EMPLOYMENT_TYPES, GOVERNORATES } from '@/types/jobs';
+import { 
+  JOB_CATEGORIES, 
+  WORK_LOCATIONS, 
+  EMPLOYMENT_TYPES, 
+  GOVERNORATES,
+  JobFilters,
+  JobCategory,
+  WorkLocation,
+  EmploymentType,
+} from '@/types/jobs';
 import JobsGrid from './JobsGrid';
 
 // Force dynamic rendering - no caching
@@ -20,10 +29,10 @@ export default async function JobsPage({
   const limit = 12;
 
   // استخراج الفلاتر من searchParams
-  const filters = {
-    category: params.category as string | undefined,
-    work_location: params.work_location as string | undefined,
-    employment_type: params.employment_type as string | undefined,
+  const filters: JobFilters = {
+    category: params.category as JobCategory | undefined,
+    work_location: params.work_location as WorkLocation | undefined,
+    employment_type: params.employment_type as EmploymentType | undefined,
     governorate: params.governorate as string | undefined,
     search: params.search as string | undefined,
   };
