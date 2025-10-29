@@ -6,6 +6,8 @@ import "server-only";
 import { AffonsoWrapper } from "./AffonsoWrapper";
 import { AppProviders } from "./AppProviders";
 import { SchemaOrg } from "@/components/SchemaOrg";
+import { PWARegister } from "@/components/PWA/PWARegister";
+import { PWAInstallPrompt } from "@/components/PWA/PWAInstallPrompt";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -20,12 +22,18 @@ export const metadata: Metadata = {
   authors: [{ name: "نائبك" }],
   creator: "نائبك",
   publisher: "نائبك",
+  manifest: "/manifest.json",
   icons: {
     icon: [
       { url: "/logo-green.png", sizes: "any" },
       { url: "/images/logo-black-main.ico", sizes: "any" }
     ],
     apple: "/logo-green.png",
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "نائبك",
   },
   openGraph: {
     type: "website",
@@ -88,8 +96,10 @@ export default async function RootLayout(props: {
         <SchemaOrg />
       </head>
       <body className="flex flex-col min-h-screen">
+        <PWARegister />
         <AppProviders locale={locale} messages={messages}>
           {children}
+          <PWAInstallPrompt />
         </AppProviders>
       </body>
     </html>
