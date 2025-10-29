@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, Edit, Trash2, Eye, EyeOff } from "lucide-react";
+import { Plus, Edit, Trash2, Eye, EyeOff, ChevronUp, ChevronDown } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -24,7 +24,6 @@ interface BreakingNewsItem {
   content: string;
   is_active: boolean;
   display_order: number;
-  scroll_speed?: number;
   created_at: string;
   updated_at: string;
 }
@@ -46,8 +45,40 @@ export function BreakingNewsList({ initialNews }: BreakingNewsListProps) {
     },
   });
 
+  const { execute: updateOrder } = useAction(updateBreakingNewsAction, {
+    onSuccess: () => {
+      toast.success("تم تحديث الترتيب");
+      window.location.reload();
+    },
+    onError: ({ error }) => {
+      toast.error(error.serverError || "حدث خطأ");
+    },
+  });
+
   const handleToggleActive = (id: string, currentState: boolean) => {
     toggleActive({ id, isActive: !currentState });
+  };
+
+  const handleMoveUp = (index: number) => {
+    if (index === 0) return;
+    
+    const currentItem = news[index];
+    const previousItem = news[index - 1];
+    
+    // Swap display_order
+    updateOrder({ id: currentItem.id, displayOrder: previousItem.display_order });
+    updateOrder({ id: previousItem.id, displayOrder: currentItem.display_order });
+  };
+
+  const handleMoveDown = (index: number) => {
+    if (index === news.length - 1) return;
+    
+    const currentItem = news[index];
+    const nextItem = news[index + 1];
+    
+    // Swap display_order
+    updateOrder({ id: currentItem.id, displayOrder: nextItem.display_order });
+    updateOrder({ id: nextItem.id, displayOrder: currentItem.display_order });
   };
 
   return (
@@ -65,10 +96,10 @@ export function BreakingNewsList({ initialNews }: BreakingNewsListProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-12">الترتيب</TableHead>
+              <TableHead className="w-24 text-center">الترتيب</TableHead>
               <TableHead>المحتوى</TableHead>
               <TableHead className="w-24 text-center">الحالة</TableHead>
-              <TableHead className="w-32 text-center">إجراءات</TableHead>
+              <TableHead className="w-40 text-center">إجراءات</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -79,9 +110,33 @@ export function BreakingNewsList({ initialNews }: BreakingNewsListProps) {
                 </TableCell>
               </TableRow>
             ) : (
-              news.map((item) => (
+              news.map((item, index) => (
                 <TableRow key={item.id}>
-                  <TableCell className="font-medium">{item.display_order}</TableCell>
+                  <TableCell className="text-center">
+                    <div className="flex items-center justify-center gap-1">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleMoveUp(index)}
+                        disabled={index === 0}
+                        title="تحريك لأعلى"
+                        className="h-8 w-8"
+                      >
+                        <ChevronUp className="h-4 w-4" />
+                      </Button>
+                      <span className="font-medium min-w-[20px] text-center">{index + 1}</span>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleMoveDown(index)}
+                        disabled={index === news.length - 1}
+                        title="تحريك لأسفل"
+                        className="h-8 w-8"
+                      >
+                        <ChevronDown className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
                   <TableCell className="max-w-md">
                     <p className="truncate">{item.content}</p>
                   </TableCell>

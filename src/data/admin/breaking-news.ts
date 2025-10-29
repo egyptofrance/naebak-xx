@@ -38,7 +38,6 @@ export const createBreakingNewsAction = adminActionClient
     z.object({
       content: z.string().min(1, "المحتوى مطلوب"),
       displayOrder: z.number().int().min(0),
-      scrollSpeed: z.number().int().min(10).max(200).default(50),
       isActive: z.boolean().default(true),
     })
   )
@@ -57,7 +56,6 @@ export const createBreakingNewsAction = adminActionClient
     const { error } = await supabase.from("breaking_news").insert({
       content: input.content,
       display_order: input.displayOrder,
-      scroll_speed: input.scrollSpeed,
       is_active: input.isActive,
       created_by: ctx.userId,
     });
@@ -79,7 +77,6 @@ export const updateBreakingNewsAction = adminActionClient
       id: z.string().uuid(),
       content: z.string().min(1, "المحتوى مطلوب").optional(),
       displayOrder: z.number().int().min(0).optional(),
-      scrollSpeed: z.number().int().min(10).max(200).optional(),
       isActive: z.boolean().optional(),
     })
   )
@@ -98,7 +95,6 @@ export const updateBreakingNewsAction = adminActionClient
     const updateData: any = {};
     if (input.content !== undefined) updateData.content = input.content;
     if (input.displayOrder !== undefined) updateData.display_order = input.displayOrder;
-    if (input.scrollSpeed !== undefined) updateData.scroll_speed = input.scrollSpeed;
     if (input.isActive !== undefined) updateData.is_active = input.isActive;
     updateData.updated_at = new Date().toISOString();
 
@@ -115,6 +111,64 @@ export const updateBreakingNewsAction = adminActionClient
     revalidatePath("/app_admin/breaking-news");
 
     return { message: "تم تحديث الخبر بنجاح" };
+  });
+
+// Update ticker settings
+export const updateTickerSettingsAction = adminActionClient
+  .schema(
+    z.object({
+      scrollSpeed: z.number().int().min(10).max(200),
+    })
+  )
+  .action(async ({ parsedInput: input }) => {
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    );
+
+    // Get the first (and only) settings row
+    const { data: settings } = await supabase
+      .from("ticker_settings")
+      .select("id")
+      .limit(1)
+      .single();
+
+    if (settings) {
+      // Update existing settings
+      const { error } = await supabase
+        .from("ticker_settings")
+        .update({
+          scroll_speed: input.scrollSpeed,
+          updated_at: new Date().toISOString()
+        })
+        .eq("id", settings.id);
+
+      if (error) {
+        throw new Error(error.message);
+      }
+    } else {
+      // Insert new settings if none exist
+      const { error } = await supabase
+        .from("ticker_settings")
+        .insert({
+          scroll_speed: input.scrollSpeed
+        });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+    }
+
+    revalidatePath("/");
+    revalidatePath("/app_admin/breaking-news");
+
+    return { message: "تم تحديث إعدادات الشريط بنجاح" };
   });
 
 // Delete breaking news

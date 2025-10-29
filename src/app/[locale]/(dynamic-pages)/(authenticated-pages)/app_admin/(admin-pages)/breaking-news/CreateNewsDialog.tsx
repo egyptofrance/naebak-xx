@@ -24,7 +24,6 @@ export function CreateNewsDialog() {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState("");
   const [displayOrder, setDisplayOrder] = useState("0");
-  const [scrollSpeed, setScrollSpeed] = useState("50");
   const [isActive, setIsActive] = useState(true);
 
   const { execute, isExecuting } = useAction(createBreakingNewsAction, {
@@ -33,7 +32,6 @@ export function CreateNewsDialog() {
       setOpen(false);
       setContent("");
       setDisplayOrder("0");
-      setScrollSpeed("50");
       setIsActive(true);
       window.location.reload();
     },
@@ -53,7 +51,6 @@ export function CreateNewsDialog() {
     execute({
       content: content.trim(),
       displayOrder: parseInt(displayOrder) || 0,
-      scrollSpeed: parseInt(scrollSpeed) || 50,
       isActive,
     });
   };
@@ -97,20 +94,6 @@ export function CreateNewsDialog() {
               />
               <p className="text-xs text-muted-foreground">
                 الأخبار ذات الترتيب الأقل تظهر أولاً
-              </p>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="scrollSpeed">سرعة التمرير (بكسل/ثانية)</Label>
-              <Input
-                id="scrollSpeed"
-                type="number"
-                value={scrollSpeed}
-                onChange={(e) => setScrollSpeed(e.target.value)}
-                min="10"
-                max="200"
-              />
-              <p className="text-xs text-muted-foreground">
-                السرعة الموصى بها: 30-80 (القيمة الافتراضية: 50)
               </p>
             </div>
             <div className="flex items-center space-x-2 space-x-reverse">

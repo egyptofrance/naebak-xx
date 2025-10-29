@@ -4,16 +4,13 @@ import type { BreakingNewsItem } from "@/app/actions/breaking-news/getBreakingNe
 
 interface BreakingNewsTickerProps {
   newsItems: BreakingNewsItem[];
+  scrollSpeed?: number;
 }
 
-export function BreakingNewsTicker({ newsItems }: BreakingNewsTickerProps) {
+export function BreakingNewsTicker({ newsItems, scrollSpeed = 50 }: BreakingNewsTickerProps) {
   if (!newsItems || newsItems.length === 0) {
     return null;
   }
-
-  // Get scroll speed from first news item (all items should have same speed)
-  // Default to 50 if not set
-  const scrollSpeed = newsItems[0]?.scroll_speed || 50;
 
   // Create a continuous string of news items separated by bullets
   const newsText = newsItems.map(item => item.content).join(" • ");

@@ -24,7 +24,6 @@ interface EditNewsDialogProps {
     id: string;
     content: string;
     display_order: number;
-    scroll_speed?: number;
   };
 }
 
@@ -32,7 +31,6 @@ export function EditNewsDialog({ news }: EditNewsDialogProps) {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState(news.content);
   const [displayOrder, setDisplayOrder] = useState(news.display_order.toString());
-  const [scrollSpeed, setScrollSpeed] = useState(news.scroll_speed?.toString() || "50");
 
   const { execute, isExecuting } = useAction(updateBreakingNewsAction, {
     onSuccess: () => {
@@ -57,7 +55,6 @@ export function EditNewsDialog({ news }: EditNewsDialogProps) {
       id: news.id,
       content: content.trim(),
       displayOrder: parseInt(displayOrder) || 0,
-      scrollSpeed: parseInt(scrollSpeed) || 50,
     });
   };
 
@@ -98,20 +95,7 @@ export function EditNewsDialog({ news }: EditNewsDialogProps) {
                 min="0"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-scrollSpeed">سرعة التمرير (بكسل/ثانية)</Label>
-              <Input
-                id="edit-scrollSpeed"
-                type="number"
-                value={scrollSpeed}
-                onChange={(e) => setScrollSpeed(e.target.value)}
-                min="10"
-                max="200"
-              />
-              <p className="text-xs text-muted-foreground">
-                السرعة الموصى بها: 30-80 (القيمة الافتراضية: 50)
-              </p>
-            </div>
+
           </div>
           <DialogFooter>
             <Button
