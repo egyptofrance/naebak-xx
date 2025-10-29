@@ -14,9 +14,10 @@ export const revalidate = 0;
 export default async function JobDetailsPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const job = await getJobById(params.id);
+  const { id } = await params;
+  const job = await getJobById(id);
 
   if (!job) {
     notFound();

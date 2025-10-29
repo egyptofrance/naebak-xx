@@ -281,6 +281,36 @@ export const EDUCATION_LEVELS: { value: EducationLevel; label: string; labelAr: 
 ];
 
 // محافظات مصر
+export const GOVERNORATES = [
+  { value: 'القاهرة', label: 'القاهرة' },
+  { value: 'الجيزة', label: 'الجيزة' },
+  { value: 'الإسكندرية', label: 'الإسكندرية' },
+  { value: 'الدقهلية', label: 'الدقهلية' },
+  { value: 'البحر الأحمر', label: 'البحر الأحمر' },
+  { value: 'البحيرة', label: 'البحيرة' },
+  { value: 'الفيوم', label: 'الفيوم' },
+  { value: 'الغربية', label: 'الغربية' },
+  { value: 'الإسماعيلية', label: 'الإسماعيلية' },
+  { value: 'المنوفية', label: 'المنوفية' },
+  { value: 'المنيا', label: 'المنيا' },
+  { value: 'القليوبية', label: 'القليوبية' },
+  { value: 'الوادي الجديد', label: 'الوادي الجديد' },
+  { value: 'الشرقية', label: 'الشرقية' },
+  { value: 'السويس', label: 'السويس' },
+  { value: 'أسوان', label: 'أسوان' },
+  { value: 'أسيوط', label: 'أسيوط' },
+  { value: 'بني سويف', label: 'بني سويف' },
+  { value: 'بورسعيد', label: 'بورسعيد' },
+  { value: 'دمياط', label: 'دمياط' },
+  { value: 'الأقصر', label: 'الأقصر' },
+  { value: 'قنا', label: 'قنا' },
+  { value: 'كفر الشيخ', label: 'كفر الشيخ' },
+  { value: 'مطروح', label: 'مطروح' },
+  { value: 'شمال سيناء', label: 'شمال سيناء' },
+  { value: 'جنوب سيناء', label: 'جنوب سيناء' },
+  { value: 'سوهاج', label: 'سوهاج' },
+];
+
 export const EGYPT_GOVERNORATES = [
   'القاهرة',
   'الجيزة',
@@ -310,3 +340,6 @@ export const EGYPT_GOVERNORATES = [
   'جنوب سيناء',
   'سوهاج',
 ];
+
+// Backward compatibility
+export { GOVERNORATES as EGYPT_GOVERNORATES_LIST };
