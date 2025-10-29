@@ -2678,6 +2678,18 @@ export type Database = {
         }
         Returns: undefined
       }
+      increment_job_views: {
+        Args: {
+          job_uuid: string
+        }
+        Returns: undefined
+      }
+      increment_job_applications: {
+        Args: {
+          job_uuid: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "manager" | "deputy" | "citizen"
