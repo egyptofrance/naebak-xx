@@ -125,7 +125,7 @@ export default function JobApplicationForm({ jobId, jobTitle }: JobApplicationFo
         years_of_experience: formData.years_of_experience ? parseInt(formData.years_of_experience) : undefined,
         current_job_title: formData.current_job_title || undefined,
         current_company: formData.current_company || undefined,
-        skills: formData.skills || undefined,
+        skills: formData.skills ? formData.skills.split(',').map(s => s.trim()).filter(s => s) : undefined,
         why_interested: formData.why_interested || undefined,
         additional_info: formData.additional_info || undefined,
         cv_url: cvUrl || undefined,
