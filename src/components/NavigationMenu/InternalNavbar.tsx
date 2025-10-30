@@ -19,7 +19,7 @@ export async function InternalNavbar({ children }: { children: ReactNode }) {
         <SidebarTrigger />
         
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+        <Link href="/" className="hidden md:flex items-center gap-2 hover:opacity-80 transition-opacity">
           <Image
             src="/images/logo-naebak-white.png"
             alt="نائبك"
