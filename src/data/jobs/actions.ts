@@ -223,20 +223,34 @@ export async function deleteJobApplication(id: string) {
 }
 
 /**
- * رفع صورة وظيفة إلى Storage
+ * رفع صورة وظيفة إلى Storage (بنفس آلية البنرات)
+ * @param fileData - base64 encoded file
+ * @param fileName - original file name
+ * @param fileType - MIME type
+ * @param jobId - job ID
  */
-export async function uploadJobImage(file: File, jobId: string) {
+export async function uploadJobImage(
+  fileData: string,
+  fileName: string,
+  fileType: string,
+  jobId: string
+) {
   const supabase = await createSupabaseUserServerActionClient();
 
   try {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${jobId}-${Date.now()}.${fileExt}`;
-    const filePath = `jobs/${fileName}`;
+    // Convert base64 to buffer
+    const base64Data = fileData.split(',')[1];
+    const buffer = Buffer.from(base64Data, 'base64');
 
+    // Generate unique filename
+    const timestamp = Date.now();
+    const uniqueFileName = `job-${jobId}-${timestamp}-${fileName}`;
+
+    // Upload to Supabase Storage (same bucket as banners)
     const { data, error } = await supabase.storage
-      .from('public')
-      .upload(filePath, file, {
-        cacheControl: '3600',
+      .from('public-user-assets')
+      .upload(uniqueFileName, buffer, {
+        contentType: fileType,
         upsert: false,
       });
 
@@ -245,9 +259,10 @@ export async function uploadJobImage(file: File, jobId: string) {
       return { success: false, error: error.message };
     }
 
+    // Get public URL
     const {
       data: { publicUrl },
-    } = supabase.storage.from('public').getPublicUrl(filePath);
+    } = supabase.storage.from('public-user-assets').getPublicUrl(uniqueFileName);
 
     return { success: true, url: publicUrl };
   } catch (error) {
