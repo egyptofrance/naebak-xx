@@ -1,0 +1,47 @@
+
+> nextbase@3.1.0 dev /home/ubuntu/naebak-xx
+> NODE_OPTIONS='--no-warnings' concurrently "content-collections watch" "next dev --turbo "
+
+[0] /bin/sh: 1: content-collections: not found
+[0] content-collections watch exited with code 127
+[1] Starting content-collections content-collections.ts
+[1] build started ...
+[1] ... finished build of 2 collections and 6 documents in 635ms
+[1] start watching ...
+[1]    ▲ Next.js 15.3.5 (Turbopack)
+[1]    - Local:        http://localhost:3000
+[1]    - Network:      http://169.254.0.21:3000
+[1]    - Experiments (use with caution):
+[1]      · turbo
+[1]      ✓ authInterrupts
+[1] 
+[1]  ✓ Starting...
+[1]  ⚠ Invalid next.config.ts options detected: 
+[1]  ⚠     Unrecognized key(s) in object: 'turbo'
+[1]  ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+[1]  ⚠ The config property `experimental.turbo` is deprecated. Move this setting to `config.turbopack` as Turbopack is now stable.
+[1] Attention: Next.js now collects completely anonymous telemetry regarding usage.
+[1] This information is used to shape Next.js' roadmap and prioritize features.
+[1] You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+[1] https://nextjs.org/telemetry
+[1] 
+[1]  ○ Compiling middleware ...
+[1]  ✓ Compiled middleware in 504ms
+[1]  ✓ Ready in 2.1s
+[1]  ○ Compiling /[locale] ...
+[1]  ✓ Compiled /[locale] in 1953ms
+[1]  ○ Compiling /_error ...
+[1]  ✓ Compiled /_error in 1160ms
+[1]  GET /ar 500 in 3337ms
+[1]  GET /ar 500 in 56ms
+[1]  GET /ar 500 in 63ms
+[1]  GET /ar 500 in 30ms
+[1]  GET /ar 500 in 24ms
+[1]  GET /ar 500 in 42ms
+[1]  GET /ar 500 in 49ms
+[1]  GET /ar 500 in 45ms
+[1]  GET /ar 500 in 42ms
+ ELIFECYCLE  Command failed.
+[1] [?25h
+[1] corrupted size vs. prev_size in fastbins
+[1] next dev --turbo  exited with code SIGTERM

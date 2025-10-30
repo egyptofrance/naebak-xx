@@ -1,0 +1,1663 @@
+🚀 Starting Phase 1: Dependencies Cleanup
+==========================================
+
+📦 Creating backup of package.json...
+[0;32m✅ Backup created: package.json.backup[0m
+
+🎨 Removing unused UI libraries...
+ WARN  Installing a dependency from a non-existent directory: /home/ubuntu/naebak-xx/@next-safe-action/adapter-react-hook-form/hooks
+Progress: resolved 0, reused 0, downloaded 1, added 0
+Progress: resolved 21, reused 0, downloaded 21, added 0
+Progress: resolved 46, reused 0, downloaded 46, added 0
+Progress: resolved 94, reused 0, downloaded 94, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+ WARN  deprecated openai-edge@1.2.3: The official OpenAI SDK now supports edge runtimes, please use that instead.
+ WARN  deprecated string-similarity@4.0.4: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+Progress: resolved 193, reused 0, downloaded 193, added 0
+Progress: resolved 238, reused 0, downloaded 238, added 0
+Progress: resolved 241, reused 0, downloaded 241, added 0
+Progress: resolved 333, reused 0, downloaded 319, added 0
+Progress: resolved 374, reused 0, downloaded 360, added 0
+Progress: resolved 535, reused 0, downloaded 521, added 0
+Progress: resolved 712, reused 0, downloaded 701, added 0
+Progress: resolved 783, reused 0, downloaded 772, added 0
+Progress: resolved 978, reused 0, downloaded 967, added 0
+Progress: resolved 1060, reused 0, downloaded 1022, added 0
+Progress: resolved 1199, reused 0, downloaded 1116, added 0
+Progress: resolved 1402, reused 0, downloaded 1253, added 0
+Progress: resolved 1597, reused 0, downloaded 1413, added 0
+Progress: resolved 1816, reused 0, downloaded 1626, added 0
+Progress: resolved 1848, reused 0, downloaded 1660, added 0
+Progress: resolved 1883, reused 0, downloaded 1682, added 0
+Progress: resolved 1942, reused 0, downloaded 1737, added 0
+Progress: resolved 2013, reused 0, downloaded 1803, added 0
+Progress: resolved 2132, reused 0, downloaded 1914, added 0
+Progress: resolved 2219, reused 0, downloaded 2022, added 0
+ WARN  5 deprecated subdependencies found: angular@1.8.3, babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Already up to date
+Progress: resolved 2231, reused 0, downloaded 2036, added 4
+Progress: resolved 2231, reused 0, downloaded 2036, added 1232
+Progress: resolved 2231, reused 0, downloaded 2036, added 2115, done
+.../core-js@3.41.0/node_modules/core-js postinstall$ node -e "try{require('./postinstall')}catch(e){}"
+ WARN  Failed to create bin at /home/ubuntu/naebak-xx/node_modules/.pnpm/supabase@2.22.4/node_modules/supabase/node_modules/.bin/supabase. ENOENT: no such file or directory, open '/home/ubuntu/naebak-xx/node_modules/.pnpm/supabase@2.22.4/node_modules/supabase/bin/supabase'
+.../node_modules/supabase postinstall$ node scripts/postinstall.js
+.../sharp@0.33.5/node_modules/sharp install$ node install/check
+.../esbuild@0.23.0/node_modules/esbuild postinstall$ node install.js
+.../esbuild@0.25.2/node_modules/esbuild postinstall$ node install.js
+.../core-js@3.41.0/node_modules/core-js postinstall: Thank you for using core-js ( https://github.com/zloirock/core-js ) for polyfilling JavaScript standard library!
+.../core-js@3.41.0/node_modules/core-js postinstall: The project needs your help! Please consider supporting core-js:
+.../core-js@3.41.0/node_modules/core-js postinstall: > https://opencollective.com/core-js 
+.../core-js@3.41.0/node_modules/core-js postinstall: > https://patreon.com/zloirock 
+.../core-js@3.41.0/node_modules/core-js postinstall: > https://boosty.to/zloirock 
+.../core-js@3.41.0/node_modules/core-js postinstall: > bitcoin: bc1qlea7544qtsmj2rayg0lthvza9fau63ux0fstcz 
+.../core-js@3.41.0/node_modules/core-js postinstall: I highly recommend reading this: https://github.com/zloirock/core-js/blob/master/docs/2023-02-14-so-whats-next.md 
+.../core-js@3.41.0/node_modules/core-js postinstall: Done
+.../esbuild@0.23.0/node_modules/esbuild postinstall: Done
+.../esbuild@0.25.2/node_modules/esbuild postinstall: Done
+.../sharp@0.33.5/node_modules/sharp install: Done
+.../node_modules/@parcel/watcher install$ node scripts/build-from-source.js
+.../node_modules/supabase postinstall: Downloading https://github.com/supabase/cli/releases/download/v2.22.4/supabase_2.22.4_checksums.txt
+.../esbuild@0.21.5/node_modules/esbuild postinstall$ node install.js
+.../node_modules/unrs-resolver postinstall$ napi-postinstall unrs-resolver check
+.../node_modules/@parcel/watcher install: Done
+.../sharp@0.34.1/node_modules/sharp install$ node install/check
+.../esbuild@0.21.5/node_modules/esbuild postinstall: Done
+.../node_modules/unrs-resolver postinstall: Done
+.../node_modules/@sentry/cli postinstall$ node ./scripts/install.js
+.../sharp@0.34.1/node_modules/sharp install: Done
+.../node_modules/@sentry/cli postinstall: Done
+.../node_modules/supabase postinstall: Downloading https://github.com/supabase/cli/releases/download/v2.22.4/supabase_linux_amd64.tar.gz
+.../node_modules/supabase postinstall: Checksum verified.
+.../node_modules/supabase postinstall: Installed Supabase CLI successfully
+.../node_modules/supabase postinstall: Done
+
+dependencies:
++ @ai-sdk/openai 1.3.16
++ @content-collections/cli 0.1.6
++ @content-collections/core 0.8.2
++ @content-collections/mdx 0.2.2
++ @content-collections/next 0.2.6
++ @dnd-kit/core 6.3.1
++ @eslint/compat 1.2.8
++ @faker-js/faker 9.7.0
++ @formatjs/intl-localematcher 0.5.10
++ @fumadocs/content-collections 1.1.8
+- @headlessui/react ^2.2.2
+- @headlessui/tailwindcss ^0.2.2
++ @hookform/resolvers 3.10.0
++ @mantine/hooks 7.17.4
++ @mdx-js/loader 3.1.0
++ @mdx-js/react 3.1.0
++ @microflash/rehype-slugify 1.0.0
++ @next-safe-action/adapter-react-hook-form 1.0.14
++ @next/bundle-analyzer 15.3.1
++ @next/eslint-plugin-next 15.3.1
++ @next/mdx 15.3.1
++ @playwright/test 1.52.0
++ @radix-ui/react-accordion 1.2.7
++ @radix-ui/react-alert-dialog 1.1.10
++ @radix-ui/react-aspect-ratio 1.1.4
++ @radix-ui/react-avatar 1.1.6
++ @radix-ui/react-checkbox 1.2.2
++ @radix-ui/react-collapsible 1.1.7
++ @radix-ui/react-context-menu 2.2.11
++ @radix-ui/react-dialog 1.1.10
++ @radix-ui/react-dropdown-menu 2.1.11
++ @radix-ui/react-hover-card 1.1.10
++ @radix-ui/react-icons 1.3.2
++ @radix-ui/react-label 2.1.4
++ @radix-ui/react-menubar 1.1.11
++ @radix-ui/react-navigation-menu 1.2.9
++ @radix-ui/react-popover 1.1.10
++ @radix-ui/react-progress 1.1.4
++ @radix-ui/react-radio-group 1.3.3
++ @radix-ui/react-scroll-area 1.2.5
++ @radix-ui/react-select 2.2.2
++ @radix-ui/react-separator 1.1.4
++ @radix-ui/react-slider 1.3.2
++ @radix-ui/react-slot 1.2.0
++ @radix-ui/react-switch 1.2.2
++ @radix-ui/react-tabs 1.1.8
++ @radix-ui/react-toast 1.2.10
++ @radix-ui/react-toggle 1.1.6
++ @radix-ui/react-toggle-group 1.1.7
++ @radix-ui/react-tooltip 1.2.3
++ @radix-ui/react-visually-hidden 1.2.0
++ @react-email/body 0.0.11
++ @react-email/button 0.0.19
++ @react-email/column 0.0.13
++ @react-email/container 0.0.15
++ @react-email/head 0.0.12
++ @react-email/heading 0.0.15
++ @react-email/hr 0.0.11
++ @react-email/html 0.0.11
++ @react-email/img 0.0.11
++ @react-email/link 0.0.12
++ @react-email/render 1.0.6
++ @react-email/section 0.0.16
++ @react-email/text 0.0.11
+- @remixicon/react ^4.6.0
++ @sentry/nextjs 8.55.0
++ @stripe/stripe-js 5.10.0
++ @supabase/sentry-js-integration 0.3.0
++ @supabase/ssr 0.5.2
++ @supabase/supabase-js 2.49.4
++ @svgr/webpack 8.1.0
++ @tailwindcss/forms 0.5.10
++ @tailwindcss/postcss 4.1.4
++ @tailwindcss/typography 0.5.16
++ @tanstack/react-query 5.74.4
++ @tanstack/react-table 8.21.3
++ @testing-library/react 16.3.0
++ @tiptap/extension-color 2.11.7
++ @tiptap/extension-list-item 2.11.7
++ @tiptap/extension-text-style 2.11.7
++ @tiptap/html 2.11.7
++ @tiptap/react 2.11.7
++ @tiptap/starter-kit 2.11.7
++ @tiptap/suggestion 2.11.7
+- @tremor/react ^3.18.7
++ @types/chance 1.1.6
++ @types/crypto-js 4.2.2
++ @types/debug 4.1.12
++ @types/events 3.0.3
++ @types/formidable 3.4.5
++ @types/jsonwebtoken 9.0.9
++ @types/lodash 4.17.16
++ @types/lodash.uniqby 4.7.9
++ @types/mdx 2.0.13
++ @types/node 22.16.3
++ @types/nodemailer 6.4.17
++ @types/nprogress 0.2.3
++ @types/react 19.0.2
++ @types/react-copy-to-clipboard 5.0.7
++ @types/react-dom 19.1.6
++ @types/react-syntax-highlighter 15.5.13
++ @types/stripe 8.0.417 deprecated
++ @types/unist 3.0.3
++ @types/uuid 10.0.0
++ @typescript-eslint/eslint-plugin 8.31.0
++ @typescript-eslint/parser 8.31.0
++ @unkey/api 0.28.0
++ @unkey/nextjs 0.18.9
++ @vercel/analytics 1.5.0
++ @vitejs/plugin-react 4.4.1
++ ai 4.3.9
++ autoprefixer 10.4.21
++ axios 1.8.4
++ chance 1.1.12
++ checkbox 0.0.1
++ class-variance-authority 0.7.1
++ clsx 2.1.1
++ cmdk 1.1.1
++ cobe 0.6.3
++ concurrently 9.1.2
++ core-js 3.41.0
++ cross-env 7.0.3
++ crypto-js 4.2.0
++ d3-scale 4.0.2
++ date-fns 4.1.0
++ debug 4.4.0
++ embla-carousel-react 8.6.0
++ emittery 1.1.0
++ encoding 0.1.13
++ env-cmd 10.1.0
++ eslint 9.25.1
++ eslint-config-esnext 4.1.0
++ eslint-config-next 15.3.1
++ eslint-config-node 4.1.0
++ eslint-config-prettier 9.1.0
++ eslint-plugin-playwright 2.2.0
++ eslint-plugin-prettier 5.2.6
++ eslint-plugin-react-hooks 5.2.0
++ events 3.3.0
++ form-data 4.0.2
++ formidable 3.5.3
++ framer-motion 12.23.24
++ fumadocs-core 15.2.9
++ fumadocs-docgen 1.3.8
++ fumadocs-mdx 11.6.1
++ fumadocs-ui 15.2.9
++ geist 1.3.1
++ hast-util-select 6.0.4
++ hastscript 9.0.1
++ hooks 0.0.0 <- @next-safe-action/adapter-react-hook-form/hooks
++ html2canvas 1.4.1
++ import-in-the-middle 1.13.1
++ inbucket-js-client 2.0.0
++ input-otp 1.4.2
++ jose 5.10.0
++ jsdom 25.0.1
++ jsonwebtoken 9.0.2
++ jspdf 2.5.2
++ jwt-decode 4.0.0
++ lodash 4.17.21
++ lodash.uniqby 4.7.0
++ lucide-react 0.483.0
++ markdown-to-jsx 7.7.4
++ micro 10.0.1
++ moment 2.30.1
++ motion 12.7.4
++ nanoid 5.1.5
++ negotiator 1.0.0
++ next 15.3.5
++ next-intl 3.26.5
++ next-mdx-remote 5.0.0
++ next-nprogress-bar 2.4.7
++ next-safe-action 7.10.5
++ next-themes 0.4.6
++ node-gyp-build 4.8.4
++ nodemailer 6.10.1
++ nprogress 0.2.0
++ openai 4.95.1
++ openai-edge 1.2.3 deprecated
++ p-memoize 7.1.1
++ path-to-regexp 6.3.0
++ pg 8.14.1
++ postcss 8.5.3
++ posthog-js 1.236.5
++ posthog-node 4.13.0
++ prettier 3.5.3
++ qs 6.14.0
++ react 19.1.0
++ react-confetti 6.4.0
++ react-confetti-explosion 2.1.2
++ react-copy-to-clipboard 5.1.0
++ react-day-picker 8.10.1
++ react-dom 19.1.0
++ react-dropzone 14.3.8
++ react-email 3.0.7
++ react-fast-marquee 1.6.5
++ react-ga4 2.1.0
++ react-hook-form 7.56.0
++ react-intersection-observer 9.16.0
++ react-markdown 9.1.0
++ react-resizable-panels 2.1.8
++ react-select 5.10.1
++ react-spring 9.7.5
++ react-syntax-highlighter 15.6.1
++ recharts 2.15.3
++ rehype-autolink-headings 7.1.0
++ rehype-parse 9.0.1
++ rehype-pretty-code 0.14.1
++ rehype-slug 6.0.0
++ rehype-toc 3.0.2
++ remark-frontmatter 5.0.0
++ remark-gfm 4.0.1
++ remark-math 6.0.0
++ remark-mdx-frontmatter 5.1.0
++ remark-toc 9.0.0
++ require-in-the-middle 7.5.2
++ resend 4.4.0
++ rooks 7.14.1
++ server-only 0.0.1
++ sharp 0.33.5
++ slugify 1.6.6
++ sonner 1.7.4
++ string-similarity 4.0.4 deprecated
++ strip-ansi 7.1.0
++ stripe 17.7.0
++ supabase 2.22.4
++ tailwind-merge 3.2.0
++ tailwindcss 4.1.4
++ tailwindcss-animate 1.0.7
++ tailwindcss-cli 0.1.2
++ tippy.js 6.3.7
++ tiptap-markdown 0.8.10
++ tw-animate-css 1.2.8
++ typescript 5.8.3
++ typescript-eslint 8.31.0
++ unist-util-visit 5.0.0
++ url-join 5.0.0
++ use-debounce 10.0.4
++ use-intl 3.26.5
++ uuid 11.1.0
++ vaul 1.1.2
++ vitest 2.1.9
++ web-vitals 4.2.4
++ zod 3.24.3
++ zod-form-data 2.0.7
+
+devDependencies:
++ dotenv 16.5.0
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-confetti-explosion 2.1.2
+│ ├── ✕ unmet peer react@^18.x: found 19.1.0
+│ └── ✕ unmet peer react-dom@^18.x: found 19.1.0
+├─┬ react-copy-to-clipboard 5.1.0
+│ └── ✕ unmet peer react@"^15.3.0 || 16 || 17 || 18": found 19.1.0
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 34.7s
+[0;32m✅ UI libraries removed[0m
+
+🔄 Removing duplicate libraries...
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+ WARN  deprecated string-similarity@4.0.4: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+Progress: resolved 301, reused 291, downloaded 0, added 0
+Progress: resolved 734, reused 623, downloaded 0, added 0
+Progress: resolved 1530, reused 1340, downloaded 0, added 0
+Progress: resolved 1881, reused 1686, downloaded 0, added 0
+Progress: resolved 1991, reused 1796, downloaded 0, added 0
+Progress: resolved 2171, reused 1975, downloaded 0, added 0
+ WARN  5 deprecated subdependencies found: angular@1.8.3, babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Packages: -6
+------
+Progress: resolved 2225, reused 2030, downloaded 0, added 0
+Progress: resolved 2225, reused 2030, downloaded 0, added 0, done
+
+dependencies:
+- jwt-decode 4.0.0
+- lodash.uniqby 4.7.0
+- next-mdx-remote 5.0.0
+- openai-edge 1.2.3
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-confetti-explosion 2.1.2
+│ ├── ✕ unmet peer react@^18.x: found 19.1.0
+│ └── ✕ unmet peer react-dom@^18.x: found 19.1.0
+├─┬ react-copy-to-clipboard 5.1.0
+│ └── ✕ unmet peer react@"^15.3.0 || 16 || 17 || 18": found 19.1.0
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 9.3s
+[0;32m✅ Duplicate libraries removed[0m
+
+🗑️  Removing unnecessary libraries...
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+ WARN  deprecated string-similarity@4.0.4: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+Progress: resolved 254, reused 254, downloaded 0, added 0
+Progress: resolved 733, reused 624, downloaded 0, added 0
+Progress: resolved 1520, reused 1346, downloaded 0, added 0
+Progress: resolved 1848, reused 1653, downloaded 0, added 0
+Progress: resolved 1948, reused 1753, downloaded 0, added 0
+Progress: resolved 2122, reused 1927, downloaded 0, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Packages: -49
+-------------------------------------------------
+Progress: resolved 2176, reused 1981, downloaded 0, added 0
+Progress: resolved 2176, reused 1981, downloaded 0, added 0, done
+
+dependencies:
+- checkbox 0.0.1
+- html2canvas 1.4.1
+- jspdf 2.5.2
+- react-confetti 6.4.0
+- react-confetti-explosion 2.1.2
+- react-copy-to-clipboard 5.1.0
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 9.2s
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 264, reused 254, downloaded 0, added 0
+Progress: resolved 718, reused 609, downloaded 0, added 0
+Progress: resolved 1502, reused 1327, downloaded 0, added 0
+Progress: resolved 1838, reused 1642, downloaded 0, added 0
+Progress: resolved 1948, reused 1753, downloaded 0, added 0
+Progress: resolved 2139, reused 1944, downloaded 0, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Progress: resolved 2164, reused 1969, downloaded 0, added 0
+Packages: -12
+------------
+Progress: resolved 2164, reused 1969, downloaded 0, added 0, done
+
+dependencies:
+- markdown-to-jsx 7.7.4
+- micro 10.0.1
+- negotiator 1.0.0
+- string-similarity 4.0.4
+- tippy.js 6.3.7
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 9.6s
+[0;32m✅ Unnecessary libraries removed[0m
+
+🛠️  Removing dev tools from dependencies...
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 288, reused 278, downloaded 0, added 0
+Progress: resolved 706, reused 597, downloaded 0, added 0
+Progress: resolved 1465, reused 1290, downloaded 0, added 0
+Progress: resolved 1779, reused 1584, downloaded 0, added 0
+Progress: resolved 1886, reused 1691, downloaded 0, added 0
+Progress: resolved 2019, reused 1824, downloaded 0, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Progress: resolved 2121, reused 1926, downloaded 0, added 0
+Packages: -43
+-------------------------------------------
+Progress: resolved 2121, reused 1926, downloaded 0, added 0, done
+
+dependencies:
+- autoprefixer 10.4.21
+- postcss 8.5.3
+- tailwindcss-cli 0.1.2
+- tw-animate-css 1.2.8
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 9.4s
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 287, reused 277, downloaded 0, added 0
+Progress: resolved 811, reused 679, downloaded 0, added 0
+Progress: resolved 1551, reused 1359, downloaded 0, added 0
+Progress: resolved 1789, reused 1594, downloaded 0, added 0
+Progress: resolved 1895, reused 1700, downloaded 0, added 0
+Progress: resolved 2062, reused 1867, downloaded 0, added 0
+Progress: resolved 2109, reused 1914, downloaded 0, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Packages: -7
+-------
+Progress: resolved 2114, reused 1919, downloaded 0, added 0, done
+
+dependencies:
+- concurrently 9.1.2
+- cross-env 7.0.3
+- env-cmd 10.1.0
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 9.7s
+[0;32m✅ Dev tools removed from dependencies[0m
+
+🏗️  Removing unused build tools...
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 280, reused 270, downloaded 0, added 0
+Progress: resolved 765, reused 644, downloaded 0, added 0
+Progress: resolved 1407, reused 1233, downloaded 0, added 0
+Progress: resolved 1633, reused 1456, downloaded 0, added 0
+Progress: resolved 1736, reused 1559, downloaded 0, added 0
+Progress: resolved 1935, reused 1758, downloaded 0, added 0
+Progress: resolved 2001, reused 1824, downloaded 0, added 0
+Progress: resolved 2002, reused 1825, downloaded 0, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Progress: resolved 2003, reused 1826, downloaded 0, added 0
+Packages: -127
+--------------------------------------------------------------------------------
+Progress: resolved 2003, reused 1826, downloaded 0, added 0, done
+
+dependencies:
+- @svgr/webpack 8.1.0
+- @tailwindcss/forms 0.5.10
+- @tailwindcss/postcss 4.1.4
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 11.3s
+[0;32m✅ Build tools removed[0m
+
+📊 Removing unused analytics...
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 276, reused 266, downloaded 0, added 0
+Progress: resolved 564, reused 487, downloaded 0, added 0
+Progress: resolved 860, reused 733, downloaded 0, added 0
+Progress: resolved 1245, reused 1103, downloaded 0, added 0
+Progress: resolved 1507, reused 1334, downloaded 0, added 0
+Progress: resolved 1631, reused 1454, downloaded 0, added 0
+Progress: resolved 1702, reused 1525, downloaded 0, added 0
+Progress: resolved 1813, reused 1636, downloaded 0, added 0
+Progress: resolved 1932, reused 1755, downloaded 0, added 0
+Progress: resolved 1980, reused 1803, downloaded 0, added 0
+Progress: resolved 1981, reused 1804, downloaded 0, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Packages: -22
+----------------------
+Progress: resolved 1981, reused 1804, downloaded 0, added 0, done
+
+dependencies:
+- @unkey/nextjs 0.18.9
+- @vercel/analytics 1.5.0
+- posthog-node 4.13.0
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 13.8s
+[0;32m✅ Analytics packages removed[0m
+
+🔧 Removing unused utilities...
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 272, reused 262, downloaded 0, added 0
+Progress: resolved 735, reused 614, downloaded 0, added 0
+Progress: resolved 1426, reused 1252, downloaded 0, added 0
+Progress: resolved 1626, reused 1449, downloaded 0, added 0
+Progress: resolved 1747, reused 1570, downloaded 0, added 0
+Progress: resolved 1944, reused 1767, downloaded 0, added 0
+Progress: resolved 1975, reused 1798, downloaded 0, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Packages: -5
+-----
+Progress: resolved 1976, reused 1799, downloaded 0, added 0, done
+
+dependencies:
+- emittery 1.1.0
+- encoding 0.1.13
+- form-data 4.0.2
+- formidable 3.5.3
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 9.7s
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 194, reused 194, downloaded 0, added 0
+Progress: resolved 546, reused 469, downloaded 0, added 0
+Progress: resolved 1207, reused 1065, downloaded 0, added 0
+Progress: resolved 1540, reused 1371, downloaded 0, added 0
+Progress: resolved 1672, reused 1495, downloaded 0, added 0
+Progress: resolved 1853, reused 1676, downloaded 0, added 0
+Progress: resolved 1921, reused 1744, downloaded 0, added 0
+Progress: resolved 1972, reused 1795, downloaded 0, added 0
+Progress: resolved 1973, reused 1796, downloaded 0, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Packages: -2
+--
+Progress: resolved 1974, reused 1797, downloaded 0, added 0, done
+
+dependencies:
+- import-in-the-middle 1.13.1
+- jose 5.10.0
+- jsdom 25.0.1
+- node-gyp-build 4.8.4
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 12s
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 268, reused 258, downloaded 0, added 0
+Progress: resolved 737, reused 609, downloaded 0, added 0
+Progress: resolved 1452, reused 1279, downloaded 0, added 0
+Progress: resolved 1616, reused 1439, downloaded 0, added 0
+Progress: resolved 1738, reused 1560, downloaded 0, added 0
+Progress: resolved 1913, reused 1735, downloaded 0, added 0
+Progress: resolved 1967, reused 1790, downloaded 0, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Progress: resolved 1971, reused 1794, downloaded 0, added 0
+Packages: -3
+---
+Progress: resolved 1971, reused 1794, downloaded 0, added 0, done
+
+dependencies:
+- p-memoize 7.1.1
+- qs 6.14.0
+- require-in-the-middle 7.5.2
+- strip-ansi 7.1.0
+- unist-util-visit 5.0.0
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 10.3s
+[0;32m✅ Utilities removed[0m
+
+📝 Removing unused MDX tools...
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 257, reused 247, downloaded 0, added 0
+Progress: resolved 730, reused 611, downloaded 0, added 0
+Progress: resolved 1400, reused 1226, downloaded 0, added 0
+Progress: resolved 1577, reused 1400, downloaded 0, added 0
+Progress: resolved 1687, reused 1510, downloaded 0, added 0
+Progress: resolved 1879, reused 1702, downloaded 0, added 0
+Progress: resolved 1960, reused 1783, downloaded 0, added 0
+Progress: resolved 1961, reused 1783, downloaded 0, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Packages: -10
+----------
+Progress: resolved 1961, reused 1784, downloaded 0, added 0, done
+
+dependencies:
+- @mdx-js/loader 3.1.0
+- @mdx-js/react 3.1.0
+- @microflash/rehype-slugify 1.0.0
+- fumadocs-mdx 11.6.1
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 10.9s
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 242, reused 232, downloaded 0, added 0
+Progress: resolved 656, reused 558, downloaded 0, added 0
+Progress: resolved 1361, reused 1186, downloaded 0, added 0
+Progress: resolved 1567, reused 1389, downloaded 0, added 0
+Progress: resolved 1687, reused 1510, downloaded 0, added 0
+Progress: resolved 1875, reused 1698, downloaded 0, added 0
+Progress: resolved 1947, reused 1770, downloaded 0, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Packages: -13
+-------------
+Progress: resolved 1948, reused 1771, downloaded 0, added 0, done
+
+dependencies:
+- rehype-autolink-headings 7.1.0
+- rehype-parse 9.0.1
+- rehype-pretty-code 0.14.1
+- rehype-slug 6.0.0
+- rehype-toc 3.0.2
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 9.6s
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 247, reused 237, downloaded 0, added 0
+Progress: resolved 705, reused 584, downloaded 0, added 0
+Progress: resolved 1411, reused 1238, downloaded 0, added 0
+Progress: resolved 1575, reused 1398, downloaded 0, added 0
+Progress: resolved 1689, reused 1512, downloaded 0, added 0
+Progress: resolved 1878, reused 1701, downloaded 0, added 0
+Progress: resolved 1908, reused 1731, downloaded 0, added 0
+Progress: resolved 1941, reused 1764, downloaded 0, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Packages: -5
+-----
+Progress: resolved 1943, reused 1766, downloaded 0, added 0, done
+
+dependencies:
+- remark-frontmatter 5.0.0
+- remark-mdx-frontmatter 5.1.0
+- remark-toc 9.0.0
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 10.8s
+[0;32m✅ MDX tools removed[0m
+
+📚 Removing unused content management...
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 243, reused 233, downloaded 0, added 0
+Progress: resolved 719, reused 598, downloaded 0, added 0
+Progress: resolved 1462, reused 1293, downloaded 0, added 0
+Progress: resolved 1586, reused 1409, downloaded 0, added 0
+Progress: resolved 1702, reused 1524, downloaded 0, added 0
+Progress: resolved 1926, reused 1749, downloaded 0, added 0
+Progress: resolved 1927, reused 1749, downloaded 0, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Packages: -16
+----------------
+Progress: resolved 1927, reused 1750, downloaded 0, added 0, done
+
+dependencies:
+- @content-collections/cli 0.1.6
+- @formatjs/intl-localematcher 0.5.10
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 9.3s
+[0;32m✅ Content management tools removed[0m
+
+✏️  Removing unused Tiptap extensions...
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 248, reused 238, downloaded 0, added 0
+Progress: resolved 748, reused 621, downloaded 0, added 0
+Progress: resolved 1468, reused 1299, downloaded 0, added 0
+Progress: resolved 1576, reused 1399, downloaded 0, added 0
+Progress: resolved 1676, reused 1499, downloaded 0, added 0
+Progress: resolved 1882, reused 1705, downloaded 0, added 0
+Progress: resolved 1920, reused 1743, downloaded 0, added 0
+Progress: resolved 1921, reused 1743, downloaded 0, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Packages: -6
+------
+Progress: resolved 1921, reused 1744, downloaded 0, added 0, done
+
+dependencies:
+- @tiptap/suggestion 2.11.7
+- tiptap-markdown 0.8.10
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 10.9s
+[0;32m✅ Tiptap extensions removed[0m
+
+🧹 Removing other unused packages...
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 224, reused 224, downloaded 0, added 0
+Progress: resolved 679, reused 558, downloaded 0, added 0
+Progress: resolved 1379, reused 1206, downloaded 0, added 0
+Progress: resolved 1558, reused 1381, downloaded 0, added 0
+Progress: resolved 1681, reused 1504, downloaded 0, added 0
+Progress: resolved 1879, reused 1702, downloaded 0, added 0
+Progress: resolved 1920, reused 1743, downloaded 0, added 0
+Progress: resolved 1921, reused 1743, downloaded 0, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Already up to date
+Progress: resolved 1921, reused 1744, downloaded 0, added 0, done
+
+dependencies:
+- d3-scale 4.0.2
+- events 3.3.0
+- web-vitals 4.2.4
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 10.4s
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 234, reused 224, downloaded 0, added 0
+Progress: resolved 705, reused 584, downloaded 0, added 0
+Progress: resolved 1424, reused 1255, downloaded 0, added 0
+Progress: resolved 1549, reused 1372, downloaded 0, added 0
+Progress: resolved 1677, reused 1499, downloaded 0, added 0
+Progress: resolved 1881, reused 1704, downloaded 0, added 0
+Progress: resolved 1919, reused 1742, downloaded 0, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Packages: -1
+-
+Progress: resolved 1920, reused 1743, downloaded 0, added 0
+Progress: resolved 1920, reused 1743, downloaded 0, added 0, done
+
+dependencies:
+- @ai-sdk/openai 1.3.16
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 10.1s
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 235, reused 225, downloaded 0, added 0
+Progress: resolved 683, reused 565, downloaded 0, added 0
+Progress: resolved 1301, reused 1127, downloaded 0, added 0
+Progress: resolved 1469, reused 1298, downloaded 0, added 0
+Progress: resolved 1581, reused 1404, downloaded 0, added 0
+Progress: resolved 1706, reused 1529, downloaded 0, added 0
+Progress: resolved 1884, reused 1707, downloaded 0, added 0
+Progress: resolved 1918, reused 1741, downloaded 0, added 0
+Progress: resolved 1919, reused 1742, downloaded 0, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Packages: -1
+-
+Progress: resolved 1919, reused 1742, downloaded 0, added 0, done
+
+dependencies:
+- @mantine/hooks 7.17.4
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 11.6s
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 236, reused 226, downloaded 0, added 0
+Progress: resolved 721, reused 598, downloaded 0, added 0
+Progress: resolved 1430, reused 1261, downloaded 0, added 0
+Progress: resolved 1566, reused 1389, downloaded 0, added 0
+Progress: resolved 1685, reused 1508, downloaded 0, added 0
+Progress: resolved 1905, reused 1728, downloaded 0, added 0
+Progress: resolved 1916, reused 1739, downloaded 0, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Progress: resolved 1918, reused 1741, downloaded 0, added 0
+Packages: -1
+-
+Progress: resolved 1918, reused 1741, downloaded 0, added 0, done
+
+dependencies:
+- inbucket-js-client 2.0.0
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 10.3s
+[0;32m✅ Other packages removed[0m
+
+🔄 Moving @faker-js/faker to devDependencies...
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 234, reused 224, downloaded 0, added 0
+Progress: resolved 721, reused 594, downloaded 0, added 0
+Progress: resolved 1463, reused 1294, downloaded 0, added 0
+Progress: resolved 1576, reused 1399, downloaded 0, added 0
+Progress: resolved 1706, reused 1528, downloaded 0, added 0
+Progress: resolved 1912, reused 1735, downloaded 0, added 0
+Progress: resolved 1916, reused 1739, downloaded 0, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Packages: -1
+-
+Progress: resolved 1917, reused 1740, downloaded 0, added 0, done
+
+dependencies:
+- @faker-js/faker 9.7.0
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 10s
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 213, reused 212, downloaded 0, added 0
+Progress: resolved 487, reused 417, downloaded 0, added 0
+Progress: resolved 850, reused 730, downloaded 1, added 0
+Progress: resolved 1269, reused 1094, downloaded 1, added 0
+Progress: resolved 1491, reused 1318, downloaded 1, added 0
+Progress: resolved 1619, reused 1441, downloaded 1, added 0
+Progress: resolved 1747, reused 1569, downloaded 1, added 0
+Progress: resolved 1871, reused 1693, downloaded 1, added 0
+Progress: resolved 1917, reused 1739, downloaded 1, added 0
+Progress: resolved 1918, reused 1739, downloaded 1, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Packages: +1
++
+Progress: resolved 1918, reused 1740, downloaded 1, added 1, done
+
+devDependencies:
++ @faker-js/faker 10.1.0
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 13.1s
+[0;32m✅ @faker-js/faker moved to devDependencies[0m
+
+🔄 Moving @testing-library/react to devDependencies...
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 230, reused 220, downloaded 0, added 0
+Progress: resolved 698, reused 575, downloaded 0, added 0
+Progress: resolved 1451, reused 1282, downloaded 0, added 0
+Progress: resolved 1568, reused 1391, downloaded 0, added 0
+Progress: resolved 1690, reused 1513, downloaded 0, added 0
+Progress: resolved 1873, reused 1696, downloaded 0, added 0
+Progress: resolved 1875, reused 1698, downloaded 0, added 0
+Progress: resolved 1909, reused 1732, downloaded 0, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Progress: resolved 1910, reused 1733, downloaded 0, added 0
+Packages: -8
+--------
+Progress: resolved 1910, reused 1733, downloaded 0, added 0, done
+
+dependencies:
+- @testing-library/react 16.3.0
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 11.3s
+Progress: resolved 0, reused 1, downloaded 0, added 0
+ WARN  deprecated @types/stripe@8.0.417: This is a stub types definition. stripe provides its own type definitions, so you do not need this installed.
+Progress: resolved 220, reused 220, downloaded 0, added 0
+Progress: resolved 539, reused 447, downloaded 0, added 0
+Progress: resolved 871, reused 750, downloaded 0, added 0
+Progress: resolved 1255, reused 1085, downloaded 0, added 0
+Progress: resolved 1474, reused 1304, downloaded 1, added 0
+Progress: resolved 1595, reused 1417, downloaded 1, added 0
+Progress: resolved 1706, reused 1528, downloaded 1, added 0
+Progress: resolved 1844, reused 1666, downloaded 1, added 0
+Progress: resolved 1917, reused 1739, downloaded 1, added 0
+Progress: resolved 1918, reused 1739, downloaded 1, added 0
+ WARN  4 deprecated subdependencies found: babel-eslint@10.1.0, glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Packages: +8
+++++++++
+Progress: resolved 1918, reused 1740, downloaded 1, added 2, done
+
+devDependencies:
++ @testing-library/react 16.3.0
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ eslint-config-esnext 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ eslint-config-node 4.1.0
+│ └── ✕ unmet peer eslint@^6.0.0: found 9.25.1
+├─┬ react-day-picker 8.10.1
+│ ├── ✕ unmet peer date-fns@"^2.28.0 || ^3.0.0": found 4.1.0
+│ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+├─┬ react-spring 9.7.5
+│ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/core 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └─┬ @react-spring/animated 9.7.5
+│ │   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │   └─┬ @react-spring/shared 9.7.5
+│ │     └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/konva 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-konva@"^16.8.0 || ^16.8.7-0 || ^16.9.0-0 || ^16.10.1-0 || ^16.12.0-0 || ^16.13.0-0 || ^17.0.0-0 || ^17.0.1-0 || ^17.0.2-0 || ^18.0.0-0": found 19.0.3
+│ ├─┬ @react-spring/three 9.7.5
+│ │ └── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ ├─┬ @react-spring/web 9.7.5
+│ │ ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ │ └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│ └─┬ @react-spring/zdog 9.7.5
+│   ├── ✕ unmet peer react@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+│   └── ✕ unmet peer react-dom@"^16.8.0 || ^17.0.0 || ^18.0.0": found 19.1.0
+└─┬ rooks 7.14.1
+  ├── ✕ unmet peer react@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+  └── ✕ unmet peer react-dom@"^16.8.0  || ^17.0.0 || ^18.0.0": found 19.1.0
+
+Done in 13.1s
+[0;32m✅ @testing-library/react moved to devDependencies[0m
+
+==========================================
+[0;32m✅ Phase 1 completed successfully![0m
+
+📊 Summary:
+  - Unused packages removed
+  - Dev dependencies moved to devDependencies
+  - Backup saved: package.json.backup
+
+🧪 Next steps:
+  1. Run: pnpm install
+  2. Run: pnpm dev
+  3. Test the application thoroughly
+  4. If everything works: git add . && git commit -m 'chore: remove unused dependencies'
+  5. If something breaks: cp package.json.backup package.json && pnpm install
+

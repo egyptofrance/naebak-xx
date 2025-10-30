@@ -1,0 +1,130 @@
+# قائمة الحزم المطلوب حذفها (85 حزمة)
+# تم التحقق من أنها غير مستخدمة باستخدام depcheck
+
+# UI Libraries (غير مستخدمة)
+@headlessui/react
+@headlessui/tailwindcss
+@tremor/react
+@remixicon/react
+
+# Duplicate/Alternative Libraries
+openai-edge
+lodash.uniqby
+next-mdx-remote
+jwt-decode
+
+# Unnecessary Libraries
+checkbox
+react-confetti
+react-confetti-explosion
+html2canvas
+jspdf
+react-copy-to-clipboard
+react-dropzone
+markdown-to-jsx
+micro
+negotiator
+string-similarity
+tippy.js
+
+# Dev Tools in Dependencies (should be in devDependencies)
+@testing-library/react
+autoprefixer
+postcss
+tailwindcss
+tailwindcss-animate
+tailwindcss-cli
+eslint
+concurrently
+cross-env
+env-cmd
+
+# Build Tools (not directly used)
+@svgr/webpack
+@tailwindcss/forms
+@tailwindcss/postcss
+@tailwindcss/typography
+tw-animate-css
+
+# Unused Analytics/Monitoring
+@vercel/analytics
+@unkey/nextjs
+posthog-node
+
+# Unused Email/Communication
+inbucket-js-client
+
+# Unused Utilities
+emittery
+encoding
+form-data
+formidable
+hast-util-select
+hastscript
+hooks
+import-in-the-middle
+jose
+jsdom
+node-gyp-build
+p-memoize
+qs
+require-in-the-middle
+sharp
+strip-ansi
+unist-util-visit
+
+# Unused MDX/Documentation
+@mdx-js/loader
+@mdx-js/react
+@microflash/rehype-slugify
+fumadocs-mdx
+rehype-autolink-headings
+rehype-parse
+rehype-pretty-code
+rehype-slug
+rehype-toc
+remark-frontmatter
+remark-mdx-frontmatter
+remark-toc
+
+# Unused Supabase/Database
+supabase
+
+# Unused Testing
+@playwright/test
+
+# Unused AI/ML
+@ai-sdk/openai
+
+# Unused Content Management
+@content-collections/cli
+@formatjs/intl-localematcher
+
+# Unused Tiptap Extensions
+@tiptap/suggestion
+tiptap-markdown
+
+# Unused Animation
+d3-scale
+
+# Unused Stripe
+@stripe/stripe-js
+
+# Unused React Email
+@react-email/column
+
+# Unused Mantine
+@mantine/hooks
+
+# Unused TypeScript ESLint
+@typescript-eslint/eslint-plugin
+@typescript-eslint/parser
+
+# Unused Events
+events
+
+# Unused Web Vitals
+web-vitals
+
+# Unused React Syntax Highlighter (if not used)
+# react-syntax-highlighter (تحقق أولاً)

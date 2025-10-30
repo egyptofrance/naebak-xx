@@ -1,7 +1,5 @@
-import { AnimatedBeamMultipleOutputDemo } from "@/components/animated-beam-multiple-outputs";
-import Globe from "@/components/magicui/globe";
+import dynamic from "next/dynamic";
 import { Marquee } from "@/components/magicui/marquee";
-
 import { Calendar } from "@/components/ui/calendar";
 import {
   Command,
@@ -12,6 +10,20 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
+
+// Dynamic imports للمكونات الثقيلة
+const Globe = dynamic(() => import("@/components/magicui/globe"), {
+  loading: () => <div className="h-full flex items-center justify-center">Loading...</div>,
+  ssr: false
+});
+
+const AnimatedBeamMultipleOutputDemo = dynamic(
+  () => import("@/components/animated-beam-multiple-outputs").then(mod => ({ default: mod.AnimatedBeamMultipleOutputDemo })),
+  {
+    loading: () => <div className="h-full flex items-center justify-center">Loading...</div>,
+    ssr: false
+  }
+);
 
 const files = [
   {
