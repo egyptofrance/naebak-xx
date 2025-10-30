@@ -399,3 +399,18 @@ export function getSafeActionErrorMessage<T extends ZodSchema>(
     "An unexpected error occurred. Please try again or contact support."
   );
 }
+
+/**
+ * Generic error message extractor for any error type.
+ * Handles Zod errors specifically and falls back to string conversion for other errors.
+ * 
+ * @param error - Any error object (ZodError, Error, string, etc.)
+ * @returns A user-friendly error message string
+ */
+export function getErrorMessage(error: unknown): string {
+  if (error instanceof z.ZodError) {
+    return error.issues.map((issue) => issue.message).join(". ");
+  } else {
+    return String(error);
+  }
+}
