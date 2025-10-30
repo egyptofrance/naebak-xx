@@ -1,0 +1,19 @@
+
+> nextbase@3.1.0 build /home/ubuntu/naebak-xx
+> content-collections build && next build
+
+build started ...
+... finished build of 2 collections and 6 documents in 99ms
+Starting content-collections content-collections.ts
+build started ...
+... finished build of 2 collections and 6 documents in 100ms
+ ⚠ Invalid next.config.ts options detected: 
+ ⚠     Unrecognized key(s) in object: 'turbo'
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+   ▲ Next.js 15.3.5
+   - Experiments (use with caution):
+     ✓ authInterrupts
+
+   Creating an optimized production build ...
+Killed
+ ELIFECYCLE  Command failed with exit code 137.

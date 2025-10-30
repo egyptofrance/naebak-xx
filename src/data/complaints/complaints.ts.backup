@@ -238,7 +238,8 @@ export async function assignComplaintToDeputy(
     console.error("Failed to log action:", actionError);
   }
 
-  smartRevalidate("complaints");
+  revalidatePath("/manager-complaints");
+  revalidatePath("/deputy-complaints");
 
   return { success: true, assignedCount: deputyIdsArray.length };
 }
@@ -312,7 +313,9 @@ export async function updateComplaintStatus(
     }
   }
 
-  smartRevalidate("complaints");
+  revalidatePath("/manager-complaints");
+  revalidatePath("/deputy-complaints");
+  revalidatePath("/complaints");
 
   return { success: true };
 }
@@ -354,7 +357,8 @@ export async function updateComplaintPriority(
     console.error("Failed to log action:", actionError);
   }
 
-  smartRevalidate("complaints");
+  revalidatePath("/manager-complaints");
+  revalidatePath("/deputy-complaints");
 
   return { success: true };
 }
@@ -396,7 +400,9 @@ export async function addComplaintComment(
     console.error("Failed to update complaint timestamp:", updateError);
   }
 
-  smartRevalidate("complaints");
+  revalidatePath("/manager-complaints");
+  revalidatePath("/deputy-complaints");
+  revalidatePath("/complaints");
 
   return { success: true };
 }
