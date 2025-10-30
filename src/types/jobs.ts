@@ -343,3 +343,9 @@ export const EGYPT_GOVERNORATES = [
 
 // Backward compatibility
 export { GOVERNORATES as EGYPT_GOVERNORATES_LIST };
+
+export const JOB_STATUSES = [
+  { value: 'active', label: 'Active', labelAr: 'نشط' },
+  { value: 'closed', label: 'Closed', labelAr: 'مغلق' },
+  { value: 'draft', label: 'Draft', labelAr: 'مسودة' },
+];
