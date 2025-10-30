@@ -49,15 +49,7 @@ export function SplashScreen() {
         </div>
       </div>
 
-      {/* App name */}
-      <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2">
-        <h1 className="text-2xl font-bold text-green-700 animate-fade-in" style={{ fontFamily: 'Tajawal, sans-serif' }}>
-          نائبك
-        </h1>
-        <p className="text-sm text-gray-500 text-center mt-2 animate-fade-in-delay">
-          منصة التواصل مع النواب
-        </p>
-      </div>
+
     </div>
   );
 }
