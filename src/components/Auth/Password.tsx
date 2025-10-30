@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { T } from "@/components/ui/Typography";
-import { classNames } from "@/utils/classNames";
+import { cn } from "@/utils/cn";
 import { CSSProperties, useState } from "react";
 
 export const Password = ({
@@ -58,7 +58,7 @@ export const Password = ({
             <Button
               disabled
               type="submit"
-              className={classNames(
+              className={cn(
                 "flex w-full justify-center rounded-lg border border-transparent py-3 text-white dark:text-black px-4 text-sm font-medium  shadow-xs focus:outline-hidden focus:ring-2 focus:ring-offset-2",
                 isLoading
                   ? "bg-yellow-300 dark:bg-yellow-700 "
@@ -70,7 +70,7 @@ export const Password = ({
           ) : (
             <Button
               type="submit"
-              className={classNames(
+              className={cn(
                 "flex w-full justify-center rounded-lg border border-transparent py-2 text-white dark:text-black px-4 text-sm font-medium  shadow-xs focus:outline-hidden focus:ring-2 focus:ring-offset-2",
                 isLoading
                   ? "bg-yellow-300 dark:bg-yellow-700 "

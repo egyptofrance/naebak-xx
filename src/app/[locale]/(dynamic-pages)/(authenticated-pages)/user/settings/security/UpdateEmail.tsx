@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { updateEmailAction } from "@/data/user/security";
-import { classNames } from "@/utils/classNames";
+import { cn } from "@/utils/cn";
 import { useAction } from "next-safe-action/hooks";
 import { useRef } from "react";
 import { useInput } from "rooks";
@@ -60,7 +60,7 @@ export const UpdateEmail = ({
           onClick={() => {
             updateEmail({ email: emailInput.value });
           }}
-          className={classNames(
+          className={cn(
             "flex w-full justify-center rounded-lg border border-transparent py-3 text-white dark:text-black px-4 text-sm font-medium shadow-xs focus:outline-hidden focus:ring-2 focus:ring-offset-2",
             isPending
               ? "bg-yellow-300 dark:bg-yellow-700"
