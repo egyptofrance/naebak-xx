@@ -18,7 +18,7 @@ export default async function AdminApplicationsPage({ searchParams }: PageProps)
   const params = await searchParams;
   
   const filters = {
-    status: params.status as string | undefined,
+    status: params.status as any,
     job_id: params.job_id as string | undefined,
   };
 
