@@ -14,9 +14,9 @@ export function LeftNav() {
   const isDocsPage = pathname?.startsWith("/docs");
 
   return (
-    <div className="flex items-center gap-8">
+    <div className="hidden lg:flex items-center gap-8">
       <DocsMobileNavigation />
-      <ul className="hidden lg:flex gap-8 font-medium items-center">
+      <ul className="flex gap-8 font-medium items-center">
         {navbarLinks.map(({ key, href }) => (
           <li
             key={key}
