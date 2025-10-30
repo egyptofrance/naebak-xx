@@ -2312,6 +2312,11 @@ export type Database = {
           id: string
           title: string
           description: string
+          company_name: string | null
+          contact_person: string | null
+          contact_phone: string | null
+          contact_email: string | null
+          posted_by: string | null
           salary_min: number | null
           salary_max: number | null
           salary_currency: string
@@ -2336,6 +2341,11 @@ export type Database = {
           id?: string
           title: string
           description: string
+          company_name?: string | null
+          contact_person?: string | null
+          contact_phone?: string | null
+          contact_email?: string | null
+          posted_by?: string | null
           salary_min?: number | null
           salary_max?: number | null
           salary_currency?: string
@@ -2360,6 +2370,11 @@ export type Database = {
           id?: string
           title?: string
           description?: string
+          company_name?: string | null
+          contact_person?: string | null
+          contact_phone?: string | null
+          contact_email?: string | null
+          posted_by?: string | null
           salary_min?: number | null
           salary_max?: number | null
           salary_currency?: string

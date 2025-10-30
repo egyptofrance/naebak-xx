@@ -31,6 +31,10 @@ export default function JobForm() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    company_name: '',
+    contact_person: '',
+    contact_phone: '',
+    contact_email: '',
     category: '',
     work_location: '',
     employment_type: '',
@@ -147,6 +151,73 @@ export default function JobForm() {
             rows={4}
           />
         </div>
+      </div>
+
+      {/* Company & Contact Information */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold">معلومات الشركة والتواصل</h3>
+
+        <div className="space-y-2">
+          <Label htmlFor="company_name">
+            اسم الشركة/الجهة <span className="text-destructive">*</span>
+          </Label>
+          <Input
+            id="company_name"
+            name="company_name"
+            value={formData.company_name}
+            onChange={handleInputChange}
+            required
+            placeholder="مثال: شركة نائبك للتكنولوجيا"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="contact_person">
+              اسم المسؤول
+            </Label>
+            <Input
+              id="contact_person"
+              name="contact_person"
+              value={formData.contact_person}
+              onChange={handleInputChange}
+              placeholder="مثال: أحمد محمد"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="contact_phone">
+              رقم التواصل <span className="text-destructive">*</span>
+            </Label>
+            <Input
+              id="contact_phone"
+              name="contact_phone"
+              value={formData.contact_phone}
+              onChange={handleInputChange}
+              required
+              placeholder="مثال: 01012345678"
+            />
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="contact_email">
+            البريد الإلكتروني (اختياري)
+          </Label>
+          <Input
+            id="contact_email"
+            name="contact_email"
+            type="email"
+            value={formData.contact_email}
+            onChange={handleInputChange}
+            placeholder="مثال: hr@company.com"
+          />
+        </div>
+      </div>
+
+      {/* Job Details */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold">تفاصيل الوظيفة</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">

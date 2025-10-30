@@ -79,6 +79,42 @@ export default async function JobDetailsPage({
             </CardHeader>
 
             <CardContent className="space-y-6">
+              {/* Company & Contact Information */}
+              {(job.company_name || job.contact_phone) && (
+                <>
+                  <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
+                    <h3 className="font-semibold text-lg mb-3">معلومات التواصل</h3>
+                    <div className="space-y-2">
+                      {job.company_name && (
+                        <div>
+                          <p className="text-sm text-muted-foreground">الشركة/الجهة</p>
+                          <p className="font-medium text-lg">{job.company_name}</p>
+                        </div>
+                      )}
+                      {job.contact_person && (
+                        <div>
+                          <p className="text-sm text-muted-foreground">المسؤول</p>
+                          <p className="font-medium">{job.contact_person}</p>
+                        </div>
+                      )}
+                      {job.contact_phone && (
+                        <div>
+                          <p className="text-sm text-muted-foreground">رقم التواصل</p>
+                          <p className="font-medium text-lg" dir="ltr">{job.contact_phone}</p>
+                        </div>
+                      )}
+                      {job.contact_email && (
+                        <div>
+                          <p className="text-sm text-muted-foreground">البريد الإلكتروني</p>
+                          <p className="font-medium" dir="ltr">{job.contact_email}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <Separator />
+                </>
+              )}
+
               {/* Key Information */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex items-center gap-3">

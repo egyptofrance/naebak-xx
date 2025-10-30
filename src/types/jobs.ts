@@ -46,6 +46,14 @@ export interface Job {
   id: string;
   title: string;
   description: string;
+  
+  // معلومات الشركة والتواصل
+  company_name: string | null;
+  contact_person: string | null;
+  contact_phone: string | null;
+  contact_email: string | null;
+  posted_by: string | null;
+  
   salary_min: number | null;
   salary_max: number | null;
   salary_currency: string;
