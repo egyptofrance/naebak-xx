@@ -8,6 +8,7 @@ import { userRoles } from "@/utils/userTypes";
 import { isSupabaseUserAppAdmin } from "@/utils/isSupabaseUserAppAdmin";
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 import { smartRevalidate } from "@/utils/smartRevalidate";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 // ============================================
