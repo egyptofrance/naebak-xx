@@ -48,7 +48,8 @@ export default function ApplicationStatusUpdate({
     e.preventDefault();
     setIsSubmitting(true);
 
-    const result = await updateJobApplication(applicationId, {
+    const result = await updateJobApplication({
+      id: applicationId,
       status,
       admin_notes: adminNotes || undefined,
     });
