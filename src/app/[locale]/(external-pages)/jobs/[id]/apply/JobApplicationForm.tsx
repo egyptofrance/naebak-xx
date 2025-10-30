@@ -113,9 +113,22 @@ export default function JobApplicationForm({ jobId, jobTitle }: JobApplicationFo
       // Submit application
       const applicationData = {
         job_id: jobId,
-        ...formData,
-        years_of_experience: formData.years_of_experience ? parseInt(formData.years_of_experience) : null,
-        cv_url: cvUrl,
+        full_name: formData.full_name,
+        email: formData.email,
+        phone: formData.phone,
+        governorate: formData.governorate,
+        address: formData.address || undefined,
+        date_of_birth: formData.date_of_birth || undefined,
+        education_level: (formData.education_level || undefined) as any,
+        education_field: formData.education_field || undefined,
+        university: formData.university || undefined,
+        years_of_experience: formData.years_of_experience ? parseInt(formData.years_of_experience) : undefined,
+        current_job_title: formData.current_job_title || undefined,
+        current_company: formData.current_company || undefined,
+        skills: formData.skills || undefined,
+        why_interested: formData.why_interested || undefined,
+        additional_info: formData.additional_info || undefined,
+        cv_url: cvUrl || undefined,
       };
 
       const result = await submitJobApplication(applicationData);
