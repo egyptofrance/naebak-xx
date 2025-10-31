@@ -8,19 +8,22 @@ export const updateUserFullNameSchema = z.object({
 export type UpdateUserFullNameSchema = z.infer<typeof updateUserFullNameSchema>;
 
 export const profileUpdateFormSchema = z.object({
-  fullName: z.string().min(1, "Full name is required"),
-  email: z.string().email().optional(),
-  phone: z.string().optional(),
-  governorateId: z.string().optional(),
+  fullName: z.string().min(1, "الاسم الكامل مطلوب"),
+  email: z.string().email("البريد الإلكتروني غير صحيح").min(1, "البريد الإلكتروني مطلوب"),
+  phone: z.string()
+    .regex(/^01[0-2,5]{1}[0-9]{8}$/, "رقم الهاتف يجب أن يكون رقم مصري صحيح (01xxxxxxxxx)")
+    .min(1, "رقم الهاتف مطلوب"),
+  governorateId: z.string().min(1, "المحافظة مطلوبة"),
   city: z.string().optional(),
-  electoralDistrictId: z.string().optional(),
-  gender: z.enum(["male", "female"]).optional(),
+  electoralDistrictId: z.string().min(1, "الدائرة الانتخابية مطلوبة"),
+  gender: z.enum(["male", "female"]).default("male"),
   district: z.string().optional(),
   village: z.string().optional(),
   address: z.string().optional(),
   jobTitle: z.string().optional(),
   partyId: z.string().optional(),
   avatarUrl: z.string().optional(),
+  isOnboardingFlow: z.boolean().optional().default(false),
 });
 
 export type ProfileUpdateFormSchema = z.infer<typeof profileUpdateFormSchema>;

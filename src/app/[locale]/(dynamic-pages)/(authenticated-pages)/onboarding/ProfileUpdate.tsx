@@ -2,6 +2,7 @@
 import { FormInput } from "@/components/form-components/FormInput";
 import { FormInputNoLabel } from "@/components/form-components/FormInputNoLabel";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import {
   CardContent,
   CardDescription,
@@ -101,7 +102,7 @@ export function ProfileUpdate() {
       governorateId: userProfile.governorate_id ?? "",
       city: userProfile.city ?? "",
       electoralDistrictId: userProfile.electoral_district_id ?? "",
-      gender: userProfile.gender as "male" | "female" | undefined,
+      gender: (userProfile.gender as "male" | "female") ?? "male",
       district: userProfile.district ?? "",
       village: userProfile.village ?? "",
       address: userProfile.address ?? "",
@@ -160,11 +161,33 @@ export function ProfileUpdate() {
   return (
     <Form {...form}>
       <form
-        onSubmit={handleSubmit((data) =>
-          profileUpdateActionState.execute({
-            ...data,
-            isOnboardingFlow: true,
-          }),
+        onSubmit={handleSubmit(
+          (data) => {
+            profileUpdateActionState.execute({
+              ...data,
+              isOnboardingFlow: true,
+            });
+          },
+          (errors) => {
+            // Show toast for each validation error
+            if (errors.fullName) {
+              toast.error(errors.fullName.message || "الاسم الكامل مطلوب");
+            }
+            if (errors.email) {
+              toast.error(errors.email.message || "البريد الإلكتروني مطلوب");
+            }
+            if (errors.phone) {
+              toast.error(errors.phone.message || "رقم الهاتف مطلوب");
+            }
+            if (errors.governorateId) {
+              toast.error(errors.governorateId.message || "المحافظة مطلوبة");
+            }
+            if (errors.electoralDistrictId) {
+              toast.error(errors.electoralDistrictId.message || "الدائرة الانتخابية مطلوبة");
+            }
+            // Show a general error toast
+            toast.error("يرجى إكمال جميع الحقول المطلوبة");
+          }
         )}
       >
         <CardHeader>
