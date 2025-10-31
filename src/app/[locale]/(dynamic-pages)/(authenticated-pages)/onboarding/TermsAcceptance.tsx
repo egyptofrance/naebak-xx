@@ -19,35 +19,36 @@ export function TermsAcceptance() {
           data-testid="terms-acceptance-title"
           className="text-2xl font-bold mb-2"
         >
-          Welcome to نائبك Demo
+          مرحباً بك في نائبك
         </CardTitle>
         <CardDescription>
-          Please review our terms of service before proceeding.
+          يرجى قراءة شروط الخدمة قبل المتابعة
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="bg-muted p-4 rounded-lg">
-          <h3 className="text-lg font-semibold mb-2">Terms of Service</h3>
+          <h3 className="text-lg font-semibold mb-2">شروط الخدمة</h3>
           <p className="text-sm text-muted-foreground mb-4">
-            Last updated: {format(startOfMonth(new Date()), "MMMM d, yyyy")}
+            آخر تحديث: {format(startOfMonth(new Date()), "MMMM d, yyyy")}
           </p>
-          <div className="max-h-40 overflow-y-auto text-sm">
+          <div className="max-h-40 overflow-y-auto text-sm space-y-3" dir="rtl">
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-              auctor, nunc id aliquam tincidunt, nisl nunc tincidunt nunc, nec
-              tincidunt nunc nunc id nunc. Sed euismod, nunc id aliquam
-              tincidunt, nisl nunc tincidunt nunc, nec tincidunt nunc nunc id
-              nunc.
+              مرحباً بكم في منصة نائبك، المنصة الرقمية التي تربط بين المواطنين وأعضاء مجلس النواب المصري. باستخدامك لهذه المنصة، فإنك توافق على الشروط والأحكام التالية.
             </p>
             <p>
-              Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
-              posuere cubilia curae; Donec velit neque, auctor sit amet aliquam
-              vel, ullamcorper sit amet ligula. Proin eget tortor risus.
+              <strong>1. استخدام المنصة:</strong> توفر منصة نائبك وسيلة للتواصل المباشر مع نائبك في البرلمان، وتقديم الشكاوى والمقترحات، ومتابعة أداء النواب ومشاريعهم. يجب استخدام المنصة بشكل قانوني وأخلاقي.
             </p>
             <p>
-              Curabitur aliquet quam id dui posuere blandit. Curabitur arcu
-              erat, accumsan id imperdiet et, porttitor at sem. Vivamus magna
-              justo, lacinia eget consectetur sed, convallis at tellus.
+              <strong>2. الخصوصية والبيانات:</strong> نحن نلتزم بحماية خصوصيتك وبياناتك الشخصية. لن يتم مشاركة بياناتك مع أي طرف ثالث دون موافقتك، وسيتم استخدامها فقط لتحسين خدماتنا وتسهيل التواصل مع نائبك.
+            </p>
+            <p>
+              <strong>3. المحتوى والمسؤولية:</strong> أنت مسؤول عن المحتوى الذي تنشره على المنصة. يجب أن يكون المحتوى محترماً وخالياً من الإساءة أو التحريض على العنف. نحتفظ بالحق في حذف أي محتوى يخالف هذه الشروط.
+            </p>
+            <p>
+              <strong>4. حقوقك وواجباتك:</strong> لديك الحق في الوصول إلى بياناتك، وتعديلها، أو حذفها في أي وقت. كما يجب عليك الحفاظ على سرية بيانات حسابك وعدم مشاركتها مع الغير.
+            </p>
+            <p>
+              <strong>5. التعديلات:</strong> نحتفظ بالحق في تعديل هذه الشروط في أي وقت. سيتم إخطارك بأي تغييرات جوهرية عبر البريد الإلكتروني أو من خلال المنصة.
             </p>
           </div>
         </div>
@@ -60,8 +61,8 @@ export function TermsAcceptance() {
           className="w-full"
         >
           {acceptTermsActionState.status === "executing"
-            ? "Accepting..."
-            : "Accept Terms"}
+            ? "جاري القبول..."
+            : "أوافق على الشروط"}
         </Button>
       </CardFooter>
     </>
