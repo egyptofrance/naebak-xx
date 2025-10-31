@@ -9,6 +9,7 @@ import {
 import { getIsAppAdmin } from "@/data/user/user";
 import {
   Book,
+  Briefcase,
   Building2,
   FileLineChart,
   Flag,
@@ -100,6 +101,11 @@ const adminSections = [
         label: "إدارة التكرارات",
         href: `/app_admin/duplicates`,
         icon: <Copy className="h-5 w-5" />,
+      },
+      {
+        label: "إدارة الوظائف",
+        href: `/app_admin/jobs`,
+        icon: <Briefcase className="h-5 w-5" />,
       },
     ],
   },

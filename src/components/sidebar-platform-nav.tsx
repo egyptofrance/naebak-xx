@@ -6,7 +6,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { FileText, GitBranch, Map, Users, UserCheck } from "lucide-react";
+import { FileText, GitBranch, Map, Users, UserCheck, Briefcase } from "lucide-react";
 
 const resourceLinks = [
   {
@@ -26,6 +26,7 @@ const resourceLinks = [
   },
   { label: "Roadmap", href: "/roadmap", icon: <Map className="h-5 w-5" /> },
   { label: "Deputies List", href: "/deputies", icon: <UserCheck className="h-5 w-5" /> },
+  { label: "الوظائف", href: "/jobs", icon: <Briefcase className="h-5 w-5" /> },
 ];
 
 export function SidebarPlatformNav() {
