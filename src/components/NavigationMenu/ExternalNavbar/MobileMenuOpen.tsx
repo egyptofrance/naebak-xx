@@ -1,5 +1,6 @@
 "use client";
 
+import { Menu, X } from "lucide-react";
 import { useContext } from "react";
 import { MobileMenuContext } from "./MobileMenuContext";
 
@@ -8,23 +9,14 @@ export function MobileMenuOpen() {
   return (
     <button
       onClick={() => setMobileMenuOpen((prev) => !prev)}
-      className="lg:hidden size-10 bg-orange-500 hover:bg-orange-600 text-white rounded-lg shadow-md flex items-center justify-center transition-colors"
-      aria-label="فتح القائمة"
+      className="lg:hidden p-2 text-white hover:text-white/80 transition-colors"
+      aria-label={mobileMenuOpen ? "إغلاق القائمة" : "فتح القائمة"}
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className={`transition-transform ${mobileMenuOpen ? "rotate-180" : ""}`}
-      >
-        <polyline points="15 18 9 12 15 6" />
-      </svg>
+      {mobileMenuOpen ? (
+        <X className="h-7 w-7" strokeWidth={2.5} />
+      ) : (
+        <Menu className="h-7 w-7" strokeWidth={2.5} />
+      )}
     </button>
   );
 }
