@@ -132,90 +132,45 @@ export function PublicComplaintsClient({
 
   return (
     <div className="space-y-6">
-      {/* Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <Card className="border-l-4 border-l-primary">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">إجمالي الشكاوى</p>
-                  <p className="text-2xl font-bold">{complaints.length}</p>
-                </div>
-                <TrendingUp className="w-8 h-8 text-primary opacity-20" />
+      {/* Compact Stats Bar */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-primary"></div>
+                <span className="text-sm text-muted-foreground">إجمالي:</span>
+                <span className="text-lg font-bold">{complaints.length}</span>
               </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <Card className="border-l-4 border-l-green-500">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">محلولة</p>
-                  <p className="text-2xl font-bold text-green-600">
-                    {complaints.filter(c => c.status === "resolved").length}
-                  </p>
-                </div>
-                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                  <span className="text-green-600 text-lg">✓</span>
-                </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                <span className="text-sm text-muted-foreground">محلولة:</span>
+                <span className="text-lg font-bold text-green-600">
+                  {complaints.filter(c => c.status === "resolved").length}
+                </span>
               </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <Card className="border-l-4 border-l-orange-500">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">قيد المعالجة</p>
-                  <p className="text-2xl font-bold text-orange-600">
-                    {complaints.filter(c => c.status === "in_progress").length}
-                  </p>
-                </div>
-                <Clock className="w-8 h-8 text-orange-500 opacity-20" />
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-orange-500"></div>
+                <span className="text-sm text-muted-foreground">قيد المعالجة:</span>
+                <span className="text-lg font-bold text-orange-600">
+                  {complaints.filter(c => c.status === "in_progress").length}
+                </span>
               </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <Card className="border-l-4 border-l-blue-500">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">جديدة</p>
-                  <p className="text-2xl font-bold text-blue-600">
-                    {complaints.filter(c => c.status === "new").length}
-                  </p>
-                </div>
-                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                  <span className="text-blue-600 text-lg">★</span>
-                </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                <span className="text-sm text-muted-foreground">جديدة:</span>
+                <span className="text-lg font-bold text-blue-600">
+                  {complaints.filter(c => c.status === "new").length}
+                </span>
               </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      </div>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
 
       {/* Filters */}
       <motion.div
