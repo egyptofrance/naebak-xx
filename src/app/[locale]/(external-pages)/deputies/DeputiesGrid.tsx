@@ -29,7 +29,6 @@ import {
 
 // Use Awaited and ReturnType to infer types from getAllDeputies
 import { getAllDeputies } from "@/app/actions/deputy/getAllDeputies";
-import { getAllGovernorates } from "@/app/actions/governorate/getAllGovernorates";
 import { getAllParties } from "@/app/actions/party/getAllParties";
 import { getAllElectoralDistricts } from "@/app/actions/electoral-district/getAllElectoralDistricts";
 import { getAllCouncils } from "@/app/actions/council/getAllCouncils";
@@ -37,7 +36,13 @@ import { formatDeputyName } from "@/utils/formatDeputyName";
 
 type DeputiesData = Awaited<ReturnType<typeof getAllDeputies>>;
 type DeputyData = DeputiesData[number];
-type GovernoratesData = Awaited<ReturnType<typeof getAllGovernorates>>;
+// Flexible governorate type that works with both getAllGovernorates and getAllVisibleGovernorates
+type GovernoratesData = Array<{
+  id: string;
+  name_ar: string;
+  name_en: string | null;
+  is_visible?: boolean;
+}>;
 type PartiesData = Awaited<ReturnType<typeof getAllParties>>;
 type ElectoralDistrictsData = Awaited<ReturnType<typeof getAllElectoralDistricts>>;
 type CouncilsData = Awaited<ReturnType<typeof getAllCouncils>>;
