@@ -1,7 +1,9 @@
 import { getPublicComplaintById } from "@/data/complaints/complaints";
+import { getComplaintAttachments } from "@/data/complaints/getComplaintAttachments";
 import { notFound } from "next/navigation";
 import { Link } from "@/components/intl-link";
 import { Button } from "@/components/ui/button";
+import { AttachmentsGallery } from "@/components/complaints/AttachmentsGallery";
 import { ArrowRight, Calendar, MapPin, Tag, AlertCircle } from "lucide-react";
 
 export const dynamic = 'force-dynamic';
@@ -67,6 +69,9 @@ export default async function PublicComplaintDetailPage({ params }: PageProps) {
   if (error || !complaint) {
     notFound();
   }
+
+  // Get attachments
+  const { data: attachments } = await getComplaintAttachments(complaintId);
 
   return (
     <div className="container mx-auto p-6 max-w-4xl" dir="rtl">
@@ -188,6 +193,13 @@ export default async function PublicComplaintDetailPage({ params }: PageProps) {
               )}
             </div>
           </div>
+
+          {/* Attachments */}
+          {attachments && attachments.length > 0 && (
+            <div>
+              <AttachmentsGallery attachments={attachments} />
+            </div>
+          )}
 
           {/* Status Info */}
           <div className="bg-brand-green-light/10 border border-brand-green-light rounded-lg p-4">
