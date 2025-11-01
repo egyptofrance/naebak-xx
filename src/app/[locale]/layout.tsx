@@ -92,8 +92,9 @@ export default async function RootLayout(props: {
   return (
     <html
       lang={locale}
-      className={Tajawal.className}
+      className={`${Tajawal.className} light`}
       suppressHydrationWarning
+      style={{ colorScheme: 'light' }}
     >
       <head>
         <AffonsoWrapper />

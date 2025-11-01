@@ -227,3 +227,70 @@
     scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
   }
 }
+
+/* Force Light Mode - Disable Dark Mode */
+@layer base {
+  /* Force light mode colors even if system is in dark mode */
+  html.light,
+  html.light body,
+  html[data-theme="light"],
+  html[data-theme="light"] body {
+    color-scheme: light !important;
+  }
+  
+  /* Prevent dark mode from being applied */
+  @media (prefers-color-scheme: dark) {
+    html,
+    body {
+      color-scheme: light !important;
+      background-color: white !important;
+      color: #171717 !important;
+    }
+  }
+}
+
+/* Control Font Size Scaling */
+@layer base {
+  /* Prevent extreme font scaling from browser/device settings */
+  html {
+    /* Use a fixed base font size that won't scale with browser settings */
+    font-size: 16px !important;
+    /* Prevent text size adjustment on mobile devices */
+    -webkit-text-size-adjust: 100% !important;
+    -moz-text-size-adjust: 100% !important;
+    -ms-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+  }
+  
+  body {
+    /* Ensure body also has controlled font size */
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+  }
+  
+  /* Ensure all text elements respect the base size */
+  * {
+    /* Prevent font boosting on mobile */
+    max-height: 999999px !important;
+  }
+}
+
+/* Override any dark mode styles */
+@layer utilities {
+  .dark\:bg-gray-700,
+  .dark\:bg-gray-700\/50,
+  .dark\:bg-gray-700\/40,
+  .dark\:bg-slate-950,
+  .dark\:bg-slate-950\/40,
+  .dark\:text-muted-foreground,
+  .dark\:border-gray-600,
+  .dark\:border-gray-600\/50,
+  .dark\:dotted-bg-dark,
+  .dark\:bg-blue-950,
+  .dark\:bg-blue-950\/20,
+  .dark\:border-blue-900,
+  .dark\:text-blue-100 {
+    /* These classes will be ignored */
+    all: unset !important;
+  }
+}
