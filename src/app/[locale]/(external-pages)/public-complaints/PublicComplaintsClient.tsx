@@ -1,8 +1,16 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { PublicComplaintCard } from "@/components/complaints/PublicComplaintCard";
-import { Filter, Tag, MapPin } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
 
 interface Complaint {
   id: string;
@@ -49,201 +57,205 @@ const statusLabels: Record<string, string> = {
   under_review: "قيد المراجعة",
   in_progress: "قيد المعالجة",
   resolved: "محلولة",
+  rejected: "مرفوضة",
   closed: "مغلقة",
 };
 
+const ITEMS_PER_PAGE = 10;
 
-
-export function PublicComplaintsClient({ complaints, visibleGovernorates }: PublicComplaintsClientProps) {
-  // Filter complaints to only show those from visible governorates
-  const filteredComplaintsByGovernorate = useMemo(() => {
-    const visibleGovNames = visibleGovernorates.map(g => g.name_ar);
-    return complaints.filter(complaint => 
-      !complaint.governorate || visibleGovNames.includes(complaint.governorate)
-    );
-  }, [complaints, visibleGovernorates]);
+export function PublicComplaintsClient({ 
+  complaints, 
+  visibleGovernorates 
+}: PublicComplaintsClientProps) {
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedGovernorate, setSelectedGovernorate] = useState<string>("all");
+  const [currentPage, setCurrentPage] = useState(1);
 
+  // Filter complaints
   const filteredComplaints = useMemo(() => {
-    return filteredComplaintsByGovernorate.filter((complaint) => {
-      if (selectedStatus !== "all" && complaint.status !== selectedStatus) {
-        return false;
-      }
-      if (selectedCategory !== "all" && complaint.category !== selectedCategory) {
-        return false;
-      }
-      // Handle governorate filter
-      if (selectedGovernorate !== "all") {
-        if (selectedGovernorate === "general") {
-          // Show only general complaints (null governorate)
-          if (complaint.governorate !== null) {
-            return false;
-          }
-        } else {
-          // Show complaints from selected governorate OR general complaints
-          if (complaint.governorate !== null && complaint.governorate !== selectedGovernorate) {
-            return false;
-          }
-        }
-      }
-      return true;
+    return complaints.filter(complaint => {
+      const statusMatch = selectedStatus === "all" || complaint.status === selectedStatus;
+      const categoryMatch = selectedCategory === "all" || complaint.category === selectedCategory;
+      const governorateMatch = 
+        selectedGovernorate === "all" || 
+        complaint.governorate === selectedGovernorate ||
+        (!complaint.governorate && selectedGovernorate === "all");
+      
+      return statusMatch && categoryMatch && governorateMatch;
     });
-  }, [filteredComplaintsByGovernorate, selectedStatus, selectedCategory, selectedGovernorate]);
+  }, [complaints, selectedStatus, selectedCategory, selectedGovernorate]);
 
-  const statusCounts = useMemo(() => {
-    return filteredComplaints.reduce((acc: any, complaint: any) => {
-      acc[complaint.status] = (acc[complaint.status] || 0) + 1;
-      return acc;
-    }, {});
-  }, [filteredComplaints]);
+  // Pagination
+  const totalPages = Math.ceil(filteredComplaints.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentComplaints = filteredComplaints.slice(startIndex, endIndex);
 
-  const resetFilters = () => {
-    setSelectedStatus("all");
-    setSelectedCategory("all");
-    setSelectedGovernorate("all");
+  // Reset to page 1 when filters change
+  const handleFilterChange = (setter: (value: string) => void) => (value: string) => {
+    setter(value);
+    setCurrentPage(1);
   };
 
-  const hasActiveFilters = selectedStatus !== "all" || selectedCategory !== "all" || selectedGovernorate !== "all";
+  // Get unique categories and statuses from complaints
+  const categories = useMemo(() => {
+    const cats = new Set(complaints.map(c => c.category));
+    return Array.from(cats);
+  }, [complaints]);
+
+  const statuses = useMemo(() => {
+    const stats = new Set(complaints.map(c => c.status));
+    return Array.from(stats);
+  }, [complaints]);
 
   return (
-    <>
+    <div className="space-y-6">
       {/* Filters */}
-      <div className="bg-card border rounded-lg p-6 mb-6" dir="rtl">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">تصفية النتائج</h2>
-          {hasActiveFilters && (
-            <button
-              onClick={resetFilters}
-              className="text-sm text-primary hover:underline"
-            >
-              إعادة تعيين الفلاتر
-            </button>
-          )}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-muted/50 rounded-lg">
+        <div>
+          <label className="text-sm font-medium mb-2 block">الحالة</label>
+          <Select value={selectedStatus} onValueChange={handleFilterChange(setSelectedStatus)}>
+            <SelectTrigger>
+              <SelectValue placeholder="جميع الحالات" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">جميع الحالات</SelectItem>
+              {statuses.map(status => (
+                <SelectItem key={status} value={status}>
+                  {statusLabels[status] || status}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Status Filter */}
-          <div>
-            <label className="flex items-center gap-2 text-sm font-medium mb-2">
-              <Filter className="h-4 w-4 text-primary" />
-              الحالة
-            </label>
-            <select
-              id="status-filter"
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md bg-background text-center appearance-none"
-              aria-label="فلترة حسب حالة الشكوى"
-              style={{ backgroundImage: "url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')", backgroundPosition: "left 0.5rem center", backgroundRepeat: "no-repeat", backgroundSize: "1.5em 1.5em" }}
-            >
-              <option value="all">جميع الحالات</option>
-              {Object.entries(statusLabels).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
+        <div>
+          <label className="text-sm font-medium mb-2 block">الفئة</label>
+          <Select value={selectedCategory} onValueChange={handleFilterChange(setSelectedCategory)}>
+            <SelectTrigger>
+              <SelectValue placeholder="جميع الفئات" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">جميع الفئات</SelectItem>
+              {categories.map(category => (
+                <SelectItem key={category} value={category}>
+                  {categoryLabels[category] || category}
+                </SelectItem>
               ))}
-            </select>
-          </div>
+            </SelectContent>
+          </Select>
+        </div>
 
-          {/* Category Filter */}
-          <div>
-            <label className="flex items-center gap-2 text-sm font-medium mb-2">
-              <Tag className="h-4 w-4 text-primary" />
-              الفئة
-            </label>
-            <select
-              id="category-filter"
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md bg-background text-center appearance-none"
-              aria-label="فلترة حسب فئة الشكوى"
-              style={{ backgroundImage: "url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')", backgroundPosition: "left 0.5rem center", backgroundRepeat: "no-repeat", backgroundSize: "1.5em 1.5em" }}
-            >
-              <option value="all">جميع الفئات</option>
-              {Object.entries(categoryLabels).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Governorate Filter */}
-          <div>
-            <label className="flex items-center gap-2 text-sm font-medium mb-2">
-              <MapPin className="h-4 w-4 text-primary" />
-              المحافظة
-            </label>
-            <select
-              id="governorate-filter"
-              value={selectedGovernorate}
-              onChange={(e) => setSelectedGovernorate(e.target.value)}
-              className="w-full px-3 py-2 border rounded-md bg-background text-center appearance-none"
-              aria-label="فلترة حسب المحافظة"
-              style={{ backgroundImage: "url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')", backgroundPosition: "left 0.5rem center", backgroundRepeat: "no-repeat", backgroundSize: "1.5em 1.5em" }}
-            >
-              <option value="all">جميع المحافظات</option>
-              <option value="general">🌍 شكاوى عامة</option>
-              {visibleGovernorates.map((gov) => (
-                <option key={gov.id} value={gov.name_ar}>
+        <div>
+          <label className="text-sm font-medium mb-2 block">المحافظة</label>
+          <Select value={selectedGovernorate} onValueChange={handleFilterChange(setSelectedGovernorate)}>
+            <SelectTrigger>
+              <SelectValue placeholder="جميع المحافظات" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">جميع المحافظات</SelectItem>
+              {visibleGovernorates.map(gov => (
+                <SelectItem key={gov.id} value={gov.name_ar}>
                   {gov.name_ar}
-                </option>
+                </SelectItem>
               ))}
-            </select>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {/* Results count */}
+      <div className="text-sm text-muted-foreground">
+        عرض {startIndex + 1} - {Math.min(endIndex, filteredComplaints.length)} من {filteredComplaints.length} شكوى
+      </div>
+
+      {/* Complaints list */}
+      <div className="grid gap-4">
+        {currentComplaints.map((complaint) => (
+          <div 
+            key={complaint.id} 
+            className="border rounded-lg p-6 bg-white shadow-sm hover:shadow-md transition-shadow"
+          >
+            <div className="flex justify-between items-start mb-4">
+              <h3 className="text-xl font-bold">{complaint.title}</h3>
+              <Link href={`/ar/public-complaints/${complaint.id}`}>
+                <Button variant="outline" size="sm">
+                  <Eye className="w-4 h-4 ml-2" />
+                  عرض التفاصيل
+                </Button>
+              </Link>
+            </div>
+            
+            <p className="text-gray-700 mb-4 line-clamp-3">
+              {complaint.description}
+            </p>
+            
+            <div className="flex flex-wrap gap-3 text-sm">
+              <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full">
+                📂 {categoryLabels[complaint.category] || complaint.category}
+              </span>
+              <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full">
+                🔄 {statusLabels[complaint.status] || complaint.status}
+              </span>
+              <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full">
+                📍 {complaint.governorate || "عامة (كل المحافظات)"}
+              </span>
+              {complaint.district && (
+                <span className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full">
+                  🏘️ {complaint.district}
+                </span>
+              )}
+            </div>
           </div>
-        </div>
-
-        <div className="mt-4 text-sm text-muted-foreground">
-          عرض {filteredComplaints.length} من {filteredComplaintsByGovernorate.length} شكوى
-        </div>
+        ))}
       </div>
 
-      {/* Statistics */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8" dir="rtl">
-        <div className="bg-card border rounded-lg p-4">
-          <p className="text-sm text-muted-foreground">إجمالي النتائج</p>
-          <p className="text-2xl font-bold">{filteredComplaints.length}</p>
-        </div>
-        <div className="bg-card border rounded-lg p-4">
-          <p className="text-sm text-muted-foreground">جديدة</p>
-          <p className="text-2xl font-bold text-blue-600">{statusCounts.new || 0}</p>
-        </div>
-        <div className="bg-card border rounded-lg p-4">
-          <p className="text-sm text-muted-foreground">قيد المراجعة</p>
-          <p className="text-2xl font-bold text-yellow-600">{statusCounts.under_review || 0}</p>
-        </div>
-        <div className="bg-card border rounded-lg p-4">
-          <p className="text-sm text-muted-foreground">قيد المعالجة</p>
-          <p className="text-2xl font-bold text-orange-600">{statusCounts.in_progress || 0}</p>
-        </div>
-        <div className="bg-card border rounded-lg p-4">
-          <p className="text-sm text-muted-foreground">محلولة</p>
-          <p className="text-2xl font-bold text-green-600">{statusCounts.resolved || 0}</p>
-        </div>
-      </div>
-
-      {/* Complaints List */}
-      {filteredComplaints.length === 0 && (
-        <div className="text-center py-16 text-muted-foreground" dir="rtl">
-          <p className="text-lg">لا توجد شكاوى تطابق الفلاتر المحددة</p>
-          {hasActiveFilters && (
-            <button
-              onClick={resetFilters}
-              className="mt-4 text-primary hover:underline"
-            >
-              إعادة تعيين الفلاتر
-            </button>
-          )}
+      {/* No results */}
+      {currentComplaints.length === 0 && (
+        <div className="text-center py-12 text-muted-foreground">
+          <p>لا توجد شكاوى تطابق الفلاتر المحددة</p>
         </div>
       )}
 
-      <div className="grid gap-4" dir="rtl">
-        {filteredComplaints.map((complaint) => (
-          <PublicComplaintCard key={complaint.id} complaint={complaint} />
-        ))}
-      </div>
-    </>
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-2 mt-8">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+          >
+            <ChevronRight className="w-4 h-4" />
+            السابق
+          </Button>
+          
+          <div className="flex gap-1">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+              <Button
+                key={page}
+                variant={currentPage === page ? "default" : "outline"}
+                size="sm"
+                onClick={() => setCurrentPage(page)}
+                className="min-w-[40px]"
+              >
+                {page}
+              </Button>
+            ))}
+          </div>
+          
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+          >
+            التالي
+            <ChevronLeft className="w-4 h-4" />
+          </Button>
+        </div>
+      )}
+    </div>
   );
 }
