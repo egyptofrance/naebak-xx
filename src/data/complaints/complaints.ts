@@ -753,11 +753,13 @@ export async function getPublicComplaints() {
       governorate,
       district,
       created_at,
-      resolved_at
+      resolved_at,
+      votes_count
     `)
     .eq("is_public", true)
     .eq("admin_approved_public", true)
     .eq("is_archived", false)
+    .order("votes_count", { ascending: false })
     .order("created_at", { ascending: false });
 
   return { data: data || [], error: error?.message };

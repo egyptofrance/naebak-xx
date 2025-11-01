@@ -2,6 +2,8 @@ import { Link } from "@/components/intl-link";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import { truncateText } from "@/lib/textUtils";
+import { UpvoteButton } from "@/components/complaints/UpvoteButton";
+import { hasUserVoted } from "@/app/actions/complaints/hasUserVoted";
 
 interface PublicComplaintCardProps {
   complaint: {
@@ -14,10 +16,14 @@ interface PublicComplaintCardProps {
     district: string | null;
     created_at: string;
     resolved_at: string | null;
+    votes_count: number;
   };
+  initialHasVoted?: boolean;
 }
 
-export function PublicComplaintCard({ complaint }: PublicComplaintCardProps) {
+export async function PublicComplaintCard({ complaint, initialHasVoted }: PublicComplaintCardProps) {
+  // Check if user has voted (server-side)
+  const hasVoted = initialHasVoted ?? await hasUserVoted(complaint.id);
   const categoryLabels: Record<string, string> = {
     infrastructure: "البنية التحتية",
     education: "التعليم",
@@ -56,6 +62,19 @@ export function PublicComplaintCard({ complaint }: PublicComplaintCardProps) {
       dir="rtl"
       aria-label={`شكوى: ${complaint.title}`}
     >
+      <div className="flex gap-4">
+        {/* Upvote Button */}
+        <div className="flex-shrink-0">
+          <UpvoteButton
+            complaintId={complaint.id}
+            initialVotesCount={complaint.votes_count || 0}
+            initialHasVoted={hasVoted}
+            variant="default"
+          />
+        </div>
+        
+        {/* Complaint Content */}
+        <div className="flex-1 min-w-0">
       <div className="flex justify-between items-start mb-3">
         <h3 className="font-semibold text-lg flex-1" id={`complaint-title-${complaint.id}`}>{complaint.title}</h3>
         <span 
@@ -123,6 +142,8 @@ export function PublicComplaintCard({ complaint }: PublicComplaintCardProps) {
             عرض التفاصيل
           </Button>
         </Link>
+      </div>
+        </div>
       </div>
     </article>
   );

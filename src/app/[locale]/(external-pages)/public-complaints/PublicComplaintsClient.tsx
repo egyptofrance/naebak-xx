@@ -14,6 +14,7 @@ interface Complaint {
   district: string | null;
   created_at: string;
   resolved_at: string | null;
+  votes_count: number;
 }
 
 interface Governorate {
