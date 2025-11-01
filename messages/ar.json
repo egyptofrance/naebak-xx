@@ -17,6 +17,15 @@
     "complaints": "الشكاوي",
     "deputies": "قائمة النواب"
   },
+  "Search": {
+    "placeholder": "ابحث عن نواب أو شكاوى...",
+    "shortcut": "ابحث",
+    "noResults": "لا توجد نتائج",
+    "deputies": "النواب",
+    "complaints": "الشكاوى",
+    "viewAll": "عرض جميع النتائج",
+    "searching": "جاري البحث..."
+  },
   "Complaints": {
     "title": "الشكاوى",
     "newComplaint": "شكوى جديدة",

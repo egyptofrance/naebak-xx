@@ -17,6 +17,15 @@
     "complaints": "Complaints",
     "deputies": "Deputies List"
   },
+  "Search": {
+    "placeholder": "Search for deputies or complaints...",
+    "shortcut": "Search",
+    "noResults": "No results found",
+    "deputies": "Deputies",
+    "complaints": "Complaints",
+    "viewAll": "View all results",
+    "searching": "Searching..."
+  },
   "Complaints": {
     "title": "Complaints",
     "newComplaint": "New Complaint",

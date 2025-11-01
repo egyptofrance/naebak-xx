@@ -9,6 +9,7 @@ import { MobileMenuOpen } from "./MobileMenuOpen";
 
 import { NavbarLogo } from "./NavbarLogo";
 import { PWAInstallButton } from "@/components/PWA/PWAInstallButton";
+import { SearchButton } from "@/components/search/SearchButton";
 
 export function ExternalNavigation() {
   return (
@@ -27,6 +28,7 @@ export function ExternalNavigation() {
           {/* Right: Menu + Actions */}
           <div className="flex items-center gap-3 md:gap-5 flex-shrink-0">
             <LeftNav />
+            <SearchButton />
             <Suspense
               fallback={
                 <div className="flex space-x-10 items-center lg:-mr-2"></div>
