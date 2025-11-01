@@ -3,8 +3,10 @@ import { getComplaintAttachments } from "@/data/complaints/getComplaintAttachmen
 import { notFound } from "next/navigation";
 import { Link } from "@/components/intl-link";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { AttachmentsGallery } from "@/components/complaints/AttachmentsGallery";
-import { ArrowRight, Calendar, MapPin, Tag, AlertCircle } from "lucide-react";
+import { ArrowRight, Calendar, MapPin, Tag, AlertCircle, FileText } from "lucide-react";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -29,23 +31,34 @@ const categoryLabels: Record<string, string> = {
   social_services: "الخدمات الاجتماعية",
   legal: "قانونية",
   corruption: "فساد",
+  investment: "استثمار",
   other: "أخرى",
 };
 
 const statusLabels: Record<string, string> = {
   new: "جديدة",
   under_review: "قيد المراجعة",
+  assigned_to_deputy: "محالة للنائب",
+  accepted: "مقبولة",
   in_progress: "قيد المعالجة",
+  on_hold: "معلقة",
+  rejected: "مرفوضة",
   resolved: "محلولة",
   closed: "مغلقة",
+  archived: "مؤرشفة",
 };
 
 const statusColors: Record<string, string> = {
-  new: "bg-gray-100 text-gray-800 border-gray-200",
-  under_review: "bg-brand-green-light/20 text-brand-green-dark border-brand-green-light",
-  in_progress: "bg-brand-green-light/20 text-brand-green-dark border-brand-green-light",
-  resolved: "bg-brand-green text-white border-brand-green",
-  closed: "bg-gray-100 text-gray-800 border-gray-200",
+  new: "bg-blue-100 text-blue-800 border-blue-200",
+  under_review: "bg-yellow-100 text-yellow-800 border-yellow-200",
+  assigned_to_deputy: "bg-purple-100 text-purple-800 border-purple-200",
+  accepted: "bg-green-100 text-green-800 border-green-200",
+  in_progress: "bg-orange-100 text-orange-800 border-orange-200",
+  on_hold: "bg-gray-100 text-gray-800 border-gray-200",
+  rejected: "bg-red-100 text-red-800 border-red-200",
+  resolved: "bg-green-500 text-white border-green-600",
+  closed: "bg-gray-500 text-white border-gray-600",
+  archived: "bg-gray-400 text-white border-gray-500",
 };
 
 const priorityLabels: Record<string, string> = {
@@ -56,10 +69,10 @@ const priorityLabels: Record<string, string> = {
 };
 
 const priorityColors: Record<string, string> = {
-  low: "bg-gray-100 text-gray-800",
-  medium: "bg-brand-green-light/20 text-brand-green-dark",
-  high: "bg-brand-green text-white",
-  urgent: "bg-red-100 text-red-800",
+  low: "bg-gray-100 text-gray-700 border-gray-300",
+  medium: "bg-yellow-100 text-yellow-700 border-yellow-300",
+  high: "bg-orange-100 text-orange-700 border-orange-300",
+  urgent: "bg-red-100 text-red-700 border-red-300",
 };
 
 export default async function PublicComplaintDetailPage({ params }: PageProps) {
@@ -74,11 +87,11 @@ export default async function PublicComplaintDetailPage({ params }: PageProps) {
   const { data: attachments } = await getComplaintAttachments(complaintId);
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl" dir="rtl">
+    <div className="container mx-auto p-4 md:p-6 max-w-5xl" dir="rtl">
       {/* Back Button */}
-      <div className="mb-6">
+      <div className="mb-4">
         <Link href="/public-complaints">
-          <Button variant="ghost" size="sm" className="gap-2">
+          <Button variant="ghost" size="sm" className="gap-2 hover:bg-gray-100">
             <ArrowRight className="h-4 w-4" />
             العودة إلى قائمة الشكاوى
           </Button>
@@ -86,110 +99,132 @@ export default async function PublicComplaintDetailPage({ params }: PageProps) {
       </div>
 
       {/* Main Card */}
-      <div className="bg-card border rounded-lg shadow-lg overflow-hidden">
+      <Card className="shadow-lg border-t-4 border-t-primary">
         {/* Header */}
-        <div className="bg-gradient-to-l from-green-600 to-green-700 text-white p-6">
-          <div className="flex justify-between items-start gap-4 mb-4">
-            <h1 className="text-2xl md:text-3xl font-bold flex-1">
-              {complaint.title}
-            </h1>
-            <span className={`text-sm px-4 py-2 rounded-full border ${statusColors[complaint.status] || 'bg-gray-100 text-gray-800'}`}>
-              {statusLabels[complaint.status] || complaint.status}
-            </span>
-          </div>
-          
-          {complaint.priority && (
-            <div className="inline-flex items-center gap-2">
-              <AlertCircle className="h-4 w-4" />
-              <span className={`text-xs px-3 py-1 rounded-full ${priorityColors[complaint.priority] || 'bg-gray-100 text-gray-800'}`}>
-                الأولوية: {priorityLabels[complaint.priority] || complaint.priority}
-              </span>
+        <CardHeader className="bg-gradient-to-b from-gray-50 to-white border-b">
+          <div className="space-y-4">
+            {/* Title and Status */}
+            <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-3">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 flex-1">
+                {complaint.title}
+              </h1>
+              <Badge 
+                variant="outline" 
+                className={`text-sm px-4 py-2 font-medium border-2 ${statusColors[complaint.status] || 'bg-gray-100 text-gray-800'}`}
+              >
+                {statusLabels[complaint.status] || complaint.status}
+              </Badge>
             </div>
-          )}
-        </div>
+            
+            {/* Priority */}
+            {complaint.priority && (
+              <div className="flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 text-gray-600" />
+                <Badge 
+                  variant="outline" 
+                  className={`text-xs px-3 py-1 font-medium border ${priorityColors[complaint.priority] || 'bg-gray-100 text-gray-800'}`}
+                >
+                  الأولوية: {priorityLabels[complaint.priority] || complaint.priority}
+                </Badge>
+              </div>
+            )}
+          </div>
+        </CardHeader>
 
         {/* Content */}
-        <div className="p-6 space-y-6">
+        <CardContent className="p-6 space-y-6">
           {/* Description */}
           <div>
-            <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
-              <Tag className="h-5 w-5 text-green-600" />
+            <h2 className="text-lg font-semibold mb-3 flex items-center gap-2 text-gray-900">
+              <FileText className="h-5 w-5 text-primary" />
               وصف الشكوى
             </h2>
-            <div className="bg-muted/50 rounded-lg p-4">
-              <p className="text-base leading-relaxed whitespace-pre-wrap">
-                {complaint.description}
-              </p>
-            </div>
+            <Card className="bg-gray-50 border-gray-200">
+              <CardContent className="p-4">
+                <p className="text-base leading-relaxed whitespace-pre-wrap text-gray-800">
+                  {complaint.description}
+                </p>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Details Grid */}
           <div>
-            <h2 className="text-lg font-semibold mb-3">التفاصيل</h2>
+            <h2 className="text-lg font-semibold mb-3 text-gray-900">التفاصيل</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Category */}
-              <div className="bg-muted/30 rounded-lg p-4 border">
-                <div className="flex items-center gap-2 text-muted-foreground mb-1">
-                  <Tag className="h-4 w-4" />
-                  <span className="text-sm font-medium">الفئة</span>
-                </div>
-                <p className="text-base font-semibold">
-                  {categoryLabels[complaint.category] || complaint.category}
-                </p>
-              </div>
+              <Card className="border-gray-200 hover:shadow-md transition-shadow">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-2 text-gray-600 mb-2">
+                    <Tag className="h-4 w-4" />
+                    <span className="text-sm font-medium">الفئة</span>
+                  </div>
+                  <p className="text-base font-semibold text-gray-900">
+                    {categoryLabels[complaint.category] || complaint.category}
+                  </p>
+                </CardContent>
+              </Card>
 
               {/* Governorate */}
               {complaint.governorate && (
-                <div className="bg-muted/30 rounded-lg p-4 border">
-                  <div className="flex items-center gap-2 text-muted-foreground mb-1">
-                    <MapPin className="h-4 w-4" />
-                    <span className="text-sm font-medium">المحافظة</span>
-                  </div>
-                  <p className="text-base font-semibold">{complaint.governorate}</p>
-                </div>
+                <Card className="border-gray-200 hover:shadow-md transition-shadow">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-2 text-gray-600 mb-2">
+                      <MapPin className="h-4 w-4" />
+                      <span className="text-sm font-medium">المحافظة</span>
+                    </div>
+                    <p className="text-base font-semibold text-gray-900">{complaint.governorate}</p>
+                  </CardContent>
+                </Card>
               )}
 
               {/* District */}
               {complaint.district && (
-                <div className="bg-muted/30 rounded-lg p-4 border">
-                  <div className="flex items-center gap-2 text-muted-foreground mb-1">
-                    <MapPin className="h-4 w-4" />
-                    <span className="text-sm font-medium">المنطقة</span>
-                  </div>
-                  <p className="text-base font-semibold">{complaint.district}</p>
-                </div>
+                <Card className="border-gray-200 hover:shadow-md transition-shadow">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-2 text-gray-600 mb-2">
+                      <MapPin className="h-4 w-4" />
+                      <span className="text-sm font-medium">المنطقة</span>
+                    </div>
+                    <p className="text-base font-semibold text-gray-900">{complaint.district}</p>
+                  </CardContent>
+                </Card>
               )}
 
               {/* Created Date */}
-              <div className="bg-muted/30 rounded-lg p-4 border">
-                <div className="flex items-center gap-2 text-muted-foreground mb-1">
-                  <Calendar className="h-4 w-4" />
-                  <span className="text-sm font-medium">تاريخ الإنشاء</span>
-                </div>
-                <p className="text-base font-semibold">
-                  {new Date(complaint.created_at).toLocaleDateString("ar-EG", {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </p>
-              </div>
-
-              {/* Resolved Date */}
-              {complaint.resolved_at && (complaint.status === 'resolved' || complaint.status === 'closed') && (
-                <div className="bg-green-50 rounded-lg p-4 border border-green-200">
-                  <div className="flex items-center gap-2 text-green-700 mb-1">
+              <Card className="border-gray-200 hover:shadow-md transition-shadow">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-2 text-gray-600 mb-2">
                     <Calendar className="h-4 w-4" />
-                    <span className="text-sm font-medium">تاريخ الحل</span>
+                    <span className="text-sm font-medium">تاريخ الإنشاء</span>
                   </div>
-                  <p className="text-base font-semibold text-green-800">
-                    {new Date(complaint.resolved_at).toLocaleDateString("ar-EG", {
+                  <p className="text-base font-semibold text-gray-900">
+                    {new Date(complaint.created_at).toLocaleDateString("ar-EG", {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric'
                     })}
                   </p>
-                </div>
+                </CardContent>
+              </Card>
+
+              {/* Resolved Date */}
+              {complaint.resolved_at && (complaint.status === 'resolved' || complaint.status === 'closed') && (
+                <Card className="border-green-300 bg-green-50 hover:shadow-md transition-shadow">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-2 text-green-700 mb-2">
+                      <Calendar className="h-4 w-4" />
+                      <span className="text-sm font-medium">تاريخ الحل</span>
+                    </div>
+                    <p className="text-base font-semibold text-green-800">
+                      {new Date(complaint.resolved_at).toLocaleDateString("ar-EG", {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </p>
+                  </CardContent>
+                </Card>
               )}
             </div>
           </div>
@@ -201,15 +236,17 @@ export default async function PublicComplaintDetailPage({ params }: PageProps) {
             </div>
           )}
 
-          {/* Status Info */}
-          <div className="bg-brand-green-light/10 border border-brand-green-light rounded-lg p-4">
-            <p className="text-sm text-brand-green-dark">
-              <strong>ملاحظة:</strong> هذه الشكوى متاحة للعرض العام بموافقة المواطن والإدارة. 
-              يتم تحديث الحالة بشكل دوري حسب تقدم المعالجة.
-            </p>
-          </div>
-        </div>
-      </div>
+          {/* Info Notice */}
+          <Card className="border-blue-200 bg-blue-50">
+            <CardContent className="p-4">
+              <p className="text-sm text-blue-800">
+                <strong>ملاحظة:</strong> هذه الشكوى متاحة للعرض العام بموافقة المواطن والإدارة. 
+                يتم تحديث الحالة بشكل دوري حسب تقدم المعالجة.
+              </p>
+            </CardContent>
+          </Card>
+        </CardContent>
+      </Card>
 
       {/* Back Button Bottom */}
       <div className="mt-6 flex justify-center">
