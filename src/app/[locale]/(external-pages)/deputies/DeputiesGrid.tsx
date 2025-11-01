@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { DeputyCardRating } from "./DeputyCardRating";
+import { Search, Users, MapPin, Building2, Landmark } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -272,7 +273,10 @@ export default function DeputiesGrid({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
             {/* Search by Name */}
             <div className="lg:col-span-5">
-              <label className="text-sm font-medium mb-2 block">البحث بالاسم</label>
+              <label className="text-sm font-medium mb-2 flex items-center gap-2">
+                <Search className="h-4 w-4 text-primary" />
+                البحث بالاسم
+              </label>
               <Input
                 type="text"
                 placeholder="ابحث عن نائب بالاسم..."
@@ -289,7 +293,10 @@ export default function DeputiesGrid({
 
             {/* Status Filter */}
             <div className="lg:col-span-4">
-              <label className="text-sm font-medium mb-2 block">حالة العضوية</label>
+              <label className="text-sm font-medium mb-2 flex items-center gap-2">
+                <Users className="h-4 w-4 text-primary" />
+                حالة العضوية
+              </label>
               <div className="flex flex-wrap gap-3 pt-2">
                 <div className="flex items-center gap-2">
                   <Checkbox
@@ -326,7 +333,10 @@ export default function DeputiesGrid({
 
             {/* Gender Filter */}
             <div className="lg:col-span-3">
-              <label className="text-sm font-medium mb-2 block">الجنس</label>
+              <label className="text-sm font-medium mb-2 flex items-center gap-2">
+                <Users className="h-4 w-4 text-primary" />
+                الجنس
+              </label>
               <RadioGroup value={genderFilter} onValueChange={setGenderFilter} className="flex flex-wrap gap-3 pt-2">
                 <div className="flex items-center gap-2">
                   <RadioGroupItem value="all" id="gender-all" />
@@ -353,7 +363,10 @@ export default function DeputiesGrid({
           {/* Row 2: 4 Dropdowns - Desktop: Same Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <label className="text-sm font-medium mb-2 block">المحافظة</label>
+              <label className="text-sm font-medium mb-2 flex items-center gap-2">
+                <MapPin className="h-4 w-4 text-primary" />
+                المحافظة
+              </label>
               <Select
                 value={governorateFilter}
                 onValueChange={(value) => {
@@ -376,7 +389,10 @@ export default function DeputiesGrid({
             </div>
 
             <div>
-              <label className="text-sm font-medium mb-2 block">الدائرة الانتخابية</label>
+              <label className="text-sm font-medium mb-2 flex items-center gap-2">
+                <MapPin className="h-4 w-4 text-primary" />
+                الدائرة الانتخابية
+              </label>
               <Select
                 value={electoralDistrictFilter}
                 onValueChange={setElectoralDistrictFilter}
@@ -398,7 +414,10 @@ export default function DeputiesGrid({
 
             {/* Party */}
             <div>
-              <label className="text-sm font-medium mb-2 block">الحزب أو التحالف</label>
+              <label className="text-sm font-medium mb-2 flex items-center gap-2">
+                <Building2 className="h-4 w-4 text-primary" />
+                الحزب أو التحالف
+              </label>
               <Select value={partyFilter} onValueChange={setPartyFilter}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="اختر الحزب" />
@@ -415,7 +434,10 @@ export default function DeputiesGrid({
             </div>
 
             <div>
-              <label className="text-sm font-medium mb-2 block">المجلس</label>
+              <label className="text-sm font-medium mb-2 flex items-center gap-2">
+                <Landmark className="h-4 w-4 text-primary" />
+                المجلس
+              </label>
               <Select value={councilFilter} onValueChange={setCouncilFilter}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="اختر المجلس" />
@@ -452,11 +474,11 @@ export default function DeputiesGrid({
         {paginatedDeputies.map((deputyData: DeputyData) => (
           <div
             key={deputyData.deputy.id}
-            className="bg-card rounded-xl shadow-sm border overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-[1.02] min-w-0"
+            className="bg-card rounded-lg shadow-md border border-border overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 min-w-0"
           >
             {/* Avatar */}
-            <div className="flex justify-center pt-8 pb-4 bg-gradient-to-b from-muted/30 to-transparent">
-              <div className="w-28 h-28 rounded-full overflow-hidden bg-muted flex items-center justify-center ring-4 ring-background shadow-lg">
+            <div className="flex justify-center pt-8 pb-4 bg-muted/20">
+              <div className="w-28 h-28 rounded-full overflow-hidden bg-muted flex items-center justify-center ring-2 ring-border shadow-md">
                 {deputyData.user?.avatar_url ? (
                   <img
                     src={deputyData.user.avatar_url}
@@ -531,11 +553,11 @@ export default function DeputiesGrid({
               {/* Points & Rating */}
               <div className="space-y-3">
                 {/* Points */}
-                <div className="flex items-center justify-center gap-2 p-2 bg-amber-50 dark:bg-amber-950/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                <div className="flex items-center justify-center gap-2 p-2 bg-muted/50 rounded-lg border border-border">
                   <span className="text-2xl">🏆</span>
                   <div className="text-center">
                     <div className="text-xs text-muted-foreground font-medium">النقاط</div>
-                    <div className="text-lg font-bold text-amber-600 dark:text-amber-500">
+                    <div className="text-lg font-bold text-foreground">
                       {deputyData.deputy.points || 0}
                     </div>
                   </div>

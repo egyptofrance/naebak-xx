@@ -1,6 +1,7 @@
 import { Link } from "@/components/intl-link";
 import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
+import { truncateText } from "@/lib/textUtils";
 
 interface PublicComplaintCardProps {
   complaint: {
@@ -58,8 +59,8 @@ export function PublicComplaintCard({ complaint }: PublicComplaintCardProps) {
         </span>
       </div>
       
-      <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
-        {complaint.description}
+      <p className="text-sm text-muted-foreground mb-4">
+        {truncateText(complaint.description, 150)}
       </p>
       
       <div className="flex flex-wrap gap-4 text-xs text-muted-foreground">

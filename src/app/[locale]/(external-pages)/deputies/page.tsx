@@ -5,6 +5,7 @@ import { getAllElectoralDistricts } from "@/app/actions/electoral-district/getAl
 import { getAllCouncils } from "@/app/actions/council/getAllCouncils";
 import DeputiesGrid from "./DeputiesGrid";
 import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 // Force dynamic rendering - no caching
 export const revalidate = 0;
@@ -36,6 +37,7 @@ export default async function DeputiesPage() {
     <div className="min-h-screen bg-background" dir="rtl">
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-7xl mx-auto">
+          <Breadcrumbs />
           <h1 className="text-4xl font-bold mb-8 text-right">قائمة النواب</h1>
           
           <DeputiesGrid 

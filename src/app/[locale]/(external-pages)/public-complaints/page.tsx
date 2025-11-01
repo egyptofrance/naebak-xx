@@ -1,6 +1,7 @@
 import { getPublicComplaints } from "@/data/complaints/complaints";
 import { PublicComplaintsClient } from "./PublicComplaintsClient";
 import { AddComplaintButton } from "@/components/complaints/AddComplaintButton";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -10,6 +11,7 @@ export default async function PublicComplaintsPage() {
 
   return (
     <div className="container mx-auto p-6 max-w-6xl" dir="rtl">
+      <Breadcrumbs />
       <div className="mb-8 flex justify-between items-start">
         <div>
           <h1 className="text-3xl font-bold mb-2">الشكاوى العامة</h1>

@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { PublicComplaintCard } from "@/components/complaints/PublicComplaintCard";
+import { Filter, Tag, MapPin } from "lucide-react";
 
 interface Complaint {
   id: string;
@@ -105,7 +106,10 @@ export function PublicComplaintsClient({ complaints }: PublicComplaintsClientPro
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Status Filter */}
           <div>
-            <label className="block text-sm font-medium mb-2">الحالة</label>
+            <label className="flex items-center gap-2 text-sm font-medium mb-2">
+              <Filter className="h-4 w-4 text-primary" />
+              الحالة
+            </label>
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
@@ -123,7 +127,10 @@ export function PublicComplaintsClient({ complaints }: PublicComplaintsClientPro
 
           {/* Category Filter */}
           <div>
-            <label className="block text-sm font-medium mb-2">الفئة</label>
+            <label className="flex items-center gap-2 text-sm font-medium mb-2">
+              <Tag className="h-4 w-4 text-primary" />
+              الفئة
+            </label>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
@@ -141,7 +148,10 @@ export function PublicComplaintsClient({ complaints }: PublicComplaintsClientPro
 
           {/* Governorate Filter */}
           <div>
-            <label className="block text-sm font-medium mb-2">المحافظة</label>
+            <label className="flex items-center gap-2 text-sm font-medium mb-2">
+              <MapPin className="h-4 w-4 text-primary" />
+              المحافظة
+            </label>
             <select
               value={selectedGovernorate}
               onChange={(e) => setSelectedGovernorate(e.target.value)}
