@@ -24,7 +24,7 @@ export async function getComplaintAttachments(complaintId: string) {
   const supabase = await createSupabaseUserServerComponentClient();
 
   const { data, error } = await supabase
-    .from("complaint_attachments")
+    .from("complaint_attachments" as any)
     .select("*")
     .eq("complaint_id", complaintId)
     .order("created_at", { ascending: true });
