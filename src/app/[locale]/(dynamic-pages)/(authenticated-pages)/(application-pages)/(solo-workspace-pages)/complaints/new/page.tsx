@@ -263,7 +263,7 @@ export default function NewComplaintPage() {
               backgroundSize: '1.5em 1.5em'
             }}
           >
-            <option value="">اختر المحافظة</option>
+            <option value="">🌍 شكوى عامة - جميع المحافظات</option>
             <option value="القاهرة">القاهرة</option>
             <option value="الجيزة">الجيزة</option>
             <option value="الإسكندرية">الإسكندرية</option>

@@ -73,8 +73,19 @@ export function PublicComplaintsClient({ complaints, visibleGovernorates }: Publ
       if (selectedCategory !== "all" && complaint.category !== selectedCategory) {
         return false;
       }
-      if (selectedGovernorate !== "all" && complaint.governorate !== selectedGovernorate) {
-        return false;
+      // Handle governorate filter
+      if (selectedGovernorate !== "all") {
+        if (selectedGovernorate === "general") {
+          // Show only general complaints (null governorate)
+          if (complaint.governorate !== null) {
+            return false;
+          }
+        } else {
+          // Show complaints from selected governorate OR general complaints
+          if (complaint.governorate !== null && complaint.governorate !== selectedGovernorate) {
+            return false;
+          }
+        }
       }
       return true;
     });
@@ -167,6 +178,7 @@ export function PublicComplaintsClient({ complaints, visibleGovernorates }: Publ
               style={{ backgroundImage: "url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')", backgroundPosition: "left 0.5rem center", backgroundRepeat: "no-repeat", backgroundSize: "1.5em 1.5em" }}
             >
               <option value="all">جميع المحافظات</option>
+              <option value="general">🌍 شكاوى عامة</option>
               {visibleGovernorates.map((gov) => (
                 <option key={gov.id} value={gov.name_ar}>
                   {gov.name_ar}

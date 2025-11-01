@@ -69,12 +69,19 @@ export function PublicComplaintCard({ complaint }: PublicComplaintCardProps) {
           <span>{categoryLabels[complaint.category] || complaint.category}</span>
         </div>
         
-        {complaint.governorate && (
-          <div className="flex items-center gap-1">
-            <span className="font-medium">المحافظة:</span>
-            <span>{complaint.governorate}</span>
-          </div>
-        )}
+        <div className="flex items-center gap-1">
+          <span className="font-medium">المحافظة:</span>
+          <span className="flex items-center gap-1">
+            {complaint.governorate ? (
+              complaint.governorate
+            ) : (
+              <>
+                <span>🌍</span>
+                <span className="font-medium text-primary">شكوى عامة</span>
+              </>
+            )}
+          </span>
+        </div>
         
         {complaint.district && (
           <div className="flex items-center gap-1">
