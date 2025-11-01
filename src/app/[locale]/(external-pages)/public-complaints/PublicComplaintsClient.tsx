@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { 
   Select,
@@ -10,7 +11,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ChevronLeft, ChevronRight, Eye, Filter } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { 
+  ChevronLeft, 
+  ChevronRight, 
+  Eye, 
+  Filter,
+  MapPin,
+  Tag,
+  Clock,
+  TrendingUp
+} from "lucide-react";
 
 interface Complaint {
   id: string;
@@ -59,6 +71,15 @@ const statusLabels: Record<string, string> = {
   resolved: "محلولة",
   rejected: "مرفوضة",
   closed: "مغلقة",
+};
+
+const statusColors: Record<string, string> = {
+  new: "bg-blue-100 text-blue-700 border-blue-300",
+  under_review: "bg-yellow-100 text-yellow-700 border-yellow-300",
+  in_progress: "bg-orange-100 text-orange-700 border-orange-300",
+  resolved: "bg-green-100 text-green-700 border-green-300",
+  rejected: "bg-red-100 text-red-700 border-red-300",
+  closed: "bg-gray-100 text-gray-700 border-gray-300",
 };
 
 const ITEMS_PER_PAGE = 10;
@@ -110,135 +131,265 @@ export function PublicComplaintsClient({
   }, [complaints]);
 
   return (
-    <div className="space-y-4">
-      {/* Compact Filters */}
-      <div className="bg-white border rounded-lg p-4 shadow-sm">
-        <div className="flex items-center gap-2 mb-3">
-          <Filter className="w-4 h-4 text-gray-600" />
-          <span className="text-sm font-medium text-gray-700">تصفية النتائج</span>
-        </div>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <Select value={selectedStatus} onValueChange={handleFilterChange(setSelectedStatus)}>
-            <SelectTrigger className="h-9">
-              <SelectValue placeholder="الحالة" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">جميع الحالات</SelectItem>
-              {statuses.map(status => (
-                <SelectItem key={status} value={status}>
-                  {statusLabels[status] || status}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+    <div className="space-y-6">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <Card className="border-l-4 border-l-primary">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">إجمالي الشكاوى</p>
+                  <p className="text-2xl font-bold">{complaints.length}</p>
+                </div>
+                <TrendingUp className="w-8 h-8 text-primary opacity-20" />
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-          <Select value={selectedCategory} onValueChange={handleFilterChange(setSelectedCategory)}>
-            <SelectTrigger className="h-9">
-              <SelectValue placeholder="الفئة" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">جميع الفئات</SelectItem>
-              {categories.map(category => (
-                <SelectItem key={category} value={category}>
-                  {categoryLabels[category] || category}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <Card className="border-l-4 border-l-green-500">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">محلولة</p>
+                  <p className="text-2xl font-bold text-green-600">
+                    {complaints.filter(c => c.status === "resolved").length}
+                  </p>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                  <span className="text-green-600 text-lg">✓</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-          <Select value={selectedGovernorate} onValueChange={handleFilterChange(setSelectedGovernorate)}>
-            <SelectTrigger className="h-9">
-              <SelectValue placeholder="المحافظة" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">جميع المحافظات</SelectItem>
-              {visibleGovernorates.map(gov => (
-                <SelectItem key={gov.id} value={gov.name_ar}>
-                  {gov.name_ar}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <Card className="border-l-4 border-l-orange-500">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">قيد المعالجة</p>
+                  <p className="text-2xl font-bold text-orange-600">
+                    {complaints.filter(c => c.status === "in_progress").length}
+                  </p>
+                </div>
+                <Clock className="w-8 h-8 text-orange-500 opacity-20" />
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <Card className="border-l-4 border-l-blue-500">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">جديدة</p>
+                  <p className="text-2xl font-bold text-blue-600">
+                    {complaints.filter(c => c.status === "new").length}
+                  </p>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                  <span className="text-blue-600 text-lg">★</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
       </div>
 
+      {/* Filters */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
+        <Card>
+          <CardContent className="p-5">
+            <div className="flex items-center gap-2 mb-4">
+              <Filter className="w-5 h-5 text-primary" />
+              <h3 className="font-semibold text-lg">تصفية النتائج</h3>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium flex items-center gap-2">
+                  <Tag className="w-4 h-4" />
+                  الحالة
+                </label>
+                <Select value={selectedStatus} onValueChange={handleFilterChange(setSelectedStatus)}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="جميع الحالات" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">جميع الحالات</SelectItem>
+                    {statuses.map(status => (
+                      <SelectItem key={status} value={status}>
+                        {statusLabels[status] || status}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium flex items-center gap-2">
+                  <Tag className="w-4 h-4" />
+                  الفئة
+                </label>
+                <Select value={selectedCategory} onValueChange={handleFilterChange(setSelectedCategory)}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="جميع الفئات" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">جميع الفئات</SelectItem>
+                    {categories.map(category => (
+                      <SelectItem key={category} value={category}>
+                        {categoryLabels[category] || category}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium flex items-center gap-2">
+                  <MapPin className="w-4 h-4" />
+                  المحافظة
+                </label>
+                <Select value={selectedGovernorate} onValueChange={handleFilterChange(setSelectedGovernorate)}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="جميع المحافظات" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">جميع المحافظات</SelectItem>
+                    {visibleGovernorates.map(gov => (
+                      <SelectItem key={gov.id} value={gov.name_ar}>
+                        {gov.name_ar}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
       {/* Results count */}
-      <div className="flex justify-between items-center text-sm text-gray-600 px-1">
-        <span>
-          عرض <span className="font-semibold text-gray-900">{startIndex + 1} - {Math.min(endIndex, filteredComplaints.length)}</span> من <span className="font-semibold text-gray-900">{filteredComplaints.length}</span> شكوى
-        </span>
+      <div className="flex justify-between items-center px-1">
+        <p className="text-sm text-muted-foreground">
+          عرض <span className="font-bold text-foreground">{startIndex + 1}-{Math.min(endIndex, filteredComplaints.length)}</span> من <span className="font-bold text-foreground">{filteredComplaints.length}</span> شكوى
+        </p>
       </div>
 
       {/* Complaints list */}
-      <div className="space-y-3">
-        {currentComplaints.map((complaint) => (
-          <div 
-            key={complaint.id} 
-            className="bg-white border rounded-lg p-5 hover:shadow-md transition-all duration-200 hover:border-primary/50"
-          >
-            <div className="flex justify-between items-start gap-4 mb-3">
-              <h3 className="text-lg font-bold text-gray-900 flex-1 leading-tight">
-                {complaint.title}
-              </h3>
-              <Link href={`/ar/public-complaints/${complaint.id}`}>
-                <Button variant="outline" size="sm" className="shrink-0 h-8">
-                  <Eye className="w-3.5 h-3.5 ml-1.5" />
-                  <span className="text-xs">التفاصيل</span>
-                </Button>
-              </Link>
-            </div>
-            
-            <p className="text-sm text-gray-600 mb-3 line-clamp-2 leading-relaxed">
-              {complaint.description}
-            </p>
-            
-            <div className="flex flex-wrap gap-2">
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
-                {categoryLabels[complaint.category] || complaint.category}
-              </span>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-200">
-                {statusLabels[complaint.status] || complaint.status}
-              </span>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-50 text-purple-700 border border-purple-200">
-                📍 {complaint.governorate || "عامة"}
-              </span>
-              {complaint.district && (
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-50 text-gray-700 border border-gray-200">
-                  {complaint.district}
-                </span>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
+      <AnimatePresence mode="wait">
+        <motion.div 
+          key={currentPage}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+          className="space-y-4"
+        >
+          {currentComplaints.map((complaint, index) => (
+            <motion.div
+              key={complaint.id}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.05 }}
+            >
+              <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 border-r-4 border-r-primary/20 hover:border-r-primary">
+                <CardContent className="p-6">
+                  <div className="flex justify-between items-start gap-4 mb-4">
+                    <div className="flex-1">
+                      <h3 className="text-xl font-bold text-foreground mb-2 leading-tight">
+                        {complaint.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+                        {complaint.description}
+                      </p>
+                    </div>
+                    <Link href={`/ar/public-complaints/${complaint.id}`}>
+                      <Button size="sm" className="shrink-0 gap-2">
+                        <Eye className="w-4 h-4" />
+                        عرض التفاصيل
+                      </Button>
+                    </Link>
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-2">
+                    <Badge variant="outline" className={statusColors[complaint.status] || "bg-gray-100"}>
+                      {statusLabels[complaint.status] || complaint.status}
+                    </Badge>
+                    <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                      {categoryLabels[complaint.category] || complaint.category}
+                    </Badge>
+                    <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
+                      <MapPin className="w-3 h-3 ml-1" />
+                      {complaint.governorate || "عامة"}
+                    </Badge>
+                    {complaint.district && (
+                      <Badge variant="outline" className="bg-gray-50 text-gray-700">
+                        {complaint.district}
+                      </Badge>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </motion.div>
+      </AnimatePresence>
 
       {/* No results */}
       {currentComplaints.length === 0 && (
-        <div className="text-center py-16 bg-gray-50 rounded-lg">
-          <div className="text-5xl mb-3">🔍</div>
-          <p className="text-lg font-medium text-gray-700 mb-1">لا توجد نتائج</p>
-          <p className="text-sm text-gray-500">جرب تغيير الفلاتر للحصول على نتائج مختلفة</p>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center py-20"
+        >
+          <div className="text-6xl mb-4">🔍</div>
+          <h3 className="text-xl font-semibold text-foreground mb-2">لا توجد نتائج</h3>
+          <p className="text-muted-foreground">جرب تغيير الفلاتر للحصول على نتائج مختلفة</p>
+        </motion.div>
       )}
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-2 pt-4">
+        <div className="flex justify-center items-center gap-2 pt-6">
           <Button
             variant="outline"
             size="sm"
             onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
             disabled={currentPage === 1}
-            className="h-9"
           >
-            <ChevronRight className="w-4 h-4" />
-            <span className="mr-1">السابق</span>
+            <ChevronRight className="w-4 h-4 ml-1" />
+            السابق
           </Button>
           
           <div className="flex gap-1">
             {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
-              // Show first 3, current, and last 3 pages
               let page;
               if (totalPages <= 7) {
                 page = i + 1;
@@ -256,7 +407,7 @@ export function PublicComplaintsClient({
                   variant={currentPage === page ? "default" : "outline"}
                   size="sm"
                   onClick={() => setCurrentPage(page)}
-                  className="min-w-[36px] h-9 px-2"
+                  className="min-w-[40px]"
                 >
                   {page}
                 </Button>
@@ -269,10 +420,9 @@ export function PublicComplaintsClient({
             size="sm"
             onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
             disabled={currentPage === totalPages}
-            className="h-9"
           >
-            <span className="ml-1">التالي</span>
-            <ChevronLeft className="w-4 h-4" />
+            التالي
+            <ChevronLeft className="w-4 h-4 mr-1" />
           </Button>
         </div>
       )}
