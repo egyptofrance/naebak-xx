@@ -753,16 +753,14 @@ export async function getPublicComplaints() {
       governorate,
       district,
       created_at,
-      resolved_at,
-      votes_count
+      resolved_at
     `)
     .eq("is_public", true)
     .eq("admin_approved_public", true)
     .eq("is_archived", false)
-    .order("votes_count", { ascending: false })
     .order("created_at", { ascending: false });
 
-  // Type assertion to include votes_count
+  // Add votes_count as 0 for now (will be calculated from complaint_votes table later)
   type ComplaintWithVotes = {
     id: string;
     title: string;
@@ -776,8 +774,13 @@ export async function getPublicComplaints() {
     votes_count: number;
   };
 
+  const complaintsWithVotes = (data || []).map(complaint => ({
+    ...complaint,
+    votes_count: 0 // TODO: Calculate from complaint_votes table
+  }));
+
   return { 
-    data: (data || []) as unknown as ComplaintWithVotes[], 
+    data: complaintsWithVotes as unknown as ComplaintWithVotes[], 
     error: error?.message 
   };
 }
