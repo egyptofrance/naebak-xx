@@ -1,13 +1,51 @@
+import { getPublicComplaints } from "@/data/complaints/complaints";
+
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function PublicComplaintsPage() {
+  let complaints = null;
+  let error = null;
+  
+  try {
+    const result = await getPublicComplaints();
+    complaints = result.data;
+    error = result.error;
+  } catch (e: any) {
+    console.error("Error:", e);
+    error = e?.message || "حدث خطأ";
+  }
+
   return (
     <div className="container mx-auto p-6 max-w-6xl" dir="rtl">
       <h1 className="text-3xl font-bold mb-2">الشكاوى العامة</h1>
-      <p className="text-muted-foreground">
-        الصفحة تعمل بنجاح! 🎉
-      </p>
+      
+      {error && (
+        <div className="bg-red-100 text-red-800 p-4 rounded-md mb-4">
+          خطأ: {error}
+        </div>
+      )}
+      
+      {!error && (
+        <div className="bg-green-100 text-green-800 p-4 rounded-md mb-4">
+          ✅ تم جلب الشكاوى بنجاح! عدد الشكاوى: {complaints?.length || 0}
+        </div>
+      )}
+      
+      {complaints && complaints.length > 0 && (
+        <div className="space-y-4">
+          {complaints.map((c: any) => (
+            <div key={c.id} className="border p-4 rounded">
+              <h3 className="font-bold">{c.title}</h3>
+              <p className="text-sm text-gray-600">{c.description?.substring(0, 100)}...</p>
+            </div>
+          ))}
+        </div>
+      )}
+      
+      {complaints && complaints.length === 0 && (
+        <p className="text-gray-600">لا توجد شكاوى حالياً</p>
+      )}
     </div>
   );
 }
