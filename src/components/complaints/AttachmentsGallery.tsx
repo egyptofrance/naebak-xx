@@ -6,21 +6,14 @@ import { X, Download, FileIcon, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
-export interface Attachment {
-  id: string;
-  file_name: string;
-  file_type: string;
-  file_size: number;
-  publicUrl: string;
-  created_at: string;
-}
+import type { ComplaintAttachmentWithUrl } from "@/data/complaints/getComplaintAttachments";
 
 interface AttachmentsGalleryProps {
-  attachments: Attachment[];
+  attachments: ComplaintAttachmentWithUrl[];
 }
 
 export function AttachmentsGallery({ attachments }: AttachmentsGalleryProps) {
-  const [selectedImage, setSelectedImage] = useState<Attachment | null>(null);
+  const [selectedImage, setSelectedImage] = useState<ComplaintAttachmentWithUrl | null>(null);
 
   if (!attachments || attachments.length === 0) {
     return null;

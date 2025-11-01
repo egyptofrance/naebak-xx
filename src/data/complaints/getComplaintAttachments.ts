@@ -13,6 +13,10 @@ export interface ComplaintAttachment {
   created_at: string;
 }
 
+export interface ComplaintAttachmentWithUrl extends ComplaintAttachment {
+  publicUrl: string;
+}
+
 /**
  * Get all attachments for a complaint
  */
@@ -31,7 +35,7 @@ export async function getComplaintAttachments(complaintId: string) {
   }
 
   // Generate public URLs for each attachment
-  const attachmentsWithUrls = (data || []).map((attachment) => {
+  const attachmentsWithUrls: ComplaintAttachmentWithUrl[] = (data || []).map((attachment) => {
     const { data: { publicUrl } } = supabase.storage
       .from('complaint_attachments')
       .getPublicUrl(attachment.file_path);
@@ -39,7 +43,7 @@ export async function getComplaintAttachments(complaintId: string) {
     return {
       ...attachment,
       publicUrl,
-    };
+    } as ComplaintAttachmentWithUrl;
   });
 
   return { data: attachmentsWithUrls, error: null };
