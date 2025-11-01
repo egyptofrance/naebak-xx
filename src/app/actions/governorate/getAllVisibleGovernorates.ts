@@ -2,11 +2,17 @@
 
 import { createSupabaseUserServerActionClient } from "@/supabase-clients/user/createSupabaseUserServerActionClient";
 
+interface Governorate {
+  id: string;
+  name_ar: string;
+  name_en: string | null;
+}
+
 /**
  * Get all visible governorates (for public-facing pages)
  * Only returns governorates where is_visible = true
  */
-export async function getAllVisibleGovernorates() {
+export async function getAllVisibleGovernorates(): Promise<Governorate[]> {
   const supabase = await createSupabaseUserServerActionClient();
 
   const { data, error } = await supabase
@@ -20,5 +26,5 @@ export async function getAllVisibleGovernorates() {
     return [];
   }
 
-  return data || [];
+  return (data || []) as Governorate[];
 }
