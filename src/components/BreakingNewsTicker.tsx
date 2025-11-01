@@ -23,8 +23,11 @@ export function BreakingNewsTicker({ newsItems, scrollSpeed = 50 }: BreakingNews
       {/* Main ticker area */}
       <div className="relative bg-gray-800 overflow-hidden">
         <div className="flex items-center h-8 lg:h-10">
-          {/* Simple red indicator dot */}
-          <div className="absolute right-3 lg:right-4 top-1/2 -translate-y-1/2 z-10">
+          {/* Gray overlay box to hide scrolling text */}
+          <div className="absolute right-0 top-0 bottom-0 w-16 lg:w-20 bg-gray-800 z-10" />
+          
+          {/* Simple red indicator dot on top of overlay */}
+          <div className="absolute right-3 lg:right-4 top-1/2 -translate-y-1/2 z-20">
             <div className="w-2 h-2 lg:w-3 lg:h-3 bg-red-600 rounded-full animate-pulse" />
           </div>
 
