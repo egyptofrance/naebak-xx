@@ -8,8 +8,19 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function PublicComplaintsPage() {
-  const { data: complaints, error } = await getPublicComplaints();
-  const visibleGovernorates = await getAllVisibleGovernorates();
+  let complaints = null;
+  let error = null;
+  let visibleGovernorates = [];
+  
+  try {
+    const result = await getPublicComplaints();
+    complaints = result.data;
+    error = result.error;
+    visibleGovernorates = await getAllVisibleGovernorates();
+  } catch (e: any) {
+    console.error("Error in PublicComplaintsPage:", e);
+    error = e.message || "حدث خطأ غير متوقع";
+  }
 
   return (
     <div id="main-content" tabIndex={-1} className="container mx-auto p-6 max-w-6xl" dir="rtl">
