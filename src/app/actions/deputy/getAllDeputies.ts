@@ -100,7 +100,7 @@ export async function getAllDeputies() {
     }
 
     // Transform the data to match the expected structure
-    const transformedDeputies = allDeputies.map((deputy: any) => {
+    const allTransformed = allDeputies.map((deputy: any) => {
       const userProfile = Array.isArray(deputy.user_profiles) 
         ? deputy.user_profiles[0] 
         : deputy.user_profiles;
@@ -153,7 +153,10 @@ export async function getAllDeputies() {
         electoral_district: electoral_district || null,
         slug: deputy.slug,
       };
-    }).filter((deputy: any) => deputy !== null); // Filter out deputies from hidden governorates
+    });
+
+    // Filter out null values (deputies from hidden governorates)
+    const transformedDeputies = allTransformed.filter((deputy): deputy is NonNullable<typeof deputy> => deputy !== null);
 
     // Sort by rating using Bayesian average (IMDB-style)
     // Formula: weighted_rating = (v/(v+m)) * R + (m/(v+m)) * C
