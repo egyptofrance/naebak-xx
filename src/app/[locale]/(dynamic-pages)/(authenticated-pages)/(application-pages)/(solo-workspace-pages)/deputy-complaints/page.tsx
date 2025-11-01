@@ -1,5 +1,6 @@
 import { getDeputyComplaints } from "@/data/complaints/complaints";
 import Link from "next/link";
+import { getPriorityColors } from "@/lib/colors";
 
 export default async function DeputyComplaintsPage() {
   const { data: complaints, error } = await getDeputyComplaints();
@@ -33,12 +34,7 @@ export default async function DeputyComplaintsPage() {
                 <span className="text-xs px-2 py-1 rounded-full bg-secondary">
                   {complaint.status}
                 </span>
-                <span className={`text-xs px-2 py-1 rounded-full ${
-                  complaint.priority === 'urgent' ? 'bg-red-100 text-red-800' :
-                  complaint.priority === 'high' ? 'bg-orange-100 text-orange-800' :
-                  complaint.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                  'bg-green-100 text-green-800'
-                }`}>
+                <span className={`text-xs px-2 py-1 rounded-full ${getPriorityColors(complaint.priority)}`}>
                   {complaint.priority}
                 </span>
               </div>

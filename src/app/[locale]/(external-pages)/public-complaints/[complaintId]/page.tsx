@@ -39,10 +39,10 @@ const statusLabels: Record<string, string> = {
 };
 
 const statusColors: Record<string, string> = {
-  new: "bg-blue-100 text-blue-800 border-blue-200",
-  under_review: "bg-yellow-100 text-yellow-800 border-yellow-200",
-  in_progress: "bg-orange-100 text-orange-800 border-orange-200",
-  resolved: "bg-green-100 text-green-800 border-green-200",
+  new: "bg-gray-100 text-gray-800 border-gray-200",
+  under_review: "bg-brand-green-light/20 text-brand-green-dark border-brand-green-light",
+  in_progress: "bg-brand-green-light/20 text-brand-green-dark border-brand-green-light",
+  resolved: "bg-brand-green text-white border-brand-green",
   closed: "bg-gray-100 text-gray-800 border-gray-200",
 };
 
@@ -55,8 +55,8 @@ const priorityLabels: Record<string, string> = {
 
 const priorityColors: Record<string, string> = {
   low: "bg-gray-100 text-gray-800",
-  medium: "bg-blue-100 text-blue-800",
-  high: "bg-orange-100 text-orange-800",
+  medium: "bg-brand-green-light/20 text-brand-green-dark",
+  high: "bg-brand-green text-white",
   urgent: "bg-red-100 text-red-800",
 };
 
@@ -190,8 +190,8 @@ export default async function PublicComplaintDetailPage({ params }: PageProps) {
           </div>
 
           {/* Status Info */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <p className="text-sm text-blue-800">
+          <div className="bg-brand-green-light/10 border border-brand-green-light rounded-lg p-4">
+            <p className="text-sm text-brand-green-dark">
               <strong>ملاحظة:</strong> هذه الشكوى متاحة للعرض العام بموافقة المواطن والإدارة. 
               يتم تحديث الحالة بشكل دوري حسب تقدم المعالجة.
             </p>

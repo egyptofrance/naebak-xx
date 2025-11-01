@@ -8,6 +8,7 @@ import { PublicDisplayManager } from "@/components/complaints/PublicDisplayManag
 import { CloseComplaintButton } from "@/components/complaints/CloseComplaintButton";
 import { EditComplaintDialog } from "@/components/complaints/EditComplaintDialog";
 import Link from "next/link";
+import { getPriorityColors } from "@/lib/colors";
 import { serverGetLoggedInUser } from "@/utils/server/serverGetLoggedInUser";
 import { statusLabels, priorityLabels, categoryLabels } from "@/lib/translations";
 
@@ -82,12 +83,7 @@ export default async function ManagerComplaintDetailPage({ params }: Props) {
                   <span className="text-xs px-3 py-1 rounded-full bg-secondary">
                   {statusLabels[complaint.status] || complaint.status}
                 </span>
-                  <span className={`text-xs px-3 py-1 rounded-full ${
-                    complaint.priority === 'urgent' ? 'bg-red-100 text-red-800' :
-                    complaint.priority === 'high' ? 'bg-orange-100 text-orange-800' :
-                    complaint.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-green-100 text-green-800'
-                  }`}>
+                  <span className={`text-xs px-3 py-1 rounded-full ${getPriorityColors(complaint.priority)}`}>
                     {priorityLabels[complaint.priority] || complaint.priority}
                   </span>
                 </div>
