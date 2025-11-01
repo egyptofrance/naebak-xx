@@ -46,8 +46,8 @@ export default function ForDeputiesPage() {
       name: "توثيق المناسبات",
       description: "سجّل حضور النائب في الأفراح، العزاءات، والفعاليات المجتمعية. كل مناسبة يحضرها النائب تُضاف إلى سجله.",
       background: (
-        <div className="absolute inset-0 bg-gradient-to-br from-[#F87B1B]/20 to-[#E6690A]/10">
-          <Calendar className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[#F87B1B] opacity-20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[oklch(from var(--color-brand-green) l c h)]/20 to-[oklch(from var(--color-brand-green-dark) l c h)]/10">
+          <Calendar className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[oklch(from var(--color-brand-green) l c h)] opacity-20" />
         </div>
       ),
       className: "col-span-1 md:col-span-2"
@@ -66,8 +66,8 @@ export default function ForDeputiesPage() {
       name: "البرنامج الانتخابي للنائب",
       description: "عرض البرنامج الانتخابي للنائب وأهدافه بوضوح للمواطنين.",
       background: (
-        <div className="absolute inset-0 bg-gradient-to-br from-[#F87B1B]/20 to-[#E6690A]/10">
-          <FileText className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[#F87B1B] opacity-20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[oklch(from var(--color-brand-green) l c h)]/20 to-[oklch(from var(--color-brand-green-dark) l c h)]/10">
+          <FileText className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[oklch(from var(--color-brand-green) l c h)] opacity-20" />
         </div>
       ),
       className: "col-span-1"
@@ -86,8 +86,8 @@ export default function ForDeputiesPage() {
       name: "تواصل مباشر مع المواطنين",
       description: "استقبال النائب للشكاوى والمقترحات مباشرة من المواطنين.",
       background: (
-        <div className="absolute inset-0 bg-gradient-to-br from-[#F87B1B]/20 to-[#E6690A]/10">
-          <MessageCircle className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[#F87B1B] opacity-20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[oklch(from var(--color-brand-green) l c h)]/20 to-[oklch(from var(--color-brand-green-dark) l c h)]/10">
+          <MessageCircle className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 text-[oklch(from var(--color-brand-green) l c h)] opacity-20" />
         </div>
       ),
       className: "col-span-1"
@@ -105,9 +105,9 @@ export default function ForDeputiesPage() {
   ];
 
   const stats = [
-    { icon: Users, value: "1000+", label: "نائب مسجل", color: "text-[#F87B1B]" },
+    { icon: Users, value: "1000+", label: "نائب مسجل", color: "text-[oklch(from var(--color-brand-green) l c h)]" },
     { icon: Users, value: "50K+", label: "مواطن نشط", color: "text-[#004030]" },
-    { icon: CheckCircle, value: "10K+", label: "شكوى تم حلها", color: "text-[#F87B1B]" },
+    { icon: CheckCircle, value: "10K+", label: "شكوى تم حلها", color: "text-[oklch(from var(--color-brand-green) l c h)]" },
     { icon: MapPin, value: "27", label: "محافظة", color: "text-[#004030]" }
   ];
 
@@ -129,7 +129,7 @@ export default function ForDeputiesPage() {
               repeat: Infinity,
               ease: "linear"
             }}
-            className="absolute top-0 left-0 w-96 h-96 bg-[#F87B1B] rounded-full filter blur-3xl"
+            className="absolute top-0 left-0 w-96 h-96 bg-[oklch(from var(--color-brand-green) l c h)] rounded-full filter blur-3xl"
           />
           <motion.div
             animate={{
@@ -141,7 +141,7 @@ export default function ForDeputiesPage() {
               repeat: Infinity,
               ease: "linear"
             }}
-            className="absolute bottom-0 right-0 w-96 h-96 bg-[#F87B1B] rounded-full filter blur-3xl"
+            className="absolute bottom-0 right-0 w-96 h-96 bg-[oklch(from var(--color-brand-green) l c h)] rounded-full filter blur-3xl"
           />
         </div>
         
@@ -153,13 +153,13 @@ export default function ForDeputiesPage() {
             variants={staggerContainer}
           >
             <motion.div variants={fadeIn} className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/20">
-              <Sparkles className="w-4 h-4 text-[#F87B1B]" />
+              <Sparkles className="w-4 h-4 text-[oklch(from var(--color-brand-green) l c h)]" />
               <span className="text-sm">المنصة الأولى للنواب في مصر</span>
             </motion.div>
             
             <motion.h1 variants={fadeIn} className="text-5xl md:text-7xl font-bold mb-6">
               انضم إلى{' '}
-              <span className="bg-gradient-to-r from-[#F87B1B] to-[#E6690A] bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[oklch(from var(--color-brand-green) l c h)] to-[oklch(from var(--color-brand-green-dark) l c h)] bg-clip-text text-transparent">
                 نائبك
               </span>
             </motion.h1>
@@ -172,7 +172,7 @@ export default function ForDeputiesPage() {
               <Button 
                 asChild
                 size="lg"
-                className="bg-gradient-to-r from-[#F87B1B] to-[#E6690A] hover:from-[#E6690A] hover:to-[#D45800] text-white px-8 py-6 text-lg font-bold shadow-2xl transform hover:scale-105 transition-all"
+                className="bg-gradient-to-r from-[oklch(from var(--color-brand-green) l c h)] to-[oklch(from var(--color-brand-green-dark) l c h)] hover:from-[oklch(from var(--color-brand-green-dark) l c h)] hover:to-[oklch(from var(--color-brand-green-dark) l c h)] text-white px-8 py-6 text-lg font-bold shadow-2xl transform hover:scale-105 transition-all"
               >
                 <Link href="/sign-up">
                   ابدأ الآن مجاناً
@@ -240,12 +240,12 @@ export default function ForDeputiesPage() {
             variants={fadeIn}
             className="text-center mb-16"
           >
-            <Badge className="mb-4 bg-[#F87B1B] hover:bg-[#E6690A]">
+            <Badge className="mb-4 bg-[oklch(from var(--color-brand-green) l c h)] hover:bg-[oklch(from var(--color-brand-green-dark) l c h)]">
               <Sparkles className="w-3 h-3 ml-1" />
               المميزات
             </Badge>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              لماذا <span className="text-[#F87B1B]">نائبك</span>؟
+              لماذا <span className="text-[oklch(from var(--color-brand-green) l c h)]">نائبك</span>؟
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               منصة شاملة توثق كل نشاطاتك وإنجازاتك وتربطك بأبناء دائرتك بشكل مباشر وفعال
@@ -280,7 +280,7 @@ export default function ForDeputiesPage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              كيف يعمل <span className="text-[#F87B1B]">نائبك</span>؟
+              كيف يعمل <span className="text-[oklch(from var(--color-brand-green) l c h)]">نائبك</span>؟
             </h2>
             <p className="text-xl text-gray-600">ثلاث خطوات بسيطة للبدء</p>
           </motion.div>
@@ -293,9 +293,9 @@ export default function ForDeputiesPage() {
             className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8"
           >
             {[
-              { step: 1, title: "سجّل حسابك", desc: "أنشئ حسابك مجاناً وأكمل بياناتك", color: "from-[#F87B1B] to-[#E6690A]" },
+              { step: 1, title: "سجّل حسابك", desc: "أنشئ حسابك مجاناً وأكمل بياناتك", color: "from-[oklch(from var(--color-brand-green) l c h)] to-[oklch(from var(--color-brand-green-dark) l c h)]" },
               { step: 2, title: "وثّق نشاطاتك", desc: "سجّل مناسباتك وإنجازاتك بشكل منتظم", color: "from-[#004030] to-[#003020]" },
-              { step: 3, title: "تواصل مع دائرتك", desc: "استقبل الشكاوى وحل المشاكل", color: "from-[#F87B1B] to-[#E6690A]" }
+              { step: 3, title: "تواصل مع دائرتك", desc: "استقبل الشكاوى وحل المشاكل", color: "from-[oklch(from var(--color-brand-green) l c h)] to-[oklch(from var(--color-brand-green-dark) l c h)]" }
             ].map((item, index) => (
               <motion.div key={index} variants={fadeIn}>
                 <Card className="text-center hover:shadow-xl transition-all transform hover:-translate-y-2 h-full">
@@ -328,7 +328,7 @@ export default function ForDeputiesPage() {
               خدمات رقمية
             </Badge>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              خدمات <span className="text-[#F87B1B]">التسويق الرقمي</span>
+              خدمات <span className="text-[oklch(from var(--color-brand-green) l c h)]">التسويق الرقمي</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               نقدم للنائب فرصة توسيع نطاق الوصول للمواطنين من أبناء دائرتهم
@@ -343,7 +343,7 @@ export default function ForDeputiesPage() {
             className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8"
           >
             <motion.div variants={fadeIn}>
-              <Card className="hover:shadow-xl transition-all h-full border-2 hover:border-[#F87B1B]/50">
+              <Card className="hover:shadow-xl transition-all h-full border-2 hover:border-[oklch(from var(--color-brand-green) l c h)]/50">
                 <CardContent className="pt-8 pb-8">
                   <Globe className="w-16 h-16 text-[#004030] mb-6" />
                   <h3 className="text-2xl font-bold text-gray-900 mb-4">رعاية حملات نائبك</h3>
@@ -355,9 +355,9 @@ export default function ForDeputiesPage() {
             </motion.div>
 
             <motion.div variants={fadeIn}>
-              <Card className="hover:shadow-xl transition-all h-full border-2 hover:border-[#F87B1B]/50">
+              <Card className="hover:shadow-xl transition-all h-full border-2 hover:border-[oklch(from var(--color-brand-green) l c h)]/50">
                 <CardContent className="pt-8 pb-8">
-                  <Target className="w-16 h-16 text-[#F87B1B] mb-6" />
+                  <Target className="w-16 h-16 text-[oklch(from var(--color-brand-green) l c h)] mb-6" />
                   <h3 className="text-2xl font-bold text-gray-900 mb-4">إعلانات مدفوعة على نائبك</h3>
                   <p className="text-base text-gray-700 leading-relaxed">
                     نوافذ إعلانية منبثقة مستهدفة حسب المحافظة أو الدائرة الانتخابية مع إحصائيات دقيقة عن عدد المشاهدات والوصول لأبناء دائرتك.
@@ -370,7 +370,7 @@ export default function ForDeputiesPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-[#F87B1B] to-[#E6690A] text-white relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-r from-[oklch(from var(--color-brand-green) l c h)] to-[oklch(from var(--color-brand-green-dark) l c h)] text-white relative overflow-hidden">
         <motion.div
           animate={{
             scale: [1, 1.1, 1],
@@ -398,7 +398,7 @@ export default function ForDeputiesPage() {
               <Button 
                 asChild
                 size="lg"
-                className="bg-white text-[#F87B1B] hover:bg-gray-100 px-10 py-6 text-lg font-bold shadow-2xl transform hover:scale-105 transition-all"
+                className="bg-white text-[oklch(from var(--color-brand-green) l c h)] hover:bg-gray-100 px-10 py-6 text-lg font-bold shadow-2xl transform hover:scale-105 transition-all"
               >
                 <Link href="/sign-up">
                   ابدأ الآن - مجاناً

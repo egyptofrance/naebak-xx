@@ -79,8 +79,8 @@ export default function DownloadPage() {
             </div>
             
             <div className="text-center">
-              <div className="w-16 h-16 bg-orange-100 dark:bg-orange-900 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Bell className="w-8 h-8 text-orange-600 dark:text-orange-400" />
+              <div className="w-16 h-16 bg-brand-green-light/10 dark:bg-brand-green-dark/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Bell className="w-8 h-8 text-brand-green dark:text-brand-green-light" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
                 إشعارات فورية

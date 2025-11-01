@@ -18,9 +18,9 @@ export default function PlatformOverview() {
         {/* Main Content Grid */}
         <div className="grid lg:grid-cols-3 gap-8 items-center">
           {/* Citizens Side */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border-2 border-blue-500 hover:shadow-xl transition-shadow">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border-2 border-brand-green-light hover:shadow-xl transition-shadow">
             <div className="flex flex-col items-center text-center">
-              <div className="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center mb-6">
+              <div className="w-20 h-20 bg-brand-green-light rounded-full flex items-center justify-center mb-6">
                 <Users className="w-10 h-10 text-white" />
               </div>
               <h3 className="text-2xl font-bold mb-4">المواطنون</h3>
@@ -29,19 +29,19 @@ export default function PlatformOverview() {
               </p>
               <ul className="text-right w-full space-y-3">
                 <li className="flex items-start gap-2">
-                  <span className="text-blue-500 mt-1">✓</span>
+                  <span className="text-brand-green mt-1">✓</span>
                   <span>تقديم الشكاوى للنواب</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-blue-500 mt-1">✓</span>
+                  <span className="text-brand-green mt-1">✓</span>
                   <span>متابعة حالة الشكوى بشفافية</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-blue-500 mt-1">✓</span>
+                  <span className="text-brand-green mt-1">✓</span>
                   <span>تقييم أداء النواب</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-blue-500 mt-1">✓</span>
+                  <span className="text-brand-green mt-1">✓</span>
                   <span>مشاركة فعالة في العملية النيابية</span>
                 </li>
               </ul>
@@ -51,8 +51,8 @@ export default function PlatformOverview() {
           {/* Connection Arrow */}
           <div className="hidden lg:flex flex-col items-center justify-center">
             <div className="relative">
-              <MessageSquare className="w-16 h-16 text-[#F87B1B] mb-4" />
-              <div className="flex items-center gap-2 text-[#F87B1B] font-bold">
+              <MessageSquare className="w-16 h-16 text-brand-green mb-4" />
+              <div className="flex items-center gap-2 text-brand-green font-bold">
                 <ArrowRight className="w-6 h-6" />
                 <span>تواصل مباشر</span>
                 <ArrowRight className="w-6 h-6" />
@@ -94,7 +94,7 @@ export default function PlatformOverview() {
 
         {/* Bottom Stats or CTA */}
         <div className="mt-12 text-center">
-          <div className="inline-flex items-center gap-2 px-6 py-3 bg-[#F87B1B] text-white rounded-full font-bold text-lg hover:bg-[#E06A0A] transition-colors cursor-pointer">
+          <div className="inline-flex items-center gap-2 px-6 py-3 bg-brand-green-dark text-white rounded-full font-bold text-lg hover:bg-brand-green transition-colors cursor-pointer">
             <span>ابدأ الآن في تقديم شكواك</span>
             <ArrowRight className="w-5 h-5" />
           </div>
