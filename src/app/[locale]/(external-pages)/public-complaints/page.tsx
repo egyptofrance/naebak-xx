@@ -10,7 +10,7 @@ export const revalidate = 0;
 export default async function PublicComplaintsPage() {
   let complaints = null;
   let error = null;
-  let visibleGovernorates = [];
+  let visibleGovernorates: any[] = [];
   
   try {
     const result = await getPublicComplaints();
