@@ -1,61 +1,61 @@
 import { getPublicComplaints } from "@/data/complaints/complaints";
+import { PublicComplaintsClient } from "./PublicComplaintsClient";
+import { AddComplaintButton } from "@/components/complaints/AddComplaintButton";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { getAllVisibleGovernorates } from "@/app/actions/governorate/getAllVisibleGovernorates";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function PublicComplaintsPage() {
-  let complaints = null;
-  let error = null;
+  let complaints: any[] | null = null;
+  let error: string | null = null;
   let visibleGovernorates: any[] = [];
   
   try {
     const result = await getPublicComplaints();
     complaints = result.data;
-    error = result.error;
+    error = result.error || null;
     
     visibleGovernorates = await getAllVisibleGovernorates();
   } catch (e: any) {
-    console.error("Error:", e);
-    error = e?.message || "حدث خطأ";
+    console.error("Error in PublicComplaintsPage:", e);
+    error = e?.message || "حدث خطأ غير متوقع";
   }
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl" dir="rtl">
-      <h1 className="text-3xl font-bold mb-2">الشكاوى العامة</h1>
-      
+    <div id="main-content" tabIndex={-1} className="container mx-auto p-6 max-w-6xl" dir="rtl">
+      <Breadcrumbs />
+      <div className="mb-8 flex justify-between items-start">
+        <div>
+          <h1 className="text-3xl font-bold mb-2">الشكاوى العامة</h1>
+          <p className="text-muted-foreground">
+            شكاوى المواطنين التي تم الموافقة على نشرها للعامة من قبل الإدارة
+          </p>
+        </div>
+        <AddComplaintButton />
+      </div>
+
       {error && (
-        <div className="bg-red-100 text-red-800 p-4 rounded-md mb-4">
-          خطأ: {error}
+        <div className="bg-destructive/10 text-destructive p-4 rounded-md mb-6">
+          {error}
         </div>
       )}
-      
-      {!error && (
-        <div className="bg-green-100 text-green-800 p-4 rounded-md mb-4">
-          ✅ تم جلب البيانات بنجاح!
-          <br />
-          عدد الشكاوى: {complaints?.length || 0}
-          <br />
-          عدد المحافظات: {visibleGovernorates?.length || 0}
-        </div>
-      )}
-      
-      {complaints && complaints.length > 0 && (
-        <div className="space-y-4">
-          {complaints.map((c: any) => (
-            <div key={c.id} className="border p-4 rounded">
-              <h3 className="font-bold">{c.title}</h3>
-              <p className="text-sm text-gray-600">{c.description?.substring(0, 100)}...</p>
-              <p className="text-xs text-gray-500 mt-2">
-                المحافظة: {c.governorate || "عامة (كل المحافظات)"}
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
-      
+
       {complaints && complaints.length === 0 && (
-        <p className="text-gray-600">لا توجد شكاوى حالياً</p>
+        <div className="text-center py-16 text-muted-foreground">
+          <p className="text-lg">لا توجد شكاوى عامة حالياً</p>
+          <p className="text-sm mt-2">
+            الشكاوى التي يوافق عليها المواطن والإدارة للنشر ستظهر هنا
+          </p>
+        </div>
+      )}
+
+      {complaints && complaints.length > 0 && (
+        <PublicComplaintsClient 
+          complaints={complaints} 
+          visibleGovernorates={visibleGovernorates}
+        />
       )}
     </div>
   );
