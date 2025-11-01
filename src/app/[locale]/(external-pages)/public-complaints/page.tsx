@@ -2,12 +2,14 @@ import { getPublicComplaints } from "@/data/complaints/complaints";
 import { PublicComplaintsClient } from "./PublicComplaintsClient";
 import { AddComplaintButton } from "@/components/complaints/AddComplaintButton";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { getAllVisibleGovernorates } from "@/app/actions/governorate/getAllVisibleGovernorates";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function PublicComplaintsPage() {
   const { data: complaints, error } = await getPublicComplaints();
+  const visibleGovernorates = await getAllVisibleGovernorates();
 
   return (
     <div className="container mx-auto p-6 max-w-6xl" dir="rtl">
@@ -38,7 +40,10 @@ export default async function PublicComplaintsPage() {
       )}
 
       {complaints && complaints.length > 0 && (
-        <PublicComplaintsClient complaints={complaints} />
+        <PublicComplaintsClient 
+          complaints={complaints} 
+          visibleGovernorates={visibleGovernorates}
+        />
       )}
     </div>
   );

@@ -16,8 +16,15 @@ interface Complaint {
   resolved_at: string | null;
 }
 
+interface Governorate {
+  id: string;
+  name_ar: string;
+  name_en: string | null;
+}
+
 interface PublicComplaintsClientProps {
   complaints: Complaint[];
+  visibleGovernorates: Governorate[];
 }
 
 const categoryLabels: Record<string, string> = {
@@ -44,21 +51,22 @@ const statusLabels: Record<string, string> = {
   closed: "مغلقة",
 };
 
-const governorates = [
-  "القاهرة", "الجيزة", "الإسكندرية", "الدقهلية", "البحيرة", "الفيوم",
-  "الغربية", "الإسماعيلية", "المنوفية", "المنيا", "القليوبية", "الوادي الجديد",
-  "الشرقية", "سوهاج", "أسوان", "أسيوط", "بني سويف", "بورسعيد",
-  "دمياط", "السويس", "الأقصر", "قنا", "البحر الأحمر", "شمال سيناء",
-  "جنوب سيناء", "كفر الشيخ", "مطروح"
-];
 
-export function PublicComplaintsClient({ complaints }: PublicComplaintsClientProps) {
+
+export function PublicComplaintsClient({ complaints, visibleGovernorates }: PublicComplaintsClientProps) {
+  // Filter complaints to only show those from visible governorates
+  const filteredComplaintsByGovernorate = useMemo(() => {
+    const visibleGovNames = visibleGovernorates.map(g => g.name_ar);
+    return complaints.filter(complaint => 
+      !complaint.governorate || visibleGovNames.includes(complaint.governorate)
+    );
+  }, [complaints, visibleGovernorates]);
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedGovernorate, setSelectedGovernorate] = useState<string>("all");
 
   const filteredComplaints = useMemo(() => {
-    return complaints.filter((complaint) => {
+    return filteredComplaintsByGovernorate.filter((complaint) => {
       if (selectedStatus !== "all" && complaint.status !== selectedStatus) {
         return false;
       }
@@ -70,7 +78,7 @@ export function PublicComplaintsClient({ complaints }: PublicComplaintsClientPro
       }
       return true;
     });
-  }, [complaints, selectedStatus, selectedCategory, selectedGovernorate]);
+  }, [filteredComplaintsByGovernorate, selectedStatus, selectedCategory, selectedGovernorate]);
 
   const statusCounts = useMemo(() => {
     return filteredComplaints.reduce((acc: any, complaint: any) => {
@@ -159,9 +167,9 @@ export function PublicComplaintsClient({ complaints }: PublicComplaintsClientPro
               style={{ backgroundImage: "url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')", backgroundPosition: "left 0.5rem center", backgroundRepeat: "no-repeat", backgroundSize: "1.5em 1.5em" }}
             >
               <option value="all">جميع المحافظات</option>
-              {governorates.map((gov) => (
-                <option key={gov} value={gov}>
-                  {gov}
+              {visibleGovernorates.map((gov) => (
+                <option key={gov.id} value={gov.name_ar}>
+                  {gov.name_ar}
                 </option>
               ))}
             </select>
@@ -169,7 +177,7 @@ export function PublicComplaintsClient({ complaints }: PublicComplaintsClientPro
         </div>
 
         <div className="mt-4 text-sm text-muted-foreground">
-          عرض {filteredComplaints.length} من {complaints.length} شكوى
+          عرض {filteredComplaints.length} من {filteredComplaintsByGovernorate.length} شكوى
         </div>
       </div>
 

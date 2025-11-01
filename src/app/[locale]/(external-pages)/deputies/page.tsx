@@ -1,5 +1,5 @@
 import { getAllDeputies } from "@/app/actions/deputy/getAllDeputies";
-import { getAllGovernorates } from "@/app/actions/governorate/getAllGovernorates";
+import { getAllVisibleGovernorates } from "@/app/actions/governorate/getAllVisibleGovernorates";
 import { getAllParties } from "@/app/actions/party/getAllParties";
 import { getAllElectoralDistricts } from "@/app/actions/electoral-district/getAllElectoralDistricts";
 import { getAllCouncils } from "@/app/actions/council/getAllCouncils";
@@ -12,7 +12,7 @@ export const revalidate = 0;
 
 export default async function DeputiesPage() {
   const deputies = await getAllDeputies();
-  const governorates = await getAllGovernorates();
+  const governorates = await getAllVisibleGovernorates();
   const parties = await getAllParties();
   const electoralDistricts = await getAllElectoralDistricts();
   const councils = await getAllCouncils();

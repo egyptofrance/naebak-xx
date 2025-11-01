@@ -50,7 +50,8 @@ export async function getAllDeputies() {
             governorates (
               id,
               name_ar,
-              name_en
+              name_en,
+              is_visible
             ),
             parties (
               id,
@@ -108,6 +109,11 @@ export async function getAllDeputies() {
         ? userProfile.governorates[0]
         : userProfile?.governorates;
 
+      // Skip deputies from hidden governorates
+      if (governorate && governorate.is_visible === false) {
+        return null;
+      }
+
       const party = Array.isArray(userProfile?.parties)
         ? userProfile.parties[0]
         : userProfile?.parties;
@@ -147,7 +153,7 @@ export async function getAllDeputies() {
         electoral_district: electoral_district || null,
         slug: deputy.slug,
       };
-    });
+    }).filter((deputy: any) => deputy !== null); // Filter out deputies from hidden governorates
 
     // Sort by rating using Bayesian average (IMDB-style)
     // Formula: weighted_rating = (v/(v+m)) * R + (m/(v+m)) * C

@@ -78,6 +78,11 @@ const adminSections = [
         icon: <Building2 className="h-5 w-5" />,
       },
       {
+        label: "إدارة المحافظات",
+        href: `/app_admin/governorates`,
+        icon: <Map className="h-5 w-5" />,
+      },
+      {
         label: "إدارة البانر",
         href: `/app_admin/banner`,
         icon: <ImageIcon className="h-5 w-5" />,
