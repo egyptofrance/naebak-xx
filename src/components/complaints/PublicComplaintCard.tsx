@@ -87,7 +87,7 @@ export function PublicComplaintCard({ complaint }: PublicComplaintCardProps) {
           <span>{new Date(complaint.created_at).toLocaleDateString("ar-EG")}</span>
         </div>
         
-        {complaint.resolved_at && (
+        {complaint.resolved_at && (complaint.status === 'resolved' || complaint.status === 'closed') && (
           <div className="flex items-center gap-1">
             <span className="font-medium">تاريخ الحل:</span>
             <span>{new Date(complaint.resolved_at).toLocaleDateString("ar-EG")}</span>

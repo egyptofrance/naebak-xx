@@ -171,7 +171,7 @@ export default async function PublicComplaintDetailPage({ params }: PageProps) {
               </div>
 
               {/* Resolved Date */}
-              {complaint.resolved_at && (
+              {complaint.resolved_at && (complaint.status === 'resolved' || complaint.status === 'closed') && (
                 <div className="bg-green-50 rounded-lg p-4 border border-green-200">
                   <div className="flex items-center gap-2 text-green-700 mb-1">
                     <Calendar className="h-4 w-4" />
