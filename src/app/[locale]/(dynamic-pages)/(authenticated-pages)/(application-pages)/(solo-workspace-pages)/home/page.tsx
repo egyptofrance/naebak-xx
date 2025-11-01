@@ -56,6 +56,7 @@ export default async function CitizenHomePage() {
 
   // Filter deputies by user's electoral district
   const myDeputies = deputies.filter(deputy => {
+    if (!deputy) return false; // Skip null deputies
     if (profile?.electoral_district) {
       return deputy.deputy.electoral_district_id === profile.electoral_district;
     }
