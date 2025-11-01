@@ -112,6 +112,9 @@ export default function DeputiesGrid({
   // Filter deputies
   const filteredDeputies = useMemo(() => {
     return deputies.filter((deputyData: DeputyData) => {
+      // Skip null deputies
+      if (!deputyData) return false;
+      
       // Name search filter
       if (searchName.trim() !== "") {
         const fullName = deputyData.user?.full_name?.toLowerCase() || "";
