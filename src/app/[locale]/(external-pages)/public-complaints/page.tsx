@@ -35,12 +35,7 @@ export default async function PublicComplaintsPage() {
       
       {/* Compact Header */}
       <div className="flex justify-between items-center mb-6 mt-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">الشكاوى العامة</h1>
-          <p className="text-sm text-gray-600 mt-1">
-            شكاوى المواطنين المعتمدة للنشر
-          </p>
-        </div>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">الشكاوى العامة</h1>
         <AddComplaintButton />
       </div>
       
