@@ -1,6 +1,8 @@
 import { cn } from "@/utils/cn";
 import { Suspense, type ReactNode } from "react";
 import { SidebarTrigger } from "../ui/sidebar";
+import { Home } from "lucide-react";
+import { Button } from "../ui/button";
 import { PendingInvitationCounter } from "./PendingInvitationCounter";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { RefreshButton } from "./RefreshButton";
@@ -16,7 +18,19 @@ export async function InternalNavbar({ children }: { children: ReactNode }) {
           "h-full  text-sm font-medium flex gap-2 mx-auto pl-6 pr-6 border-b border-white/10 py-3 w-full justify-between items-center",
         )}
       >
-        <SidebarTrigger />
+        <div className="flex items-center gap-2">
+          <SidebarTrigger />
+          <Link href="/">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-10 text-white hover:bg-white/10 rounded-lg"
+              aria-label="العودة للصفحة الرئيسية"
+            >
+              <Home className="size-5" />
+            </Button>
+          </Link>
+        </div>
         
         {/* Logo */}
         <Link href="/" className="hidden md:flex items-center gap-2 hover:opacity-80 transition-opacity">

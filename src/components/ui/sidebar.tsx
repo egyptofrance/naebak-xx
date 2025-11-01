@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
-import { PanelLeftIcon } from "lucide-react"
+import { PanelLeftIcon, Settings } from "lucide-react"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
@@ -267,27 +267,14 @@ function SidebarTrigger({
       data-slot="sidebar-trigger"
       variant="ghost"
       size="icon"
-      className={cn("size-10 bg-orange-500 hover:bg-orange-600 text-white rounded-lg shadow-md", className)}
+      className={cn("size-10 text-white hover:bg-white/10 rounded-lg", className)}
       onClick={(event) => {
         onClick?.(event)
         toggleSidebar()
       }}
       {...props}
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className={cn("transition-transform", isCollapsed ? "" : "rotate-180")}
-      >
-        <polyline points="15 18 9 12 15 6" />
-      </svg>
+      <Settings className="size-5" />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   )
