@@ -1,4 +1,5 @@
 import { getPublicComplaints } from "@/data/complaints/complaints";
+import { getAllVisibleGovernorates } from "@/app/actions/governorate/getAllVisibleGovernorates";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -6,11 +7,14 @@ export const revalidate = 0;
 export default async function PublicComplaintsPage() {
   let complaints = null;
   let error = null;
+  let visibleGovernorates: any[] = [];
   
   try {
     const result = await getPublicComplaints();
     complaints = result.data;
     error = result.error;
+    
+    visibleGovernorates = await getAllVisibleGovernorates();
   } catch (e: any) {
     console.error("Error:", e);
     error = e?.message || "حدث خطأ";
@@ -28,7 +32,11 @@ export default async function PublicComplaintsPage() {
       
       {!error && (
         <div className="bg-green-100 text-green-800 p-4 rounded-md mb-4">
-          ✅ تم جلب الشكاوى بنجاح! عدد الشكاوى: {complaints?.length || 0}
+          ✅ تم جلب البيانات بنجاح!
+          <br />
+          عدد الشكاوى: {complaints?.length || 0}
+          <br />
+          عدد المحافظات: {visibleGovernorates?.length || 0}
         </div>
       )}
       
@@ -38,6 +46,9 @@ export default async function PublicComplaintsPage() {
             <div key={c.id} className="border p-4 rounded">
               <h3 className="font-bold">{c.title}</h3>
               <p className="text-sm text-gray-600">{c.description?.substring(0, 100)}...</p>
+              <p className="text-xs text-gray-500 mt-2">
+                المحافظة: {c.governorate || "عامة (كل المحافظات)"}
+              </p>
             </div>
           ))}
         </div>
