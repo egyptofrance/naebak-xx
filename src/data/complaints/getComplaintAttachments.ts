@@ -21,6 +21,11 @@ export interface ComplaintAttachmentWithUrl extends ComplaintAttachment {
  * Get all attachments for a complaint
  */
 export async function getComplaintAttachments(complaintId: string) {
+  // TODO: Re-enable when complaint_attachments table is created in Supabase
+  // For now, return empty array to avoid database errors
+  return { data: [], error: null };
+  
+  /* Original code - commented out temporarily
   const supabase = await createSupabaseUserServerComponentClient();
 
   const { data, error } = await supabase
@@ -47,4 +52,5 @@ export async function getComplaintAttachments(complaintId: string) {
   });
 
   return { data: attachmentsWithUrls, error: null };
+  */
 }
