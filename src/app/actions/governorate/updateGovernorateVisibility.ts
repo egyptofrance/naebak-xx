@@ -33,7 +33,7 @@ export async function updateGovernorateVisibility(
   // Update governorate visibility
   const { error } = await supabase
     .from("governorates")
-    .update({ is_visible: isVisible })
+    .update({ is_visible: isVisible } as any)
     .eq("id", governorateId);
 
   if (error) {
