@@ -35,7 +35,7 @@ export default async function DeputiesPage() {
 
   return (
     <div className="min-h-screen bg-background" dir="rtl">
-      <div className="container mx-auto px-4 py-16">
+      <div id="main-content" tabIndex={-1} className="container mx-auto px-4 py-16">
         <div className="max-w-7xl mx-auto">
           <Breadcrumbs />
           <h1 className="text-4xl font-bold mb-8 text-right">قائمة النواب</h1>

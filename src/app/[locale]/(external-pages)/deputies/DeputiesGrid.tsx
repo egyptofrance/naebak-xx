@@ -480,9 +480,10 @@ export default function DeputiesGrid({
       {/* Deputies Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {paginatedDeputies.filter((d): d is NonNullable<DeputyData> => d !== null).map((deputyData) => (
-          <div
+          <article
             key={deputyData.deputy.id}
             className="bg-card rounded-lg shadow-md border border-border overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 min-w-0"
+            aria-label={`نائب: ${formatDeputyName(deputyData.user?.full_name, deputyData.deputy?.display_name)}`}
           >
             {/* Avatar */}
             <div className="flex justify-center pt-8 pb-4 bg-muted/20">
@@ -490,8 +491,9 @@ export default function DeputiesGrid({
                 {deputyData.user?.avatar_url ? (
                   <img
                     src={deputyData.user.avatar_url}
-                    alt={deputyData.user.full_name || ""}
+                    alt={`صورة النائب ${formatDeputyName(deputyData.user?.full_name, deputyData.deputy?.display_name)}`}
                     className="w-full h-full object-cover"
+                    loading="lazy"
                   />
                 ) : (
                   <span className="text-4xl font-bold text-muted-foreground">
@@ -505,12 +507,14 @@ export default function DeputiesGrid({
             <div className="p-5 space-y-4">
               {/* Name & Status */}
               <div className="text-center space-y-2">
-                <h3 className="text-xl font-bold leading-tight">
+                <h3 className="text-xl font-bold leading-tight" id={`deputy-name-${deputyData.deputy.id}`}>
                   {formatDeputyName(deputyData.user?.full_name, deputyData.deputy?.display_name)}
                 </h3>
                 <Badge
                   variant={getStatusVariant(deputyData.deputy.deputy_status)}
                   className="text-xs"
+                  role="status"
+                  aria-label={`حالة العضوية: ${getStatusLabel(deputyData.deputy.deputy_status)}`}
                 >
                   {getStatusLabel(deputyData.deputy.deputy_status)}
                 </Badge>
@@ -593,7 +597,7 @@ export default function DeputiesGrid({
                 </Button>
               )}
             </div>
-          </div>
+          </article>
         ))}
       </div>
 

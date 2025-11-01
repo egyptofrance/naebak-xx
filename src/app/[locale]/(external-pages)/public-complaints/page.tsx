@@ -12,7 +12,7 @@ export default async function PublicComplaintsPage() {
   const visibleGovernorates = await getAllVisibleGovernorates();
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl" dir="rtl">
+    <div id="main-content" tabIndex={-1} className="container mx-auto p-6 max-w-6xl" dir="rtl">
       <Breadcrumbs />
       <div className="mb-8 flex justify-between items-start">
         <div>

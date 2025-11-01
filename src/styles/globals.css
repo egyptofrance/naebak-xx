@@ -297,3 +297,100 @@
     all: unset !important;
   }
 }
+
+/* ============================================
+   Accessibility Styles
+   ============================================ */
+
+/* Skip to Content Link */
+.skip-to-content {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 9999;
+  padding: 1rem 1.5rem;
+  background-color: #0a5c0a; /* brand-green-dark */
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 0 0 0.5rem 0.5rem;
+  transition: left 0.3s ease;
+}
+
+.skip-to-content:focus {
+  left: 1rem;
+  outline: 3px solid #22c55e; /* brand-green-light */
+  outline-offset: 2px;
+}
+
+/* Enhanced Focus Indicators */
+*:focus-visible {
+  outline: 3px solid #22c55e !important; /* brand-green-light */
+  outline-offset: 2px !important;
+  border-radius: 4px;
+}
+
+/* Remove default outline for mouse users */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Button and Link Focus States */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #22c55e !important;
+  outline-offset: 2px !important;
+}
+
+/* Card Focus States */
+.card:focus-visible,
+[role="button"]:focus-visible,
+[role="link"]:focus-visible {
+  outline: 3px solid #22c55e !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1);
+}
+
+/* Main Content Focus (for skip link) */
+#main-content:focus {
+  outline: none;
+}
+
+/* Screen Reader Only Text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  *:focus-visible {
+    outline-width: 4px !important;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .skip-to-content {
+    transition: none;
+  }
+}

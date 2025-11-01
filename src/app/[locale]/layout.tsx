@@ -9,6 +9,7 @@ import { SchemaOrg } from "@/components/SchemaOrg";
 import { PWARegister } from "@/components/PWA/PWARegister";
 import { PWAInstallPrompt } from "@/components/PWA/PWAInstallPrompt";
 import { SplashScreen } from "@/components/PWA/SplashScreen";
+import { SkipToContent } from "@/components/accessibility/SkipToContent";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -101,6 +102,7 @@ export default async function RootLayout(props: {
         <SchemaOrg />
       </head>
       <body className="flex flex-col min-h-screen">
+        <SkipToContent />
         <SplashScreen />
         <PWARegister />
         <AppProviders locale={locale} messages={messages}>

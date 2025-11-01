@@ -130,9 +130,11 @@ export function PublicComplaintsClient({ complaints, visibleGovernorates }: Publ
               الحالة
             </label>
             <select
+              id="status-filter"
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
               className="w-full px-3 py-2 border rounded-md bg-background text-center appearance-none"
+              aria-label="فلترة حسب حالة الشكوى"
               style={{ backgroundImage: "url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')", backgroundPosition: "left 0.5rem center", backgroundRepeat: "no-repeat", backgroundSize: "1.5em 1.5em" }}
             >
               <option value="all">جميع الحالات</option>
@@ -151,9 +153,11 @@ export function PublicComplaintsClient({ complaints, visibleGovernorates }: Publ
               الفئة
             </label>
             <select
+              id="category-filter"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="w-full px-3 py-2 border rounded-md bg-background text-center appearance-none"
+              aria-label="فلترة حسب فئة الشكوى"
               style={{ backgroundImage: "url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')", backgroundPosition: "left 0.5rem center", backgroundRepeat: "no-repeat", backgroundSize: "1.5em 1.5em" }}
             >
               <option value="all">جميع الفئات</option>
@@ -172,9 +176,11 @@ export function PublicComplaintsClient({ complaints, visibleGovernorates }: Publ
               المحافظة
             </label>
             <select
+              id="governorate-filter"
               value={selectedGovernorate}
               onChange={(e) => setSelectedGovernorate(e.target.value)}
               className="w-full px-3 py-2 border rounded-md bg-background text-center appearance-none"
+              aria-label="فلترة حسب المحافظة"
               style={{ backgroundImage: "url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e')", backgroundPosition: "left 0.5rem center", backgroundRepeat: "no-repeat", backgroundSize: "1.5em 1.5em" }}
             >
               <option value="all">جميع المحافظات</option>
