@@ -777,7 +777,7 @@ export async function getPublicComplaints() {
   };
 
   return { 
-    data: (data || []) as ComplaintWithVotes[], 
+    data: (data || []) as unknown as ComplaintWithVotes[], 
     error: error?.message 
   };
 }
