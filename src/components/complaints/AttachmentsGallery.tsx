@@ -50,16 +50,16 @@ export function AttachmentsGallery({ attachments }: AttachmentsGalleryProps) {
             {images.map((image) => (
               <div
                 key={image.id}
-                className="relative aspect-square rounded-lg overflow-hidden border border-gray-200 cursor-pointer hover:border-green-500 transition-colors group"
+                className="relative aspect-square rounded-lg overflow-hidden border border-gray-200 cursor-pointer hover:border-green-500 transition-colors group bg-gray-50"
                 onClick={() => setSelectedImage(image)}
               >
                 <Image
                   src={image.publicUrl}
                   alt={image.file_name}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform"
+                  className="object-contain p-2"
                 />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
               </div>
             ))}
           </div>
