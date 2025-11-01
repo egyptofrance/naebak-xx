@@ -26,5 +26,5 @@ export async function getAllVisibleGovernorates(): Promise<Governorate[]> {
     return [];
   }
 
-  return (data || []) as Governorate[];
+  return (data || []) as unknown as Governorate[];
 }
