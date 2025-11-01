@@ -119,7 +119,7 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
               aria-autocomplete="list"
               aria-controls="search-results"
               role="combobox"
-              aria-expanded={hasResults}
+              aria-expanded={hasResults ? true : undefined}
             />
             {isLoading && (
               <Loader2 className="h-5 w-5 text-primary animate-spin" aria-hidden="true" />
