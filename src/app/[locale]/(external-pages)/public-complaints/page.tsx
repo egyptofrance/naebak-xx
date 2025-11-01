@@ -7,19 +7,26 @@ import { getAllVisibleGovernorates } from "@/app/actions/governorate/getAllVisib
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
+interface Governorate {
+  id: string;
+  name_ar: string;
+  name_en: string | null;
+}
+
 export default async function PublicComplaintsPage() {
-  let complaints = null;
-  let error = null;
-  let visibleGovernorates: any[] = [];
+  let complaints: any[] | null = null;
+  let error: string | null = null;
+  let visibleGovernorates: Governorate[] = [];
   
   try {
     const result = await getPublicComplaints();
     complaints = result.data;
-    error = result.error;
+    error = result.error || null;
+    
     visibleGovernorates = await getAllVisibleGovernorates();
   } catch (e: any) {
     console.error("Error in PublicComplaintsPage:", e);
-    error = e.message || "حدث خطأ غير متوقع";
+    error = e?.message || "حدث خطأ غير متوقع";
   }
 
   return (
@@ -59,4 +66,3 @@ export default async function PublicComplaintsPage() {
     </div>
   );
 }
-
