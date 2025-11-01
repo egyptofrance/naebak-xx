@@ -1,5 +1,5 @@
 import { getAllDeputies } from "@/app/actions/deputy/getAllDeputies";
-import { getAllGovernorates } from "@/app/actions/governorate/getAllGovernorates";
+import { getAllVisibleGovernorates } from "@/app/actions/governorate/getAllVisibleGovernorates";
 import { getAllParties } from "@/app/actions/party/getAllParties";
 import { getAllElectoralDistricts } from "@/app/actions/electoral-district/getAllElectoralDistricts";
 import { getAllCouncils } from "@/app/actions/council/getAllCouncils";
@@ -46,7 +46,7 @@ export default async function CitizenHomePage() {
   // Fetch all data
   const [deputies, governorates, parties, electoralDistricts, councils] = await Promise.all([
     getAllDeputies(),
-    getAllGovernorates(),
+    getAllVisibleGovernorates(),
     getAllParties(),
     getAllElectoralDistricts(),
     getAllCouncils(),
