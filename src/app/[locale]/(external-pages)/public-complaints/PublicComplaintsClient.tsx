@@ -32,7 +32,6 @@ interface Complaint {
   district: string | null;
   created_at: string;
   resolved_at: string | null;
-  attachments: any;
   votes_count: number;
 }
 
@@ -311,23 +310,6 @@ export function PublicComplaintsClient({
                     <p className="text-base text-foreground line-clamp-3 leading-relaxed mb-3">
                       {complaint.description}
                     </p>
-                    {complaint.attachments && Array.isArray(complaint.attachments) && complaint.attachments.length > 0 && (
-                      <div className="flex gap-2 mt-3 flex-wrap">
-                        {complaint.attachments.slice(0, 3).map((attachment: any, idx: number) => (
-                          <img
-                            key={idx}
-                            src={attachment.url || attachment}
-                            alt={`صورة ${idx + 1}`}
-                            className="w-20 h-20 object-cover rounded-lg border-2 border-gray-200"
-                          />
-                        ))}
-                        {complaint.attachments.length > 3 && (
-                          <div className="w-20 h-20 rounded-lg border-2 border-gray-200 bg-gray-100 flex items-center justify-center">
-                            <span className="text-sm text-gray-600">+{complaint.attachments.length - 3}</span>
-                          </div>
-                        )}
-                      </div>
-                    )}
                   </div>
                     <Link href={`/public-complaints/${complaint.id}`}>
                       <Button size="sm" className="shrink-0 gap-2">

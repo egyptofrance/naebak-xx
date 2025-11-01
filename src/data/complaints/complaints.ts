@@ -753,8 +753,7 @@ export async function getPublicComplaints() {
       governorate,
       district,
       created_at,
-      resolved_at,
-      attachments
+      resolved_at
     `)
     .eq("is_public", true)
     .eq("admin_approved_public", true)
@@ -772,7 +771,6 @@ export async function getPublicComplaints() {
     district: string | null;
     created_at: string;
     resolved_at: string | null;
-    attachments: any;
     votes_count: number;
   };
 
