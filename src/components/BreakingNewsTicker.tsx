@@ -29,7 +29,7 @@ export function BreakingNewsTicker({ newsItems, scrollSpeed = 50 }: BreakingNews
           </div>
 
           {/* Scrolling news text using react-fast-marquee */}
-          <div className="flex-1 pr-8 lg:pr-10">
+          <div className="flex-1 pr-12 lg:pr-16">
             <Marquee
               speed={scrollSpeed}
               gradient={false}
