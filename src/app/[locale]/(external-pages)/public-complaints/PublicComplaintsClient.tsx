@@ -19,9 +19,7 @@ import {
   Eye, 
   Filter,
   MapPin,
-  Tag,
-  Clock,
-  TrendingUp
+  Tag
 } from "lucide-react";
 
 interface Complaint {
@@ -48,6 +46,37 @@ interface PublicComplaintsClientProps {
   visibleGovernorates: Governorate[];
 }
 
+// All possible statuses from database enum
+const ALL_STATUSES = [
+  "new",
+  "under_review",
+  "assigned_to_deputy",
+  "accepted",
+  "in_progress",
+  "on_hold",
+  "rejected",
+  "resolved",
+  "closed",
+  "archived"
+] as const;
+
+// All possible categories from database enum
+const ALL_CATEGORIES = [
+  "infrastructure",
+  "education",
+  "health",
+  "security",
+  "environment",
+  "transportation",
+  "utilities",
+  "housing",
+  "employment",
+  "social_services",
+  "legal",
+  "corruption",
+  "other"
+] as const;
+
 const categoryLabels: Record<string, string> = {
   infrastructure: "البنية التحتية",
   education: "التعليم",
@@ -67,19 +96,27 @@ const categoryLabels: Record<string, string> = {
 const statusLabels: Record<string, string> = {
   new: "جديدة",
   under_review: "قيد المراجعة",
+  assigned_to_deputy: "محالة للنائب",
+  accepted: "مقبولة",
   in_progress: "قيد المعالجة",
-  resolved: "محلولة",
+  on_hold: "معلقة",
   rejected: "مرفوضة",
+  resolved: "محلولة",
   closed: "مغلقة",
+  archived: "مؤرشفة",
 };
 
 const statusColors: Record<string, string> = {
   new: "bg-blue-100 text-blue-700 border-blue-300",
   under_review: "bg-yellow-100 text-yellow-700 border-yellow-300",
+  assigned_to_deputy: "bg-purple-100 text-purple-700 border-purple-300",
+  accepted: "bg-cyan-100 text-cyan-700 border-cyan-300",
   in_progress: "bg-orange-100 text-orange-700 border-orange-300",
-  resolved: "bg-green-100 text-green-700 border-green-300",
+  on_hold: "bg-amber-100 text-amber-700 border-amber-300",
   rejected: "bg-red-100 text-red-700 border-red-300",
+  resolved: "bg-green-100 text-green-700 border-green-300",
   closed: "bg-gray-100 text-gray-700 border-gray-300",
+  archived: "bg-slate-100 text-slate-700 border-slate-300",
 };
 
 const ITEMS_PER_PAGE = 10;
@@ -118,17 +155,6 @@ export function PublicComplaintsClient({
     setter(value);
     setCurrentPage(1);
   };
-
-  // Get unique categories and statuses from complaints
-  const categories = useMemo(() => {
-    const cats = new Set(complaints.map(c => c.category));
-    return Array.from(cats);
-  }, [complaints]);
-
-  const statuses = useMemo(() => {
-    const stats = new Set(complaints.map(c => c.status));
-    return Array.from(stats);
-  }, [complaints]);
 
   return (
     <div className="space-y-6">
@@ -176,7 +202,7 @@ export function PublicComplaintsClient({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
+        transition={{ delay: 0.2 }}
       >
         <Card>
           <CardContent className="p-5">
@@ -197,7 +223,7 @@ export function PublicComplaintsClient({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">جميع الحالات</SelectItem>
-                    {statuses.map(status => (
+                    {ALL_STATUSES.map(status => (
                       <SelectItem key={status} value={status}>
                         {statusLabels[status] || status}
                       </SelectItem>
@@ -217,7 +243,7 @@ export function PublicComplaintsClient({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">جميع الفئات</SelectItem>
-                    {categories.map(category => (
+                    {ALL_CATEGORIES.map(category => (
                       <SelectItem key={category} value={category}>
                         {categoryLabels[category] || category}
                       </SelectItem>
