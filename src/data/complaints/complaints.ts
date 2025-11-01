@@ -762,7 +762,24 @@ export async function getPublicComplaints() {
     .order("votes_count", { ascending: false })
     .order("created_at", { ascending: false });
 
-  return { data: data || [], error: error?.message };
+  // Type assertion to include votes_count
+  type ComplaintWithVotes = {
+    id: string;
+    title: string;
+    description: string;
+    category: string;
+    status: string;
+    governorate: string | null;
+    district: string | null;
+    created_at: string;
+    resolved_at: string | null;
+    votes_count: number;
+  };
+
+  return { 
+    data: (data || []) as ComplaintWithVotes[], 
+    error: error?.message 
+  };
 }
 
 
