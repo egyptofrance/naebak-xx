@@ -35,7 +35,7 @@ export async function getComplaintAttachments(complaintId: string) {
   }
 
   // Generate public URLs for each attachment
-  const attachmentsWithUrls: ComplaintAttachmentWithUrl[] = (data || []).map((attachment) => {
+  const attachmentsWithUrls: ComplaintAttachmentWithUrl[] = (data || []).map((attachment: any) => {
     const { data: { publicUrl } } = supabase.storage
       .from('complaint_attachments')
       .getPublicUrl(attachment.file_path);
