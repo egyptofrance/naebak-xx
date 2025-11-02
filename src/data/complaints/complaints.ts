@@ -884,7 +884,8 @@ export async function getPublicComplaintById(complaintId: string) {
       district,
       created_at,
       resolved_at,
-      priority
+      priority,
+      votes_count
     `)
     .eq("id", complaintId)
     .eq("is_public", true)
@@ -957,3 +958,35 @@ export const updateComplaintDetails = adminActionClient
 
     return { success: true };
   });
+
+
+/**
+ * Get comments for a complaint from complaint_actions table
+ */
+export async function getComplaintComments(complaintId: string) {
+  const supabase = await createSupabaseUserServerComponentClient();
+
+  const { data, error } = await supabase
+    .from("complaint_actions")
+    .select(`
+      id,
+      comment,
+      created_at,
+      performed_by,
+      user_profiles:performed_by (
+        full_name,
+        email
+      )
+    `)
+    .eq("complaint_id", complaintId)
+    .eq("action_type", "comment")
+    .not("comment", "is", null)
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    console.error("Error fetching comments:", error);
+    return { data: [], error: error.message };
+  }
+
+  return { data: data || [], error: null };
+}

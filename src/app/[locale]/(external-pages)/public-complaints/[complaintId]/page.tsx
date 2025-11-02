@@ -1,12 +1,15 @@
-import { getPublicComplaintById } from "@/data/complaints/complaints";
+import { getPublicComplaintById, getComplaintComments } from "@/data/complaints/complaints";
 import { getComplaintAttachments } from "@/data/complaints/getComplaintAttachments";
+import { hasUserVoted } from "@/app/actions/complaints/hasUserVoted";
 import { notFound } from "next/navigation";
 import { Link } from "@/components/intl-link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { AttachmentsGallery } from "@/components/complaints/AttachmentsGallery";
-import { ArrowRight, Calendar, MapPin, Tag, AlertCircle, FileText } from "lucide-react";
+import { UpvoteButton } from "@/components/complaints/UpvoteButton";
+import { ComplaintCommentsList } from "@/components/complaints/ComplaintCommentsList";
+import { ArrowRight, Calendar, MapPin, Tag, AlertCircle, FileText, MessageSquare, ThumbsUp } from "lucide-react";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -77,14 +80,27 @@ const priorityColors: Record<string, string> = {
 
 export default async function PublicComplaintDetailPage({ params }: PageProps) {
   const { complaintId } = await params;
+  
+  // Fetch complaint data
   const { data: complaint, error } = await getPublicComplaintById(complaintId);
 
   if (error || !complaint) {
     notFound();
   }
 
-  // Get attachments
-  const { data: attachments } = await getComplaintAttachments(complaintId);
+  // Fetch additional data in parallel
+  const [
+    { data: attachments },
+    { data: comments },
+    hasVoted
+  ] = await Promise.all([
+    getComplaintAttachments(complaintId),
+    getComplaintComments(complaintId),
+    hasUserVoted(complaintId)
+  ]);
+
+  // Get votes count from complaint
+  const votesCount = (complaint as any).votes_count || 0;
 
   return (
     <div className="container mx-auto p-4 md:p-6 max-w-5xl" dir="rtl">
@@ -103,11 +119,26 @@ export default async function PublicComplaintDetailPage({ params }: PageProps) {
         {/* Header */}
         <CardHeader className="bg-gradient-to-b from-gray-50 to-white border-b">
           <div className="space-y-4">
-            {/* Title and Status */}
-            <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-3">
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 flex-1">
-                {complaint.title}
-              </h1>
+            {/* Title, Status, and Upvote */}
+            <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
+              <div className="flex gap-4 flex-1">
+                {/* Upvote Button */}
+                <div className="flex-shrink-0">
+                  <UpvoteButton
+                    complaintId={complaint.id}
+                    initialVotesCount={votesCount}
+                    initialHasVoted={hasVoted}
+                    variant="default"
+                  />
+                </div>
+                
+                {/* Title */}
+                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 flex-1">
+                  {complaint.title}
+                </h1>
+              </div>
+              
+              {/* Status Badge */}
               <Badge 
                 variant="outline" 
                 className={`text-sm px-4 py-2 font-medium border-2 ${statusColors[complaint.status] || 'bg-gray-100 text-gray-800'}`}
@@ -235,6 +266,15 @@ export default async function PublicComplaintDetailPage({ params }: PageProps) {
               <AttachmentsGallery attachments={attachments} />
             </div>
           )}
+
+          {/* Comments Section */}
+          <div>
+            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900">
+              <MessageSquare className="h-5 w-5 text-primary" />
+              التعليقات ({comments?.length || 0})
+            </h2>
+            <ComplaintCommentsList comments={comments || []} />
+          </div>
 
           {/* Info Notice */}
           <Card className="border-blue-200 bg-blue-50">
