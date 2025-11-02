@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { MapPin, Briefcase, Clock, Calendar, Eye, Users, Building } from 'lucide-react';
+import { MapPin, Briefcase, Clock, Calendar, Eye, Users, Building, Phone } from 'lucide-react';
 import Link from 'next/link';
 import { JOB_CATEGORIES, WORK_LOCATIONS, EMPLOYMENT_TYPES } from '@/types/jobs';
 
@@ -79,8 +79,45 @@ export default async function JobDetailsPage({
             </CardHeader>
 
             <CardContent className="space-y-6">
-              {/* Company & Contact Information */}
-              {(job.company_name || job.contact_phone) && (
+              {/* Company Advertisement - إعلان الشركة */}
+              {job.is_company_ad && job.company_phone && (
+                <>
+                  <div className="p-6 bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg border-2 border-primary/30">
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 bg-primary/20 rounded-full">
+                        <Phone className="h-6 w-6 text-primary" />
+                      </div>
+                      <div className="flex-1 space-y-3">
+                        <h3 className="font-bold text-xl">إعلان شركة</h3>
+                        {job.company_name && (
+                          <div>
+                            <p className="text-sm text-muted-foreground">اسم الشركة</p>
+                            <p className="font-semibold text-lg">{job.company_name}</p>
+                          </div>
+                        )}
+                        <div>
+                          <p className="text-sm text-muted-foreground mb-1">للتقديم والاستفسار، اتصل بنا مباشرة:</p>
+                          <a 
+                            href={`tel:${job.company_phone}`}
+                            className="inline-flex items-center gap-2 text-2xl font-bold text-primary hover:underline"
+                            dir="ltr"
+                          >
+                            <Phone className="h-5 w-5" />
+                            {job.company_phone}
+                          </a>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          متاح للاتصال المباشر - لا حاجة لملء نموذج التقديم
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <Separator />
+                </>
+              )}
+
+              {/* Regular Contact Information - معلومات التواصل العادية */}
+              {!job.is_company_ad && (job.company_name || job.contact_phone) && (
                 <>
                   <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
                     <h3 className="font-semibold text-lg mb-3">معلومات التواصل</h3>
@@ -195,14 +232,16 @@ export default async function JobDetailsPage({
 
               <Separator />
 
-              {/* Apply Button */}
-              <div className="flex justify-center">
-                <Button size="lg" asChild className="px-12">
-                  <Link href={`/jobs/${job.id}/apply`}>
-                    قدم طلبك الآن
-                  </Link>
-                </Button>
-              </div>
+              {/* Apply Button - فقط للوظائف العادية */}
+              {!job.is_company_ad && (
+                <div className="flex justify-center">
+                  <Button size="lg" asChild className="px-12">
+                    <Link href={`/jobs/${job.id}/apply`}>
+                      قدم طلبك الآن
+                    </Link>
+                  </Button>
+                </div>
+              )}
             </CardContent>
           </Card>
 
@@ -263,20 +302,41 @@ export default async function JobDetailsPage({
             </Card>
           )}
 
-          {/* Apply Button (Bottom) */}
-          <Card className="bg-primary/5">
-            <CardContent className="py-8 text-center space-y-4">
-              <h3 className="text-2xl font-bold">هل أنت مهتم بهذه الوظيفة؟</h3>
-              <p className="text-muted-foreground">
-                قدم طلبك الآن وانضم إلى فريق نائبك
-              </p>
-              <Button size="lg" asChild className="px-12">
-                <Link href={`/jobs/${job.id}/apply`}>
-                  قدم طلبك الآن
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
+          {/* Apply Button (Bottom) - فقط للوظائف العادية */}
+          {!job.is_company_ad && (
+            <Card className="bg-primary/5">
+              <CardContent className="py-8 text-center space-y-4">
+                <h3 className="text-2xl font-bold">هل أنت مهتم بهذه الوظيفة؟</h3>
+                <p className="text-muted-foreground">
+                  قدم طلبك الآن وانضم إلى فريق نائبك
+                </p>
+                <Button size="lg" asChild className="px-12">
+                  <Link href={`/jobs/${job.id}/apply`}>
+                    قدم طلبك الآن
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Company Ad Call to Action - لإعلانات الشركات */}
+          {job.is_company_ad && job.company_phone && (
+            <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-2 border-primary/30">
+              <CardContent className="py-8 text-center space-y-4">
+                <Phone className="h-12 w-12 mx-auto text-primary" />
+                <h3 className="text-2xl font-bold">هل أنت مهتم بهذه الوظيفة؟</h3>
+                <p className="text-muted-foreground">
+                  اتصل بالشركة مباشرة للتقديم والاستفسار
+                </p>
+                <Button size="lg" asChild className="px-12">
+                  <a href={`tel:${job.company_phone}`}>
+                    <Phone className="h-5 w-5 ml-2" />
+                    اتصل الآن: {job.company_phone}
+                  </a>
+                </Button>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
     </div>

@@ -49,6 +49,8 @@ export interface Job {
   
   // معلومات الشركة والتواصل
   company_name: string | null;
+  company_phone: string | null;          // رقم تليفون الشركة للإعلانات
+  is_company_ad: boolean;                // هل هذا إعلان شركة؟
   contact_person: string | null;
   contact_phone: string | null;
   contact_email: string | null;
@@ -144,6 +146,9 @@ export interface JobApplicationWithJob extends JobApplication {
 export interface CreateJobInput {
   title: string;
   description: string;
+  company_name?: string;
+  company_phone?: string;            // رقم تليفون الشركة للإعلانات
+  is_company_ad?: boolean;           // هل هذا إعلان شركة؟
   salary_min?: number;
   salary_max?: number;
   salary_currency?: string;

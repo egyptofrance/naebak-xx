@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, Briefcase, Clock, Eye, Users, Search } from 'lucide-react';
+import { MapPin, Briefcase, Clock, Eye, Users, Search, Filter, Building2, MapPinned } from 'lucide-react';
 import Link from 'next/link';
 
 interface JobsGridProps {
@@ -85,13 +85,13 @@ export default function JobsGrid({
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Filters Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Search className="h-5 w-5" />
-            البحث والفلترة
+      <Card className="shadow-sm">
+        <CardHeader className="pb-4">
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <Search className="h-5 w-5 text-primary" />
+            البحث عن وظيفة
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -99,96 +99,147 @@ export default function JobsGrid({
           <form onSubmit={handleSearch} className="flex gap-2">
             <Input
               type="text"
-              placeholder="ابحث عن وظيفة..."
+              placeholder="ابحث عن وظيفة بالاسم أو الوصف..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="flex-1"
             />
-            <Button type="submit">بحث</Button>
+            <Button type="submit" className="px-6">
+              <Search className="h-4 w-4 ml-2" />
+              بحث
+            </Button>
           </form>
 
-          {/* Filters */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Category Filter */}
-            <Select
-              value={searchParams.get('category_id') || 'all'}
-              onValueChange={(value) => handleFilterChange('category_id', value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="الفئة" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">جميع الفئات</SelectItem>
-                {categories.map((cat) => (
-                  <SelectItem key={cat.id} value={cat.id}>
-                    {cat.name_ar}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          {/* Filters Grid */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+              <Filter className="h-4 w-4" />
+              <span>تصفية النتائج</span>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {/* Category Filter */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                  <Briefcase className="h-3.5 w-3.5" />
+                  الفئة الوظيفية
+                </label>
+                <Select
+                  value={searchParams.get('category_id') || 'all'}
+                  onValueChange={(value) => handleFilterChange('category_id', value)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="اختر الفئة" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">جميع الفئات</SelectItem>
+                    {categories.map((cat) => (
+                      <SelectItem key={cat.id} value={cat.id}>
+                        {cat.name_ar}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-            {/* Work Location Filter */}
-            <Select
-              value={searchParams.get('work_location') || 'all'}
-              onValueChange={(value) => handleFilterChange('work_location', value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="مكان العمل" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">جميع الأماكن</SelectItem>
-                {workLocations.map((loc) => (
-                  <SelectItem key={loc.value} value={loc.value}>
-                    {loc.labelAr}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              {/* Governorate Filter */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                  <MapPinned className="h-3.5 w-3.5" />
+                  المحافظة
+                </label>
+                <Select
+                  value={searchParams.get('governorate_id') || 'all'}
+                  onValueChange={(value) => handleFilterChange('governorate_id', value)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="اختر المحافظة" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">جميع المحافظات</SelectItem>
+                    {governorates.map((gov) => (
+                      <SelectItem key={gov.id} value={gov.id}>
+                        {gov.name_ar}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-            {/* Employment Type Filter */}
-            <Select
-              value={searchParams.get('employment_type') || 'all'}
-              onValueChange={(value) => handleFilterChange('employment_type', value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="نوع الوظيفة" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">جميع الأنواع</SelectItem>
-                {employmentTypes.map((type) => (
-                  <SelectItem key={type.value} value={type.value}>
-                    {type.labelAr}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              {/* Work Location Filter */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                  <Building2 className="h-3.5 w-3.5" />
+                  مكان العمل
+                </label>
+                <Select
+                  value={searchParams.get('work_location') || 'all'}
+                  onValueChange={(value) => handleFilterChange('work_location', value)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="اختر مكان العمل" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">جميع الأماكن</SelectItem>
+                    {workLocations.map((loc) => (
+                      <SelectItem key={loc.value} value={loc.value}>
+                        {loc.labelAr}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-            {/* Governorate Filter */}
-            <Select
-              value={searchParams.get('governorate_id') || 'all'}
-              onValueChange={(value) => handleFilterChange('governorate_id', value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="المحافظة" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">جميع المحافظات</SelectItem>
-                {governorates.map((gov) => (
-                  <SelectItem key={gov.id} value={gov.id}>
-                    {gov.name_ar}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              {/* Employment Type Filter */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                  <Clock className="h-3.5 w-3.5" />
+                  نوع الوظيفة
+                </label>
+                <Select
+                  value={searchParams.get('employment_type') || 'all'}
+                  onValueChange={(value) => handleFilterChange('employment_type', value)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="اختر النوع" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">جميع الأنواع</SelectItem>
+                    {employmentTypes.map((type) => (
+                      <SelectItem key={type.value} value={type.value}>
+                        {type.labelAr}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>
+
+      {/* Results Count */}
+      <div className="flex items-center justify-between px-1">
+        <p className="text-sm text-muted-foreground">
+          {total > 0 ? (
+            <>
+              عرض <span className="font-semibold text-foreground">{total}</span> وظيفة متاحة
+            </>
+          ) : (
+            'لا توجد وظائف متاحة'
+          )}
+        </p>
+      </div>
 
       {/* Jobs Grid */}
       {initialJobs.length === 0 ? (
         <Card>
           <CardContent className="py-16 text-center">
-            <p className="text-muted-foreground">لا توجد وظائف متاحة حالياً</p>
+            <div className="flex flex-col items-center gap-3">
+              <Search className="h-12 w-12 text-muted-foreground/50" />
+              <p className="text-lg font-medium text-muted-foreground">لا توجد وظائف متاحة حالياً</p>
+              <p className="text-sm text-muted-foreground">جرب تغيير معايير البحث أو الفلاتر</p>
+            </div>
           </CardContent>
         </Card>
       ) : (

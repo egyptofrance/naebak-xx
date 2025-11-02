@@ -8,6 +8,9 @@ import {
   EmploymentType,
 } from '@/types/jobs';
 import JobsGrid from './JobsGrid';
+import { Button } from '@/components/ui/button';
+import { PlusCircle } from 'lucide-react';
+import Link from 'next/link';
 
 // Force dynamic rendering - no caching
 export const revalidate = 0;
@@ -48,13 +51,25 @@ export default async function JobsPage({
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="mb-12 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              الوظائف المتاحة
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              انضم إلى فريق نائبك وكن جزءاً من التغيير
-            </p>
+          <div className="mb-12 text-center space-y-6">
+            <div>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                الوظائف المتاحة
+              </h1>
+              <p className="text-lg text-muted-foreground">
+                انضم إلى فريق نائبك وكن جزءاً من التغيير
+              </p>
+            </div>
+            
+            {/* Company Ad Button */}
+            <div className="flex justify-center">
+              <Button asChild size="lg" className="gap-2">
+                <Link href="/company-job-ad">
+                  <PlusCircle className="h-5 w-5" />
+                  أضف إعلان وظيفة لشركتك
+                </Link>
+              </Button>
+            </div>
           </div>
 
           {/* Jobs Grid with Filters */}
