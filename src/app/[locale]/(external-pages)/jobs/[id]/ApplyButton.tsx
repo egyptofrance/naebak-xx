@@ -19,24 +19,14 @@ export default function ApplyButton({ jobId, hasProfile, isCompanyAd, companyPho
   const [success, setSuccess] = useState(false);
   
   const handleApply = async () => {
-    // If no profile, redirect to complete profile page
+    // If no profile, redirect to complete profile page with jobId
     if (!hasProfile) {
-      router.push(`/complete-employment-profile?returnTo=/jobs/${jobId}`);
+      router.push(`/complete-employment-profile?jobId=${jobId}`);
       return;
     }
     
-    // Submit application
-    setLoading(true);
-    setError('');
-    
-    try {
-      await submitJobApplication(jobId);
-      setSuccess(true);
-    } catch (err: any) {
-      setError(err.message || 'حدث خطأ أثناء التقديم');
-    } finally {
-      setLoading(false);
-    }
+    // If has profile, redirect to complete profile page to submit application
+    router.push(`/complete-employment-profile?jobId=${jobId}`);
   };
   
   // Company ad - show call button

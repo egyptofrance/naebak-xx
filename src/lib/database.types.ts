@@ -2336,6 +2336,12 @@ export type Database = {
           updated_at: string
           created_by: string | null
           updated_by: string | null
+          category_id: string | null
+          governorate_id: string | null
+          company_id: string | null
+          created_by_user_id: string | null
+          company_phone: string | null
+          is_company_ad: boolean
         }
         Insert: {
           id?: string
@@ -2365,6 +2371,12 @@ export type Database = {
           updated_at?: string
           created_by?: string | null
           updated_by?: string | null
+          category_id?: string | null
+          governorate_id?: string | null
+          company_id?: string | null
+          created_by_user_id?: string | null
+          company_phone?: string | null
+          is_company_ad?: boolean
         }
         Update: {
           id?: string
@@ -2394,6 +2406,12 @@ export type Database = {
           updated_at?: string
           created_by?: string | null
           updated_by?: string | null
+          category_id?: string | null
+          governorate_id?: string | null
+          company_id?: string | null
+          created_by_user_id?: string | null
+          company_phone?: string | null
+          is_company_ad?: boolean
         }
         Relationships: [
           {
@@ -2505,6 +2523,170 @@ export type Database = {
           {
             foreignKeyName: "job_applications_reviewed_by_fkey"
             columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      user_employment_profiles: {
+        Row: {
+          id: string
+          user_id: string
+          full_name: string
+          email: string
+          phone: string
+          national_id: string | null
+          date_of_birth: string | null
+          governorate: string | null
+          city: string | null
+          address: string | null
+          education_level: string | null
+          education_details: string | null
+          years_of_experience: number | null
+          previous_experience: string | null
+          skills: string[] | null
+          cv_url: string | null
+          portfolio_url: string | null
+          additional_documents: string[] | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          full_name: string
+          email: string
+          phone: string
+          national_id?: string | null
+          date_of_birth?: string | null
+          governorate?: string | null
+          city?: string | null
+          address?: string | null
+          education_level?: string | null
+          education_details?: string | null
+          years_of_experience?: number | null
+          previous_experience?: string | null
+          skills?: string[] | null
+          cv_url?: string | null
+          portfolio_url?: string | null
+          additional_documents?: string[] | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          full_name?: string
+          email?: string
+          phone?: string
+          national_id?: string | null
+          date_of_birth?: string | null
+          governorate?: string | null
+          city?: string | null
+          address?: string | null
+          education_level?: string | null
+          education_details?: string | null
+          years_of_experience?: number | null
+          previous_experience?: string | null
+          skills?: string[] | null
+          cv_url?: string | null
+          portfolio_url?: string | null
+          additional_documents?: string[] | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_employment_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      company_profiles: {
+        Row: {
+          id: string
+          user_id: string
+          company_name: string
+          company_type: string | null
+          tax_number: string | null
+          commercial_register: string | null
+          contact_person: string
+          contact_phone: string
+          contact_email: string
+          governorate: string | null
+          city: string | null
+          address: string | null
+          website: string | null
+          description: string | null
+          logo_url: string | null
+          verification_status: string
+          verification_documents: string[] | null
+          verified_at: string | null
+          verified_by: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          company_name: string
+          company_type?: string | null
+          tax_number?: string | null
+          commercial_register?: string | null
+          contact_person: string
+          contact_phone: string
+          contact_email: string
+          governorate?: string | null
+          city?: string | null
+          address?: string | null
+          website?: string | null
+          description?: string | null
+          logo_url?: string | null
+          verification_status?: string
+          verification_documents?: string[] | null
+          verified_at?: string | null
+          verified_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          company_name?: string
+          company_type?: string | null
+          tax_number?: string | null
+          commercial_register?: string | null
+          contact_person?: string
+          contact_phone?: string
+          contact_email?: string
+          governorate?: string | null
+          city?: string | null
+          address?: string | null
+          website?: string | null
+          description?: string | null
+          logo_url?: string | null
+          verification_status?: string
+          verification_documents?: string[] | null
+          verified_at?: string | null
+          verified_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_profiles_verified_by_fkey"
+            columns: ["verified_by"]
             isOneToOne: false
             referencedRelation: "user_profiles"
             referencedColumns: ["id"]
