@@ -130,7 +130,12 @@ export async function getAllJobs(
   try {
     let query = supabase
       .from('jobs')
-      .select('*, statistics:job_statistics(*), category:job_categories(id, name_ar, name_en, slug)', { count: 'exact' });
+      .select(`
+        *,
+        statistics:job_statistics(*),
+        category:job_categories(id, name_ar, name_en, slug),
+        governorate:governorates(id, name_ar, name_en)
+      `, { count: 'exact' });
 
     // تطبيق الفلاتر
     if (filters?.status) {
