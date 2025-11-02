@@ -9,6 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import { AttachmentsGallery } from "@/components/complaints/AttachmentsGallery";
 import { UpvoteButton } from "@/components/complaints/UpvoteButton";
 import { ComplaintCommentsList } from "@/components/complaints/ComplaintCommentsList";
+import { AddCommentForm } from "@/components/complaints/AddCommentForm";
+import { createSupabaseUserServerComponentClient } from "@/supabase-clients/user/createSupabaseUserServerComponentClient";
 import { ArrowRight, Calendar, MapPin, Tag, AlertCircle, FileText, MessageSquare, ThumbsUp } from "lucide-react";
 
 export const dynamic = 'force-dynamic';
@@ -80,6 +82,11 @@ const priorityColors: Record<string, string> = {
 
 export default async function PublicComplaintDetailPage({ params }: PageProps) {
   const { complaintId } = await params;
+  
+  // Get current user (if logged in)
+  const supabase = await createSupabaseUserServerComponentClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  const userId = user?.id || '';
   
   // Fetch complaint data
   const { data: complaint, error } = await getPublicComplaintById(complaintId);
@@ -267,11 +274,26 @@ export default async function PublicComplaintDetailPage({ params }: PageProps) {
           )}
 
           {/* Comments Section */}
-          <div>
+          <div className="space-y-6">
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900">
               <MessageSquare className="h-5 w-5 text-primary" />
               التعليقات ({comments?.length || 0})
             </h2>
+            
+            {/* Add Comment Form */}
+            {userId ? (
+              <AddCommentForm complaintId={complaintId} userId={userId} />
+            ) : (
+              <Card className="border-blue-200 bg-blue-50">
+                <CardContent className="p-4">
+                  <p className="text-sm text-blue-800">
+                    <strong>ملاحظة:</strong> يجب تسجيل الدخول لإضافة تعليق.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+            
+            {/* Comments List */}
             <ComplaintCommentsList comments={comments || []} />
           </div>
 
