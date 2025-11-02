@@ -24,7 +24,7 @@ export async function createJob(input: CreateJobInput) {
       return { success: false, error: 'Unauthorized' };
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('jobs')
       .insert({
         ...input,
@@ -66,7 +66,7 @@ export async function updateJob(input: UpdateJobInput) {
 
     const { id, ...updateData } = input;
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('jobs')
       .update({
         ...updateData,
