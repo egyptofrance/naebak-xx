@@ -2,7 +2,7 @@ import { createSupabaseUserServerComponentClient } from '@/supabase-clients/user
 import { serverGetLoggedInUser } from '@/utils/server/serverGetLoggedInUser';
 
 export async function hasEmploymentProfile(): Promise<boolean> {
-  const supabase = createSupabaseUserServerComponentClient();
+  const supabase = await createSupabaseUserServerComponentClient();
   const user = await serverGetLoggedInUser();
 
   if (!user) {
@@ -19,7 +19,7 @@ export async function hasEmploymentProfile(): Promise<boolean> {
 }
 
 export async function getEmploymentProfile() {
-  const supabase = createSupabaseUserServerComponentClient();
+  const supabase = await createSupabaseUserServerComponentClient();
   const user = await serverGetLoggedInUser();
 
   if (!user) {

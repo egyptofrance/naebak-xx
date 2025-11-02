@@ -14,7 +14,7 @@ export default async function MyApplicationsPage() {
     redirect('/sign-in');
   }
 
-  const supabase = createSupabaseUserServerComponentClient();
+  const supabase = await createSupabaseUserServerComponentClient();
 
   const { data: applications, error } = await supabase
     .from('job_applications')
