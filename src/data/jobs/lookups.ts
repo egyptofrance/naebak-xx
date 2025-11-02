@@ -28,8 +28,9 @@ export interface Governorate {
   id: string;
   name_ar: string;
   name_en: string | null;
+  code: string | null;
   created_at: string;
-  updated_at: string;
+  is_visible: boolean;
 }
 
 /**
