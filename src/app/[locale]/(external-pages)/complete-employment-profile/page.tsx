@@ -10,14 +10,16 @@ export const metadata = {
 export default async function CompleteEmploymentProfilePage({
   searchParams,
 }: {
-  searchParams: { returnTo?: string };
+  searchParams: Promise<{ returnTo?: string }>;
 }) {
+  const params = await searchParams;
+  
   // Check if user already has profile
   const profile = await getUserEmploymentProfile();
   
   if (profile && profile.is_complete) {
     // Redirect to return URL or jobs page
-    const returnTo = searchParams.returnTo || '/jobs';
+    const returnTo = params.returnTo || '/jobs';
     redirect(returnTo);
   }
   
@@ -32,7 +34,7 @@ export default async function CompleteEmploymentProfilePage({
       
       <EmploymentProfileForm 
         initialData={profile} 
-        returnTo={searchParams.returnTo}
+        returnTo={params.returnTo}
       />
     </div>
   );
