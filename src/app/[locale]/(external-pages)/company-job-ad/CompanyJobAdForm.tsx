@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,10 +10,19 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Building2, Phone, Briefcase, MapPin, DollarSign, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
-import { createJob } from '@/data/jobs/mutations';
-import { getJobCategories, getGovernorates } from '@/data/jobs/lookups';
-import type { JobCategory, Governorate } from '@/data/jobs/lookups';
 import { WORK_LOCATIONS, EMPLOYMENT_TYPES } from '@/types/jobs';
+
+interface JobCategory {
+  id: string;
+  name_ar: string;
+  name_en: string | null;
+}
+
+interface Governorate {
+  id: string;
+  name_ar: string;
+  name_en: string | null;
+}
 
 export default function CompanyJobAdForm() {
   const router = useRouter();
@@ -24,18 +33,26 @@ export default function CompanyJobAdForm() {
   const [governorates, setGovernorates] = useState<Governorate[]>([]);
 
   // Load categories and governorates on mount
-  useState(() => {
+  useEffect(() => {
     loadData();
-  });
+  }, []);
 
   const loadData = async () => {
     try {
-      const [cats, govs] = await Promise.all([
-        getJobCategories(),
-        getGovernorates(),
+      const [catsRes, govsRes] = await Promise.all([
+        fetch('/api/jobs/categories'),
+        fetch('/api/jobs/governorates'),
       ]);
-      setCategories(cats);
-      setGovernorates(govs);
+
+      const catsData = await catsRes.json();
+      const govsData = await govsRes.json();
+
+      if (catsData.success) {
+        setCategories(catsData.data);
+      }
+      if (govsData.success) {
+        setGovernorates(govsData.data);
+      }
     } catch (err) {
       console.error('Error loading data:', err);
     }
@@ -104,7 +121,15 @@ export default function CompanyJobAdForm() {
         positions_available: 1,
       };
 
-      const result = await createJob(jobData);
+      const response = await fetch('/api/jobs/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(jobData),
+      });
+
+      const result = await response.json();
 
       if (result.success) {
         setSuccess(true);

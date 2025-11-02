@@ -2,7 +2,7 @@
  * Job Mutations - إضافة وتعديل الوظائف
  */
 
-import { createClient } from '@/lib/supabase/client';
+import { supabaseUserClientComponent } from '@/supabase-clients/user/supabaseUserClientComponent';
 import type { CreateJobInput, UpdateJobInput } from '@/types/jobs';
 
 /**
@@ -10,7 +10,7 @@ import type { CreateJobInput, UpdateJobInput } from '@/types/jobs';
  */
 export async function createJob(input: CreateJobInput) {
   try {
-    const supabase = createClient();
+    const supabase = supabaseUserClientComponent;
 
     // Prepare job data
     const jobData = {
@@ -70,7 +70,7 @@ export async function createJob(input: CreateJobInput) {
  */
 export async function updateJob(input: UpdateJobInput) {
   try {
-    const supabase = createClient();
+    const supabase = supabaseUserClientComponent;
 
     const { id, ...updateData } = input;
 
@@ -98,7 +98,7 @@ export async function updateJob(input: UpdateJobInput) {
  */
 export async function deleteJob(jobId: string) {
   try {
-    const supabase = createClient();
+    const supabase = supabaseUserClientComponent;
 
     const { error } = await (supabase as any)
       .from('jobs')
