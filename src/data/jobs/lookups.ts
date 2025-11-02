@@ -39,7 +39,7 @@ export async function getActiveJobCategories(): Promise<JobCategory[]> {
   const supabase = await createSupabaseUserServerComponentClient();
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('job_categories')
       .select('*')
       .eq('is_active', true)
@@ -64,7 +64,7 @@ export async function getAllJobCategories(): Promise<JobCategory[]> {
   const supabase = await createSupabaseUserServerComponentClient();
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('job_categories')
       .select('*')
       .order('display_order', { ascending: true });
@@ -88,7 +88,7 @@ export async function getJobCategoryById(id: string): Promise<JobCategory | null
   const supabase = await createSupabaseUserServerComponentClient();
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('job_categories')
       .select('*')
       .eq('id', id)
@@ -113,7 +113,7 @@ export async function getJobCategoryBySlug(slug: string): Promise<JobCategory | 
   const supabase = await createSupabaseUserServerComponentClient();
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('job_categories')
       .select('*')
       .eq('slug', slug)
