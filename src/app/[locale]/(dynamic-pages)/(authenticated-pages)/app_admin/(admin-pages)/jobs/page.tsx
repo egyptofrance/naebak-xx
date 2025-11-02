@@ -50,9 +50,9 @@ export default async function AdminJobsPage() {
           </Card>
           <Card>
             <CardHeader className="pb-3">
-              <CardDescription>الوظائف المعلقة</CardDescription>
+              <CardDescription>الوظائف المسودة</CardDescription>
               <CardTitle className="text-3xl">
-                {jobs.filter((j) => j.status === 'pending').length}
+                {jobs.filter((j) => j.status === 'draft').length}
               </CardTitle>
             </CardHeader>
           </Card>
