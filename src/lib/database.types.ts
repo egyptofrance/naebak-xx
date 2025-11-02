@@ -2434,6 +2434,8 @@ export type Database = {
         Row: {
           id: string
           job_id: string
+          user_id: string | null
+          employment_profile_id: string | null
           full_name: string
           email: string
           phone: string
@@ -2453,6 +2455,7 @@ export type Database = {
           additional_documents: string[] | null
           status: string
           admin_notes: string | null
+          company_notes: string | null
           reviewed_by: string | null
           reviewed_at: string | null
           created_at: string
@@ -2461,33 +2464,8 @@ export type Database = {
         Insert: {
           id?: string
           job_id: string
-          full_name: string
-          email: string
-          phone: string
-          national_id?: string | null
-          date_of_birth?: string | null
-          governorate?: string | null
-          city?: string | null
-          address?: string | null
-          education_level?: string | null
-          education_details?: string | null
-          years_of_experience?: number | null
-          previous_experience?: string | null
-          skills?: string[] | null
-          cv_url?: string | null
-          cover_letter?: string | null
-          portfolio_url?: string | null
-          additional_documents?: string[] | null
-          status?: string
-          admin_notes?: string | null
-          reviewed_by?: string | null
-          reviewed_at?: string | null
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          job_id?: string
+          user_id?: string | null
+          employment_profile_id?: string | null
           full_name?: string
           email?: string
           phone?: string
@@ -2507,6 +2485,37 @@ export type Database = {
           additional_documents?: string[] | null
           status?: string
           admin_notes?: string | null
+          company_notes?: string | null
+          reviewed_by?: string | null
+          reviewed_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          job_id?: string
+          user_id?: string | null
+          employment_profile_id?: string | null
+          full_name?: string
+          email?: string
+          phone?: string
+          national_id?: string | null
+          date_of_birth?: string | null
+          governorate?: string | null
+          city?: string | null
+          address?: string | null
+          education_level?: string | null
+          education_details?: string | null
+          years_of_experience?: number | null
+          previous_experience?: string | null
+          skills?: string[] | null
+          cv_url?: string | null
+          cover_letter?: string | null
+          portfolio_url?: string | null
+          additional_documents?: string[] | null
+          status?: string
+          admin_notes?: string | null
+          company_notes?: string | null
           reviewed_by?: string | null
           reviewed_at?: string | null
           created_at?: string
