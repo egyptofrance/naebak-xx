@@ -1002,7 +1002,8 @@ export async function getComplaintComments(complaintId: string) {
  */
 export async function getComplaintVotesCount(complaintId: string): Promise<number> {
   // Use admin client to access complaint_votes table
-  const { count, error } = await supabaseAdminClient
+  // Type assertion needed because complaint_votes is not in generated types
+  const { count, error } = await (supabaseAdminClient as any)
     .from("complaint_votes")
     .select("*", { count: "exact", head: true })
     .eq("complaint_id", complaintId);
