@@ -25,7 +25,12 @@ export async function getActiveJobs(
   try {
     let query = supabase
       .from('jobs')
-      .select('*, statistics:job_statistics(*), category:job_categories(id, name_ar, name_en, slug)', { count: 'exact' })
+      .select(`
+        *,
+        statistics:job_statistics(*),
+        category:job_categories(id, name_ar, name_en, slug),
+        governorate:governorates(id, name_ar, name_en)
+      `, { count: 'exact' })
       .eq('status', 'active');
 
     // تطبيق الفلاتر
