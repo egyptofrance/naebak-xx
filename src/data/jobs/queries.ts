@@ -38,8 +38,8 @@ export async function getActiveJobs(
     if (filters?.employment_type) {
       query = query.eq('employment_type', filters.employment_type);
     }
-    if (filters?.governorate) {
-      query = query.eq('governorate', filters.governorate);
+    if (filters?.governorate_id) {
+      query = query.eq('governorate_id', filters.governorate_id);
     }
     if (filters?.search) {
       query = query.or(
@@ -140,8 +140,8 @@ export async function getAllJobs(
     if (filters?.employment_type) {
       query = query.eq('employment_type', filters.employment_type);
     }
-    if (filters?.governorate) {
-      query = query.eq('governorate', filters.governorate);
+    if (filters?.governorate_id) {
+      query = query.eq('governorate_id', filters.governorate_id);
     }
     if (filters?.search) {
       query = query.or(
@@ -201,8 +201,8 @@ export async function getJobApplications(
     if (filters?.status) {
       query = query.eq('status', filters.status);
     }
-    if (filters?.governorate) {
-      query = query.eq('governorate', filters.governorate);
+    if (filters?.governorate_id) {
+      query = query.eq('governorate_id', filters.governorate_id);
     }
     if (filters?.search) {
       query = query.or(
