@@ -3,12 +3,12 @@ import { MessageSquare, User } from "lucide-react";
 
 interface Comment {
   id: string;
-  comment: string;
+  comment: string | null;
   created_at: string;
   performed_by: string;
   user_profiles: {
     full_name: string | null;
-    email: string;
+    email: string | null;
   } | null;
 }
 
@@ -55,7 +55,7 @@ export function ComplaintCommentsList({ comments }: ComplaintCommentsListProps) 
                   </time>
                 </div>
                 <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
-                  {comment.comment}
+                  {comment.comment || "لا يوجد نص للتعليق"}
                 </p>
               </div>
             </div>
