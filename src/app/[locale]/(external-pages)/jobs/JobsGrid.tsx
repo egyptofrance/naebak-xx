@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { JobWithStatistics } from '@/types/jobs';
+import type { JobCategory, Governorate } from '@/data/jobs/lookups';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,10 +17,10 @@ interface JobsGridProps {
   total: number;
   currentPage: number;
   limit: number;
-  categories: Array<{ value: string; label: string; labelAr: string }>;
+  categories: JobCategory[];
   workLocations: Array<{ value: string; label: string; labelAr: string }>;
   employmentTypes: Array<{ value: string; label: string; labelAr: string }>;
-  governorates: Array<{ value: string; label: string }>;
+  governorates: Governorate[];
 }
 
 export default function JobsGrid({
@@ -76,11 +77,11 @@ export default function JobsGrid({
   };
 
   const getWorkLocationLabel = (value: string) => {
-    return workLocations.find((loc) => loc.value === value)?.label || value;
+    return workLocations.find((loc) => loc.value === value)?.labelAr || value;
   };
 
-  const getCategoryLabel = (value: string) => {
-    return categories.find((cat) => cat.value === value)?.label || value;
+  const getEmploymentTypeLabel = (value: string) => {
+    return employmentTypes.find((type) => type.value === value)?.labelAr || value;
   };
 
   return (
@@ -110,8 +111,8 @@ export default function JobsGrid({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Category Filter */}
             <Select
-              value={searchParams.get('category') || 'all'}
-              onValueChange={(value) => handleFilterChange('category', value)}
+              value={searchParams.get('category_id') || 'all'}
+              onValueChange={(value) => handleFilterChange('category_id', value)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="الفئة" />
@@ -119,8 +120,8 @@ export default function JobsGrid({
               <SelectContent>
                 <SelectItem value="all">جميع الفئات</SelectItem>
                 {categories.map((cat) => (
-                  <SelectItem key={cat.value} value={cat.value}>
-                    {cat.label}
+                  <SelectItem key={cat.id} value={cat.id}>
+                    {cat.name_ar}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -138,7 +139,7 @@ export default function JobsGrid({
                 <SelectItem value="all">جميع الأماكن</SelectItem>
                 {workLocations.map((loc) => (
                   <SelectItem key={loc.value} value={loc.value}>
-                    {loc.label}
+                    {loc.labelAr}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -156,7 +157,7 @@ export default function JobsGrid({
                 <SelectItem value="all">جميع الأنواع</SelectItem>
                 {employmentTypes.map((type) => (
                   <SelectItem key={type.value} value={type.value}>
-                    {type.label}
+                    {type.labelAr}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -164,8 +165,8 @@ export default function JobsGrid({
 
             {/* Governorate Filter */}
             <Select
-              value={searchParams.get('governorate') || 'all'}
-              onValueChange={(value) => handleFilterChange('governorate', value)}
+              value={searchParams.get('governorate_id') || 'all'}
+              onValueChange={(value) => handleFilterChange('governorate_id', value)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="المحافظة" />
@@ -173,8 +174,8 @@ export default function JobsGrid({
               <SelectContent>
                 <SelectItem value="all">جميع المحافظات</SelectItem>
                 {governorates.map((gov) => (
-                  <SelectItem key={gov.value} value={gov.value}>
-                    {gov.label}
+                  <SelectItem key={gov.id} value={gov.id}>
+                    {gov.name_ar}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -183,84 +184,66 @@ export default function JobsGrid({
         </CardContent>
       </Card>
 
-      {/* Results Count */}
-      <div className="flex items-center justify-between">
-        <p className="text-muted-foreground">
-          عرض {initialJobs.length} من أصل {total} وظيفة
-        </p>
-        {searchParams.toString() && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => router.push('/jobs')}
-          >
-            مسح الفلاتر
-          </Button>
-        )}
-      </div>
-
       {/* Jobs Grid */}
       {initialJobs.length === 0 ? (
-        <Card className="p-12 text-center">
-          <p className="text-lg text-muted-foreground">
-            لا توجد وظائف متاحة حالياً
-          </p>
+        <Card>
+          <CardContent className="py-16 text-center">
+            <p className="text-muted-foreground">لا توجد وظائف متاحة حالياً</p>
+          </CardContent>
         </Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {initialJobs.map((job) => (
             <Card key={job.id} className="flex flex-col hover:shadow-lg transition-shadow">
+              {job.image_url && (
+                <div className="w-full h-48 overflow-hidden rounded-t-lg">
+                  <img
+                    src={job.image_url}
+                    alt={job.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+              
               <CardHeader>
-                {job.image_url && (
-                  <div className="w-full h-48 mb-4 rounded-lg overflow-hidden">
-                    <img
-                      src={job.image_url}
-                      alt={job.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                )}
-                <CardTitle className="text-xl">{job.title}</CardTitle>
+                <div className="flex items-start justify-between gap-2">
+                  <CardTitle className="text-xl line-clamp-2">{job.title}</CardTitle>
+                  {job.category && (
+                    <Badge variant="secondary" className="shrink-0">
+                      {job.category.name_ar || job.category.name_en}
+                    </Badge>
+                  )}
+                </div>
                 <CardDescription className="line-clamp-2">
                   {job.description}
                 </CardDescription>
               </CardHeader>
 
               <CardContent className="flex-1 space-y-3">
-                {/* Category Badge */}
-                <Badge variant="secondary">{getCategoryLabel(job.category)}</Badge>
-
-                {/* Details */}
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <MapPin className="h-4 w-4" />
-                    <span>{getWorkLocationLabel(job.work_location)}</span>
-                    {job.governorate && <span>- {job.governorate}</span>}
-                  </div>
-
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Briefcase className="h-4 w-4" />
-                    <span>{formatSalary(job.salary_min, job.salary_max, job.salary_currency)}</span>
-                  </div>
-
-                  {job.work_hours && (
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <Clock className="h-4 w-4" />
-                      <span>{job.work_hours}</span>
-                    </div>
-                  )}
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <MapPin className="h-4 w-4" />
+                  <span>{getWorkLocationLabel(job.work_location)}</span>
                 </div>
 
-                {/* Statistics */}
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Briefcase className="h-4 w-4" />
+                  <span>{getEmploymentTypeLabel(job.employment_type)}</span>
+                </div>
+
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Clock className="h-4 w-4" />
+                  <span>{formatSalary(job.salary_min, job.salary_max, job.salary_currency)}</span>
+                </div>
+
                 {job.statistics && (
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2 border-t">
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground pt-2">
                     <div className="flex items-center gap-1">
-                      <Eye className="h-3 w-3" />
+                      <Eye className="h-4 w-4" />
                       <span>{job.statistics.views_count}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <Users className="h-3 w-3" />
-                      <span>{job.statistics.applications_count} متقدم</span>
+                      <Users className="h-4 w-4" />
+                      <span>{job.statistics.applications_count}</span>
                     </div>
                   </div>
                 )}
@@ -278,22 +261,22 @@ export default function JobsGrid({
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex justify-center gap-2">
           <Button
             variant="outline"
-            disabled={currentPage === 1}
             onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
           >
             السابق
           </Button>
-
-          <div className="flex items-center gap-1">
+          
+          <div className="flex items-center gap-2">
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <Button
                 key={page}
                 variant={page === currentPage ? 'default' : 'outline'}
-                size="sm"
                 onClick={() => handlePageChange(page)}
+                className="w-10"
               >
                 {page}
               </Button>
@@ -302,8 +285,8 @@ export default function JobsGrid({
 
           <Button
             variant="outline"
-            disabled={currentPage === totalPages}
             onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
           >
             التالي
           </Button>

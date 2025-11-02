@@ -25,12 +25,12 @@ export async function getActiveJobs(
   try {
     let query = supabase
       .from('jobs')
-      .select('*, statistics:job_statistics(*)', { count: 'exact' })
+      .select('*, statistics:job_statistics(*), category:job_categories(id, name_ar, name_en, slug)', { count: 'exact' })
       .eq('status', 'active');
 
     // تطبيق الفلاتر
-    if (filters?.category) {
-      query = query.eq('category', filters.category);
+    if (filters?.category_id) {
+      query = query.eq('category_id', filters.category_id);
     }
     if (filters?.work_location) {
       query = query.eq('work_location', filters.work_location);
@@ -87,7 +87,7 @@ export async function getJobById(id: string): Promise<JobWithStatistics | null> 
   try {
     const { data, error } = await supabase
       .from('jobs')
-      .select('*, statistics:job_statistics(*)')
+      .select('*, statistics:job_statistics(*), category:job_categories(id, name_ar, name_en, slug)')
       .eq('id', id)
       .eq('status', 'active')
       .single();
@@ -125,14 +125,14 @@ export async function getAllJobs(
   try {
     let query = supabase
       .from('jobs')
-      .select('*, statistics:job_statistics(*)', { count: 'exact' });
+      .select('*, statistics:job_statistics(*), category:job_categories(id, name_ar, name_en, slug)', { count: 'exact' });
 
     // تطبيق الفلاتر
     if (filters?.status) {
       query = query.eq('status', filters.status);
     }
-    if (filters?.category) {
-      query = query.eq('category', filters.category);
+    if (filters?.category_id) {
+      query = query.eq('category_id', filters.category_id);
     }
     if (filters?.work_location) {
       query = query.eq('work_location', filters.work_location);

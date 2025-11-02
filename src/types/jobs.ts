@@ -61,8 +61,10 @@ export interface Job {
   office_address: string | null;
   work_hours: string | null;
   employment_type: EmploymentType;
-  category: JobCategory;
-  governorate: string | null;
+  category_id: string | null;           // UUID reference to job_categories
+  category?: any;                        // Joined data from job_categories
+  governorate_id: string | null;         // UUID reference to governorates
+  governorate?: any;                     // Joined data from governorates
   requirements: string[] | null;
   responsibilities: string[] | null;
   benefits: string[] | null;
@@ -149,8 +151,8 @@ export interface CreateJobInput {
   office_address?: string;
   work_hours?: string;
   employment_type: EmploymentType;
-  category: JobCategory;
-  governorate?: string;
+  category_id: string;               // UUID of job category
+  governorate_id?: string;           // UUID of governorate
   requirements?: string[];
   responsibilities?: string[];
   benefits?: string[];
@@ -202,10 +204,10 @@ export interface UpdateJobApplicationInput {
 // ============================================================
 
 export interface JobFilters {
-  category?: JobCategory;
+  category_id?: string;              // UUID of job category
   work_location?: WorkLocation;
   employment_type?: EmploymentType;
-  governorate?: string;
+  governorate_id?: string;           // UUID of governorate
   status?: JobStatus;
   search?: string;
 }

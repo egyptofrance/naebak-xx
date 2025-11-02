@@ -1,11 +1,9 @@
 import { getActiveJobs } from '@/data/jobs/queries';
+import { getActiveJobCategories, getAllGovernorates } from '@/data/jobs/lookups';
 import { 
-  JOB_CATEGORIES, 
   WORK_LOCATIONS, 
-  EMPLOYMENT_TYPES, 
-  GOVERNORATES,
+  EMPLOYMENT_TYPES,
   JobFilters,
-  JobCategory,
   WorkLocation,
   EmploymentType,
 } from '@/types/jobs';
@@ -28,12 +26,18 @@ export default async function JobsPage({
   const page = Number(params.page) || 1;
   const limit = 12;
 
+  // جلب التصنيفات والمحافظات من قاعدة البيانات
+  const [categories, governorates] = await Promise.all([
+    getActiveJobCategories(),
+    getAllGovernorates(),
+  ]);
+
   // استخراج الفلاتر من searchParams
   const filters: JobFilters = {
-    category: params.category as JobCategory | undefined,
+    category_id: params.category_id as string | undefined,
     work_location: params.work_location as WorkLocation | undefined,
     employment_type: params.employment_type as EmploymentType | undefined,
-    governorate: params.governorate as string | undefined,
+    governorate_id: params.governorate_id as string | undefined,
     search: params.search as string | undefined,
   };
 
@@ -59,10 +63,10 @@ export default async function JobsPage({
             total={total}
             currentPage={page}
             limit={limit}
-            categories={JOB_CATEGORIES}
+            categories={categories}
             workLocations={WORK_LOCATIONS}
             employmentTypes={EMPLOYMENT_TYPES}
-            governorates={GOVERNORATES}
+            governorates={governorates}
           />
         </div>
       </div>
