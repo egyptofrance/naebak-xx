@@ -302,24 +302,18 @@ export function PublicComplaintsClient({
             >
               <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 border-r-4 border-r-primary/20 hover:border-r-primary">
                 <CardContent className="p-6">
-                  <div className="flex justify-between items-start gap-4 mb-4">
-                  <div className="flex-1">
+                  {/* العنوان والوصف */}
+                  <div className="mb-4">
                     <h3 className="text-2xl font-bold text-foreground mb-3 leading-tight">
                       {complaint.title}
                     </h3>
-                    <p className="text-base text-foreground line-clamp-3 leading-relaxed mb-3">
+                    <p className="text-base text-foreground line-clamp-5 leading-relaxed">
                       {complaint.description}
                     </p>
                   </div>
-                    <Link href={`/public-complaints/${complaint.id}`}>
-                      <Button size="sm" className="shrink-0 gap-2">
-                        <Eye className="w-4 h-4" />
-                        عرض التفاصيل
-                      </Button>
-                    </Link>
-                  </div>
                   
-                  <div className="flex flex-wrap gap-2">
+                  {/* الـ Badges */}
+                  <div className="flex flex-wrap gap-2 mb-4">
                     <Badge variant="outline" className={statusColors[complaint.status] || "bg-gray-100"}>
                       {statusLabels[complaint.status] || complaint.status}
                     </Badge>
@@ -335,6 +329,16 @@ export function PublicComplaintsClient({
                         {complaint.district}
                       </Badge>
                     )}
+                  </div>
+
+                  {/* زرار عرض التفاصيل */}
+                  <div className="flex justify-end mt-4 pt-4 border-t border-gray-100">
+                    <Link href={`/public-complaints/${complaint.id}`}>
+                      <Button size="default" className="gap-2">
+                        <Eye className="w-4 h-4" />
+                        عرض التفاصيل
+                      </Button>
+                    </Link>
                   </div>
                 </CardContent>
               </Card>
