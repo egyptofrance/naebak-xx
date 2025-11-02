@@ -22,7 +22,7 @@ export async function createOrUpdateEmploymentProfile(formData: {
   portfolio_url?: string;
   additional_documents?: string[];
 }) {
-  const supabase = createSupabaseUserServerActionClient();
+  const supabase = await createSupabaseUserServerActionClient();
   const user = await serverGetLoggedInUser();
 
   if (!user) {
@@ -75,7 +75,7 @@ export async function createOrUpdateEmploymentProfile(formData: {
 }
 
 export async function submitJobApplication(jobId: string, employmentProfileId: string) {
-  const supabase = createSupabaseUserServerActionClient();
+  const supabase = await createSupabaseUserServerActionClient();
   const user = await serverGetLoggedInUser();
 
   if (!user) {
