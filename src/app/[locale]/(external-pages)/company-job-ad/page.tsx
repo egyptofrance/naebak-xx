@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function CompanyJobAdPage() {
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto px-4 py-8 max-w-4xl" dir="rtl">
       <div className="space-y-6">
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold">إعلان وظيفة</h1>

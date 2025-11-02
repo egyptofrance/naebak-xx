@@ -207,6 +207,7 @@ export default function CompanyJobAdForm() {
               value={formData.company_name}
               onChange={(e) => handleChange('company_name', e.target.value)}
               placeholder="مثال: شركة التقنية المتقدمة"
+              className="text-right"
               required
             />
           </div>
@@ -223,7 +224,7 @@ export default function CompanyJobAdForm() {
                 value={formData.company_phone}
                 onChange={(e) => handleChange('company_phone', e.target.value)}
                 placeholder="01xxxxxxxxx"
-                className="pr-10"
+                className="pr-10 text-right"
                 required
               />
             </div>
@@ -252,6 +253,7 @@ export default function CompanyJobAdForm() {
               value={formData.title}
               onChange={(e) => handleChange('title', e.target.value)}
               placeholder="مثال: موظف مبيعات"
+              className="text-right"
               required
             />
           </div>
@@ -265,6 +267,7 @@ export default function CompanyJobAdForm() {
               value={formData.description}
               onChange={(e) => handleChange('description', e.target.value)}
               placeholder="اكتب وصفاً تفصيلياً للوظيفة..."
+              className="text-right"
               rows={5}
               required
             />
@@ -370,6 +373,7 @@ export default function CompanyJobAdForm() {
               value={formData.office_address}
               onChange={(e) => handleChange('office_address', e.target.value)}
               placeholder="مثال: شارع التحرير، القاهرة"
+              className="text-right"
             />
           </div>
 
@@ -384,7 +388,7 @@ export default function CompanyJobAdForm() {
                   value={formData.salary_min}
                   onChange={(e) => handleChange('salary_min', e.target.value)}
                   placeholder="3000"
-                  className="pr-10"
+                  className="pr-10 text-right"
                 />
               </div>
             </div>
@@ -399,7 +403,7 @@ export default function CompanyJobAdForm() {
                   value={formData.salary_max}
                   onChange={(e) => handleChange('salary_max', e.target.value)}
                   placeholder="5000"
-                  className="pr-10"
+                  className="pr-10 text-right"
                 />
               </div>
             </div>
@@ -420,6 +424,7 @@ export default function CompanyJobAdForm() {
               value={formData.requirements}
               onChange={(e) => handleChange('requirements', e.target.value)}
               placeholder="اكتب كل متطلب في سطر منفصل..."
+              className="text-right"
               rows={4}
             />
             <p className="text-xs text-muted-foreground">كل سطر سيكون متطلب منفصل</p>
@@ -432,6 +437,7 @@ export default function CompanyJobAdForm() {
               value={formData.benefits}
               onChange={(e) => handleChange('benefits', e.target.value)}
               placeholder="اكتب كل ميزة في سطر منفصل..."
+              className="text-right"
               rows={4}
             />
             <p className="text-xs text-muted-foreground">كل سطر سيكون ميزة منفصلة</p>
