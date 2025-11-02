@@ -15,7 +15,8 @@
     "about": "About Us",
     "contact": "Contact Us",
     "complaints": "Complaints",
-    "deputies": "Deputies List"
+    "deputies": "Deputies List",
+    "jobs": "Jobs"
   },
   "Search": {
     "placeholder": "Search for deputies or complaints...",
