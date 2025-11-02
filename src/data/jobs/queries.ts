@@ -201,8 +201,8 @@ export async function getJobApplications(
     if (filters?.status) {
       query = query.eq('status', filters.status);
     }
-    if (filters?.governorate_id) {
-      query = query.eq('governorate_id', filters.governorate_id);
+    if (filters?.governorate) {
+      query = query.eq('governorate', filters.governorate);
     }
     if (filters?.search) {
       query = query.or(
