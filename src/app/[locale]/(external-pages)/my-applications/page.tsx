@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { getUserProfile } from '@/data/user/queries';
+import { serverGetLoggedInUser } from '@/utils/server/serverGetLoggedInUser';
 import { createSupabaseUserServerComponentClient } from '@/supabase-clients/user/createSupabaseUserServerComponentClient';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { Calendar, Briefcase, MapPin } from 'lucide-react';
 
 export default async function MyApplicationsPage() {
-  const user = await getUserProfile();
+  const user = await serverGetLoggedInUser();
 
   if (!user) {
     redirect('/sign-in');

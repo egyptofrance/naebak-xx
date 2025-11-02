@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { getUserProfile } from '@/data/user/queries';
+import { serverGetLoggedInUser } from '@/utils/server/serverGetLoggedInUser';
 import { hasEmploymentProfile } from '@/data/employment/queries';
 import EmploymentProfileForm from './EmploymentProfileForm';
 
@@ -9,7 +9,7 @@ export default async function CompleteEmploymentProfilePage({
   searchParams: Promise<{ jobId?: string; returnTo?: string }>;
 }) {
   const params = await searchParams;
-  const user = await getUserProfile();
+  const user = await serverGetLoggedInUser();
 
   if (!user) {
     redirect('/sign-in');

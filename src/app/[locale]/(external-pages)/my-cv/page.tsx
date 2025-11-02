@@ -1,12 +1,12 @@
 import { redirect } from 'next/navigation';
-import { getUserProfile } from '@/data/user/queries';
+import { serverGetLoggedInUser } from '@/utils/server/serverGetLoggedInUser';
 import { getEmploymentProfile } from '@/data/employment/queries';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
 export default async function MyCVPage() {
-  const user = await getUserProfile();
+  const user = await serverGetLoggedInUser();
 
   if (!user) {
     redirect('/sign-in');

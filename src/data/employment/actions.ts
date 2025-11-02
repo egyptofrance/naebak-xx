@@ -1,7 +1,7 @@
 'use server';
 
 import { createSupabaseUserServerActionClient } from '@/supabase-clients/user/createSupabaseUserServerActionClient';
-import { getUserProfile } from '../user/queries';
+import { serverGetLoggedInUser } from '@/utils/server/serverGetLoggedInUser';
 import { revalidatePath } from 'next/cache';
 
 export async function createOrUpdateEmploymentProfile(formData: {
@@ -23,7 +23,7 @@ export async function createOrUpdateEmploymentProfile(formData: {
   additional_documents?: string[];
 }) {
   const supabase = createSupabaseUserServerActionClient();
-  const user = await getUserProfile();
+  const user = await serverGetLoggedInUser();
 
   if (!user) {
     return { success: false, error: 'User not authenticated' };
@@ -76,7 +76,7 @@ export async function createOrUpdateEmploymentProfile(formData: {
 
 export async function submitJobApplication(jobId: string, employmentProfileId: string) {
   const supabase = createSupabaseUserServerActionClient();
-  const user = await getUserProfile();
+  const user = await serverGetLoggedInUser();
 
   if (!user) {
     return { success: false, error: 'User not authenticated' };

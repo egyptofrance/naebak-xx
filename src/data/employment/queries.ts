@@ -1,9 +1,9 @@
 import { createSupabaseUserServerComponentClient } from '@/supabase-clients/user/createSupabaseUserServerComponentClient';
-import { getUserProfile } from '../user/queries';
+import { serverGetLoggedInUser } from '@/utils/server/serverGetLoggedInUser';
 
 export async function hasEmploymentProfile(): Promise<boolean> {
   const supabase = createSupabaseUserServerComponentClient();
-  const user = await getUserProfile();
+  const user = await serverGetLoggedInUser();
 
   if (!user) {
     return false;
@@ -20,7 +20,7 @@ export async function hasEmploymentProfile(): Promise<boolean> {
 
 export async function getEmploymentProfile() {
   const supabase = createSupabaseUserServerComponentClient();
-  const user = await getUserProfile();
+  const user = await serverGetLoggedInUser();
 
   if (!user) {
     return null;
