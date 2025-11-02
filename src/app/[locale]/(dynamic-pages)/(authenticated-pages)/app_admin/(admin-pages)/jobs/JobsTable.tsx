@@ -104,8 +104,8 @@ export default function JobsTable({ jobs }: JobsTableProps) {
             {jobs.map((job) => (
               <TableRow key={job.id}>
                 <TableCell className="font-medium">{job.title}</TableCell>
-                <TableCell>{job.category}</TableCell>
-                <TableCell>{job.governorate}</TableCell>
+                <TableCell>{job.category?.name_ar || 'غير محدد'}</TableCell>
+                <TableCell>{job.governorate?.name_ar || 'غير محدد'}</TableCell>
                 <TableCell>{getStatusBadge(job.status)}</TableCell>
                 <TableCell>{job.statistics?.views_count || 0}</TableCell>
                 <TableCell>{job.statistics?.applications_count || 0}</TableCell>
