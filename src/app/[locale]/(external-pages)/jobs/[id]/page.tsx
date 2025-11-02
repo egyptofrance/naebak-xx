@@ -7,6 +7,8 @@ import { Separator } from '@/components/ui/separator';
 import { MapPin, Briefcase, Clock, Calendar, Eye, Users, Building, Phone } from 'lucide-react';
 import Link from 'next/link';
 import { JOB_CATEGORIES, WORK_LOCATIONS, EMPLOYMENT_TYPES } from '@/types/jobs';
+import { hasEmploymentProfile } from '@/data/employment/queries';
+import ApplyButton from './ApplyButton';
 
 // Force dynamic rendering
 export const revalidate = 0;
@@ -18,6 +20,7 @@ export default async function JobDetailsPage({
 }) {
   const { id } = await params;
   const job = await getJobById(id);
+  const userHasProfile = await hasEmploymentProfile();
 
   if (!job) {
     notFound();
@@ -232,16 +235,13 @@ export default async function JobDetailsPage({
 
               <Separator />
 
-              {/* Apply Button - فقط للوظائف العادية */}
-              {!job.is_company_ad && (
-                <div className="flex justify-center">
-                  <Button size="lg" asChild className="px-12">
-                    <Link href={`/jobs/${job.id}/apply`}>
-                      قدم طلبك الآن
-                    </Link>
-                  </Button>
-                </div>
-              )}
+              {/* Apply Button */}
+              <ApplyButton
+                jobId={job.id}
+                hasProfile={userHasProfile}
+                isCompanyAd={job.is_company_ad || false}
+                companyPhone={job.company_phone}
+              />
             </CardContent>
           </Card>
 
