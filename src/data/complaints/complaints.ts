@@ -1001,9 +1001,8 @@ export async function getComplaintComments(complaintId: string) {
  * Get votes count for a complaint
  */
 export async function getComplaintVotesCount(complaintId: string): Promise<number> {
-  const supabase = await createSupabaseUserServerComponentClient();
-
-  const { count, error } = await supabase
+  // Use admin client to access complaint_votes table
+  const { count, error } = await supabaseAdminClient
     .from("complaint_votes")
     .select("*", { count: "exact", head: true })
     .eq("complaint_id", complaintId);
