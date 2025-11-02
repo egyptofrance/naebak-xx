@@ -760,7 +760,7 @@ export async function getPublicComplaints() {
     .eq("is_archived", false)
     .order("created_at", { ascending: false });
 
-  // Add votes_count as 0 for now (will be calculated from complaint_votes table later)
+  // Calculate votes_count for each complaint from complaint_votes table
   type ComplaintWithVotes = {
     id: string;
     title: string;
@@ -774,10 +774,16 @@ export async function getPublicComplaints() {
     votes_count: number;
   };
 
-  const complaintsWithVotes = (data || []).map(complaint => ({
-    ...complaint,
-    votes_count: 0 // TODO: Calculate from complaint_votes table
-  }));
+  // Get votes count for all complaints in parallel
+  const complaintsWithVotes = await Promise.all(
+    (data || []).map(async (complaint) => {
+      const votesCount = await getComplaintVotesCount(complaint.id);
+      return {
+        ...complaint,
+        votes_count: votesCount
+      };
+    })
+  );
 
   return { 
     data: complaintsWithVotes as unknown as ComplaintWithVotes[], 
@@ -884,8 +890,7 @@ export async function getPublicComplaintById(complaintId: string) {
       district,
       created_at,
       resolved_at,
-      priority,
-      votes_count
+      priority
     `)
     .eq("id", complaintId)
     .eq("is_public", true)
@@ -989,4 +994,24 @@ export async function getComplaintComments(complaintId: string) {
   }
 
   return { data: data || [], error: null };
+}
+
+
+/**
+ * Get votes count for a complaint
+ */
+export async function getComplaintVotesCount(complaintId: string): Promise<number> {
+  const supabase = await createSupabaseUserServerComponentClient();
+
+  const { count, error } = await supabase
+    .from("complaint_votes")
+    .select("*", { count: "exact", head: true })
+    .eq("complaint_id", complaintId);
+
+  if (error) {
+    console.error("Error fetching votes count:", error);
+    return 0;
+  }
+
+  return count || 0;
 }

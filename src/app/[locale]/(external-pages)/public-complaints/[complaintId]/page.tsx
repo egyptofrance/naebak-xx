@@ -1,4 +1,4 @@
-import { getPublicComplaintById, getComplaintComments } from "@/data/complaints/complaints";
+import { getPublicComplaintById, getComplaintComments, getComplaintVotesCount } from "@/data/complaints/complaints";
 import { getComplaintAttachments } from "@/data/complaints/getComplaintAttachments";
 import { hasUserVoted } from "@/app/actions/complaints/hasUserVoted";
 import { notFound } from "next/navigation";
@@ -92,15 +92,14 @@ export default async function PublicComplaintDetailPage({ params }: PageProps) {
   const [
     { data: attachments },
     { data: comments },
-    hasVoted
+    hasVoted,
+    votesCount
   ] = await Promise.all([
     getComplaintAttachments(complaintId),
     getComplaintComments(complaintId),
-    hasUserVoted(complaintId)
+    hasUserVoted(complaintId),
+    getComplaintVotesCount(complaintId)
   ]);
-
-  // Get votes count from complaint
-  const votesCount = (complaint as any).votes_count || 0;
 
   return (
     <div className="container mx-auto p-4 md:p-6 max-w-5xl" dir="rtl">

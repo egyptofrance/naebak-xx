@@ -73,15 +73,14 @@ export async function upvoteComplaint(complaintId: string) {
       }
 
       // Get updated votes count
-      const { data: complaint } = await supabase
-        .from("complaints")
-        .select("votes_count")
-        .eq("id", complaintId)
-        .single();
+      const { count } = await supabase
+        .from("complaint_votes")
+        .select("*", { count: "exact", head: true })
+        .eq("complaint_id", complaintId);
 
       return {
         success: true,
-        votesCount: complaint?.votes_count || 0,
+        votesCount: count || 0,
         hasVoted: false,
       };
     } else {
@@ -105,15 +104,14 @@ export async function upvoteComplaint(complaintId: string) {
       }
 
       // Get updated votes count
-      const { data: complaint } = await supabase
-        .from("complaints")
-        .select("votes_count")
-        .eq("id", complaintId)
-        .single();
+      const { count } = await supabase
+        .from("complaint_votes")
+        .select("*", { count: "exact", head: true })
+        .eq("complaint_id", complaintId);
 
       return {
         success: true,
-        votesCount: complaint?.votes_count || 0,
+        votesCount: count || 0,
         hasVoted: true,
       };
     }
