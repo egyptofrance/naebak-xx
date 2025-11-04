@@ -84,8 +84,8 @@ async function SidebarFooterUserMenu() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem asChild>
-                <Link href="/user/settings" className="bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 hover:from-gray-200 hover:to-gray-300 dark:hover:from-gray-600 dark:hover:to-gray-700 text-gray-900 dark:text-gray-100 font-semibold shadow-md hover:shadow-lg transition-all duration-200 rounded-md px-3 py-2 border border-gray-300 dark:border-gray-600">
+              <DropdownMenuItem asChild className="p-0 focus:bg-transparent hover:bg-transparent">
+                <Link href="/user/settings" className="w-full flex items-center gap-2 !bg-gradient-to-b !from-gray-100 !to-gray-200 dark:!from-gray-700 dark:!to-gray-800 hover:!from-gray-200 hover:!to-gray-300 dark:hover:!from-gray-600 dark:hover:!to-gray-700 !text-gray-900 dark:!text-gray-100 font-semibold !shadow-[0_2px_4px_rgba(0,0,0,0.1),0_1px_2px_rgba(0,0,0,0.06)] hover:!shadow-[0_4px_6px_rgba(0,0,0,0.1),0_2px_4px_rgba(0,0,0,0.06)] transition-all duration-200 rounded-md px-3 py-2 !border !border-gray-300 dark:!border-gray-600">
                   <BadgeCheck className="text-gray-700 dark:text-gray-300" />
                   الإعدادات
                 </Link>
