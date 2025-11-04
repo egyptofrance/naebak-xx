@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Users } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 
 interface VisitorCounterSettings {
   min: number;
@@ -44,17 +42,10 @@ export function VisitorCounter() {
     return () => clearInterval(interval);
   }, [settings]);
 
-  if (count === 0) return null;
+  if (count === 0) return <span className="text-3xl font-bold">...</span>;
 
   return (
-    <Badge 
-      variant="secondary" 
-      className="flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-sm transition-colors flex-shrink-0"
-    >
-      <Users className="h-3.5 w-3.5 md:h-4 md:w-4 flex-shrink-0" />
-      <span className="hidden sm:inline text-xs whitespace-nowrap">متصل الآن:</span>
-      <span className="font-bold text-xs md:text-sm whitespace-nowrap">{count.toLocaleString('ar-EG')}</span>
-    </Badge>
+    <span className="text-3xl font-bold text-blue-600">{count.toLocaleString('ar-EG')}</span>
   );
 }
 

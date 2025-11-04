@@ -3,7 +3,7 @@ import { Users, Building2, MessageSquare, ArrowRight } from "lucide-react";
 
 export default function PlatformOverview() {
   return (
-    <section className="py-16 px-6 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950">
+    <section className="py-16 px-6 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950" dir="rtl">
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
         <div className="text-center mb-12">

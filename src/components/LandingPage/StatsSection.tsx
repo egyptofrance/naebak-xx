@@ -1,6 +1,7 @@
 "use client";
-import { Users, MessageSquare, CheckCircle, TrendingUp } from "lucide-react";
+import { Users, MessageSquare, CheckCircle, TrendingUp, Eye } from "lucide-react";
 import { useEffect, useState } from "react";
+import { VisitorCounter } from "@/components/VisitorCounter";
 
 interface StatsProps {
   deputiesCount: number;
@@ -70,6 +71,14 @@ export default function StatsSection({
       bgColor: "bg-brand-green/10",
     },
     {
+      title: "الزوار المتواجدون",
+      value: "visitor",
+      icon: Eye,
+      color: "text-blue-600",
+      bgColor: "bg-blue-600/10",
+      isVisitorCounter: true,
+    },
+    {
       title: "الشكاوى المحلولة",
       value: counts.resolved,
       icon: CheckCircle,
@@ -86,7 +95,7 @@ export default function StatsSection({
   ];
 
   return (
-    <section className="py-16 px-6 bg-white dark:bg-gray-950">
+    <section className="py-16 px-6 bg-white dark:bg-gray-950" dir="rtl">
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
         <div className="text-center mb-12">
@@ -99,7 +108,7 @@ export default function StatsSection({
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           {stats.map((stat) => {
             const Icon = stat.icon;
             return (
@@ -112,7 +121,13 @@ export default function StatsSection({
                     <Icon className={`w-6 h-6 ${stat.color}`} />
                   </div>
                 </div>
-                <div className="text-3xl font-bold mb-2">{stat.value}</div>
+                {stat.isVisitorCounter ? (
+                  <div className="text-3xl font-bold mb-2">
+                    <VisitorCounter />
+                  </div>
+                ) : (
+                  <div className="text-3xl font-bold mb-2">{stat.value}</div>
+                )}
                 <div className="text-sm text-muted-foreground">{stat.title}</div>
               </div>
             );

@@ -7,7 +7,7 @@ export default function HeroSection() {
   const t = useTranslations("HomePage");
   return (
     <>
-      <section className="py-10 lg:py-20 text-center px-6 max-w-5xl mx-auto">
+      <section className="py-10 lg:py-20 text-center px-6 max-w-5xl mx-auto" dir="rtl">
       <div className="flex flex-col gap-10 w-full">
         <div className="space-y-4 flex flex-col items-center flex-1">
           <Link href={"#"}>
