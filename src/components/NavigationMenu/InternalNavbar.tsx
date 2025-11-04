@@ -1,7 +1,7 @@
 import { cn } from "@/utils/cn";
 import { Suspense, type ReactNode } from "react";
 import { SidebarTrigger } from "../ui/sidebar";
-import { Home } from "lucide-react";
+import { Home, Settings } from "lucide-react";
 import { Button } from "../ui/button";
 import { PendingInvitationCounter } from "./PendingInvitationCounter";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -30,6 +30,16 @@ export async function InternalNavbar({ children }: { children: ReactNode }) {
               <Home className="size-5" />
             </Button>
           </Link>
+          <Link href="/user/settings">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-10 text-white hover:bg-white/10 rounded-lg"
+              aria-label="الإعدادات"
+            >
+              <Settings className="size-5" />
+            </Button>
+          </Link>
         </div>
         
         {/* Logo */}
@@ -44,16 +54,8 @@ export async function InternalNavbar({ children }: { children: ReactNode }) {
           />
         </Link>
         
-        <Suspense>{children}</Suspense>
-        <div className="relative w-max flex items-center gap-2">
-          <div className="hidden lg:flex items-center gap-2">
-            <div className="flex items-center gap-2">
-              <RefreshButton />
-              <LanguageSwitcher />
-              <PendingInvitationCounter />
-            </div>
-          </div>
-        </div>
+        {/* Right side - empty for now */}
+        <div className="w-10"></div>
       </div>
     </header>
   );
