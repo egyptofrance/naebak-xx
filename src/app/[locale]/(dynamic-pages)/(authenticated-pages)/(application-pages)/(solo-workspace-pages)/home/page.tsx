@@ -39,7 +39,7 @@ export default async function CitizenHomePage() {
   // Get user profile with governorate and electoral district
   const { data: profile } = await supabase
     .from('user_profiles')
-    .select('governorate_id, electoral_district, full_name')
+    .select('governorate_id, electoral_district_id, full_name')
     .eq('id', user.id)
     .single();
 
@@ -57,8 +57,8 @@ export default async function CitizenHomePage() {
   // Filter deputies by user's electoral district
   const myDeputies = deputies.filter(deputy => {
     if (!deputy) return false; // Skip null deputies
-    if (profile?.electoral_district) {
-      return deputy.deputy.electoral_district_id === profile.electoral_district;
+    if (profile?.electoral_district_id) {
+      return deputy.deputy.electoral_district_id === profile.electoral_district_id;
     }
     // Fallback to governorate if electoral district is not set
     if (profile?.governorate_id) {
@@ -69,7 +69,7 @@ export default async function CitizenHomePage() {
 
   // Get user's governorate and electoral district names
   const userGovernorate = governorates.find(g => g.id === profile?.governorate_id);
-  const userElectoralDistrict = electoralDistricts.find(d => d.id === profile?.electoral_district);
+  const userElectoralDistrict = electoralDistricts.find(d => d.id === profile?.electoral_district_id);
 
   return (
     <div className="min-h-screen bg-background">

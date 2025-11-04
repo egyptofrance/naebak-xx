@@ -357,7 +357,7 @@ const updateUserFullNameSchema = z.object({
   phone: z.string().optional(),
   governorateId: z.string().optional(),
   city: z.string().optional(),
-  electoralDistrict: z.string().optional(),
+  electoralDistrictId: z.string().optional(),
   gender: z.enum(["male", "female"]).optional(),
   district: z.string().optional(),
   village: z.string().optional(),
@@ -395,8 +395,8 @@ export const updateUserFullNameAction = authActionClient
     if (profileData.city && profileData.city.trim()) 
       updateData.city = profileData.city.trim();
     
-    if (profileData.electoralDistrict && profileData.electoralDistrict.trim()) 
-      updateData.electoral_district = profileData.electoralDistrict.trim();
+    if (profileData.electoralDistrictId && profileData.electoralDistrictId.trim()) 
+      updateData.electoral_district_id = profileData.electoralDistrictId;
     
     if (profileData.gender) 
       updateData.gender = profileData.gender;
