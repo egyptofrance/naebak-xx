@@ -15,9 +15,10 @@ export async function InternalNavbar({ children }: { children: ReactNode }) {
     <header className="sticky top-0 w-full z-10 bg-green-900 text-white shadow-lg">
       <div
         className={cn(
-          "h-full  text-sm font-medium flex gap-2 mx-auto pl-6 pr-6 border-b border-white/10 py-3 w-full justify-between items-center",
+          "h-full text-sm font-medium flex gap-2 mx-auto pl-6 pr-6 border-b border-white/10 py-3 w-full justify-between items-center",
         )}
       >
+        {/* Left side - Menu and Home */}
         <div className="flex items-center gap-2">
           <SidebarTrigger />
           <Link href="/">
@@ -30,23 +31,22 @@ export async function InternalNavbar({ children }: { children: ReactNode }) {
               <Home className="size-5" />
             </Button>
           </Link>
-
         </div>
         
-        {/* Logo */}
-        <Link href="/" className="hidden md:flex items-center gap-2 hover:opacity-80 transition-opacity">
+        {/* Center - empty for balance */}
+        <div className="flex-1"></div>
+        
+        {/* Right side - Logo */}
+        <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <Image
             src="/images/logo-naebak-white.png"
             alt="نائبك"
             width={200}
             height={67}
-            className="h-12 md:h-14 w-auto object-contain"
+            className="h-10 md:h-12 w-auto object-contain"
             priority
           />
         </Link>
-        
-        {/* Right side - empty for now */}
-        <div className="w-10"></div>
       </div>
     </header>
   );

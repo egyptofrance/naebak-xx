@@ -1,5 +1,6 @@
 import { ApplicationLayoutShell } from "@/components/ApplicationLayoutShell/ApplicationLayoutShell";
 import { InternalNavbar } from "@/components/NavigationMenu/InternalNavbar";
+import { Footer } from "@/components/LandingPage/Footer";
 import {
   getCachedSoloWorkspace,
   getCachedWorkspaceBySlug,
@@ -47,7 +48,7 @@ export async function WorkspaceLayout({
 }) {
   return (
     <ApplicationLayoutShell sidebar={sidebar}>
-      <div>
+      <div className="flex flex-col min-h-screen">
         <Suspense fallback={null}>
           <WorkspaceTestIds workspaceSlug={workspaceSlug} />
         </Suspense>
@@ -59,6 +60,7 @@ export async function WorkspaceLayout({
         <div className="relative flex-1 h-auto w-full overflow-auto" dir="rtl">
           <div className="px-6 space-y-6 pb-8 text-right">{children}</div>
         </div>
+        <Footer />
       </div>
     </ApplicationLayoutShell>
   );
