@@ -37,20 +37,5 @@ async function Title({
 
 // Main navigation menu for authenticated users
 export async function WorkspaceNavbar() {
-  return (
-    <nav className="flex items-center gap-6" dir="rtl">
-      <Link href="/deputies" className="text-sm font-medium hover:text-primary transition-colors">
-        النواب
-      </Link>
-      <Link href="/about" className="text-sm font-medium hover:text-primary transition-colors">
-        من نحن
-      </Link>
-      <Link href="/contact" className="text-sm font-medium hover:text-primary transition-colors">
-        اتصل بنا
-      </Link>
-      <Link href="/public-complaints" className="text-sm font-medium hover:text-primary transition-colors">
-        الشكاوى العامة
-      </Link>
-    </nav>
-  );
+  return null;
 }
