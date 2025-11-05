@@ -30,7 +30,7 @@ import { Suspense } from "react";
 
 const adminSections = [
   {
-    title: "القائمة الرئيسية",
+    title: "لوحة التحكم",
     links: [
       {
         label: "لوحة التحكم",
