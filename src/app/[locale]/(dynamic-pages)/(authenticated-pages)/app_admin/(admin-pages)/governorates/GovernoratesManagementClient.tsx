@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
+
 import { updateGovernorateVisibility } from "@/app/actions/governorate/updateGovernorateVisibility";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
 interface Governorate {
   id: string;
@@ -133,21 +134,36 @@ export function GovernoratesManagementClient({
                     )}
                   </td>
                   <td className="p-4 text-center">
-                    <div className="flex items-center justify-center gap-2">
-                      <Switch
-                        checked={governorate.is_visible || false}
-                        onCheckedChange={() =>
-                          handleToggleVisibility(
-                            governorate.id,
-                            governorate.is_visible || false
-                          )
-                        }
-                        disabled={loading === governorate.id}
-                      />
-                      {loading === governorate.id && (
-                        <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                    <Button
+                      variant={governorate.is_visible ? "default" : "outline"}
+                      size="sm"
+                      onClick={() =>
+                        handleToggleVisibility(
+                          governorate.id,
+                          governorate.is_visible || false
+                        )
+                      }
+                      disabled={loading === governorate.id}
+                      className={cn(
+                        "min-w-[100px]",
+                        governorate.is_visible
+                          ? "bg-green-600 hover:bg-green-700 text-white"
+                          : "bg-gray-100 hover:bg-gray-200 text-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300"
                       )}
-                    </div>
+                    >
+                      {loading === governorate.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <>
+                          {governorate.is_visible ? (
+                            <Eye className="h-4 w-4 ml-2" />
+                          ) : (
+                            <EyeOff className="h-4 w-4 ml-2" />
+                          )}
+                          {governorate.is_visible ? "إخفاء" : "إظهار"}
+                        </>
+                      )}
+                    </Button>
                   </td>
                 </tr>
               ))}
