@@ -24,7 +24,9 @@ export function GovernoratesManagementClient({
 }: GovernoratesManagementClientProps) {
   const [governorates, setGovernorates] = useState(initialGovernorates);
   const [loading, setLoading] = useState<string | null>(null);
-  const { toast } = useTo  const handleToggleVisibility = async (
+  const { toast } = useToast();
+
+  const handleToggleVisibility = async (
     governorateId: string,
     currentVisibility: boolean
   ) => {
