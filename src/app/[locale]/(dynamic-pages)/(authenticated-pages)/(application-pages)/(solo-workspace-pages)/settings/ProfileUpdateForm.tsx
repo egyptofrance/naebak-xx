@@ -229,7 +229,7 @@ export function ProfileUpdateForm({
                   <FormItem>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      value={field.value}
                     >
                       <FormControl>
                         <SelectTrigger className="w-full">
@@ -301,7 +301,7 @@ export function ProfileUpdateForm({
                   <FormItem>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      value={field.value}
                       disabled={!form.watch("governorateId")}
                     >
                       <FormControl>
@@ -335,7 +335,7 @@ export function ProfileUpdateForm({
                   <FormItem>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      value={field.value}
                     >
                       <FormControl>
                         <SelectTrigger className="w-full">
