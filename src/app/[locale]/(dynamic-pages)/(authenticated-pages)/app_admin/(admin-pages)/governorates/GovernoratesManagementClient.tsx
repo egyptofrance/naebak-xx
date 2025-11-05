@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, useTransition } from "react";
 import { updateGovernorateVisibility } from "@/app/actions/governorate/updateGovernorateVisibility";
 import { Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
@@ -21,44 +20,47 @@ export function GovernoratesManagementClient({
   governorates: initialGovernorates,
 }: GovernoratesManagementClientProps) {
   const [governorates, setGovernorates] = useState(initialGovernorates);
-  const [loading, setLoading] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const [loadingId, setLoadingId] = useState<string | null>(null);
   const { toast } = useToast();
 
   const handleToggle = async (governorateId: string, currentVisibility: boolean) => {
-    setLoading(governorateId);
+    setLoadingId(governorateId);
+    
+    startTransition(async () => {
+      try {
+        const result = await updateGovernorateVisibility(governorateId, !currentVisibility);
+        
+        if (result.success) {
+          setGovernorates((prev) =>
+            prev.map((gov) =>
+              gov.id === governorateId
+                ? { ...gov, is_visible: !currentVisibility }
+                : gov
+            )
+          );
 
-    try {
-      const result = await updateGovernorateVisibility(governorateId, !currentVisibility);
-      
-      if (result.success) {
-        setGovernorates((prev) =>
-          prev.map((gov) =>
-            gov.id === governorateId
-              ? { ...gov, is_visible: !currentVisibility }
-              : gov
-          )
-        );
-
-        toast({
-          title: "تم التحديث بنجاح",
-          description: `تم ${!currentVisibility ? "تفعيل" : "إخفاء"} المحافظة`,
-        });
-      } else {
+          toast({
+            title: "تم التحديث بنجاح",
+            description: `تم ${!currentVisibility ? "تفعيل" : "إخفاء"} المحافظة`,
+          });
+        } else {
+          toast({
+            title: "خطأ",
+            description: result.error || "فشل في تحديث حالة المحافظة",
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
         toast({
           title: "خطأ",
-          description: result.error || "فشل في تحديث حالة المحافظة",
+          description: "حدث خطأ غير متوقع",
           variant: "destructive",
         });
+      } finally {
+        setLoadingId(null);
       }
-    } catch (error) {
-      toast({
-        title: "خطأ",
-        description: "حدث خطأ غير متوقع",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(null);
-    }
+    });
   };
 
   const visibleCount = governorates.filter((g) => g.is_visible).length;
@@ -104,53 +106,57 @@ export function GovernoratesManagementClient({
 
       {/* Governorates Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {governorates.map((governorate) => (
-          <div
-            key={governorate.id}
-            className="bg-card border rounded-lg p-4 flex items-center justify-between hover:shadow-md transition-shadow"
-          >
-            <div className="flex-1">
-              <h3 className="font-bold text-lg mb-1">{governorate.name_ar}</h3>
-              <p className="text-sm text-muted-foreground">
-                {governorate.name_en || "-"}
-              </p>
-              <div className="mt-2">
-                {governorate.is_visible ? (
-                  <span className="inline-flex items-center gap-1 text-xs text-green-600 dark:text-green-400">
-                    <CheckCircle2 className="h-3 w-3" />
-                    مفعلة
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center gap-1 text-xs text-gray-500">
-                    <XCircle className="h-3 w-3" />
-                    مخفية
-                  </span>
-                )}
+        {governorates.map((governorate) => {
+          const isLoading = loadingId === governorate.id;
+          const isVisible = governorate.is_visible || false;
+          
+          return (
+            <div
+              key={governorate.id}
+              className="bg-card border rounded-lg p-4 flex items-center justify-between hover:shadow-md transition-shadow"
+            >
+              <div className="flex-1">
+                <h3 className="font-bold text-lg mb-1">{governorate.name_ar}</h3>
+                <p className="text-sm text-muted-foreground">
+                  {governorate.name_en || "-"}
+                </p>
+                <div className="mt-2">
+                  {isVisible ? (
+                    <span className="inline-flex items-center gap-1 text-xs text-green-600 dark:text-green-400">
+                      <CheckCircle2 className="h-3 w-3" />
+                      مفعلة
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 text-xs text-gray-500">
+                      <XCircle className="h-3 w-3" />
+                      مخفية
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div>
+                <button
+                  type="button"
+                  onClick={() => handleToggle(governorate.id, isVisible)}
+                  disabled={isLoading || isPending}
+                  className={`px-4 py-2 rounded-md font-medium text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                    isVisible
+                      ? "bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300"
+                      : "bg-green-600 hover:bg-green-700 text-white"
+                  }`}
+                >
+                  {isLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : isVisible ? (
+                    "إخفاء"
+                  ) : (
+                    "تفعيل"
+                  )}
+                </button>
               </div>
             </div>
-            <div>
-              <Button
-                onClick={() => handleToggle(governorate.id, governorate.is_visible || false)}
-                disabled={loading === governorate.id}
-                size="sm"
-                variant={governorate.is_visible ? "outline" : "default"}
-                className={
-                  governorate.is_visible
-                    ? "bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300"
-                    : "bg-green-600 hover:bg-green-700 text-white"
-                }
-              >
-                {loading === governorate.id ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : governorate.is_visible ? (
-                  "إخفاء"
-                ) : (
-                  "تفعيل"
-                )}
-              </Button>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
