@@ -1,26 +1,29 @@
 "use client";
-import { Users, MessageSquare, CheckCircle, TrendingUp, Eye } from "lucide-react";
+import { Users, FileText, Clock, CheckCircle, Eye, AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { VisitorCounter } from "@/components/VisitorCounter";
 
 interface StatsProps {
   deputiesCount: number;
-  activeComplaintsCount: number;
+  newComplaintsCount: number;
+  underReviewComplaintsCount: number;
+  inProgressComplaintsCount: number;
   resolvedComplaintsCount: number;
-  resolutionRate: number;
 }
 
 export default function StatsSection({
   deputiesCount,
-  activeComplaintsCount,
+  newComplaintsCount,
+  underReviewComplaintsCount,
+  inProgressComplaintsCount,
   resolvedComplaintsCount,
-  resolutionRate,
 }: StatsProps) {
   const [counts, setCounts] = useState({
     deputies: 0,
-    active: 0,
+    newComplaints: 0,
+    underReview: 0,
+    inProgress: 0,
     resolved: 0,
-    rate: 0,
   });
 
   // Animation effect (count up)
@@ -36,24 +39,26 @@ export default function StatsSection({
 
       setCounts({
         deputies: Math.round(deputiesCount * progress),
-        active: Math.round(activeComplaintsCount * progress),
+        newComplaints: Math.round(newComplaintsCount * progress),
+        underReview: Math.round(underReviewComplaintsCount * progress),
+        inProgress: Math.round(inProgressComplaintsCount * progress),
         resolved: Math.round(resolvedComplaintsCount * progress),
-        rate: Math.round(resolutionRate * progress),
       });
 
       if (step >= steps) {
         clearInterval(timer);
         setCounts({
           deputies: deputiesCount,
-          active: activeComplaintsCount,
+          newComplaints: newComplaintsCount,
+          underReview: underReviewComplaintsCount,
+          inProgress: inProgressComplaintsCount,
           resolved: resolvedComplaintsCount,
-          rate: resolutionRate,
         });
       }
     }, interval);
 
     return () => clearInterval(timer);
-  }, [deputiesCount, activeComplaintsCount, resolvedComplaintsCount, resolutionRate]);
+  }, [deputiesCount, newComplaintsCount, underReviewComplaintsCount, inProgressComplaintsCount, resolvedComplaintsCount]);
 
   const stats = [
     {
@@ -64,33 +69,40 @@ export default function StatsSection({
       bgColor: "bg-brand-green-dark/10",
     },
     {
-      title: "الشكاوى النشطة",
-      value: counts.active,
-      icon: MessageSquare,
-      color: "text-brand-green",
-      bgColor: "bg-brand-green/10",
+      title: "الشكاوى الجديدة",
+      value: counts.newComplaints,
+      icon: AlertCircle,
+      color: "text-orange-600",
+      bgColor: "bg-orange-600/10",
     },
     {
-      title: "الزوار المتواجدون",
-      value: "visitor",
-      icon: Eye,
+      title: "قيد المراجعة",
+      value: counts.underReview,
+      icon: FileText,
       color: "text-blue-600",
       bgColor: "bg-blue-600/10",
-      isVisitorCounter: true,
+    },
+    {
+      title: "قيد التنفيذ",
+      value: counts.inProgress,
+      icon: Clock,
+      color: "text-yellow-600",
+      bgColor: "bg-yellow-600/10",
     },
     {
       title: "الشكاوى المحلولة",
       value: counts.resolved,
       icon: CheckCircle,
-      color: "text-brand-green-dark",
-      bgColor: "bg-brand-green-dark/10",
+      color: "text-green-600",
+      bgColor: "bg-green-600/10",
     },
     {
-      title: "معدل الحل",
-      value: `${counts.rate}%`,
-      icon: TrendingUp,
-      color: "text-brand-green",
-      bgColor: "bg-brand-green/10",
+      title: "الزوار المتواجدون",
+      value: "visitor",
+      icon: Eye,
+      color: "text-purple-600",
+      bgColor: "bg-purple-600/10",
+      isVisitorCounter: true,
     },
   ];
 
@@ -108,7 +120,7 @@ export default function StatsSection({
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {stats.map((stat) => {
             const Icon = stat.icon;
             return (

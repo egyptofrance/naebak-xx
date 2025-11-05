@@ -12,16 +12,23 @@ export async function getPublicStats() {
       .select("*", { count: "exact", head: true })
       .eq("deputy_status", "current");
 
-    // Get total complaints count
-    const { count: totalComplaintsCount } = await supabase
-      .from("complaints")
-      .select("*", { count: "exact", head: true });
-
-    // Get active complaints count (all except resolved, closed, archived)
-    const { count: activeComplaintsCount } = await supabase
+    // Get new complaints count
+    const { count: newComplaintsCount } = await supabase
       .from("complaints")
       .select("*", { count: "exact", head: true })
-      .not("status", "in", "(resolved,closed,archived)");
+      .eq("status", "new");
+
+    // Get under review complaints count
+    const { count: underReviewComplaintsCount } = await supabase
+      .from("complaints")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "under_review");
+
+    // Get in progress complaints count
+    const { count: inProgressComplaintsCount } = await supabase
+      .from("complaints")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "in_progress");
 
     // Get resolved complaints count
     const { count: resolvedComplaintsCount } = await supabase
@@ -29,24 +36,21 @@ export async function getPublicStats() {
       .select("*", { count: "exact", head: true })
       .eq("status", "resolved");
 
-    // Calculate resolution rate
-    const resolutionRate = totalComplaintsCount && totalComplaintsCount > 0
-      ? Math.round((resolvedComplaintsCount! / totalComplaintsCount) * 100)
-      : 0;
-
     return {
       deputiesCount: deputiesCount || 0,
-      activeComplaintsCount: activeComplaintsCount || 0,
+      newComplaintsCount: newComplaintsCount || 0,
+      underReviewComplaintsCount: underReviewComplaintsCount || 0,
+      inProgressComplaintsCount: inProgressComplaintsCount || 0,
       resolvedComplaintsCount: resolvedComplaintsCount || 0,
-      resolutionRate,
     };
   } catch (error) {
     console.error("Error fetching public stats:", error);
     return {
       deputiesCount: 0,
-      activeComplaintsCount: 0,
+      newComplaintsCount: 0,
+      underReviewComplaintsCount: 0,
+      inProgressComplaintsCount: 0,
       resolvedComplaintsCount: 0,
-      resolutionRate: 0,
     };
   }
 }
