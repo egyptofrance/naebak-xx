@@ -129,56 +129,7 @@ export default async function config(
       ignoreDuringBuilds: true,
     },
     
-    // Webpack optimizations
-    webpack: (config, { dev, isServer }) => {
-      // تحسين Production Build
-      if (!dev && !isServer) {
-        config.optimization = {
-          ...config.optimization,
-          moduleIds: "deterministic",
-          runtimeChunk: "single",
-          splitChunks: {
-            chunks: "all",
-            cacheGroups: {
-              default: false,
-              vendors: false,
-              // Vendor chunk
-              vendor: {
-                name: "vendor",
-                chunks: "all",
-                test: /node_modules/,
-                priority: 20,
-              },
-              // Common chunk
-              common: {
-                name: "common",
-                minChunks: 2,
-                chunks: "all",
-                priority: 10,
-                reuseExistingChunk: true,
-                enforce: true,
-              },
-              // React/Next.js chunk
-              framework: {
-                name: "framework",
-                test: /[\\/]node_modules[\\/](react|react-dom|next)[\\/]/,
-                priority: 40,
-                enforce: true,
-              },
-              // UI Libraries chunk
-              ui: {
-                name: "ui",
-                test: /[\\/]node_modules[\\/](@radix-ui|lucide-react|framer-motion|react-spring)[\\/]/,
-                priority: 30,
-                enforce: true,
-              },
-            },
-          },
-        };
-      }
-      
-      return config;
-    },
+    // Webpack optimizations removed - using Next.js defaults for better compatibility
   };
   
   if (phase === PHASE_DEVELOPMENT_SERVER) {
