@@ -2,11 +2,9 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-
 import { updateGovernorateVisibility } from "@/app/actions/governorate/updateGovernorateVisibility";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import { cn } from "@/lib/utils";
 
 interface Governorate {
   id: string;
@@ -26,17 +24,13 @@ export function GovernoratesManagementClient({
   const [loading, setLoading] = useState<string | null>(null);
   const { toast } = useToast();
 
-  const handleToggleVisibility = async (
-    governorateId: string,
-    currentVisibility: boolean
-  ) => {
-    console.log('🔄 Toggling visibility:', { governorateId, currentVisibility, newValue: !currentVisibility });
+  const handleToggle = async (governorateId: string, currentVisibility: boolean) => {
     setLoading(governorateId);
 
     try {
       const result = await updateGovernorateVisibility(governorateId, !currentVisibility);
-      console.log('✅ Result from server:', result);    if (result.success) {
-        // Update local state
+      
+      if (result.success) {
         setGovernorates((prev) =>
           prev.map((gov) =>
             gov.id === governorateId
@@ -47,7 +41,7 @@ export function GovernoratesManagementClient({
 
         toast({
           title: "تم التحديث بنجاح",
-          description: `تم ${!currentVisibility ? "إظهار" : "إخفاء"} المحافظة`,
+          description: `تم ${!currentVisibility ? "تفعيل" : "إخفاء"} المحافظة`,
         });
       } else {
         toast({
@@ -57,14 +51,12 @@ export function GovernoratesManagementClient({
         });
       }
     } catch (error) {
-      console.error("❌ Error toggling visibility:", error);
       toast({
         title: "خطأ",
-        description: error instanceof Error ? error.message : "حدث خطأ غير متوقع",
+        description: "حدث خطأ غير متوقع",
         variant: "destructive",
       });
     } finally {
-      console.log('🏁 Finished, resetting loading state');
       setLoading(null);
     }
   };
@@ -82,7 +74,7 @@ export function GovernoratesManagementClient({
         </div>
         <div className="bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
           <div className="text-sm text-green-700 dark:text-green-300 mb-1">
-            المحافظات المرئية
+            المحافظات المفعلة
           </div>
           <div className="text-3xl font-bold text-green-700 dark:text-green-300">
             {visibleCount}
@@ -98,112 +90,67 @@ export function GovernoratesManagementClient({
         </div>
       </div>
 
-      {/* Governorates List */}
-      <div className="bg-card border rounded-lg overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-muted/50 border-b">
-              <tr>
-                <th className="text-right p-4 font-semibold">المحافظة</th>
-                <th className="text-right p-4 font-semibold">الاسم بالإنجليزية</th>
-                <th className="text-center p-4 font-semibold">الحالة</th>
-                <th className="text-center p-4 font-semibold">التحكم</th>
-              </tr>
-            </thead>
-            <tbody>
-              {governorates.map((governorate) => (
-                <tr
-                  key={governorate.id}
-                  className="border-b last:border-b-0 hover:bg-muted/30 transition-colors"
-                >
-                  <td className="p-4">
-                    <div className="font-semibold">{governorate.name_ar}</div>
-                  </td>
-                  <td className="p-4">
-                    <div className="text-muted-foreground">
-                      {governorate.name_en || "-"}
-                    </div>
-                  </td>
-                  <td className="p-4 text-center">
-                    {governorate.is_visible ? (
-                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-100 dark:bg-green-950/30 text-green-700 dark:text-green-300 text-sm font-medium">
-                        <Eye className="h-3 w-3" />
-                        مرئية
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-950/30 text-gray-700 dark:text-gray-300 text-sm font-medium">
-                        <EyeOff className="h-3 w-3" />
-                        مخفية
-                      </span>
-                    )}
-                  </td>
-                  <td className="p-4 text-center">
-                    <Button
-                      variant={governorate.is_visible ? "default" : "outline"}
-                      size="sm"
-                      onClick={() =>
-                        handleToggleVisibility(
-                          governorate.id,
-                          governorate.is_visible || false
-                        )
-                      }
-                      disabled={loading === governorate.id}
-                      className={cn(
-                        "min-w-[100px]",
-                        governorate.is_visible
-                          ? "bg-green-600 hover:bg-green-700 text-white"
-                          : "bg-gray-100 hover:bg-gray-200 text-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300"
-                      )}
-                    >
-                      {loading === governorate.id ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        <>
-                          {governorate.is_visible ? (
-                            <Eye className="h-4 w-4 ml-2" />
-                          ) : (
-                            <EyeOff className="h-4 w-4 ml-2" />
-                          )}
-                          {governorate.is_visible ? "إخفاء" : "إظهار"}
-                        </>
-                      )}
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      {/* Info Box */}
+      <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
+          كيفية الاستخدام:
+        </h3>
+        <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+          <li>• اضغط على زر "تفعيل" لإظهار المحافظة للمستخدمين</li>
+          <li>• اضغط على زر "إخفاء" لإخفاء المحافظة من المستخدمين</li>
+          <li>• المحافظات المخفية لن تظهر في القوائم أو الفلاتر</li>
+        </ul>
       </div>
 
-      {/* Quick Actions */}
-      <div className="flex gap-4">
-        <Button
-          variant="outline"
-          onClick={async () => {
-            for (const gov of governorates) {
-              if (!gov.is_visible) {
-                await handleToggleVisibility(gov.id, false);
-              }
-            }
-          }}
-          disabled={loading !== null}
-        >
-          إظهار الكل
-        </Button>
-        <Button
-          variant="outline"
-          onClick={async () => {
-            for (const gov of governorates) {
-              if (gov.is_visible) {
-                await handleToggleVisibility(gov.id, true);
-              }
-            }
-          }}
-          disabled={loading !== null}
-        >
-          إخفاء الكل
-        </Button>
+      {/* Governorates Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {governorates.map((governorate) => (
+          <div
+            key={governorate.id}
+            className="bg-card border rounded-lg p-4 flex items-center justify-between hover:shadow-md transition-shadow"
+          >
+            <div className="flex-1">
+              <h3 className="font-bold text-lg mb-1">{governorate.name_ar}</h3>
+              <p className="text-sm text-muted-foreground">
+                {governorate.name_en || "-"}
+              </p>
+              <div className="mt-2">
+                {governorate.is_visible ? (
+                  <span className="inline-flex items-center gap-1 text-xs text-green-600 dark:text-green-400">
+                    <CheckCircle2 className="h-3 w-3" />
+                    مفعلة
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 text-xs text-gray-500">
+                    <XCircle className="h-3 w-3" />
+                    مخفية
+                  </span>
+                )}
+              </div>
+            </div>
+            <div>
+              <Button
+                onClick={() => handleToggle(governorate.id, governorate.is_visible || false)}
+                disabled={loading === governorate.id}
+                size="sm"
+                variant={governorate.is_visible ? "outline" : "default"}
+                className={
+                  governorate.is_visible
+                    ? "bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-300"
+                    : "bg-green-600 hover:bg-green-700 text-white"
+                }
+              >
+                {loading === governorate.id ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : governorate.is_visible ? (
+                  "إخفاء"
+                ) : (
+                  "تفعيل"
+                )}
+              </Button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
