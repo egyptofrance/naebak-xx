@@ -1,7 +1,6 @@
 import { getAllGovernorates } from "@/app/actions/governorate/getAllGovernorates";
 import { updateGovernorateVisibility } from "@/app/actions/governorate/updateGovernorateVisibility";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { CheckCircle2, XCircle } from "lucide-react";
 
 export const metadata = {
@@ -9,7 +8,11 @@ export const metadata = {
   description: "التحكم في المحافظات المرئية للنشر التدريجي",
 };
 
-export default async function GovernoratesManagementPage() {
+export default async function GovernoratesManagementPage({
+  searchParams,
+}: {
+  searchParams: { success?: string; error?: string };
+}) {
   const governorates = await getAllGovernorates();
   
   const visibleCount = governorates.filter((g) => g.is_visible).length;
@@ -23,27 +26,48 @@ export default async function GovernoratesManagementPage() {
     const currentVisibility = formData.get("currentVisibility") === "true";
     const governorateName = formData.get("governorateName") as string;
     
-    console.log("=== Toggle Action ===");
-    console.log("ID:", governorateId);
-    console.log("Name:", governorateName);
-    console.log("Current:", currentVisibility);
-    console.log("New:", !currentVisibility);
+    console.log("=== SERVER ACTION CALLED ===");
+    console.log("Governorate ID:", governorateId);
+    console.log("Governorate Name:", governorateName);
+    console.log("Current Visibility:", currentVisibility);
+    console.log("New Visibility:", !currentVisibility);
+    console.log("===========================");
     
-    const result = await updateGovernorateVisibility(governorateId, !currentVisibility);
-    
-    console.log("Result:", result);
-    
-    if (result.success) {
-      revalidatePath("/ar/app_admin/governorates");
-      revalidatePath("/");
-      redirect("/ar/app_admin/governorates?success=" + governorateName);
-    } else {
-      redirect("/ar/app_admin/governorates?error=" + (result.error || "فشل"));
+    try {
+      const result = await updateGovernorateVisibility(governorateId, !currentVisibility);
+      
+      console.log("Update Result:", result);
+      
+      if (result.success) {
+        console.log("SUCCESS! Revalidating paths...");
+        revalidatePath("/ar/app_admin/governorates");
+        revalidatePath("/");
+        console.log("Paths revalidated");
+      } else {
+        console.error("FAILED:", result.error);
+      }
+      
+      return result;
+    } catch (error) {
+      console.error("EXCEPTION in toggleVisibility:", error);
+      return { success: false, error: String(error) };
     }
   }
 
   return (
     <div className="container mx-auto p-6 max-w-6xl" dir="rtl">
+      {/* Success/Error Messages */}
+      {searchParams.success && (
+        <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-800">
+          ✅ تم تحديث {searchParams.success} بنجاح
+        </div>
+      )}
+      {searchParams.error && (
+        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
+          ❌ خطأ: {searchParams.error}
+        </div>
+      )}
+
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">إدارة المحافظات</h1>
@@ -124,13 +148,13 @@ export default async function GovernoratesManagementPage() {
                 </div>
               </div>
               <div>
-                <form action={toggleVisibility}>
+                <form action={toggleVisibility} method="POST">
                   <input type="hidden" name="governorateId" value={governorate.id} />
                   <input type="hidden" name="currentVisibility" value={String(isVisible)} />
                   <input type="hidden" name="governorateName" value={governorate.name_ar} />
                   <button
                     type="submit"
-                    className={`px-4 py-2 rounded-md font-medium text-sm transition-colors hover:opacity-90 ${
+                    className={`px-4 py-2 rounded-md font-medium text-sm transition-colors hover:opacity-90 active:scale-95 ${
                       isVisible
                         ? "bg-gray-200 hover:bg-gray-300 text-gray-700 border border-gray-300"
                         : "bg-green-600 hover:bg-green-700 text-white"
