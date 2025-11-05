@@ -11,8 +11,9 @@ export const metadata = {
 export default async function GovernoratesManagementPage({
   searchParams,
 }: {
-  searchParams: { success?: string; error?: string };
+  searchParams: Promise<{ success?: string; error?: string }>;
 }) {
+  const params = await searchParams;
   const governorates = await getAllGovernorates();
   
   const visibleCount = governorates.filter((g) => g.is_visible).length;
@@ -57,14 +58,14 @@ export default async function GovernoratesManagementPage({
   return (
     <div className="container mx-auto p-6 max-w-6xl" dir="rtl">
       {/* Success/Error Messages */}
-      {searchParams.success && (
+      {params.success && (
         <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-800">
-          ✅ تم تحديث {searchParams.success} بنجاح
+          ✅ تم تحديث {params.success} بنجاح
         </div>
       )}
-      {searchParams.error && (
+      {params.error && (
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
-          ❌ خطأ: {searchParams.error}
+          ❌ خطأ: {params.error}
         </div>
       )}
 
