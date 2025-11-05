@@ -76,14 +76,14 @@ export default function StatsSection({
       bgColor: "bg-orange-600/10",
     },
     {
-      title: "قيد المراجعة",
+      title: "الشكاوى قيد المراجعة",
       value: counts.underReview,
       icon: FileText,
       color: "text-blue-600",
       bgColor: "bg-blue-600/10",
     },
     {
-      title: "قيد التنفيذ",
+      title: "الشكاوى قيد التنفيذ",
       value: counts.inProgress,
       icon: Clock,
       color: "text-yellow-600",
@@ -111,16 +111,13 @@ export default function StatsSection({
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl lg:text-4xl font-bold mb-4">
+          <h2 className="text-3xl lg:text-4xl font-bold">
             إحصائيات المنصة
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            أرقام حقيقية تعكس نشاط المنصة وتفاعل المواطنين مع نوابهم
-          </p>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {stats.map((stat) => {
             const Icon = stat.icon;
             return (

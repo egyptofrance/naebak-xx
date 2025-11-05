@@ -23,21 +23,7 @@ export default function HeroSection() {
           <p className="text-muted-foreground leading-loose lg:text-lg lg:leading-relaxed max-w-4xl">
             {t("description")}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 w-full sm:justify-center pt-4">
-            <Button className="w-full sm:w-auto sm:min-w-32" asChild>
-              <Link href={"/login"}>
-                Log In
-                <ArrowRight size={16} className="ml-2" />
-              </Link>
-            </Button>
-            <Button
-              className="w-full sm:w-auto sm:min-w-32"
-              variant={"secondary"}
-            >
-              Learn More
-              <ChevronRight size={16} className="ml-2" />
-            </Button>
-          </div>
+
         </div>
 
       </div>
