@@ -24,15 +24,16 @@ export function GovernoratesManagementClient({
 }: GovernoratesManagementClientProps) {
   const [governorates, setGovernorates] = useState(initialGovernorates);
   const [loading, setLoading] = useState<string | null>(null);
-  const { toast } = useToast();
-
-  const handleToggleVisibility = async (governorateId: string, currentVisibility: boolean) => {
+  const { toast } = useTo  const handleToggleVisibility = async (
+    governorateId: string,
+    currentVisibility: boolean
+  ) => {
+    console.log('🔄 Toggling visibility:', { governorateId, currentVisibility, newValue: !currentVisibility });
     setLoading(governorateId);
 
     try {
       const result = await updateGovernorateVisibility(governorateId, !currentVisibility);
-
-      if (result.success) {
+      console.log('✅ Result from server:', result);    if (result.success) {
         // Update local state
         setGovernorates((prev) =>
           prev.map((gov) =>
@@ -54,13 +55,14 @@ export function GovernoratesManagementClient({
         });
       }
     } catch (error) {
-      console.error("Error toggling visibility:", error);
+      console.error("❌ Error toggling visibility:", error);
       toast({
         title: "خطأ",
-        description: "حدث خطأ غير متوقع",
+        description: error instanceof Error ? error.message : "حدث خطأ غير متوقع",
         variant: "destructive",
       });
     } finally {
+      console.log('🏁 Finished, resetting loading state');
       setLoading(null);
     }
   };
