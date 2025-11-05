@@ -116,18 +116,18 @@ export default function StatsSection({
                 key={stat.title}
                 className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow"
               >
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`p-3 rounded-lg ${stat.bgColor}`}>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className={`p-3 rounded-lg ${stat.bgColor} flex-shrink-0`}>
                     <Icon className={`w-6 h-6 ${stat.color}`} />
                   </div>
+                  {stat.isVisitorCounter ? (
+                    <div className="text-3xl font-bold">
+                      <VisitorCounter />
+                    </div>
+                  ) : (
+                    <div className="text-3xl font-bold">{stat.value}</div>
+                  )}
                 </div>
-                {stat.isVisitorCounter ? (
-                  <div className="text-3xl font-bold mb-2">
-                    <VisitorCounter />
-                  </div>
-                ) : (
-                  <div className="text-3xl font-bold mb-2">{stat.value}</div>
-                )}
                 <div className="text-sm text-muted-foreground">{stat.title}</div>
               </div>
             );

@@ -17,11 +17,11 @@ export async function getPublicStats() {
       .from("complaints")
       .select("*", { count: "exact", head: true });
 
-    // Get active complaints count
+    // Get active complaints count (all except resolved, closed, archived)
     const { count: activeComplaintsCount } = await supabase
       .from("complaints")
       .select("*", { count: "exact", head: true })
-      .in("status", ["new", "under_review", "assigned_to_deputy", "accepted", "in_progress", "on_hold"]);
+      .not("status", "in", "(resolved,closed,archived)");
 
     // Get resolved complaints count
     const { count: resolvedComplaintsCount } = await supabase
