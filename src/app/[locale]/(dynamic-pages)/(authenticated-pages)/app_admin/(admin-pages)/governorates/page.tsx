@@ -34,24 +34,17 @@ export default async function GovernoratesManagementPage({
     console.log("New Visibility:", !currentVisibility);
     console.log("===========================");
     
-    try {
-      const result = await updateGovernorateVisibility(governorateId, !currentVisibility);
-      
-      console.log("Update Result:", result);
-      
-      if (result.success) {
-        console.log("SUCCESS! Revalidating paths...");
-        revalidatePath("/ar/app_admin/governorates");
-        revalidatePath("/");
-        console.log("Paths revalidated");
-      } else {
-        console.error("FAILED:", result.error);
-      }
-      
-      return result;
-    } catch (error) {
-      console.error("EXCEPTION in toggleVisibility:", error);
-      return { success: false, error: String(error) };
+    const result = await updateGovernorateVisibility(governorateId, !currentVisibility);
+    
+    console.log("Update Result:", result);
+    
+    if (result.success) {
+      console.log("SUCCESS! Revalidating paths...");
+      revalidatePath("/ar/app_admin/governorates");
+      revalidatePath("/");
+      console.log("Paths revalidated - page will refresh");
+    } else {
+      console.error("FAILED:", result.error);
     }
   }
 
