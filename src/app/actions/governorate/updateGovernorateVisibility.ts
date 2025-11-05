@@ -26,7 +26,7 @@ export async function updateGovernorateVisibility(
     .eq("id", user.id)
     .single();
 
-  if (!profile || !["super_admin", "admin"].includes(profile.role)) {
+  if (!profile || !["super_admin", "admin", "manager"].includes(profile.role)) {
     return { success: false, error: "غير مصرح - يجب أن تكون مسؤولاً" };
   }
 
