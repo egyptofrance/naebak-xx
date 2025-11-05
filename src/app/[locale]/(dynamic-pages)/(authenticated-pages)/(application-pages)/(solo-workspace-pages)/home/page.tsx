@@ -125,7 +125,7 @@ export default async function CitizenHomePage() {
           {myDeputies.length === 0 && (
             <div className="bg-muted/50 border border-border rounded-lg p-8 text-center">
               <p className="text-lg text-muted-foreground mb-4">
-                {!profile?.electoral_district && !profile?.governorate_id ? (
+                {!profile?.electoral_district_id && !profile?.governorate_id ? (
                   <>
                     لم تقم بتحديد دائرتك الانتخابية بعد
                     <br />
